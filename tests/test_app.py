@@ -22,7 +22,7 @@ class App(unittest.TestCase):
         self.saved_log_dir, config.LOG_DIR = config.LOG_DIR, Path(self.dir.name)
         self.saved_call = interpret.call_api
         self.replies = []
-        interpret.call_api = lambda system, user, model: (json.dumps(self.replies.pop(0)), {"input_tokens": 1, "output_tokens": 1})
+        interpret.call_api = lambda system, user, model, schema=None: (json.dumps(self.replies.pop(0)), {"input_tokens": 1, "output_tokens": 1})
         self.at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=60)
 
     def tearDown(self):

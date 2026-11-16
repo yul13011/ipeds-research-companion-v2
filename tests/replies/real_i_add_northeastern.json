@@ -1,0 +1,81 @@
+{
+ "question": "add Northeastern",
+ "reply": {
+  "kind": "edit",
+  "request": null,
+  "edit": {
+   "changes": [
+    {
+     "field": "schools",
+     "action": "add"
+    }
+   ],
+   "values": {
+    "operation": "schools",
+    "measures": [],
+    "schools": [
+     {
+      "name": "Northeastern",
+      "id": null
+     }
+    ],
+    "groups": [],
+    "peers_of": null,
+    "conditions": [],
+    "breakdown": null,
+    "split_by": null,
+    "sort": null,
+    "year": {
+     "stated": null,
+     "kind": null
+    },
+    "topic": null,
+    "readings": []
+   }
+  },
+  "options": [],
+  "chosen": [],
+  "decline": null
+ },
+ "model_wrote": {
+  "kind": "edit",
+  "request": null,
+  "edit": {
+   "changes": [
+    {
+     "field": "schools",
+     "action": "add"
+    }
+   ],
+   "values": {
+    "operation": "schools",
+    "measures": [],
+    "schools": [
+     {
+      "name": "Northeastern",
+      "id": null
+     }
+    ],
+    "groups": [],
+    "peers_of": null,
+    "conditions": [],
+    "breakdown": null,
+    "split_by": null,
+    "sort": null,
+    "year": {
+     "stated": null,
+     "kind": null
+    },
+    "topic": null,
+    "readings": []
+   }
+  },
+  "options": [],
+  "chosen": [],
+  "decline": null
+ },
+ "expect": "picker",
+ "adapted_to_tags": [],
+ "source": "live smoke test, Sonnet, 2026-11-16",
+ "after": "real_b_compare_grad"
+}

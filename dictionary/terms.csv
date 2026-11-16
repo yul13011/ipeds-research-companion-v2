@@ -81,3 +81,5 @@ national universe,all institutions; every institution; including territories; ou
 national universe,all institutions; every institution; including territories; outside the national universe,setting,All institutions,All institutions,,all,no,,no,"All institutions in the directory are included, not only the national universe.",in use,
 small cohort,,setting,Small-cohort warning,Small-cohort warning,,denominator < guard,yes,,no,"{school}'s figure rests on {count} students, fewer than {threshold}, so it can change a lot from year to year.",in use,
 cohort period,,setting,Entering cohort,Entering cohort,,template,yes,,no,"students who entered in {cohort}, {status}",in use,
+detailed measure,,setting,Switch to the detailed table,Switch to the detailed table,,template,yes,,no,"{summary} has no breakdown of its own, so it is broken down using {detailed}, which reports the same figure in more detail.",in use,
+detail differs,,setting,Detail reported with a related campus,Detail reported with a related campus,,template,yes,,no,"{school} reports its detail together with a related campus, so the detailed total ({detailed}) differs from the summary figure ({summary}).",in use,

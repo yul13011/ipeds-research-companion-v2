@@ -12,6 +12,7 @@ Every rule comes from a dictionary table: term readings and defaults, default ro
 breakdown sets, school groups and settings. Nothing here reads the user's wording.
 """
 import copy
+import json
 import re
 
 from path import shortlist as sl
@@ -111,6 +112,8 @@ def resolve_request(request, d, short):
                 statements=[], caveats=[], word_notes=[], topic=None, small_cohort=None)
     if op in ("define", "data_exists"):
         return topic_plan(plan, request, d)
+    if request["breakdown"]:
+        switch_to_detail(request, d, plan)
 
     for step in (apply_readings, scope, level_defaults):
         stop = step(request, d, plan)
@@ -188,6 +191,37 @@ def cohort_period(m, covered, d):
     status = status[0].lower() + status[1:] if status else ""
     status = status.replace("status of student as of", "status as of")
     return d.setting("cohort period")[1].format(cohort=named, status=status)
+
+
+def supports(d, measure_id, set_name):
+    table, _, column = measure_id.partition(".")
+    return d.one("SELECT 1 FROM breakdown_sets WHERE set_name=? AND \"table\"=? AND status IN ('loaded', 'additive') AND "
+                 "((stored_as='rows' AND measure=?) OR (stored_as='columns' AND total=?))", set_name, table, column, column)
+
+
+def switch_to_detail(request, d, plan):
+    """A breakdown asked for on a summary measure with no breakdown of its own uses the measure's detailed equivalent
+    (measures.csv, detailed_measure), and says so."""
+    for m in request["measures"]:
+        if supports(d, m["id"], request["breakdown"]["set"]):
+            continue
+        link = d.one("SELECT detailed, rows FROM detail_links WHERE measure=?", m["id"])
+        if not link:
+            continue
+        detailed, rows = link[0], json.loads(link[1])
+        table = detailed.partition(".")[0]
+        labels = [label for k, v in rows.items() for (label,) in
+                  d.q('SELECT label FROM dict_category_codes WHERE "table"=? AND UPPER("column")=UPPER(?) AND code=? AND '
+                      '"default" IS NULL', table, k, str(v))]
+        names = dict(d.q('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures '
+                         'WHERE "table" || \'.\' || variable IN (?, ?)', m["id"], detailed))
+        plan["statements"].append(d.setting("detailed measure")[1].format(
+            summary=names.get(m["id"], m["id"]), detailed=", ".join([names.get(detailed, detailed)] + labels)))
+        for unitid, summary, value in d.q("SELECT unitid, summary, detailed FROM detail_link_exceptions WHERE measure=?", m["id"]):
+            if unitid in {s["id"] for s in request["schools"]}:
+                plan["caveats"].append(d.setting("detail differs")[1].format(
+                    school=d.name(unitid), summary=f"{summary:,.0f}", detailed="no row" if value is None else f"{value:,.0f}"))
+        m["id"], m["row"] = detailed, [dict(column=k, code=str(v)) for k, v in rows.items()]
 
 
 def topic_plan(plan, request, d):

@@ -42,46 +42,126 @@ YEAR_KINDS = ("fall", "fiscal year", "academic year", "aid year", "entering coho
 MISSING = ("measure", "group", "calculation", "breakdown", "years", "not in IPEDS", "not a data question", "other")
 
 
-def nullable(schema):
-    return {"anyOf": [schema, {"type": "null"}]}
-
-
 def obj(**props):
     return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}
 
 
-STRING = {"type": "string"}
-PAIR = obj(column=STRING, code=STRING)
-REQUEST_SCHEMA = obj(
-    operation={"type": "string", "enum": list(OPERATIONS)},
-    measures={"type": "array", "items": obj(id=STRING, row={"type": "array", "items": PAIR})},
-    schools={"type": "array", "items": obj(name=STRING, id=nullable({"type": "integer"}))},
-    groups={"type": "array", "items": STRING},
-    peers_of=nullable({"type": "integer"}),
-    conditions={"type": "array", "items": obj(measure=STRING, comparison={"type": "string", "enum": list(COMPARISONS)},
-                                              value=STRING)},
-    breakdown=nullable(obj(set=STRING, fixed={"type": "array", "items": PAIR})),
-    split_by=nullable({"type": "string", "enum": ["sector", "level", "control"]}),
-    sort=nullable(obj(order={"type": "string", "enum": ["highest", "lowest"]}, limit=nullable({"type": "integer"}))),
-    year=obj(stated=nullable(STRING), kind=nullable({"type": "string", "enum": list(YEAR_KINDS)})),
-    topic=nullable(STRING),
-    readings={"type": "array", "items": obj(term=STRING, reading=STRING)},
-)
-EDIT_SCHEMA = obj(
-    changes={"type": "array", "items": obj(
-        field={"type": "string", "enum": list(LIST_FIELDS + SCALAR_FIELDS)},
-        action={"type": "string", "enum": ["add", "remove", "replace", "back"]})},
-    values=nullable(REQUEST_SCHEMA),
-)
-REPLY_SCHEMA = obj(
-    kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline"]},
-    request=nullable(REQUEST_SCHEMA),
-    edit=nullable(EDIT_SCHEMA),
-    options={"type": "array", "items": obj(label=STRING, request=REQUEST_SCHEMA)},
-    chosen={"type": "array", "items": {"type": "integer"}},
-    decline=nullable(obj(reason=STRING, wanted=STRING, missing={"type": "string", "enum": list(MISSING)},
-                         closest=STRING)),
-)
+# The shape the model must reply in, built for each question from its shortlist. The model answers in tags
+# (M1, S1, G1, R1, B1, T1, O1): every field that names something accepts only the tags on that question's
+# shortlist, so the model cannot type an ID wrongly. Unused fields are null or empty lists. The request shape
+# appears once, as the items of `requests`, which keeps the schema small: one item for a new question, one
+# holding an edit's new values, or two or three options with labels. from_wire() maps tags back to real IDs.
+STRING, INTEGER = {"type": "string"}, {"type": "integer"}
+
+
+def one_of(tags):
+    """A field that takes one tag from the list; with no tags of that kind, it can only be null."""
+    return {"type": "string", "enum": tags} if tags else {"type": "null"}
+
+
+def maybe(schema):
+    return schema if schema == {"type": "null"} else {"anyOf": [schema, {"type": "null"}]}
+
+
+def reply_schema(tags):
+    """The structured-output schema for one question. `tags` is shortlist["tags"]."""
+    of = lambda kind: one_of(sorted((t for t, (k, _) in tags.items() if k == kind), key=lambda t: (len(t), t)))
+    request = obj(
+        label=STRING,
+        operation={"type": "string", "enum": list(OPERATIONS)},
+        measures={"type": "array", "items": obj(measure=of("measures"), row={"type": "array", "items": of("rows")})},
+        schools={"type": "array", "items": obj(name=STRING, school=maybe(of("schools")))},
+        groups={"type": "array", "items": of("groups")},
+        peers_of=maybe(of("schools")),
+        conditions={"type": "array", "items": obj(measure=of("measures"), comparison={"type": "string", "enum": list(COMPARISONS)},
+                                                  value=STRING)},
+        breakdown=maybe(obj(set=of("sets"), fixed={"type": "array", "items": of("rows")})),
+        split_by=maybe({"type": "string", "enum": ["sector", "level", "control"]}),
+        sort=maybe(obj(order={"type": "string", "enum": ["highest", "lowest"]}, limit=maybe(INTEGER))),
+        year=obj(stated=maybe(STRING), kind=maybe({"type": "string", "enum": list(YEAR_KINDS)})),
+        topic=maybe(STRING),
+        outside=maybe(of("outside")),
+        readings={"type": "array", "items": of("readings")},
+    )
+    return obj(
+        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline"]},
+        requests={"type": "array", "items": request},
+        changes={"type": "array", "items": obj(
+            field={"type": "string", "enum": list(LIST_FIELDS + SCALAR_FIELDS)},
+            action={"type": "string", "enum": ["add", "remove", "replace", "back"]})},
+        chosen={"type": "array", "items": INTEGER},
+        decline=maybe(obj(reason=STRING, wanted=STRING, missing={"type": "string", "enum": list(MISSING)}, closest=STRING)),
+    )
+
+
+def request_from_wire(r, tags):
+    """One request as the model wrote it, in tags, turned into the request the code uses (real IDs, None for unused)."""
+    look = lambda t, kind: tags[t][1] if t in tags and tags[t][0] == kind else None
+    def rows_for(table, tag_list):
+        pairs = [look(t, "rows") for t in tag_list or []]
+        return [dict(column=p[1], code=p[2]) for p in pairs if p and (table is None or p[0] == table)]
+    measures = []
+    for m in r.get("measures") or []:
+        mid = look(m["measure"], "measures")
+        if mid:
+            measures.append(dict(id=mid, row=rows_for(mid.partition(".")[0] if "." in mid else None, m.get("row"))))
+    breakdown = r.get("breakdown")
+    set_key = look(breakdown["set"], "sets") if breakdown and breakdown.get("set") else None
+    sort = r.get("sort")
+    outside = look(r.get("outside"), "outside") if r.get("outside") else None
+    return dict(
+        operation=r["operation"], measures=measures,
+        schools=[dict(name=s["name"], id=look(s.get("school"), "schools")) for s in r.get("schools") or []],
+        groups=[g for g in (look(t, "groups") for t in r.get("groups") or []) if g],
+        peers_of=look(r.get("peers_of"), "schools") if r.get("peers_of") else None,
+        conditions=[dict(measure=look(c["measure"], "measures"), comparison=c["comparison"], value=c["value"])
+                    for c in r.get("conditions") or [] if look(c["measure"], "measures")],
+        breakdown=dict(set=set_key[0], fixed=rows_for(set_key[1], breakdown.get("fixed"))) if set_key else None,
+        split_by=r.get("split_by") or None,
+        sort=dict(order=sort["order"], limit=sort.get("limit") or None) if sort else None,
+        year=dict(stated=(r.get("year") or {}).get("stated") or None, kind=(r.get("year") or {}).get("kind") or None),
+        topic=outside or r.get("topic") or None,
+        readings=[dict(term=x[0], reading=x[1]) for x in (look(t, "readings") for t in r.get("readings") or []) if x],
+    )
+
+
+def from_wire(reply, tags=None):
+    """The model's reply in the form the code uses: request, edit, options, chosen and decline, unused parts None.
+
+    A reply already in that form (the saved replies the tests use) passes through unchanged."""
+    if "requests" not in reply:
+        return copy.deepcopy(reply)
+    kind = reply["kind"]
+    items = [request_from_wire(r, tags or {}) for r in reply["requests"]]
+    labels = [r.get("label") or f"Option {i + 1}" for i, r in enumerate(reply["requests"])]
+    return dict(kind=kind,
+                request=items[0] if kind == "request" and items else None,
+                edit=dict(changes=reply["changes"], values=items[0] if items else None) if kind == "edit" else None,
+                options=[dict(label=l, request=r) for l, r in zip(labels, items)] if kind == "options" else [],
+                chosen=reply.get("chosen") or [],
+                decline=reply.get("decline") if kind == "decline" else None)
+
+
+def to_wire(r, tags):
+    """A request written in this question's tags, for showing the previous request in the prompt."""
+    if not r:
+        return r
+    back = {(kind, key): t for t, (kind, key) in tags.items()}
+    t = lambda kind, key: back.get((kind, key), str(key))
+    table = lambda mid: mid.partition(".")[0]
+    return dict(
+        operation=r["operation"],
+        measures=[dict(measure=t("measures", m["id"]), row=[t("rows", (table(m["id"]), p["column"], p["code"])) for p in m["row"]])
+                  for m in r["measures"]],
+        schools=[dict(name=s["name"], school=t("schools", s["id"]) if s["id"] else None) for s in r["schools"]],
+        groups=[t("groups", g) for g in r["groups"]],
+        peers_of=t("schools", r["peers_of"]) if r["peers_of"] else None,
+        conditions=[dict(measure=t("measures", c["measure"]), comparison=c["comparison"], value=c["value"]) for c in r["conditions"]],
+        breakdown=dict(set=r["breakdown"]["set"], fixed=[f"{p['column']} = {p['code']}" for p in r["breakdown"]["fixed"]])
+        if r["breakdown"] else None,
+        split_by=r["split_by"], sort=r["sort"], year=r["year"], topic=r["topic"],
+        readings=[t("readings", (x["term"], x["reading"])) for x in r["readings"]],
+    )
 
 
 def empty(operation="schools"):

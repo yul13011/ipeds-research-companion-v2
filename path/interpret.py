@@ -1,8 +1,9 @@
 """Step 3, Interpret: the one model call.
 
 The model is shown the shortlist for this question, the previous request, any pending
-clarifying options, and the question. It returns one structured reply (request.REPLY_SCHEMA),
-enforced by the API's structured output. It never writes SQL and never produces a number.
+clarifying options, and the question, each shortlist item with a short tag. It returns one
+structured reply in tags (request.reply_schema, built for this question), enforced by the API's
+structured output; code maps the tags back to real IDs. It never writes SQL and never produces a number.
 
 The call itself is passed in (`call`), so tests use saved replies and never reach the API.
 """
@@ -10,74 +11,86 @@ import json
 import time
 
 import config
-from path.request import COMPARISONS, OPERATIONS, REPLY_SCHEMA
+from path.request import COMPARISONS, OPERATIONS, from_wire, reply_schema, to_wire
 
 INSTRUCTIONS = """You read questions about U.S. colleges for an app that answers them from IPEDS data.
 You do not answer the question. You turn it into one structured reply that code will run.
 
 Rules:
-- Use only IDs and names that appear in the SHORTLIST below. Never invent a measure, school, group,
-  category row or breakdown set. If what the question needs is not there, decline and say what is missing.
+- Every item in the SHORTLIST has a tag (M1 measure, S1 school, G1 group, R1 category row, B1 breakdown set,
+  T1 term reading, O1 outside-IPEDS topic). Answer with tags only. If what the question needs has no tag,
+  decline and say what is missing.
 - Never write SQL and never state a number from the data.
-- Choose kind:
-  request: a complete request for a new question.
+- Leave a field null, or an empty list, when it does not apply. Fill only the parts the kind you choose needs.
+- Choose kind, and fill `requests` to match:
+  request: one complete request for a new question (its label can be empty).
   edit: a follow-up that changes the PREVIOUS REQUEST ("add Northeastern", "now for Texas", "rank them",
-        "break that down by gender", "go back"). List each changed field with add, remove, replace or back,
-        and put only the new values in `values`. Leave everything else to the previous request.
+        "break that down by gender", "go back"). List each changed field in `changes` with add, remove, replace
+        or back, and put only the new values in one item of `requests`. Leave everything else to the previous request.
   options: the question has two or three reasonable readings. Give each as a complete request with a short label.
   choose: the user is answering the PENDING OPTIONS ("the first one", "B", "both"). Give their 0-based numbers.
   decline: nothing in the shortlist can answer it, or it asks for something IPEDS does not hold (see OUTSIDE IPEDS),
         individual records, a measure applied to the wrong population, or it is not a question about data.
         Say plainly what is missing and name the closest thing the app can do.
 - Operations: {operations}
-- measures: pick the measure that matches. For a multi-row measure, name a category row only when the user asks
-  for one (for example transfer-in students); otherwise leave `row` empty and the app uses the overall total.
-- TERMS: a term lists its readings. If the user said which reading they mean, record it in `readings`.
+- measures: pick the measure that matches. For a multi-row measure, name a category row (R tag listed for that
+  measure) only when the user asks for one, such as transfer-in students; otherwise leave `row` empty and the app
+  uses the overall total.
+- breakdown: use a breakdown set (B tag) listed for the measure you chose. A set listed "through the detailed table"
+  also works for that measure.
+- TERMS: a term lists its readings, each with a T tag. If the user said which reading they mean, put its tag in `readings`.
   If the term says "always ask" and the user did not say, return options, one per reading.
   Otherwise use the reading marked default.
-- schools: write each name as the user wrote it, with its ID if the shortlist clearly has that school,
+- schools: write each name as the user wrote it, with its S tag if the shortlist clearly has that school,
   or null if it does not or several schools could be meant.
-- groups: use group names exactly as listed. A school must be in every group named.
-- "its peers" or "peer institutions": set peers_of to the school's ID.
+- groups: G tags. A school must be in every group named.
+- "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
-- year: copy the year as the user stated it, or null. Set kind only if the user said (fall, fiscal year, ...).
-- define and data_exists: put the matching measure IDs in measures, or the OUTSIDE IPEDS topic in topic.
+- year: copy the year as the user stated it, or leave it empty. Set kind only if the user said (fall, fiscal year, ...).
+- define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
   If nothing matches, put the user's topic in plain words in topic.
 """
 
 
 def render(short, previous, pending, question):
-    """The shortlist and conversation as plain text for the model."""
-    lines = ["SHORTLIST", "Measures (id | name | period | unit):"]
+    """The shortlist and conversation as plain text for the model, in tags. Returns (text, words per part)."""
+    parts = {}
+    def section(name, lines):
+        parts[name] = lines
+    rows = []
     for m in short["measures"]:
-        flag = "" if m["set_up"] else " | not set up in this app yet"
-        lines.append(f"  {m['id']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{flag}")
-    lines.append("Terms:")
+        flag = " | not set up in this app yet" if not m["set_up"] else ""
+        b = (f" | breakdowns: {', '.join(m['breakdowns'])}" if m["breakdowns"] else "") + \
+            (f" | breakdowns through the detailed table: {', '.join(m['breakdowns_via_detail'])}" if m["breakdowns_via_detail"] else "")
+        rows.append(f"  {m['tag']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{b}{flag}")
+    section("measures", ["Measures (tag | name | period | unit):"] + rows)
+    rows = []
     for t in short["terms"]:
-        lines.append(f"  {t['term']}" + (" (always ask)" if t["always_ask"] == "yes" else ""))
+        rows.append(f"  {t['term']}" + (" (always ask)" if t["always_ask"] == "yes" else ""))
         for r in t["readings"]:
-            extra = " [default" + (f" for {r['default_for']}" if r["default_for"] else "") + "]" if r["is_default"] == "yes" else ""
-            when = " [offered when a group mixes levels]" if r["when"] else ""
-            lines.append(f"    - {r['reading']}: {', '.join(r['measures']) or r['condition'] or ''}{extra}{when}")
-    lines.append("Schools (id | name | city, state | also called):")
-    lines += [f"  {s['id']} | {s['name']} | {s['city']}, {s['state']} | {s['alias'] or ''}" for s in short["schools"]]
-    lines.append("Groups (name | definition):")
-    lines += [f"  {g['name']} | {(g['statement'] or '')[:120]}" + (" | not available" if g["status"] == "decline" else "")
-              for g in short["groups"]]
-    lines.append("Category rows (table.column = code | label):")
-    lines += [f"  {r['table']}.{r['column']} = {r['code']} | {r['label']}" for r in short["rows"]]
-    lines.append("Breakdown sets (set | table):")
-    lines += [f"  {s['set']} | {s['table']}" for s in short["sets"]]
-    lines.append("Outside IPEDS (topic):")
-    lines += [f"  {o['topic']}" for o in short["outside"]]
-    lines.append("")
-    lines.append("PREVIOUS REQUEST: " + (json.dumps(previous) if previous else "none"))
+            extra = " | default" + (f" for {r['default_for']}" if r["default_for"] else "") if r["is_default"] == "yes" else ""
+            when = " | offered when a group mixes levels" if r["when"] else ""
+            uses = f" | {', '.join(r['measure_tags'])}" if r["measure_tags"] else ""
+            rows.append(f"    {r['tag']} | {r['reading']}{uses}{extra}{when}")
+    section("terms", ["Terms (tag | reading):"] + rows)
+    section("schools", ["Schools (tag | name | city, state | also called):"] +
+            [f"  {s['tag']} | {s['name']} | {s['city']}, {s['state']} | {s['alias'] or ''}" for s in short["schools"]])
+    section("groups", ["Groups (tag | name | definition):"] +
+            [f"  {g['tag']} | {g['name']} | {(g['statement'] or '')[:120]}" + (" | not available" if g["status"] == "decline" else "")
+             for g in short["groups"]])
+    section("rows", ["Category rows (tag | label | for measures):"] +
+            [f"  {r['tag']} | {r['label']} | {', '.join(r['for'])}" for r in short["rows"]])
+    section("sets", ["Breakdown sets (tag | set | for measures):"] +
+            [f"  {s['tag']} | {s['set']} | {', '.join(s['for'])}" for s in short["sets"]])
+    section("outside", ["Outside IPEDS (tag | topic):"] + [f"  {o['tag']} | {o['topic']}" for o in short["outside"]])
+    convo = ["PREVIOUS REQUEST: " + (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
     if pending:
-        lines.append("PENDING OPTIONS:")
-        lines += [f"  {i}: {o['label']}" for i, o in enumerate(pending)]
-    lines.append("")
-    lines.append("QUESTION: " + question)
-    return "\n".join(lines)
+        convo += ["PENDING OPTIONS:"] + [f"  {i}: {o['label']}" for i, o in enumerate(pending)]
+    section("conversation", convo)
+    section("question", ["QUESTION: " + question])
+    order = ["measures", "terms", "schools", "groups", "rows", "sets", "outside", "conversation", "question"]
+    text = "\n".join(["SHORTLIST"] + [line for name in order for line in parts[name]])
+    return text, {name: len(" ".join(parts[name]).split()) for name in order}
 
 
 def check(reply):
@@ -92,13 +105,13 @@ def check(reply):
     return None
 
 
-def call_api(system, user, model):
-    """One call to the Anthropic API with the reply held to the request shape. Returns (reply text, usage)."""
+def call_api(system, user, model, schema):
+    """One call to the Anthropic API with the reply held to this question's shape. Returns (reply text, usage)."""
     import anthropic
     client = anthropic.Anthropic()                  # reads ANTHROPIC_API_KEY from the environment
     response = client.messages.create(
         model=model, max_tokens=8000, system=system, messages=[{"role": "user", "content": user}],
-        output_config={"format": {"type": "json_schema", "schema": REPLY_SCHEMA}, "effort": config.INTERPRET_EFFORT})
+        output_config={"format": {"type": "json_schema", "schema": schema}, "effort": config.INTERPRET_EFFORT})
     if response.stop_reason in ("refusal", "max_tokens"):
         raise ValueError(f"the model stopped early ({response.stop_reason})")
     text = next(b.text for b in response.content if b.type == "text")
@@ -111,17 +124,21 @@ def interpret(question, short, previous=None, pending=None, call=None, model=Non
     call = call or call_api
     system = INSTRUCTIONS.format(operations="; ".join(f"{k}: {v}" for k, v in OPERATIONS.items()),
                                  comparisons=", ".join(COMPARISONS))
-    user = render(short, previous, pending, question)
+    user, parts = render(short, previous, pending, question)
+    schema = reply_schema(short["tags"])
     meta = {"model": model, "attempts": 0, "input_tokens": 0, "output_tokens": 0, "error": None,
-            "prompt_words": len((system + user).split())}
+            "prompt_words": len((system + user).split()),
+            "prompt_parts": dict(instructions=len(system.split()), **parts, schema_characters=len(json.dumps(schema))),
+            "system": system, "user": user}
     start = time.time()
     for _ in range(2):                              # one retry, then a plain failure
         meta["attempts"] += 1
         try:
-            text, usage = call(system, user, model)
+            text, usage = call(system, user, model, schema)
             meta["input_tokens"] += usage["input_tokens"]
             meta["output_tokens"] += usage["output_tokens"]
-            reply = json.loads(text)
+            meta["raw_reply"] = json.loads(text)
+            reply = from_wire(meta["raw_reply"], short["tags"])
             problem = check(reply)
             if problem:
                 raise ValueError(problem)

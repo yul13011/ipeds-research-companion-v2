@@ -556,6 +556,16 @@ class RealDictionary(unittest.TestCase):
         self.assertEqual(rule[0], "split by reporting_form")
         self.assertIn("different accounting standards", rule[1])
 
+    def test_detail_links(self):
+        rows = self.db.execute("SELECT measure, detailed, n_schools, n_agree FROM detail_links").fetchall()
+        self.assertEqual(len(rows), 54)
+        link = {m: (d, n, a) for m, d, n, a in rows}
+        self.assertEqual(link["DRVEF.EFUG"][0], "EFA.EFTOTLT")
+        for measure, (_, n, agree) in link.items():                 # only a few campuses reporting together differ
+            self.assertGreaterEqual(agree, n - 9, measure)
+        yale = self.db.execute("SELECT EFUG FROM DRVEF WHERE UNITID=130794").fetchone()[0]
+        self.assertEqual(yale, self.db.execute("SELECT EFTOTLT FROM EFA WHERE UNITID=130794 AND EFALEVEL=2").fetchone()[0])
+
     def test_every_table_states_its_period(self):
         blank = self.db.execute("SELECT \"table\" FROM dict_year_meaning WHERE period IS NULL OR kind IS NULL OR kind='needs review'").fetchall()
         self.assertEqual(blank, [])

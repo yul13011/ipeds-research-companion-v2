@@ -115,6 +115,14 @@ def build_index(db):
     idf = rarity([e["text"] for _, entries in kinds for e in entries.values()])
     for kind, entries in kinds:
         index[kind] = (BM25([(k, e["text"]) for k, e in entries.items()], idf), entries)
+    support = {}
+    for s, t, how, measure, total in q("SELECT set_name, \"table\", stored_as, measure, total FROM breakdown_sets "
+                                       "WHERE status IN ('loaded', 'additive')"):
+        mid = f"{t}.{measure if how == 'rows' else total}"
+        if (s, t) not in support.setdefault(mid, []):
+            support[mid].append((s, t))
+    index["support"] = support
+    index["detailed"] = {m: d for m, d in q("SELECT measure, detailed FROM detail_links")}
     index["picker_phrases"] = q("SELECT nickname, search_phrase FROM dict_school_nicknames WHERE search_phrase IS NOT NULL")
     index["first_version"] = {}
     for m in measures.values():
@@ -181,6 +189,10 @@ def shortlist(question, db_path, carried=()):
             for key, s in index["sets"][1].items():
                 if s["set"] == request["breakdown"]["set"]:
                     found["sets"].setdefault(key, s)
+    for mid in list(measures):                  # a summary measure brings its detailed equivalent's table
+        detailed = index["detailed"].get(mid)
+        if detailed and detailed in entries:
+            measures.setdefault(detailed, entries[detailed])
     tables = {m["table"] for m in measures.values()}
     bm25, rows = index["rows"]
     for table in tables & {r["table"] for r in rows.values()}:     # the best rows of each shortlisted multi-row table
@@ -190,7 +202,47 @@ def shortlist(question, db_path, carried=()):
         if s["table"] in tables:
             found["sets"].setdefault(key, s)
     found["measures"] = measures
-    return {kind: [public(e) for e in found[kind].values()] for kind in LIMITS}
+    return tag({kind: [public(e) for e in found[kind].values()] for kind in LIMITS}, index)
+
+
+PREFIX = {"measures": "M", "schools": "S", "groups": "G", "rows": "R", "sets": "B", "outside": "O"}
+
+
+def tag(short, index):
+    """Give every shortlist item a short tag (M1, S1, G1, R1, B1, T1, O1). The model answers in tags only;
+    short["tags"] maps each tag back to what it stands for."""
+    tables = {m["table"] for m in short["measures"]}
+    short["rows"] = [r for r in short["rows"] if r["table"] in tables]   # a row is only useful with its measure
+    tags = {}
+    for kind, prefix in PREFIX.items():
+        for i, item in enumerate(short[kind], 1):
+            item["tag"] = f"{prefix}{i}"
+            key = {"measures": item.get("id"), "schools": item.get("id"), "groups": item.get("name"),
+                   "rows": (item.get("table"), item.get("column"), item.get("code")),
+                   "sets": (item.get("set"), item.get("table")), "outside": item.get("topic")}[kind]
+            tags[item["tag"]] = (kind, key)
+    n = 0
+    for t in short["terms"]:
+        for r in t["readings"]:
+            n += 1
+            r["tag"] = f"T{n}"
+            tags[r["tag"]] = ("readings", (t["term"], r["reading"]))
+    by_measure = {m["id"]: m["tag"] for m in short["measures"]}
+    by_set = {(s["set"], s["table"]): s["tag"] for s in short["sets"]}
+    for m in short["measures"]:                 # which breakdowns each measure supports, own or through its detailed table
+        own = [by_set[k] for k in index["support"].get(m["id"], []) if k in by_set]
+        detailed = index["detailed"].get(m["id"])
+        via = [by_set[k] for k in index["support"].get(detailed, []) if k in by_set] if detailed else []
+        m["breakdowns"], m["breakdowns_via_detail"] = own, [b for b in via if b not in own]
+    for r in short["rows"]:
+        r["for"] = [m["tag"] for m in short["measures"] if m["table"] == r["table"]]
+    for s in short["sets"]:
+        s["for"] = [m["tag"] for m in short["measures"] if s["tag"] in m["breakdowns"] + m["breakdowns_via_detail"]]
+    for t in short["terms"]:
+        for r in t["readings"]:
+            r["measure_tags"] = [by_measure[x] for x in r["measures"] if x in by_measure]
+    short["tags"] = tags
+    return short
 
 
 def search_schools(name, db_path, limit=8):
@@ -201,7 +253,7 @@ def search_schools(name, db_path, limit=8):
 
 def ids(short):
     """Everything on a shortlist, by kind, in the form request.used_ids() returns."""
-    return {"measure": {m["id"] for m in short["measures"]},
+    return {"measure": {m["id"] for m in short["measures"]},  # by real ID; tags are mapped back before this check
             "school": {s["id"] for s in short["schools"]},
             "group": {g["name"] for g in short["groups"]},
             "row": {(r["table"], r["column"].upper(), r["code"]) for r in short["rows"]},

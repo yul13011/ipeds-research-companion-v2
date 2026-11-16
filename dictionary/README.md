@@ -31,6 +31,7 @@ One row per IPEDS variable in the release (2,599).
 - `period`: filled only when the variable reports a different year from its table (net price for 2023-24 in a 2024-25 table). Blank means the table's period in `year_meaning.csv`.
 - `plain_name`: your plain-English name. Blank means the IPEDS title is used.
 - `synonyms`: other words users say for this measure.
+- `detailed_measure`: for a summary measure, the same figure in a detailed table, written `TABLE.COLUMN where COLUMN = code; ...`, for example `EFA.EFTOTLT where EFALEVEL = 2` for undergraduate enrollment. When a breakdown is asked for on the summary measure, the app uses the detailed one and says so. The build checks that the two agree at every school and lists the schools where they do not (schools that report together with a related campus).
 - `breakdown_set`: filled when this column is one part of a breakdown stored as columns, such as "By race and ethnicity" or "By gender". All the columns of one table with the same name form the set.
 - `set_total`: the column that the parts add up to, or `sum of parts` when the data has no total column. The build tests that the parts add up on every row; a set that fails is not loaded.
 

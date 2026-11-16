@@ -44,7 +44,7 @@ def reply_edit(changes, values):
 
 def saved(call_reply):
     """A stand-in for the API call that returns a fixed reply."""
-    return lambda system, user, model: (json.dumps(call_reply), {"input_tokens": 1000, "output_tokens": 100})
+    return lambda system, user, model, schema=None: (json.dumps(call_reply), {"input_tokens": 1000, "output_tokens": 100})
 
 
 class Request(unittest.TestCase):
@@ -77,6 +77,39 @@ class Request(unittest.TestCase):
         self.assertEqual(rq.apply_edit(later, dict(changes=[dict(field="schools", action="back")], values=None),
                                        [self.base, later]), self.base)
 
+    TAGS = {"M1": ("measures", "DRVADM.DVADM01"), "M2": ("measures", "EFA.EFTOTLT"), "S1": ("schools", 130794),
+            "G1": ("groups", "State: Ohio"), "R1": ("rows", ("EFA", "EFALEVEL", "2")), "B1": ("sets", ("By gender", "EFA")),
+            "T1": ("readings", ("ranking guard", "Include all schools")), "O1": ("outside", "Loan default rates")}
+
+    def test_schema_stays_within_the_api_limit(self):
+        """The API allows at most 16 fields that can be empty (union-typed); each takes only this shortlist's tags."""
+        text = json.dumps(rq.reply_schema(self.TAGS))
+        self.assertLessEqual(text.count('"anyOf"'), 16)
+        self.assertNotIn('"none"', text.lower())
+        self.assertIn('"enum": ["M1", "M2"]', text)
+
+    def test_tags_map_back_to_ids(self):
+        wire = dict(label="", operation="breakdown", measures=[dict(measure="M2", row=["R1"])], schools=[dict(name="Yale", school="S1"),
+                    dict(name="Somewhere", school=None)], groups=["G1"], peers_of=None, conditions=[], breakdown=dict(set="B1", fixed=[]),
+                    split_by=None, sort=None, year=dict(stated=None, kind=None), topic=None, outside=None, readings=["T1"])
+        r = rq.request_from_wire(wire, self.TAGS)
+        self.assertEqual(r["measures"], [M("EFA.EFTOTLT", [("EFALEVEL", "2")])])
+        self.assertEqual([s["id"] for s in r["schools"]], [130794, None])
+        self.assertEqual((r["groups"], r["breakdown"]["set"], r["readings"]),
+                         (["State: Ohio"], "By gender", [dict(term="ranking guard", reading="Include all schools")]))
+        self.assertEqual(rq.request_from_wire(dict(wire, outside="O1", measures=[]), self.TAGS)["topic"], "Loan default rates")
+        back = rq.to_wire(r, self.TAGS)
+        self.assertEqual((back["measures"][0]["measure"], back["schools"][0]["school"], back["groups"]), ("M2", "S1", ["G1"]))
+        reply = rq.from_wire(dict(kind="options", requests=[dict(wire, label="A"), dict(wire, label="B")], changes=[],
+                                  chosen=[], decline=None), self.TAGS)
+        self.assertEqual([o["label"] for o in reply["options"]], ["A", "B"])
+        reply = rq.from_wire(dict(kind="edit", requests=[wire], changes=[dict(field="schools", action="add")], chosen=[],
+                                  decline=None), self.TAGS)
+        self.assertEqual(reply["edit"]["values"], r)
+
+    def test_request_shape_appears_once_in_the_reply_shape(self):
+        self.assertEqual(json.dumps(rq.reply_schema(self.TAGS)).count('"peers_of": {'), 1)
+
     def test_schema_is_strict_everywhere(self):
         def walk(node):
             if isinstance(node, dict):
@@ -88,7 +121,7 @@ class Request(unittest.TestCase):
             elif isinstance(node, list):
                 for v in node:
                     walk(v)
-        walk(rq.REPLY_SCHEMA)
+        walk(rq.reply_schema(self.TAGS))
 
 
 @unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
@@ -132,9 +165,9 @@ class Interpret(unittest.TestCase):
 
     def test_one_retry_then_a_plain_failure(self):
         replies = iter(["not json", json.dumps(self.good)])
-        reply, meta = interpret.interpret("q", self.short, call=lambda s, u, m: (next(replies), {"input_tokens": 10, "output_tokens": 5}))
+        reply, meta = interpret.interpret("q", self.short, call=lambda s, u, m, x=None: (next(replies), {"input_tokens": 10, "output_tokens": 5}))
         self.assertEqual((reply, meta["attempts"], meta["error"]), (self.good, 2, None))
-        reply, meta = interpret.interpret("q", self.short, call=lambda s, u, m: ("{}", {"input_tokens": 10, "output_tokens": 5}))
+        reply, meta = interpret.interpret("q", self.short, call=lambda s, u, m, x=None: ("{}", {"input_tokens": 10, "output_tokens": 5}))
         self.assertIsNone(reply)
         self.assertEqual(meta["attempts"], 2)
         self.assertIn("KeyError", meta["error"])
@@ -147,12 +180,15 @@ class Interpret(unittest.TestCase):
 
     def test_prompt_shows_the_shortlist_only(self):
         seen = {}
-        def call(system, user, model):
+        def call(system, user, model, schema=None):
             seen["text"] = system + user
+            seen["schema"] = schema
             return json.dumps(self.good), {"input_tokens": 1000, "output_tokens": 100}
         _, meta = interpret.interpret("What was Yale's admission rate?", self.short, call=call, model="claude-haiku-5-5")
-        self.assertIn("DRVADM.DVADM01", seen["text"])
-        self.assertNotIn("SFA.UPGRNTP", seen["text"])                      # not on this shortlist
+        self.assertIn("Percent admitted, total", seen["text"])
+        self.assertNotIn("DRVADM.DVADM01", seen["text"])                   # tags, not IDs
+        measure_tags = seen["schema"]["properties"]["requests"]["items"]["properties"]["measures"]["items"]["properties"]["measure"]["enum"]
+        self.assertEqual(len(measure_tags), len(self.short["measures"]))   # only this shortlist's tags are accepted
         self.assertLess(meta["prompt_words"], 2500)
         self.assertAlmostEqual(meta["cost_usd"], (1000 * 0.10 + 100 * 0.50) / 1e6)
 
@@ -257,7 +293,7 @@ class Path_(unittest.TestCase):
         last = json.loads((Path(self.dir.name) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
         self.assertEqual(last["outcome"], "wrong_reading")
         self.assertIn("SFA.UPGRNTP", json.dumps(last["detail"]))
-        self.assertIn("DRVADM.DVADM01", last["shortlist"]["measures"])          # the shortlist is logged
+        self.assertIn("DRVADM.DVADM01", last["shortlist"].values())             # the shortlist is logged, tag by tag
 
     def test_unclear_school_opens_the_picker(self):
         state = {}
@@ -398,6 +434,41 @@ class Path_(unittest.TestCase):
                  reply_request(req("schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)])))
         after = {p.name: p.stat().st_size for p in shared.glob("*.jsonl")} if shared.exists() else {}
         self.assertEqual(before, after)
+
+
+@unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
+class RealReplies(unittest.TestCase):
+    """What the model actually returned in the live smoke test of 2026-11-16 (tests/replies/real_*.json), replayed.
+    Where the old format let the model write something tags now rule out, the file keeps both."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.states = {}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def run_case(self, name):
+        case = json.loads((REPLIES / f"real_{name}.json").read_text(encoding="utf-8"))
+        state = self.states.setdefault(name, {}) if not case.get("after") else self.states[case["after"].replace("real_", "")]
+        page = answer.ask(case["question"], state, self.log, call=saved(case["reply"]))
+        self.assertEqual(page["kind"], case["expect"], name)
+        return page
+
+    def test_all_nine(self):
+        for name in ["a_yale_admission", "b_compare_grad", "c_rank_retention", "e_group_grad", "f_yale_degrees_field",
+                     "g_frcc_peers", "h_ai_policies", "i_add_northeastern"]:
+            self.run_case(name)
+
+    def test_d_summary_measure_switches_to_the_detailed_one(self):
+        page = self.run_case("d_yale_race")                         # the model chose undergraduate enrollment, DRVEF.EFUG
+        rows = {r[0]: r[1] for r in page["table"]["rows"]}
+        self.assertEqual(rows["Total"], "6,814")
+        self.assertIn("Undergraduate enrollment has no breakdown of its own, so it is broken down using Fall enrollment, "
+                      "All students, Undergraduate total", page["interpreted"])
 
 
 class Show(unittest.TestCase):

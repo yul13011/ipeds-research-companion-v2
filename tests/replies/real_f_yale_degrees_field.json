@@ -1,0 +1,103 @@
+{
+ "question": "How many bachelor's degrees by field did Yale award?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "breakdown",
+   "measures": [
+    {
+     "id": "C_A.CTOTALT",
+     "row": [
+      {
+       "column": "AWLEVEL",
+       "code": "5"
+      }
+     ]
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": {
+    "set": "Degrees by field of study",
+    "fixed": [
+     {
+      "column": "AWLEVEL",
+      "code": "5"
+     }
+    ]
+   },
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ },
+ "model_wrote": {
+  "kind": "request",
+  "request": {
+   "operation": "breakdown",
+   "measures": [
+    {
+     "id": "C_A.CTOTALT",
+     "row": [
+      {
+       "column": "C_A.AWLEVEL",
+       "code": "5"
+      }
+     ]
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": {
+    "set": "Degrees by field of study",
+    "fixed": [
+     {
+      "column": "C_A.AWLEVEL",
+      "code": "5"
+     }
+    ]
+   },
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ },
+ "expect": "answer",
+ "adapted_to_tags": [
+  "column written with its table name is now its R tag",
+  "fixed column written with its table name is now its R tag"
+ ],
+ "source": "live smoke test, Sonnet, 2026-11-16"
+}

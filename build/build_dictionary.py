@@ -12,6 +12,7 @@ What it does, in plain terms:
        group_membership  which schools are in each group
        row_keys          for each multi-row table, the category columns that pick out one row per school,
                          and the default code of each (category_codes.csv, `default`)
+       detail_links      each summary measure's detailed equivalent, tested school by school
        breakdown_sets    every named breakdown, tested: do its parts add up to its total?
        breakdown_parts   the parts of each breakdown that passed
        breakdown_slices  for sets in tables keyed by several category columns: every value of the
@@ -24,6 +25,7 @@ Run:  python build/build_dictionary.py     (fast; run after any change to a dict
                                             except special_codes.csv, which needs build_data.py)
 """
 import csv
+import json
 import itertools
 import sqlite3
 import sys
@@ -372,6 +374,41 @@ def build_row_keys(db):
     return problems
 
 
+def parse_detail(text):
+    """'EFA.EFTOTLT where EFALEVEL = 2; MAJORNUM = 1' -> ('EFA', 'EFTOTLT', {'EFALEVEL': '2', 'MAJORNUM': '1'})."""
+    ref, _, rest = text.partition(" where ")
+    table, _, column = ref.strip().partition(".")
+    rows = {k.strip(): v.strip() for k, _, v in (x.partition("=") for x in rest.split(";")) if k.strip()}
+    return table, column, rows
+
+
+def build_detail_links(db):
+    """For each summary measure with a detailed equivalent: do the two agree at every school? A school with a summary
+    of 0 and no detailed row agrees (IPEDS reports no row for nothing). Returns a list of problems."""
+    db.executescript("""DROP TABLE IF EXISTS detail_links; DROP TABLE IF EXISTS detail_link_exceptions;
+        CREATE TABLE detail_links (measure TEXT, detailed TEXT, rows TEXT, n_schools INTEGER, n_agree INTEGER);
+        CREATE TABLE detail_link_exceptions (measure TEXT, unitid INTEGER, summary REAL, detailed REAL);""")
+    problems = []
+    measures = {f"{t}.{v}".upper() for t, v in db.execute('SELECT "table", variable FROM dict_measures')}
+    for table, column, text in db.execute('SELECT "table", variable, detailed_measure FROM dict_measures '
+                                          "WHERE detailed_measure IS NOT NULL").fetchall():
+        dt, dc, rows = parse_detail(text)
+        keys = {c.upper() for (c,) in db.execute('SELECT "column" FROM row_keys WHERE "table"=?', (dt,))}
+        if f"{dt}.{dc}".upper() not in measures or {k.upper() for k in rows} != keys:
+            problems.append(f"measures.csv: {table}.{column} names '{text}', which is not a measure with one value "
+                            f"for each of its category columns ({', '.join(sorted(keys))})")
+            continue
+        where = " AND ".join(f'CAST(d."{k}" AS TEXT) = ?' for k in rows)
+        pairs = db.execute(f'SELECT s.UNITID, s."{column}", d."{dc}" FROM "{table}" s LEFT JOIN (SELECT * FROM "{dt}" d '
+                           f'WHERE {where}) d ON d.UNITID = s.UNITID AND d.year = s.year WHERE s."{column}" IS NOT NULL',
+                           list(rows.values())).fetchall()
+        differ = [(u, s, x) for u, s, x in pairs if not (s == x or (s == 0 and x is None))]
+        db.execute("INSERT INTO detail_links VALUES (?,?,?,?,?)", (f"{table}.{column}", f"{dt}.{dc}",
+                                                                   json.dumps(rows), len(pairs), len(pairs) - len(differ)))
+        db.executemany("INSERT INTO detail_link_exceptions VALUES (?,?,?,?)", [(f"{table}.{column}", u, s, x) for u, s, x in differ])
+    return problems
+
+
 def build(local_db=None, folder=None):
     """Load, check, then build. Stops with a list of problems if the dictionary does not fit the data."""
     db = sqlite3.connect(local_db or config.LOCAL_DB)
@@ -385,6 +422,7 @@ def build(local_db=None, folder=None):
         build_directory(db)
         build_groups(db)
         problems = build_row_keys(db)
+        problems += build_detail_links(db) if not problems else []
         if problems:
             db.rollback()
             raise ValueError("The dictionary does not fit the data:\n  " + "\n  ".join(problems))

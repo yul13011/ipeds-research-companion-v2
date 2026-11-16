@@ -63,9 +63,8 @@ def ask(question, state, log, db_path=None, call=None, model=None):
     db = connect(db_path)
     try:
         out = resolve.resolve(reply, short, state, db, db_path)
-        row = dict(question=question, reply=reply, shortlist={k: [x.get("id") or x.get("name") or x.get("set") or x.get("topic")
-                                                                  or x.get("term") or [x.get("table"), x.get("column"), x.get("code")]
-                                                                  for x in v] for k, v in short.items()},
+        row = dict(question=question, reply=reply, shortlist={t: key for t, (_, key) in short["tags"].items()},
+                   raw_reply=meta.get("raw_reply"), prompt_parts=meta.get("prompt_parts"),
                    model=meta["model"], tokens_in=meta["input_tokens"], tokens_out=meta["output_tokens"],
                    cost_usd=meta["cost_usd"], model_seconds=meta["seconds"], model_error=meta["error"])
         page = finish(out, state, db, log, row)
