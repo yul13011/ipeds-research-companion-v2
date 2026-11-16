@@ -90,3 +90,34 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **One code, one set: limit lifted.** `set_fixed` names a default that the request may change. The build tests each set at every value of the other category columns and loads only the values that pass. Reason: "bachelor's degrees by field" and "undergraduates by age" must work.
 - **Age caveat.** Enrollment by age is optional in even-numbered years; 2,576 of 5,842 schools reported it for fall 2024. `year_meaning.csv` gains a `caveat` column, shown whenever figures from that table are given for a group.
 - **Less-than-two-year graduation rate.** Left out for now.
+
+## 2026-11-16: Stage 3 design approved, with changes
+
+- **Operations.** Lookup and compare are one operation (one or more schools). Group total and group rate are one group operation: code decides from the dictionary whether the measure is summed or computed from counts. The model never chooses between a total and a rate.
+- **Units.** `measures.csv` gains `unit` for first-version measures: count, dollars, percent, average, ratio or coded. Only count and dollars may be summed across schools (the "summable units" setting in `terms.csv`). A percent, average or ratio with no row in `rates.csv` gets a decline for a group figure, with the per-school list offered. Blank is not summable. Pending owner approval of the list.
+- **Shortlist only.** Resolve rejects any measure, school, group, category code or breakdown set that was not on the shortlist shown to the model for that question, and logs it as a wrong reading.
+- **Edits.** A follow-up can change any field (schools, measures, groups, breakdown, condition, sort, year, operation), with add, remove and replace for list fields. "Now for Texas", "break that down by gender" and "rank them" must work as edits.
+- **Pending options.** After a clarifying question, the next model call is shown the pending options, so "the first one" or "both" can be matched.
+- **Logging the shortlist.** Each question's log row records the shortlist (IDs only).
+- **Structured output.** The model reply uses the API's structured output. An invalid reply is retried once, then a plain failure message is shown and logged.
+- **Tests and the API.** Tests never call the API; they use saved model replies. Live calls happen only in a smoke test the owner approves, and in Stage 4.
+- **Default rows.** `category_codes.csv` gains `default`: the overall total where one exists, first major for completions. Pending owner approval of the list.
+- **Applies-to.** `rates.csv` gains `applies_to`, the school group a rate row applies to.
+- **Unstated things.** No year: the latest period. No group: the national universe. "Top" with no number: 10. Each is stated in "Interpreted as". Recorded as `setting` rows in `terms.csv`.
+- **Ranking guard.** For rates, schools with fewer than 30 in the denominator are excluded; the number excluded is stated and the count is shown beside each value. The user can ask to include all. The threshold is a `setting` row in `terms.csv`.
+- **Staff by race and gender.** No optional-year caveat for now.
+
+## 2026-11-16: units and default rows approved
+
+- **Units.** The `unit` column in `measures.csv` is approved as drafted, including published prices as `average` and SAT and ACT percentile scores left blank.
+- **25 added measures.** The measures named by approved terms and the main count column of each approved breakdown set are in the first version.
+- **Default rows.** The 19 defaults in `category_codes.csv` are approved. Three key columns have no default and the app asks: students receiving awards by level, enrollment by major, graduation-rate cohort rows.
+
+## 2026-11-16: group averages and finance reporting forms
+
+- **Group averages.** Averages are treated like rates: a row in `rates.csv` names the total and the count, both summed across schools before dividing. `rates.csv` gains `method`: `sum of counts`, or `weighted average` where IPEDS gives no total. An average with no row still gets a decline for a group figure.
+- **Core expenses per FTE student.** One row per finance form: core expenses over 12-month FTE enrollment (`DRVEF12.FTE12MN`, the FTE IPEDS uses for its own per-FTE figures). Public and private nonprofit together give 38,376, matching NCES.
+- **Average Pell grant.** Total Pell dollars over Pell recipients: 5,300, matching NCES.
+- **Average salary.** Salary outlays equated to nine months over staff on 9-to-12-month contracts (`SAL_IS`), all ranks and each of six ranks. 100,254 with the app's national universe; NCES's 100,224 includes administrative offices, and the counts give exactly 100,224 when they are included. The universe is not changed.
+- **Average net price.** Each school's average weighted by its cohort count (`GISTN2` for public in-state, `GRNTN2` for private). No NCES figure. Pending owner review; not used until approved.
+- **Finance reporting forms.** `measures.csv` gains `reporting_form` (GASB, FASB, for-profit) for finance measures, and `school_groups.csv` three groups of schools by the form they report on. A group figure never combines forms; it is shown separately for each form, with the statement in the "different reporting forms" setting in `terms.csv`. The split is by form, not by control, because 18 public institutions report on the FASB form.

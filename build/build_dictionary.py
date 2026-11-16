@@ -10,6 +10,8 @@ What it does, in plain terms:
                          school_groups.csv names (sector, level, control, Carnegie class, and so on)
        group_list        every group a user can name, with its definition and number of schools
        group_membership  which schools are in each group
+       row_keys          for each multi-row table, the category columns that pick out one row per school,
+                         and the default code of each (category_codes.csv, `default`)
        breakdown_sets    every named breakdown, tested: do its parts add up to its total?
        breakdown_parts   the parts of each breakdown that passed
        breakdown_slices  for sets in tables keyed by several category columns: every value of the
@@ -22,6 +24,7 @@ Run:  python build/build_dictionary.py     (fast; run after any change to a dict
                                             except special_codes.csv, which needs build_data.py)
 """
 import csv
+import itertools
 import sqlite3
 import sys
 from pathlib import Path
@@ -33,6 +36,7 @@ TABLES = ["measures", "terms", "school_groups", "group_members", "school_nicknam
           "rates", "category_codes", "year_meaning", "outside_ipeds", "special_codes"]
 IDENTITY = ["INSTNM", "IALIAS", "CITY", "STABBR"]          # always in the directory, from HD
 FILTER_KINDS = ("column", "universe")                       # groups defined by codes in directory columns
+METHODS = ("sum of counts", "weighted average")            # how a rates.csv row combines schools; see README
 ADDITIVE = "sum of parts"                                   # a breakdown set with no total row or column in the data
 
 
@@ -109,6 +113,16 @@ def check(db):
                 exists(f"{ref.partition('.')[0]}.{cat}", f"rates.csv '{rate}'")
         if rate_measure and rate_measure.upper() not in measures:
             problems.append(f"rates.csv: '{rate}' names {rate_measure}, which is not in measures.csv")
+    for rate, method in db.execute("SELECT rate, method FROM dict_rates"):
+        if method not in METHODS:
+            problems.append(f"rates.csv: '{rate}' has method '{method}'; it must be one of {', '.join(METHODS)}")
+    for rate, applies_to in db.execute("SELECT rate, applies_to FROM dict_rates WHERE applies_to IS NOT NULL"):
+        if applies_to not in group_names:
+            problems.append(f"rates.csv: '{rate}' applies to '{applies_to}', which is not a school group")
+    for rate_measure, n, n_scoped in db.execute("SELECT rate_measure, COUNT(*), COUNT(applies_to) FROM dict_rates "
+                                                "WHERE rate_measure IS NOT NULL GROUP BY 1 HAVING COUNT(*) > 1"):
+        if n_scoped < n:
+            problems.append(f"rates.csv: {rate_measure} has {n} rows, so each must say which schools it applies to")
 
     for table, column in db.execute('SELECT DISTINCT "table", "column" FROM dict_category_codes'):
         exists(f"{table}.{column}", "category_codes.csv")
@@ -311,6 +325,49 @@ def build_breakdown_sets(db):
     db.execute('CREATE INDEX ix_breakdown_slices ON breakdown_slices (set_name, "table", measure, slice)')
 
 
+def build_row_keys(db):
+    """For each multi-row table, find the fewest category columns that pick out one row per school, and check the
+    defaults in category_codes.csv: one at most per key column, none on a column that only describes the row, and
+    together they must pick out exactly one row per school. Returns a list of problems."""
+    db.executescript("""DROP TABLE IF EXISTS row_keys;
+        CREATE TABLE row_keys ("table" TEXT, "column" TEXT, default_code TEXT, default_label TEXT);""")
+    problems = []
+    tables = {}
+    for table, column in db.execute('SELECT DISTINCT "table", "column" FROM dict_category_codes ORDER BY rowid'):
+        tables.setdefault(table, []).append(column)
+    for table, columns in tables.items():
+        rows = db.execute(f'SELECT COUNT(*) FROM "{table}"').fetchone()[0]
+        key = None
+        for size in range(1, len(columns) + 1):
+            for combo in itertools.combinations(columns, size):
+                cols = ", ".join(f'"{c}"' for c in combo)
+                if db.execute(f'SELECT COUNT(*) FROM (SELECT 1 FROM "{table}" GROUP BY UNITID, year, {cols})').fetchone()[0] == rows:
+                    key = combo
+                    break
+            if key:
+                break
+        if not key:
+            problems.append(f"category_codes.csv: no set of category columns in {table} picks out one row per school")
+            continue
+        defaults = db.execute('SELECT "column", code, label FROM dict_category_codes WHERE "table" = ? AND "default" = \'yes\'',
+                              (table,)).fetchall()
+        for column in columns:
+            mine = [(code, label) for c, code, label in defaults if c == column]
+            if len(mine) > 1:
+                problems.append(f"category_codes.csv: {table}.{column} has {len(mine)} default codes; it may have one")
+            if mine and column not in key:
+                problems.append(f"category_codes.csv: {table}.{column} only describes the row, so it takes no default")
+            if column in key:
+                db.execute("INSERT INTO row_keys VALUES (?,?,?,?)", (table, column, *(mine[0] if mine else (None, None))))
+        chosen = [(c, code) for c, code, _ in defaults if c in key]
+        if key and len(chosen) == len(key):                 # every key column has a default: one row per school?
+            where = " AND ".join(f"CAST(\"{c}\" AS TEXT) = '{code}'" for c, code in chosen)
+            most = db.execute(f'SELECT MAX(n) FROM (SELECT COUNT(*) n FROM "{table}" WHERE {where} GROUP BY UNITID, year)').fetchone()[0]
+            if most and most > 1:
+                problems.append(f"category_codes.csv: the defaults for {table} pick {most} rows for one school")
+    return problems
+
+
 def build(local_db=None, folder=None):
     """Load, check, then build. Stops with a list of problems if the dictionary does not fit the data."""
     db = sqlite3.connect(local_db or config.LOCAL_DB)
@@ -323,6 +380,10 @@ def build(local_db=None, folder=None):
         build_value_labels(db)
         build_directory(db)
         build_groups(db)
+        problems = build_row_keys(db)
+        if problems:
+            db.rollback()
+            raise ValueError("The dictionary does not fit the data:\n  " + "\n  ".join(problems))
         build_breakdown_sets(db)
         db.commit()
         return {name: db.execute(f"SELECT COUNT(*) FROM dict_{name}").fetchone()[0] for name in TABLES}

@@ -23,6 +23,8 @@ One row per IPEDS variable in the release (2,599).
 - `format`: IPEDS format. `Cont` is a quantity, `Disc` is a coded answer, `Alpha` is text.
 - `data_type`: `N` numeric or `A` text, from the codebook.
 - `rows_per_school`: one row per school, or many.
+- `reporting_form`: for finance measures, the form the school reported on: `GASB`, `FASB` or `for-profit`. A group figure never combines measures or rate rows with different forms; the "different reporting forms" setting in `terms.csv` holds the rule and its statement. A rate row takes the form of its numerator.
+- `unit`: for first-version measures, one of `count`, `dollars`, `percent`, `average`, `ratio` or `coded`. Only the units named in the "summable units" setting in `terms.csv` (count and dollars) are added up across schools. A percent, average or ratio is computed for a group from its counts in `rates.csv`, or the group figure is declined. Blank means not summable (text, identifiers, test-score percentiles).
 - `priority`: 1 for ready-made and most-asked measures, then 2 and 3.
 - `in_first_version`: `yes` or `no`. A `no` means "IPEDS collects it, but it is not set up in this app yet".
 - `period`: filled only when the variable reports a different year from its table (net price for 2023-24 in a 2024-25 table). Blank means the table's period in `year_meaning.csv`.
@@ -37,7 +39,7 @@ Words with more than one possible reading. One row per reading and measure. A re
 
 - `term`: the name of the term. All rows of one term share it.
 - `words`: what users say.
-- `kind`: `measure` if the reading is something to look up; `group` if the reading defines a set of schools.
+- `kind`: `measure` if the reading is something to look up; `group` if the reading defines a set of schools; `setting` for a rule the app applies when the user does not say (no year, no group, no number for "top"), the ranking guard, and which units may be summed.
 - `reading`: the name of this reading. It is the text on the option button when the app asks.
 - `shown_as`: the column heading in the result. Rows of one reading with the same heading are the same measure reported on different forms; a school has a value in only one.
 - `measure`: the measure this row points to.
@@ -90,6 +92,8 @@ The counts behind each rate, so a group rate is computed by summing counts, neve
 - `numerator`, `denominator`: the count columns.
 - `category_column`: for multi-row tables, the column that picks the rows.
 - `numerator_code`, `denominator_code`: the row codes to use.
+- `method`: how schools are combined. `sum of counts`: add the numerators, add the denominators, then divide (rates, and averages such as dollars per student). `weighted average`: the numerator is each school's own average and the denominator its count of students; the group figure is the sum of average times count, divided by the sum of counts (net price, where IPEDS gives no total).
+- `applies_to`: the school group the counts apply to, when the rate is defined only for some schools. Rows that share a ready-made rate must each name one.
 - `nces_figure`: the published national figure for 2024-25, used as a test.
 - `status`: whether it has been tested.
 
@@ -98,6 +102,7 @@ The counts behind each rate, so a group rate is computed by summing counts, neve
 Every code in the category columns of the multi-row tables.
 
 - `table`, `column`, `code`, `label`: the code and its IPEDS label.
+- `default`: `yes` on the one code used when a request does not name this column. Only columns that pick out the row take a default; columns that just describe the row (the occupation column in a table keyed by a combined staff category) take none. The build checks that the defaults pick exactly one row per school. A column with no default makes the app ask.
 - `role`: `total` or `part`, guessed from the label wording. It is a reading aid only; breakdowns use the three columns below.
 - `breakdown_set`: filled when this code is one part of a named breakdown, such as "Fall enrollment by level".
 - `set_total`: the code of the row the parts add up to, or `sum of parts` when the data has no total row. The same on every row of the set.

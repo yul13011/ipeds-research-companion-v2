@@ -160,3 +160,6 @@ Ivy Plus,member list,Ivy Plus,,,,"The eight Ivy League schools plus MIT, Stanfor
 Seven Sisters,member list,Seven Sisters,,,,"Barnard, Bryn Mawr, Mount Holyoke, Smith, Vassar and Wellesley",,in use,1,
 Flagship universities,member list,flagship universities; state flagships; flagships,,,,Flagship is not an IPEDS category. This is a hand-kept list of 53 state flagship universities.,,in use,1,
 Has an IPEDS comparison group,has rows,,CUSTOMCGIDS,,,Schools that submitted their own comparison group to IPEDS,,in use,2,"Used to decide whether ""peers"" can default to the school's own comparison group"
+Reports on the GASB finance form,has rows,,F_F1A,,,Schools that report finance on the GASB form (public institutions),,in use,2,
+Reports on the FASB finance form,has rows,,F_F2,,,Schools that report finance on the FASB form (private nonprofit institutions and 18 public institutions),,in use,2,
+Reports on the for-profit finance form,has rows,,F_F3,,,Schools that report finance on the for-profit form (private for-profit institutions),,in use,2,

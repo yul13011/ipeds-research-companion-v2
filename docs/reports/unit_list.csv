@@ -1,0 +1,763 @@
+table,variable,title,unit
+ADM,ADMCON1,Secondary school GPA,coded
+ADM,ADMCON2,Secondary school rank,coded
+ADM,ADMCON3,Secondary school record,coded
+ADM,ADMCON4,Completion of college-preparatory program,coded
+ADM,ADMCON5,Recommendations,coded
+ADM,ADMCON6,Formal demonstration of competencies,coded
+ADM,ADMCON7,Admission test scores,coded
+ADM,ADMCON8,English Proficiency Test,coded
+ADM,ADMCON9,"Other Test (Wonderlic, WISC-III, etc.)",coded
+ADM,ADMCON10,Work experience,coded
+ADM,ADMCON11,Personal statement or essay,coded
+ADM,ADMCON12,Legacy status,coded
+ADM,APPLCN,Applicants total,count
+ADM,APPLCNM,Applicants men,count
+ADM,APPLCNW,Applicants women,count
+ADM,APPLCNAN,Applicants another gender,count
+ADM,APPLCNUN,Applicants gender unknown,count
+ADM,ADMSSN,Admissions total,count
+ADM,ADMSSNM,Admissions men,count
+ADM,ADMSSNW,Admissions women,count
+ADM,ADMSSNAN,Admissions another gender,count
+ADM,ADMSSNUN,Admissions gender unknown,count
+ADM,ENRLT,Enrolled total,count
+ADM,ENRLM,Enrolled  men,count
+ADM,ENRLW,Enrolled  women,count
+ADM,ENRLAN,Enrolled another gender,count
+ADM,ENRLUN,Enrolled gender unknown,count
+ADM,ENRLFT,Enrolled full time total,count
+ADM,ENRLFTM,Enrolled full time men,count
+ADM,ENRLFTW,Enrolled full time women,count
+ADM,ENRLFTAN,Enrolled full time another gender,count
+ADM,ENRLFTUN,Enrolled full time gender unknown,count
+ADM,ENRLPT,Enrolled part time total,count
+ADM,ENRLPTM,Enrolled part time men,count
+ADM,ENRLPTW,Enrolled part time women,count
+ADM,ENRLPTAN,Enrolled part time another gender,count
+ADM,ENRLPTUN,Enrolled part time gender unknown,count
+ADM,SATNUM,Number of first-time degree/certificate-seeking students submitting SAT scores,count
+ADM,SATPCT,Percent of first-time degree/certificate-seeking students submitting SAT scores,percent
+ADM,ACTNUM,Number of first-time degree/certificate-seeking students submitting ACT scores,count
+ADM,ACTPCT,Percent of first-time degree/certificate-seeking students submitting ACT scores,percent
+ADM,SATVR25,SAT Evidence-Based Reading and Writing 25th percentile score,
+ADM,SATVR50,SAT Evidence-Based Reading and Writing 50th percentile score,
+ADM,SATVR75,SAT Evidence-Based Reading and Writing 75th percentile score,
+ADM,SATMT25,SAT Math 25th percentile score,
+ADM,SATMT50,SAT Math 50th percentile score,
+ADM,SATMT75,SAT Math 75th percentile score,
+ADM,ACTCM25,ACT Composite 25th percentile score,
+ADM,ACTCM50,ACT Composite 50th percentile score,
+ADM,ACTCM75,ACT Composite 75th percentile score,
+ADM,ACTEN25,ACT English 25th percentile score,
+ADM,ACTEN50,ACT English 50th percentile score,
+ADM,ACTEN75,ACT English 75th percentile score,
+ADM,ACTMT25,ACT Math 25th percentile score,
+ADM,ACTMT50,ACT Math 50th percentile score,
+ADM,ACTMT75,ACT Math 75th percentile score,
+COST2_NETPRICE,NPIST2,"Average net price-students awarded grant or scholarship aid, 2023-24",average
+COST2_NETPRICE,NPGRN2,"Average net price-students awarded grant or scholarship aid, 2023-24",average
+DRVADM,DVADM01,Percent admitted - total,percent
+DRVADM,DVADM02,Percent admitted - men,percent
+DRVADM,DVADM03,Percent admitted - women,percent
+DRVADM,DVADM04,Admissions yield - total,percent
+DRVADM,DVADM05,Admissions yield - men,percent
+DRVADM,DVADM06,Admissions yield - women,percent
+DRVADM,DVADM07,Admissions yield - full time,percent
+DRVADM,DVADM08,Admissions yield - full time men,percent
+DRVADM,DVADM09,Admissions yield - full time women,percent
+DRVADM,DVADM10,Admissions yield - part time,percent
+DRVADM,DVADM11,Admissions yield - part time men,percent
+DRVADM,DVADM12,Admissions yield - part time women,percent
+DRVAL,LPBOOKSP,Physical books as a percent of the total library collection,percent
+DRVAL,LPMEDIAP,Physical media as a percent of the total library collection,percent
+DRVAL,LPSERIAP,Physical serials as a percent of the total library collection,percent
+DRVAL,LEBOOKSP,Digital/Electronic books as a percent of the total library collection,percent
+DRVAL,LEDATABP,Databases as a percent of the total library collection,percent
+DRVAL,LEMEDIAP,Digital/Electronic media as a percent of the total library collection,percent
+DRVAL,LESERIAP,Digital/Electronic serials as a percent of the total library collection,percent
+DRVAL,LSALWAGP,Salaries and wages from the library budget as a percent of total library expenditures,percent
+DRVAL,LFRNGBNP,Fringe benefits paid out of the library budget as a percent of total library expenditures,percent
+DRVAL,LEXMSBBP,"One-time purchases of books, serial backfiles, and other materials as a percent of total library expenditures",percent
+DRVAL,LEXMSCSP,Ongoing commitments to subscriptions as a percent of total library expenditures,percent
+DRVAL,LEXMSOTP,All other materials/services as a percent of total library expenditures,percent
+DRVAL,LEXOMTLP,Total operations and maintenance as a percent of total library expenditures,percent
+DRVAL,LEXPTOTF,Total library expenditures per FTE,average
+DRVAL,LTOTLFTE,Total library FTE staff,count
+DRVAL,LLIBRFTE,Librarians FTE staff,count
+DRVAL,LPROFFTE,Other professional FTE staff,count
+DRVAL,LPAIDFTE,All other paid FTE staff (Except Student Assistants),count
+DRVAL,LSTUDFTE,Student assistants FTE,count
+DRVC,ASCDEG,Associate's degree,count
+DRVC,BASDEG,Bachelor's degree,count
+DRVC,MASDEG,Master's degree,count
+DRVC,DOCDEGRS,Doctor's degree - research/scholarship,count
+DRVC,DOCDEGPP,Doctor's degree - professional practice,count
+DRVC,DOCDEGOT,Doctor's degree - other,count
+DRVC,CERT1,Certificates of less than 1 year,count
+DRVC,CERT1A,Certificate of less than 12 weeks,count
+DRVC,CERT1B,"Certificate of at least 12 weeks, but less than 1 year",count
+DRVC,CERT2,Certificates of 1 but less than 2 years,count
+DRVC,CERT4,Certificates of 2 but less than 4 years,count
+DRVC,PBACERT,Postbaccalaureate certificates,count
+DRVC,PMACERT,Post-master's certificates,count
+DRVC,SASCDEG,Number of students receiving an Associate's degree,count
+DRVC,SBASDEG,Number of students receiving a Bachelor's degree,count
+DRVC,SMASDEG,Number of students receiving a Master's degree,count
+DRVC,SDOCDEG,Number of students receiving a Doctor's degree,count
+DRVC,SCERT1A,Number of students receiving certificates of less than 12 weeks,count
+DRVC,SCERT1B,"Number of students receiving certificates of at least 12 weeks, but less than 1 year",count
+DRVC,SCERT24,Number of students receiving a certificate of 1 but less than 4 years,count
+DRVC,SBAMACRT,Number of students receiving a Postbaccalaureate or Post-master's certificate,count
+DRVCOST,TUFEYR0,"Tuition and fees, 2021-22",average
+DRVCOST,TUFEYR1,"Tuition and fees, 2022-23",average
+DRVCOST,TUFEYR2,"Tuition and fees, 2023-24",average
+DRVCOST,TUFEYR3,"Tuition and fees, 2024-25",average
+DRVCOST,CINDON,Total price for in-district students living on campus  2024-25,average
+DRVCOST,CINSON,Total price for in-state students living on campus 2024-25,average
+DRVCOST,COTSON,Total price for out-of-state students living on campus 2024-25,average
+DRVCOST,CINDOFF,Total price for in-district students living off campus (not with family)  2024-25,average
+DRVCOST,CINSOFF,Total price for in-state students living off campus (not with family)  2024-25,average
+DRVCOST,COTSOFF,Total price for out-of-state students living off campus (not with family)  2024-25,average
+DRVCOST,CINDFAM,Total price for in-district students living off campus (with family)  2024-25,average
+DRVCOST,CINSFAM,Total price for in-state students living off campus (with family)  2024-25,average
+DRVCOST,COTSFAM,Total price for out-of-state students living off campus (with family)  2024-25,average
+DRVEF12,FTE12MN,12-month full-time equivalent enrollment,count
+DRVEF12,UNDUP,Total 12-month unduplicated headcount,count
+DRVEF12,UNDUPUG,Undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12FT,Full-time 12-month unduplicated headcount,count
+DRVEF12,E12PT,Part-time 12-month unduplicated headcount,count
+DRVEF12,E12UG1ST,First-time degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGTRN,Transfer-in degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGCNT,Continuing degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGNDG,Nondegree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12GRAD,Graduate 12-month unduplicated headcount,count
+DRVEF12,E12UGFT,Full-time undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UG1SFT,Full-time first-time degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGTRFT,Full-time transfer-in degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGCNFT,Full-time continuing degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGNDFT,Full-time nondegree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12GRADFT,Full-time graduate 12-month unduplicated headcount,count
+DRVEF12,E12UGPT,Part-time undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UG1SPT,Part-time first-time degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGTRPT,Part-time transfer-in degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGCNPT,Part-time continuing degree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12UGNDPT,Part-time nondegree/certificate-seeking undergraduate 12-month unduplicated headcount,count
+DRVEF12,E12GRADPT,Part-time graduate 12-month unduplicated headcount,count
+DRVEF12,PCTE12AN,Percent of 12-month unduplicated headcount that are American Indian or Alaska Native,percent
+DRVEF12,PCTE12AS,Percent of 12-month unduplicated headcount that are Asian,percent
+DRVEF12,PCTE12BK,Percent of 12-month unduplicated headcount that are Black or African American,percent
+DRVEF12,PCTE12HS,Percent of 12-month unduplicated headcount that are Hispanic/Latino,percent
+DRVEF12,PCTE12NH,Percent of 12-month unduplicated headcount that are Native Hawaiian or Other Pacific Islander,percent
+DRVEF12,PCTE12WH,Percent of 12-month unduplicated headcount that are White,percent
+DRVEF12,PCTE122M,Percent of 12-month unduplicated headcount that are two or more races,percent
+DRVEF12,PCTE12UN,Percent of 12-month unduplicated headcount that are race/ethnicity unknown,percent
+DRVEF12,PCTE12NR,Percent of 12-month unduplicated headcount that are U.S. Nonresident,percent
+DRVEF12,PCTE12W,Percent of 12-month unduplicated headcount that are women,percent
+DRVEF12,PCTE12UGAN,Percent of undergraduate 12-month unduplicated headcount that are American Indian or Alaska Native,percent
+DRVEF12,PCTE12UGAS,Percent of undergraduate 12-month unduplicated headcount that are Asian,percent
+DRVEF12,PCTE12UGBK,Percent of undergraduate 12-month unduplicated headcount that are Black or African American,percent
+DRVEF12,PCTE12UGHS,Percent of undergraduate 12-month unduplicated headcount that are Hispanic/Latino,percent
+DRVEF12,PCTE12UGNH,Percent of undergraduate 12-month unduplicated headcount that are Native Hawaiian or Other Pacific Islander,percent
+DRVEF12,PCTE12UGWH,Percent of undergraduate 12-month unduplicated headcount that are White,percent
+DRVEF12,PCTE12UG2M,Percent of undergraduate 12-month unduplicated headcount that are two or more races,percent
+DRVEF12,PCTE12UGUN,Percent of undergraduate 12-month unduplicated headcount that are race/ethnicity unknown,percent
+DRVEF12,PCTE12UGNR,Percent of undergraduate 12-month unduplicated headcount that are U.S. Nonresident,percent
+DRVEF12,PCTE12UGW,Percent of undergraduate 12-month unduplicated headcount that are women,percent
+DRVEF12,PCTE12GRADAN,Percent of graduate 12-month unduplicated headcount that are American Indian or Alaska Native,percent
+DRVEF12,PCTE12GRADAS,Percent of graduate 12-month unduplicated headcount that are Asian,percent
+DRVEF12,PCTE12GRADBK,Percent of graduate 12-month unduplicated headcount that are Black or African American,percent
+DRVEF12,PCTE12GRADHS,Percent of graduate 12-month unduplicated headcount that are Hispanic/Latino,percent
+DRVEF12,PCTE12GRADNH,Percent of graduate 12-month unduplicated headcount that are Native Hawaiian or Other Pacific Islander,percent
+DRVEF12,PCTE12GRADWH,Percent of graduate 12-month unduplicated headcount that are White,percent
+DRVEF12,PCTE12GRAD2M,Percent of graduate 12-month unduplicated headcount that are two or more races,percent
+DRVEF12,PCTE12GRADUN,Percent of graduate 12-month unduplicated headcount that are race/ethnicity unknown,percent
+DRVEF12,PCTE12GRADNR,Percent of graduate 12-month unduplicated headcount that are U.S. Nonresident,percent
+DRVEF12,PCTE12GRADW,Percent of graduate 12-month unduplicated headcount that are women,percent
+DRVEF12,PCTE12DEEXC,Percent of 12-month unduplicated headcount enrolled exclusively in distance education courses,percent
+DRVEF12,PCTE12DESOM,Percent of 12-month unduplicated headcount enrolled in some but not all distance education courses,percent
+DRVEF12,PCTE12DENON,Percent of 12-month unduplicated headcount not enrolled in any distance education courses,percent
+DRVEF12,PCTE12UGDEEXC,Percent of undergraduate 12-month unduplicated headcount enrolled exclusively in distance education courses,percent
+DRVEF12,PCTE12UGDESOM,Percent of undergraduate 12-month unduplicated headcount enrolled in some but not all distance education courses,percent
+DRVEF12,PCTE12UGDENON,Percent of undergraduate 12-month unduplicated headcount not enrolled in any distance education courses,percent
+DRVEF12,PCTE12GRADDEEXC,Percent of graduate 12-month unduplicated headcount enrolled exclusively in distance education courses,percent
+DRVEF12,PCTE12GRADDESOM,Percent of graduate 12-month unduplicated headcount enrolled in some but not all distance education courses,percent
+DRVEF12,PCTE12GRADDENON,Percent of graduate 12-month unduplicated headcount not enrolled in any distance education courses,percent
+DRVEF,ENRTOT,Total  enrollment,count
+DRVEF,FTE,Full-time equivalent fall enrollment,count
+DRVEF,EnrFt,Full-time enrollment,count
+DRVEF,EnrPt,Part-time enrollment,count
+DRVEF,PctEnrWh,Percent of total enrollment that are White,percent
+DRVEF,PctEnrBK,Percent of total enrollment that are Black or African American,percent
+DRVEF,PctEnrHS,Percent of total enrollment that are Hispanic/Latino,percent
+DRVEF,PctEnrAP,Percent of total enrollment that are Asian/Native Hawaiian/Pacific Islander,percent
+DRVEF,PCTENRAS,Percent of total enrollment that are Asian,percent
+DRVEF,PCTENRNH,Percent of total enrollment that are Native Hawaiian or Other Pacific Islander,percent
+DRVEF,PctEnrAN,Percent of total enrollment that are American Indian or Alaska Native,percent
+DRVEF,PCTENR2M,Percent of total enrollment that are two or more races,percent
+DRVEF,PctEnrUn,Percent of total enrollment that are Race/ethnicity unknown,percent
+DRVEF,PctEnrNr,Percent of total enrollment that are U.S. Nonresident,percent
+DRVEF,PCTENRW,Percent of total enrollment that are women,percent
+DRVEF,PCTFT1ST,"Full-time, first-time, degree/certificate seeking undergraduates (GRS Cohort) as percent of all undergraduates",percent
+DRVEF,EFUG,Undergraduate enrollment,count
+DRVEF,EFUG1ST,First-time degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGTRN,Transfer-in degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGCNT,Continuing degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGNDG,Nondegree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGFT,Full-time undergraduate enrollment,count
+DRVEF,EFUG1SFT,Full-time first-time degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGTRFT,Full-time transfer-in degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGCNFT,Full-time continuing degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGNDFT,Full-time nondegree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGPT,Part-time undergraduate enrollment,count
+DRVEF,EFUG1SPT,Part-time first-time degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGTRPT,Part-time transfer-in degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGCNPT,Part-time continuing degree/certificate-seeking undergraduate enrollment,count
+DRVEF,EFUGNDPT,Part-time nondegree/certificate-seeking undergraduate enrollment,count
+DRVEF,PCUENRWH,Percent of undergraduate enrollment that are White,percent
+DRVEF,PCUENRBK,Percent of undergraduate enrollment that are Black or African American,percent
+DRVEF,PCUENRHS,Percent of undergraduate enrollment that are Hispanic/Latino,percent
+DRVEF,PCUENRAP,Percent of undergraduate enrollment that are Asian/Native Hawaiian/Pacific Islander,percent
+DRVEF,PCUENRAS,Percent of undergraduate enrollment that are Asian,percent
+DRVEF,PCUENRNH,Percent of undergraduate enrollment that are Native Hawaiian or Other Pacific Islander,percent
+DRVEF,PCUENRAN,Percent of undergraduate enrollment that are American Indian or Alaska Native,percent
+DRVEF,PCUENR2M,Percent of undergraduate enrollment that are two or more races,percent
+DRVEF,PCUENRUN,Percent of undergraduate enrollment that are Race/ethnicity unknown,percent
+DRVEF,PCUENRNR,Percent of undergraduate enrollment that are U.S. Nonresident,percent
+DRVEF,PCUENRW,Percent of undergraduate enrollment that are women,percent
+DRVEF,EFGRAD,Graduate enrollment,count
+DRVEF,EFGRADFT,Full-time graduate enrollment,count
+DRVEF,EFGRADPT,Part-time graduate enrollment,count
+DRVEF,PCGENRWH,Percent of graduate enrollment that are White,percent
+DRVEF,PCGENRBK,Percent of graduate enrollment that are Black or African American,percent
+DRVEF,PCGENRHS,Percent of graduate enrollment that are Hispanic/Latino,percent
+DRVEF,PCGENRAP,Percent of graduate enrollment that are Asian/Native Hawaiian/Pacific Islander,percent
+DRVEF,PCGENRAS,Percent of graduate enrollment that are Asian,percent
+DRVEF,PCGENRNH,Percent of graduate enrollment that are Native Hawaiian or Other Pacific Islander,percent
+DRVEF,PCGENRAN,Percent of graduate enrollment that are American Indian or Alaska Native,percent
+DRVEF,PCGENR2M,Percent of graduate enrollment that are two or more races,percent
+DRVEF,PCGENRUN,Percent of graduate enrollment that are Race/ethnicity unknown,percent
+DRVEF,PCGENRNR,Percent of graduate enrollment that are U.S. Nonresident,percent
+DRVEF,PCGENRW,Percent of graduate enrollment that are women,percent
+DRVEF,DVEF01,"Adult age (25-64) enrollment, all students",count
+DRVEF,DVEF02,"Adult age (25-64) enrollment, undergraduate",count
+DRVEF,DVEF03,"Adult age (25-64) enrollment, graduate",count
+DRVEF,DVEF05,"Adult age (25-64) enrollment, full-time students",count
+DRVEF,DVEF06,"Adult age (25-64) enrollment, full-time undergraduate",count
+DRVEF,DVEF07,"Adult age (25-64) enrollment, full-time graduate",count
+DRVEF,DVEF09,"Adult age (25-64) enrollment, part-time students",count
+DRVEF,DVEF10,"Adult age (25-64) enrollment, part-time undergraduate",count
+DRVEF,DVEF11,"Adult age (25-64) enrollment, part-time graduate",count
+DRVEF,DVEF13,Percent of undergraduate enrollment under 18,percent
+DRVEF,DVEF14,Percent of undergraduate enrollment 18-24,percent
+DRVEF,DVEF15,"Percent of undergraduate enrollment, 25-64",percent
+DRVEF,DVEF16,Percent of undergraduate enrollment over 65,percent
+DRVEF,RMINSTTN,Number of first-time undergraduates - in-state,count
+DRVEF,RMOUSTTN,Number of first-time undergraduates - out-of-state,count
+DRVEF,RMFRGNCN,Number of first-time undergraduates - foreign countries,count
+DRVEF,RMUNKNWN,Number of first-time undergraduates - residence unknown,count
+DRVEF,RMINSTTP,Percent of first-time undergraduates - in-state,percent
+DRVEF,RMOUSTTP,Percent of first-time undergraduates - out-of-state,percent
+DRVEF,RMFRGNCP,Percent of first-time undergraduates - foreign countries,percent
+DRVEF,RMUNKNWP,Percent of first-time undergraduates - residence unknown,percent
+DRVEF,PCTDEEXC,Percent of students enrolled exclusively in distance education courses,percent
+DRVEF,PCTDESOM,Percent of students enrolled in some but not all distance education courses,percent
+DRVEF,PCTDENON,Percent of students not enrolled in any distance education courses,percent
+DRVEF,PCUDEEXC,Percent of undergraduate students enrolled exclusively in distance education courses,percent
+DRVEF,PCUDESOM,Percent of undergraduate students enrolled in some but not all distance education courses,percent
+DRVEF,PCUDENON,Percent of undergraduate students not enrolled in any distance education courses,percent
+DRVEF,PCGDEEXC,Percent of graduate students enrolled exclusively in distance education courses,percent
+DRVEF,PCGDESOM,Percent of graduate students enrolled in some but not all distance education courses,percent
+DRVEF,PCGDENON,Percent of graduate students not enrolled in any distance education courses,percent
+DRVF,F1CORREV,"Core revenues, total dollars (GASB)",dollars
+DRVF,F1TUFEPC,Tuition and fees as a percent of core revenues (GASB),percent
+DRVF,F1STAPPC,State appropriations as percent of core revenues  (GASB),percent
+DRVF,F1LCAPPC,Local appropriations as a percent of core revenues (GASB),percent
+DRVF,F1GVGCPC,Government grants and contracts as a percent of core revenues (GASB),percent
+DRVF,F1PGGCPC,"Private gifts, grants, and contracts as a percent of core revenues (GASB)",percent
+DRVF,F1INVRPC,Investment return as a percent of core revenues (GASB),percent
+DRVF,F1OTRVPC,Other revenues as a percent of core revenues (GASB),percent
+DRVF,F1TUFEFT,Revenues from tuition and fees per FTE (GASB),average
+DRVF,F1STAPFT,Revenues from state appropriations per FTE (GASB),average
+DRVF,F1LCAPFT,Revenues from local appropriations per FTE (GASB),average
+DRVF,F1GVGCFT,Revenues from government grants and contracts per FTE (GASB),average
+DRVF,F1PGGCFT,"Revenues from private gifts, grants, and contracts per FTE (GASB)",average
+DRVF,F1INVRFT,Revenues from investment return per FTE (GASB),average
+DRVF,F1OTRVFT,Other core revenues per FTE (GASB),average
+DRVF,F1COREXP,"Core expenses, total dollars (GASB)",dollars
+DRVF,F1INSTFT,Instruction expenses per FTE  (GASB),average
+DRVF,F1RSRCFT,Research expenses per FTE  (GASB),average
+DRVF,F1PBSVFT,Public service expenses per FTE (GASB),average
+DRVF,F1ACSPFT,Academic support expenses per FTE (GASB),average
+DRVF,F1STSVFT,Student service expenses per FTE (GASB),average
+DRVF,F1INSUFT,Institutional support expenses per FTE (GASB),average
+DRVF,F1OTEXFT,All other core expenses per FTE (GASB),average
+DRVF,F1INSTPC,Instruction expenses as a percent of total core expenses (GASB),percent
+DRVF,F1RSRCPC,Research expenses as a percent of total core expenses (GASB),percent
+DRVF,F1PBSVPC,Public service expenses as a percent of total core expenses (GASB),percent
+DRVF,F1ACSPPC,Academic support expenses as a percent of total core expenses (GASB),percent
+DRVF,F1STSVPC,Student service expenses as a percent of total core expenses (GASB),percent
+DRVF,F1INSUPC,Institutional support expenses as a percent of total core expenses (GASB),percent
+DRVF,F1OTEXPC,Other core expenses as a percent of total core expenses (GASB),percent
+DRVF,F1SWINSP,Salaries and wages for instruction as a percent of total expenses for instruction (GASB),percent
+DRVF,F1SWRSRP,Salaries and wages for research as a percent of total expenses for research (GASB),percent
+DRVF,F1SWPBSP,Salaries and wages for public service as a percent of total expenses for public service (GASB),percent
+DRVF,F1SWACSP,Salaries and wages for academic support as a percent of total expenses for academic support (GASB),percent
+DRVF,F1SWSTSP,Salaries and wages for student services as a percent of total expenses for student services (GASB),percent
+DRVF,F1SWISPP,Salaries and wages for institutional support as a percent of total expenses for institutional support (GASB),percent
+DRVF,F1SWOTEP,Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (GASB),percent
+DRVF,F1SWCREP,Salaries and wages for core expenses as a percent of total core expenses (GASB),percent
+DRVF,F1ENDMFT,Endowment assets (year end) per FTE enrollment (GASB),average
+DRVF,F1SAFBPC,"Total salaries, wages, and benefits as a percent of total expenses (GASB)",percent
+DRVF,F1SALRPC,Total salaries and wages as a percent of total expenses (GASB),percent
+DRVF,F1EQUITR,Equity ratio (GASB),ratio
+DRVF,F2CORREV,"Core revenues, total dollars (FASB)",dollars
+DRVF,F2TUFEPC,Tuition and fees as a percent of core revenues (FASB),percent
+DRVF,F2GVGCPC,Government grants and contracts as a percent of core revenues (FASB),percent
+DRVF,F2PGGCPC,"Private gifts, grants, contracts/contributions from affiliated entities as a percent of core revenues (FASB)",percent
+DRVF,F2INVRPC,Investment return as a percent of core revenues (FASB),percent
+DRVF,F2OTRVPC,Other revenues as a percent of core revenues (FASB),percent
+DRVF,F2TUFEFT,Revenues from tuition and fees per FTE (FASB),average
+DRVF,F2GVGCFT,Revenues from government grants and contracts per FTE (FASB),average
+DRVF,F2PGGCFT,"Revenues from private gifts, grants, contracts/contributions from affiliated entities per FTE (FASB)",average
+DRVF,F2INVRFT,Revenues from investment return per FTE (FASB),average
+DRVF,F2OTRVFT,Other core revenues per FTE (FASB),average
+DRVF,F2COREXP,"Core expenses, total dollars (FASB)",dollars
+DRVF,F2INSTFT,Instruction expenses per FTE  (FASB),average
+DRVF,F2RSRCFT,Research expenses per FTE (FASB),average
+DRVF,F2PBSVFT,Public service expenses per FTE (FASB),average
+DRVF,F2ACSPFT,Academic support expenses per FTE (FASB),average
+DRVF,F2STSVFT,Student service expenses per FTE (FASB),average
+DRVF,F2INSUFT,Institutional support expenses per FTE (FASB),average
+DRVF,F2OTEXFT,All other core expenses per FTE (FASB),average
+DRVF,F2INSTPC,Instruction expenses as a percent of total core expenses (FASB),percent
+DRVF,F2RSRCPC,Research expenses as a percent of total core expenses (FASB),percent
+DRVF,F2PBSVPC,Public service expenses as a percent of total core expenses (FASB),percent
+DRVF,F2ACSPPC,Academic support expenses as a percent of total core expenses (FASB),percent
+DRVF,F2STSVPC,Student service expenses as a percent of total core expenses (FASB),percent
+DRVF,F2INSUPC,Institutional support expenses as a percent of total core expenses (FASB),percent
+DRVF,F2OTEXPC,Other core expenses as a percent of total core expenses (FASB),percent
+DRVF,F2SWINSP,Salaries and wages for instruction as a percent of total expenses for instruction (FASB),percent
+DRVF,F2SWRSRP,Salaries and wages for research as a percent of total expenses for research (FASB),percent
+DRVF,F2SWPBSP,Salaries and wages for public service as a percent of total expenses for public service (FASB),percent
+DRVF,F2SWACSP,Salaries and wages for academic support as a percent of total expenses for academic support (FASB),percent
+DRVF,F2SWSTSP,Salaries and wages for student services as a percent of total expenses for student services (FASB),percent
+DRVF,F2SWISPP,Salaries and wages for institutional support as a percent of total expenses for institutional support (FASB),percent
+DRVF,F2SWOTEP,Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (FASB),percent
+DRVF,F2SWCREP,Salaries and wages for core expenses as a percent of total core expenses (FASB),percent
+DRVF,F2ENDMFT,Endowment assets (year end) per FTE enrollment (FASB),average
+DRVF,F2SAFBPC,"Total salaries, wages, and benefits as a percent of total expenses (FASB)",percent
+DRVF,F2SALRPC,Total salaries and wages as a percent of total expenses (FASB),percent
+DRVF,F2EQUITR,Equity ratio (FASB),ratio
+DRVF,F3CORREV,"Core revenues, total dollars (for-profit institutions)",dollars
+DRVF,F3TUFEPC,Tuition and fees as a percent of core revenues (for-profit institutions),percent
+DRVF,F3GVGCPC,Government grants and contracts as a percent of core revenues (for-profit institutions),percent
+DRVF,F3PGGCPC,"Private gifts, grants, contracts as a percent of core revenues (for-profit institutions)",percent
+DRVF,F3INVRPC,Investment return as a percent of core revenues (for-profit institutions),percent
+DRVF,F3SSEAPC,Sales and services of educational activities as a percent of core revenues (for-profit institutions),percent
+DRVF,F3OTRVPC,Other revenues as a percent of core revenues (for-profit institutions),percent
+DRVF,F3TUFEFT,Revenues from tuition and fees per FTE (for-profit institutions),average
+DRVF,F3GVGCFT,Revenues from government grants and contracts per FTE (for-profit institutions),average
+DRVF,F3PGGCFT,"Revenues from private gifts, grants, contracts per FTE (for-profit institutions)",average
+DRVF,F3INVRFT,Revenues from investment return per FTE (for-profit institutions),average
+DRVF,F3SSEAFT,Revenues from sales and services of educational activities per FTE  (for-profit institutions),average
+DRVF,F3OTRVFT,Other core revenues per FTE (for-profit institutions),average
+DRVF,F3COREXP,"Core expenses, total dollars (for-profit institutons)",dollars
+DRVF,F3INSTFT,Instruction expenses per FTE (for-profit institutions),average
+DRVF,F3RSRCFT,Research expenses per FTE (for-profit institutions),average
+DRVF,F3PBSVFT,Public service expenses per FTE (for-profit institutions),average
+DRVF,F3ACSPFT,Academic support expenses per FTE (for-profit institutions),average
+DRVF,F3STSVFT,Student service expenses per FTE (for-profit institutions),average
+DRVF,F3INSUFT,Institutional support expenses per FTE (for-profit institutions),average
+DRVF,F3OTEXFT,All other core expenses per FTE (for-profit institutions),average
+DRVF,F3INSTPC,Instruction expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3RSRCPC,Research expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3PBSVPC,Public service expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3ACSPPC,Academic support expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3STSVPC,Student service expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3INSUPC,Institutional support expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3OTEXPC,Other core expenses as a percent of total  core expenses (for-profit institutions),percent
+DRVF,F3SWINSP,Salaries and wages for instruction as a percent of total expenses for instruction (for-profit institutions),percent
+DRVF,F3SWRSRP,Salaries and wages for research as a percent of total expenses for research (for-profit institutions),percent
+DRVF,F3SWPBSP,Salaries and wages for public service as a percent of total expenses for public service (for-profit institutions),percent
+DRVF,F3SWACSP,Salaries and wages for academic support as a percent of total expenses for academic support (for-profit institutions),percent
+DRVF,F3SWSTSP,Salaries and wages for student services as a percent of total expenses for student services (for-profit institutions),percent
+DRVF,F3SWISPP,Salaries and wages for institutional support as a percent of total expenses for institutional support (for-profit institutions),percent
+DRVF,F3SWOTEP,Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (for-profit),percent
+DRVF,F3SWCREP,Salaries and wages for core expenses as a percent of total core expenses (for-profit institutions),percent
+DRVF,F3SAFBPC,"Total salaries, wages, and benefits as a percent of total expenses (for-profit institutions)",percent
+DRVF,F3SALRPC,Total salaries and wages as a percent of total expenses (for-profit institutions),percent
+DRVF,F3EQUITR,Equity ratio (for-profit institutions),ratio
+DRVGR,GRRTTOT,"Graduation rate, total cohort",percent
+DRVGR,GRRTM,"Graduation rate, men",percent
+DRVGR,GRRTW,"Graduation rate, women",percent
+DRVGR,GRRTAN,"Graduation rate, American Indian or Alaska Native",percent
+DRVGR,GRRTAP,"Graduation rate, Asian/Native Hawaiian/Other Pacific Islander",percent
+DRVGR,GRRTAS,"Graduation rate, Asian",percent
+DRVGR,GRRTNH,"Graduation rate, Native Hawaiian or Other Pacific Islander",percent
+DRVGR,GRRTBK,"Graduation rate, Black, non-Hispanic",percent
+DRVGR,GRRTHS,"Graduation rate, Hispanic",percent
+DRVGR,GRRTWH,"Graduation rate, White, non-Hispanic",percent
+DRVGR,GRRT2M,"Graduation rate, two or more races",percent
+DRVGR,GRRTUN,"Graduation rate, Race/ethnicity unknown",percent
+DRVGR,GRRTNR,"Graduation rate, U.S. Nonresident",percent
+DRVGR,TRRTTOT,"Transfer-out rate, total cohort",percent
+DRVGR,GBA4RTT,"Graduation rate - Bachelor degree within 4 years, total",percent
+DRVGR,GBA5RTT,"Graduation rate - Bachelor degree within 5 years, total",percent
+DRVGR,GBA6RTT,"Graduation rate - Bachelor degree within 6 years, total",percent
+DRVGR,GBA6RTM,"Graduation rate - Bachelor degree within 6 years, men",percent
+DRVGR,GBA6RTW,"Graduation rate - Bachelor degree within 6 years, women",percent
+DRVGR,GBA6RTAN,"Graduation rate - Bachelor degree within 6 years, American Indian or Alaska Native",percent
+DRVGR,GBA6RTAP,"Graduation rate - Bachelor degree within 6 years, Asian/Native Hawaiian/Pacific Islander",percent
+DRVGR,GBA6RTAS,"Graduation rate - Bachelor degree within 6 years, Asian",percent
+DRVGR,GBA6RTNH,"Graduation rate - Bachelor degree within 6 years, Native Hawaiian or Other Pacific Islander",percent
+DRVGR,GBA6RTBK,"Graduation rate - Bachelor degree within 6 years, Black, non-Hispanic",percent
+DRVGR,GBA6RTHS,"Graduation rate - Bachelor degree within 6 years, Hispanic",percent
+DRVGR,GBA6RTWH,"Graduation rate - Bachelor degree within 6 years, White, non-Hispanic",percent
+DRVGR,GBA6RT2M,"Graduation rate - Bachelor degree within 6 years, two or more races",percent
+DRVGR,GBA6RTUN,"Graduation rate - Bachelor degree within 6 years, Race/ethnicity unknown",percent
+DRVGR,GBA6RTNR,"Graduation rate - Bachelor degree within 6 years, U.S. Nonresident",percent
+DRVGR,GBATRRT,Transfer-out rate - Bachelor cohort,percent
+DRVGR,PGGRRTT,Pell Grant recipients - Overall graduation rate within 150 percent of normal time,percent
+DRVGR,PGBA6RT,Pell Grant recipients - Bachelor's degree rate within 6 years,percent
+DRVGR,SSGRRTT,Direct Subsidized  Loan recipients not receiving Pell Grants - Overall graduation rate within 150 percent of normal time,percent
+DRVGR,SSBA6RT,Direct Subsidized  Loan recipients not receiving Pell Grants - Bachelor's degree rate within 6 years,percent
+DRVGR,NRGRRTT,Did not receive Pell Grants or Direct Subsidized  Loans - Overall graduation rate within 150 percent of normal time,percent
+DRVGR,NRBA6RT,Did not receive Pell Grants or Direct Subsidized Loans - Bachelor's degree rate within 6 years,percent
+DRVHR,SALTOTL,Average salary equated to 9 months of full-time instructional staff - all ranks,average
+DRVHR,SalProf,Average salary equated to 9 months of full-time instructional staff - professors,average
+DRVHR,SalAssc,Average salary equated to 9 months of full-time instructional staff - associate professors,average
+DRVHR,SalAsst,Average salary equated to 9 months of full-time instructional staff - assistant professors,average
+DRVHR,SalInst,Average salary equated to 9 months of full-time instructional staff - instructors,average
+DRVHR,Sallect,Average salary equated to 9 months of full-time instructional staff - lecturers,average
+DRVHR,SALNRNK,Average salary equated to 9 months of full-time instructional staff - No academic rank,average
+DRVHR,SFTETOTL,Total FTE staff,count
+DRVHR,SFTEPSTC,"Instructional, research and public service FTE",count
+DRVHR,SFTEINST,Instructional FTE,count
+DRVHR,SFTERSRC,Research FTE,count
+DRVHR,SFTEPBSV,Public Service FTE,count
+DRVHR,SFTELCAI,"Librarians, Curators, and Archivists/Student and Academic Affairs and Other Education Services FTE",count
+DRVHR,SFTELCA,"Librarians, Curators, and Archivists FTE",count
+DRVHR,SFTEOTIS,Student and Academic Affairs and Other Education Services FTE,count
+DRVHR,SFTEMNGM,Management FTE,count
+DRVHR,SFTEBFO,Business and Financial Operations FTE,count
+DRVHR,SFTECES,"Computer, Engineering, and Science FTE",count
+DRVHR,SFTECLAM,"Community Service, Legal, Arts, and Media FTE",count
+DRVHR,SFTEHLTH,Healthcare FTE,count
+DRVHR,SFTEOTHR,"Service, sales, office/admin support, natural resources, construction, maintenance, production, transportation & materials moving FTE",count
+DRVHR,SFTESRVC,Service FTE,count
+DRVHR,SFTESALE,Sales and Related FTE,count
+DRVHR,SFTEOFAS,Office and Administrative Support FTE,count
+DRVHR,SFTENRCM,"Natural Resources, Construction, and Maintenance FTE",count
+DRVHR,SFTEPTMM,"Production, Transportation, and Material Moving FTE",count
+DRVOM,OM1TotlAwdp4,Percent full-time first-time receiving an award - 4 years,percent
+DRVOM,OM1TotlAwdp6,Percent full-time first-time receiving an award - 6 years,percent
+DRVOM,OM1TotlAwdp8,Percent full-time first-time receiving an award - 8 years,percent
+DRVOM,OM1TotlEnYp8,Percent full-time first-time still enrolled at same institution - 8 years,percent
+DRVOM,OM1TotlEnAp8,Percent full-time first-time subsequently enrolled at another institution - 8 years,percent
+DRVOM,OM1TotlEnUp8,Percent full-time first-time enrollment status unknown - 8 years,percent
+DRVOM,OM1TotlCRTp8,Percent full-time first-time receiving a certificate - 8 years,percent
+DRVOM,OM1TotlASCp8,Percent full-time first-time receiving an associate's - 8 years,percent
+DRVOM,OM1TotlBACp8,Percent full-time first-time receiving a bachelor's - 8 years,percent
+DRVOM,OM1PellAwdp4,"Percent full-time first-time, Pell grant recipients receiving an award - 4 years",percent
+DRVOM,OM1PellAwdp6,"Percent full-time first-time, Pell grant recipients receiving an award - 6 years",percent
+DRVOM,OM1PellAwdp8,"Percent full-time first-time, Pell grant recipients receiving an award - 8 years",percent
+DRVOM,OM1PellEnYp8,"Percent full-time first-time, Pell grant recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM1PellEnAp8,"Percent full-time first-time, Pell grant recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM1PellEnUp8,"Percent full-time first-time, Pell grant recipients enrollment status unknown - 8 years",percent
+DRVOM,OM1PellCRTp8,"Percent full-time first-time, Pell grant recipients receiving a certificate - 8 years",percent
+DRVOM,OM1PellASCp8,"Percent full-time first-time, Pell grant recipients receiving an associate's - 8 years",percent
+DRVOM,OM1PellBACp8,"Percent full-time first-time, Pell grant recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM1nPelAwdp4,"Percent full-time first-time, non-Pell recipients receiving an award - 4 years",percent
+DRVOM,OM1nPelAwdp6,"Percent full-time first-time, non-Pell recipients receiving an award - 6 years",percent
+DRVOM,OM1nPelAwdp8,"Percent full-time first-time, non-Pell recipients receiving an award - 8 years",percent
+DRVOM,OM1nPelEnYp8,"Percent full-time first-time, non-Pell recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM1nPelEnAp8,"Percent full-time first-time, non-Pell recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM1nPelEnUp8,"Percent full-time first-time, non-Pell recipients enrollment status unknown - 8 years",percent
+DRVOM,OM1nPelCRTp8,"Percent full-time first-time, non-Pell recipients receiving a certificate - 8 years",percent
+DRVOM,OM1nPelASCp8,"Percent full-time first-time, non-Pell recipients receiving an associate's - 8 years",percent
+DRVOM,OM1nPelBACp8,"Percent full-time first-time, non-Pell recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM2TotlAwdp4,Percent part-time first-time receiving an award - 4 years,percent
+DRVOM,OM2TotlAwdp6,Percent part-time first-time receiving an award - 6 years,percent
+DRVOM,OM2TotlAwdp8,Percent part-time first-time receiving an award - 8 years,percent
+DRVOM,OM2TotlEnYp8,Percent part-time first-time still enrolled at same institution - 8 years,percent
+DRVOM,OM2TotlEnAp8,Percent part-time first-time subsequently enrolled at another institution - 8 years,percent
+DRVOM,OM2TotlEnUp8,Percent part-time first-time enrollment status unknown - 8 years,percent
+DRVOM,OM2TotlCRTp8,Percent part-time first-time receiving a certificate - 8 years,percent
+DRVOM,OM2TotlASCp8,Percent part-time first-time receiving an associate's - 8 years,percent
+DRVOM,OM2TotlBACp8,Percent part-time first-time receiving a bachelor's - 8 years,percent
+DRVOM,OM2PellAwdp4,"Percent part-time first-time, Pell grant recipients receiving an award - 4 years",percent
+DRVOM,OM2PellAwdp6,"Percent part-time first-time, Pell grant recipients receiving an award - 6 years",percent
+DRVOM,OM2PellAwdp8,"Percent part-time first-time, Pell grant recipients receiving an award - 8 years",percent
+DRVOM,OM2PellEnYp8,"Percent part-time first-time, Pell grant recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM2PellEnAp8,"Percent part-time first-time, Pell grant recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM2PellEnUp8,"Percent part-time first-time, Pell grant recipients enrollment status unknown - 8 years",percent
+DRVOM,OM2PellCRTp8,"Percent part-time first-time, Pell grant recipients receiving a certificate - 8 years",percent
+DRVOM,OM2PellASCp8,"Percent part-time first-time, Pell grant recipients receiving an associate's - 8 years",percent
+DRVOM,OM2PellBACp8,"Percent part-time first-time, Pell grant recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM2nPelAwdp4,"Percent part-time first-time, non-Pell recipients receiving an award - 4 years",percent
+DRVOM,OM2nPelAwdp6,"Percent part-time first-time, non-Pell recipients receiving an award - 6 years",percent
+DRVOM,OM2nPelAwdp8,"Percent part-time first-time, non-Pell recipients receiving an award - 8 years",percent
+DRVOM,OM2nPelEnYp8,"Percent part-time first-time, non-Pell recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM2nPelEnAp8,"Percent part-time first-time, non-Pell recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM2nPelEnUp8,"Percent part-time first-time, non-Pell recipients enrollment status unknown - 8 years",percent
+DRVOM,OM2nPelCRTp8,"Percent part-time first-time, non-Pell recipients receiving a certificate - 8 years",percent
+DRVOM,OM2nPelASCp8,"Percent part-time first-time, non-Pell recipients receiving an associate's - 8 years",percent
+DRVOM,OM2nPelBACp8,"Percent part-time first-time, non-Pell recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM3TotlAwdp4,Percent full-time non-first-time receiving an award - 4 years,percent
+DRVOM,OM3TotlAwdp6,Percent full-time non-first-time receiving an award - 6 years,percent
+DRVOM,OM3TotlAwdp8,Percent full-time non-first-time receiving an award - 8 years,percent
+DRVOM,OM3TotlEnYp8,Percent full-time non-first-time still enrolled at same institution - 8 years,percent
+DRVOM,OM3TotlEnAp8,Percent full-time non-first-time subsequently enrolled at another institution - 8 years,percent
+DRVOM,OM3TotlEnUp8,Percent full-time non-first-time enrollment status unknown - 8 years,percent
+DRVOM,OM3TotlCRTp8,Percent full-time non-first-time receiving a certificate - 8 years,percent
+DRVOM,OM3TotlASCp8,Percent full-time non-first-time receiving an associate's - 8 years,percent
+DRVOM,OM3TotlBACp8,Percent full-time non-first-time receiving a bachelor's - 8 years,percent
+DRVOM,OM3PellAwdp4,"Percent full-time non-first-time, Pell grant recipients receiving an award - 4 years",percent
+DRVOM,OM3PellAwdp6,"Percent full-time non-first-time, Pell grant recipients receiving an award - 6 years",percent
+DRVOM,OM3PellAwdp8,"Percent full-time non-first-time, Pell grant recipients receiving an award - 8 years",percent
+DRVOM,OM3PellEnYp8,"Percent full-time non-first-time, Pell grant recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM3PellEnAp8,"Percent full-time non-first-time, Pell grant recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM3PellEnUp8,"Percent full-time non-first-time, Pell grant recipients enrollment status unknown - 8 years",percent
+DRVOM,OM3PellCRTp8,"Percent full-time non-first-time, Pell grant recipients receiving a certificate - 8 years",percent
+DRVOM,OM3PellASCp8,"Percent full-time non-first-time, Pell grant recipients receiving an associate's - 8 years",percent
+DRVOM,OM3PellBACp8,"Percent full-time non-first-time, Pell grant recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM3nPelAwdp4,"Percent full-time non-first-time, non-Pell recipients receiving an award - 4 years",percent
+DRVOM,OM3nPelAwdp6,"Percent full-time non-first-time, non-Pell recipients receiving an award - 6 years",percent
+DRVOM,OM3nPelAwdp8,"Percent full-time non-first-time, non-Pell recipients receiving an award - 8 years",percent
+DRVOM,OM3nPelEnYp8,"Percent full-time non-first-time, non-Pell recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM3nPelEnAp8,"Percent full-time non-first-time, non-Pell recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM3nPelEnUp8,"Percent full-time non-first-time, non-Pell recipients enrollment status unknown - 8 years",percent
+DRVOM,OM3nPelCRTp8,"Percent full-time non-first-time, non-Pell recipients receiving a certificate - 8 years",percent
+DRVOM,OM3nPelASCp8,"Percent full-time non-first-time, non-Pell recipients receiving an associate's - 8 years",percent
+DRVOM,OM3nPelBACp8,"Percent full-time non-first-time, non-Pell recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM4TotlAwdp4,Percent part-time non-first-time receiving an award - 4 years,percent
+DRVOM,OM4TotlAwdp6,Percent part-time non-first-time receiving an award - 6 years,percent
+DRVOM,OM4TotlAwdp8,Percent part-time non-first-time receiving an award - 8 years,percent
+DRVOM,OM4TotlEnYp8,Percent part-time non-first-time still enrolled at same institution - 8 years,percent
+DRVOM,OM4TotlEnAp8,Percent part-time non-first-time subsequently enrolled at another institution - 8 years,percent
+DRVOM,OM4TotlEnUp8,Percent part-time non-first-time enrollment status unknown - 8 years,percent
+DRVOM,OM4TotlCRTp8,Percent part-time non-first-time receiving a certificate - 8 years,percent
+DRVOM,OM4TotlASCp8,Percent part-time non-first-time receiving an associate's - 8 years,percent
+DRVOM,OM4TotlBACp8,Percent part-time non-first-time receiving a bachelor's - 8 years,percent
+DRVOM,OM4PellAwdp4,"Percent part-time non-first-time, Pell grant recipients receiving an award - 4 years",percent
+DRVOM,OM4PellAwdp6,"Percent part-time non-first-time, Pell grant recipients receiving an award - 6 years",percent
+DRVOM,OM4PellAwdp8,"Percent part-time non-first-time, Pell grant recipients receiving an award - 8 years",percent
+DRVOM,OM4PellEnYp8,"Percent part-time non-first-time, Pell grant recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM4PellEnAp8,"Percent part-time non-first-time, Pell grant recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM4PellEnUp8,"Percent part-time non-first-time, Pell grant recipients enrollment status unknown - 8 years",percent
+DRVOM,OM4PellCRTp8,"Percent part-time non-first-time, Pell grant recipients receiving a certificate - 8 years",percent
+DRVOM,OM4PellASCp8,"Percent part-time non-first-time, Pell grant recipients receiving an associate's - 8 years",percent
+DRVOM,OM4PellBACp8,"Percent part-time non-first-time, Pell grant recipients receiving a bachelor's - 8 years",percent
+DRVOM,OM4nPelAwdp4,"Percent part-time non-first-time, non-Pell recipients receiving an award - 4 years",percent
+DRVOM,OM4nPelAwdp6,"Percent part-time non-first-time, non-Pell recipients receiving an award - 6 years",percent
+DRVOM,OM4nPelAwdp8,"Percent part-time non-first-time, non-Pell recipients receiving an award - 8 years",percent
+DRVOM,OM4nPelEnYp8,"Percent part-time non-first-time, non-Pell recipients still enrolled at same institution - 8 years",percent
+DRVOM,OM4nPelEnAp8,"Percent part-time non-first-time, non-Pell recipients subsequently enrolled at another institution - 8 years",percent
+DRVOM,OM4nPelEnUp8,"Percent part-time non-first-time, non-Pell recipients enrollment status unknown - 8 years",percent
+DRVOM,OM4nPelCRTp8,"Percent part-time non-first-time, non-Pell recipients receiving a certificate - 8 years",percent
+DRVOM,OM4nPelASCp8,"Percent part-time non-first-time, non-Pell recipients receiving an associate's - 8 years",percent
+DRVOM,OM4nPelBACp8,"Percent part-time non-first-time, non-Pell recipients receiving a bachelor's - 8 years",percent
+EFD,GRCOHRT,Full-time first-time degree/certificate-seeking undergraduate (current year GRS cohort),count
+EFD,UGENTERN,"Total entering students at the undergraduate level, fall 2024",count
+EFD,PGRCOHRT,Current year GRS cohort as a percent of entering class,percent
+EFD,RRFTCT,Full-time fall 2023 cohort,count
+EFD,RRFTEX,Exclusions from full-time fall 2023 cohort,count
+EFD,RRFTIN,Inclusions to the full-time fall 2023 cohort,count
+EFD,RRFTCTA,Full-time adjusted fall 2023 cohort,count
+EFD,RET_NMF,Students from the full-time adjusted fall 2023 cohort enrolled in fall 2024,count
+EFD,RET_PCF,"Full-time retention rate, 2024",percent
+EFD,RRPTCT,Part-time fall 2023 cohort,count
+EFD,RRPTEX,Exclusions from part-time fall 2023 cohort,count
+EFD,RRPTIN,Inclusions to the part-time fall 2023 cohort,count
+EFD,RRPTCTA,Part-time adjusted fall 2023 cohort,count
+EFD,RET_NMP,Students from the part-time adjusted fall 2023 cohort enrolled in fall 2024,count
+EFD,RET_PCP,"Part-time retention rate, 2024",percent
+EFD,STUFACR,Student-to-faculty ratio,ratio
+HD,INSTNM,Institution (entity) name,
+HD,IALIAS,Institution name alias,
+HD,ADDR,Street address or post office box,
+HD,CITY,City location of institution,
+HD,STABBR,State abbreviation,coded
+HD,ZIP,ZIP code,
+HD,FIPS,FIPS state code,coded
+HD,OBEREG,Bureau of Economic Analysis (BEA) regions,coded
+HD,CHFNM,Name of chief administrator,
+HD,CHFTITLE,Title of chief administrator,
+HD,GENTELE,General information telephone number,
+HD,EIN,Employer Identification Number,
+HD,UEIS,Unique Entity Identifier (UEI) Numbers,
+HD,OPEID,Office of Postsecondary Education (OPE) ID Number,
+HD,OPEFLAG,OPE Title IV eligibility indicator code,coded
+HD,WEBADDR,Institution's internet website address,
+HD,ADMINURL,Admissions office web address,
+HD,FAIDURL,Financial aid office web address,
+HD,APPLURL,Online application web address,
+HD,NPRICURL,Net price calculator web address,
+HD,VETURL,Veterans and Military Servicemembers tuition policies web address,
+HD,ATHURL,Student-Right-to-Know student athlete graduation rate web address,
+HD,DISAURL,Disability Services Web Address,
+HD,SECTOR,Sector of institution,coded
+HD,ICLEVEL,Level of institution,coded
+HD,CONTROL,Control of institution,coded
+HD,HLOFFER,Highest level of offering,coded
+HD,UGOFFER,Undergraduate offering,coded
+HD,GROFFER,Graduate offering,coded
+HD,HDEGOFR1,Highest degree offered,coded
+HD,DEGGRANT,Degree-granting status,coded
+HD,HBCU,Historically Black College or University,coded
+HD,HOSPITAL,Institution has hospital,coded
+HD,MEDICAL,Institution grants a medical degree,coded
+HD,TRIBAL,Tribal college,coded
+HD,LOCALE,Degree of urbanization (Urban-centric locale),coded
+HD,OPENPUBL,Institution open to the general public,coded
+HD,ACT,Status of institution,coded
+HD,NEWID,UNITID for merged schools,
+HD,DEATHYR,Year institution was deleted from IPEDS,coded
+HD,CLOSEDAT,Date institution closed,
+HD,CYACTIVE,Institution is active in current year,coded
+HD,POSTSEC,Primarily postsecondary indicator,coded
+HD,PSEFLAG,Postsecondary institution indicator,coded
+HD,PSET4FLG,Postsecondary and Title IV institution indicator,coded
+HD,RPTMTH,"Reporting method for student charges, graduation rates, retention rates and student financial aid",coded
+HD,INSTCAT,Institutional category,coded
+HD,C00CARNEGIE,2000 Carnegie Classification (historical - not updated),coded
+HD,C21BASIC,Carnegie Classification 2021: Basic,coded
+HD,CARNEGIEIC,Carnegie Classification 2025: Institutional Classification,coded
+HD,CARNEGIESAEC,Carnegie Classification 2025: Student Access and Earnings,coded
+HD,CARNEGIERSCH,Carnegie Classification 2025: Research Activity Designation,coded
+HD,CARNEGIESIZE,Carnegie Classification 2025: Institutional Size,coded
+HD,CARNEGIEALF,Carnegie Classification 2025: Award Level Focus,coded
+HD,CARNEGIEAPM,Carnegie Classification 2025: Undergraduate Academic Program Mix,coded
+HD,CARNEGIEGPM,Carnegie Classification 2025: Graduate Academic Program Mix,coded
+HD,LANDGRNT,Land Grant Institution,coded
+HD,INSTSIZE,Institution size category,coded
+HD,F1SYSTYP,Multi-institution or multi-campus organization,coded
+HD,F1SYSNAM,Name of multi-institution or multi-campus organization,
+HD,F1SYSCOD,Identification number of multi-institution or multi-campus organization,coded
+HD,CBSA,Core Based Statistical Area (CBSA),coded
+HD,CBSATYPE,CBSA Type Metropolitan or Micropolitan,coded
+HD,CSA,Combined Statistical Area (CSA),coded
+HD,COUNTYCD,Fips County code,coded
+HD,COUNTYNM,County name,
+HD,CNGDSTCD,State and 118TH Congressional District ID,coded
+HD,LONGITUD,Longitude location of institution,
+HD,LATITUDE,Latitude location of institution,
+HD,DFRCGID,Data Feedback Report comparison group created by NCES,coded
+HD,DFRCUSCG,Data Feedback Report - Institution submitted a custom comparison group,coded
+SFA,SCUGRAD,Total number of undergraduates - financial aid cohort,count
+SFA,SCUGDGSK,Total number of degree/certificate-seeking undergraduate students,count
+SFA,SCUGNDGS,Total number of non-degee/non-certificate seeking undergraduate students,count
+SFA,SCUGFFN,Total number of full-time first-time degree/certificate seeking undergraduates - financial aid cohort,count
+SFA,SCUGFFP,Full-time first-time degree/certificate seeking undergraduates as a percent of all undergraduates - financial aid cohort,percent
+SFA,SCFA2,Total number of undergraduates - fall cohort,count
+SFA,SCFA2DG,Total number of degree/certificate-seeking undergraduates - fall cohort,count
+SFA,SCFA2ND,Total number of non-degee/non-certificate seeking undergraduates - fall cohort,count
+SFA,SCFA1N,Number of students in fall cohort,count
+SFA,SCFA1P,Students in fall cohort as a percentage of all undergraduates,percent
+SFA,SCFY2,Total number of undergraduates - full-year cohort,count
+SFA,SCFY2DG,Total number of degree/certificate-seeking undergraduates - full-year cohort,count
+SFA,SCFY2ND,Total number of non-degee/non-certificate seeking undergraduates - full-year cohort,count
+SFA,SCFY1N,Number of students in full-year cohort,count
+SFA,SCFY1P,Students in full-year cohort as a percentage of all  undergraduates,percent
+SFA,UAGRNTN,"Number of undergraduate students awarded federal, state, local, institutional or other sources of grant aid",count
+SFA,UAGRNTP,"Percent of undergraduate students awarded federal, state, local, institutional or other sources of grant aid",percent
+SFA,UAGRNTT,"Total amount of federal, state, local, institutional or other sources of grant aid awarded to undergraduate students",dollars
+SFA,UAGRNTA,"Average amount of federal, state, local, institutional or other sources of grant aid awarded to undergraduate students",average
+SFA,UDGAGRNTN,"Number of degree/certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid",count
+SFA,UDGAGRNTP,"Percent of degree/certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid",percent
+SFA,UDGAGRNTT,"Total amount of federal, state, local, institutional or other sources of grant aid awarded to degree/certificate-seeking undergraduate students",dollars
+SFA,UDGAGRNTA,"Average amount of federal, state, local, institutional or other sources of grant aid awarded to degree/certificate-seeking undergraduate students",average
+SFA,UNDAGRNTN,"Number of non-degree/non-certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid",count
+SFA,UNDAGRNTP,"Percent of non-degree/non-certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid",percent
+SFA,UNDAGRNTT,"Total amount of federal, state, local, institutional or other sources of grant aid awarded to non-degree/non-certificate-seeking undergraduates",dollars
+SFA,UNDAGRNTA,"Average amount of federal, state, local, institutional or other sources of grant aid awarded to non-degree/non-certificate-seeking undergraduates",average
+SFA,UPGRNTN,Number of undergraduate students awarded Federal Pell grants,count
+SFA,UPGRNTP,Percent of undergraduate students awarded Federal Pell grants,percent
+SFA,UPGRNTT,Total amount of Federal Pell grant aid awarded to undergraduate students,dollars
+SFA,UPGRNTA,Average amount Federal Pell grant aid awarded to undergraduate students,average
+SFA,UDGPGRNTN,Number of degree/certificate-seeking undergraduate students awarded Federal Pell Grants,count
+SFA,UDGPGRNTP,Percent of degree/certificate-seeking undergraduate students awarded Federal Pell Grants,percent
+SFA,UDGPGRNTT,Total amount of Federal Pell Grant aid awarded to degree/certificate-seeking undergraduate students,dollars
+SFA,UDGPGRNTA,Average amount of Federal Pell Grant aid awarded to degree/certificate-seeking undergraduate students,average
+SFA,UNDPGRNTN,Number of non-degree/non-certificate-seeking undergraduate students awarded Federal Pell Grants,count
+SFA,UNDPGRNTP,Percent of non-degree/non-certificate-seeking undergraduate students awarded Federal Pell Grants,percent
+SFA,UNDPGRNTT,Total amount of Federal Pell Grant aid awarded to non-degree/non-certificate-seeking undergraduate students,dollars
+SFA,UNDPGRNTA,Average amount of Federal Pell Grant aid awarded to non-degree/non-certificate-seeking undergraduate students,average
+SFA,UFLOANN,Number of undergraduate students awarded federal student loans,count
+SFA,UFLOANP,Percent of undergraduate students awarded federal student loans,percent
+SFA,UFLOANT,Total amount of federal student loans awarded to undergraduate students,dollars
+SFA,UFLOANA,Average amount of federal student loans awarded to undergraduate students,average
+SFA,UDGFLOANN,Number of degree/certificate-seeking undergraduate students awarded federal student loans,count
+SFA,UDGFLOANP,Percent of degree/certificate-seeking undergraduate students awarded federal student loans,percent
+SFA,UDGFLOANT,Total amount of federal student loans awarded to degree/certificate-seeking undergraduate students,dollars
+SFA,UDGFLOANA,Average amount of federal student loans awarded to degree/certificate-seeking undergraduate students,average
+SFA,UNDFLOANN,Number of non-degree/non-certificate-seeking undergraduate students awarded federal student loans,count
+SFA,UNDFLOANP,Percent of non-degree/non-certificate-seeking undergraduate students awarded federal student loans,percent
+SFA,UNDFLOANT,Total amount of federal student loans awarded to non-degree/non-certificate-seeking undergraduate students,dollars
+SFA,UNDFLOANA,Average amount of federal student loans awarded to non-degree/non-certificate-seeking undergraduate students,average
+SFA,ANYAIDN,Number of full-time first-time undergraduates awarded any financial aid,count
+SFA,ANYAIDP,Percent of full-time first-time undergraduates awarded any financial aid,percent
+SFA,AIDFSIN,Number of full-time first-time undergraduates awarded any loans to students or grant aid  from federal state/local government or the institution,count
+SFA,AIDFSIP,Percent of full-time first-time undergraduates awarded any loans to students or grant aid  from federal state/local government or the institution,percent
+SFA,AGRNT_N,"Number of full-time first-time undergraduates awarded federal, state, local or institutional grant aid",count
+SFA,AGRNT_P,"Percent of full-time first-time undergraduates awarded federal, state, local or institutional grant aid",percent
+SFA,AGRNT_T,"Total amount of federal, state, local or institutional grant aid awarded to full-time first-time undergraduates",dollars
+SFA,AGRNT_A,"Average amount of federal, state, local or institutional grant aid awarded",average
+SFA,FGRNT_N,Number of full-time first-time undergraduates awarded federal grant aid,count
+SFA,FGRNT_P,Percent of full-time first-time undergraduates awarded federal grant aid,percent
+SFA,FGRNT_T,Total amount of federal grant aid awarded to full-time first-time undergraduates,dollars
+SFA,FGRNT_A,Average amount of federal grant aid awarded to full-time first-time undergraduates,average
+SFA,PGRNT_N,Number of full-time first-time undergraduates awarded Pell grants,count
+SFA,PGRNT_P,Percent of full-time first-time undergraduates awarded Pell grants,percent
+SFA,PGRNT_T,Total amount of Pell grant aid awarded to full-time first-time undergraduates,dollars
+SFA,PGRNT_A,Average amount of Pell grant aid awarded to full-time first-time undergraduates,average
+SFA,OFGRT_N,Number of full-time first-time undergraduates awarded other federal grant aid,count
+SFA,OFGRT_P,Percent of full-time first-time undergraduates awarded other federal grant aid,percent
+SFA,OFGRT_T,Total amount of other federal grant aid awarded to full-time first-time undergraduates,dollars
+SFA,OFGRT_A,Average amount of other federal grant aid awarded to full-time first-time undergraduates,average
+SFA,SGRNT_N,Number of full-time first-time undergraduates awarded state/local grant aid,count
+SFA,SGRNT_P,Percent of full-time first-time undergraduates awarded state/local grant aid,percent
+SFA,SGRNT_T,Total amount of state/local grant aid awarded to full-time first-time undergraduates,dollars
+SFA,SGRNT_A,Average amount of state/local grant aid awarded to full-time first-time undergraduates,average
+SFA,IGRNT_N,Number of full-time first-time undergraduates awarded  institutional grant aid,count
+SFA,IGRNT_P,Percent of full-time first-time undergraduates awarded institutional grant aid,percent
+SFA,IGRNT_T,Total amount of institutional grant aid awarded to full-time first-time undergraduates,dollars
+SFA,IGRNT_A,Average amount of institutional grant aid awarded to full-time first-time undergraduates,average
+SFA,LOAN_N,Number of full-time first-time undergraduates awarded student loans,count
+SFA,LOAN_P,Percent of full-time first-time undergraduates awarded student loans,percent
+SFA,LOAN_T,Total amount of student loans awarded to full-time first-time undergraduates,dollars
+SFA,LOAN_A,Average amount of student loans awarded to full-time first-time undergraduates,average
+SFA,FLOAN_N,Number of full-time first-time undergraduates awarded federal student loans,count
+SFA,FLOAN_P,Percent of full-time first-time undergraduates awarded federal student loans,percent
+SFA,FLOAN_T,Total amount of federal student loans awarded to full-time first-time undergraduates,dollars
+SFA,FLOAN_A,Average amount of federal student loans awarded to full-time first-time undergraduates,average
+SFA,OLOAN_N,Number of full-time first-time undergraduates awarded other student loans,count
+SFA,OLOAN_P,Percent of full-time first-time undergraduates awarded other student loans,percent
+SFA,OLOAN_T,Total amount of other student loans awarded to full-time first-time undergraduates,dollars
+SFA,OLOAN_A,Average amount of other student loans awarded to full-time first-time undergraduates,average
+C_B,CSTOTLT,Grand total,count
+COST1,chg3ay3,Published out-of-state tuition and fees 2024-25,average
+COST2_NETPRICE,NPIS42,"Average net price - all students awarded Title IV federal financial aid, 2023-24",average
+COST2_NETPRICE,NPT42,"Average net price -all students awarded Title IV federal financial aid, 2023-24",average
+EFFY_HS,EFYTOTLT,Grand total,count
+F_F1A,F1H02,Value of endowment assets at the end of the fiscal year,dollars
+F_F2,F2H02,Value of endowment assets at the end of the fiscal year,dollars
+C_A,CTOTALT,Grand total,count
+C_C,CSTOTLT,Grand total,count
+EAP,EAPTOT,Total employees,count
+EAP,EAPFT,Full-time employees,count
+EAP,EAPPT,Part-time employees,count
+EF,EFTOTAL,Grand total,count
+EFA,EFTOTLT,Grand total,count
+EFB,EFAGE09,Grand total,count
+EFC,EFRES01,First-time degree/certificate-seeking undergraduate students,count
+EFCP,EFTOTLT,Grand total,count
+EFFY,EFYTOTLT,Grand total,count
+GR,GRTOTLT,Grand total,count
+OM,OMACHRT,Adjusted 2016-17 cohort,count
+OM,OMAWDN8,"Number of adjusted cohort receiving an award at 8 years (August 31, 2024)",count
+S_IS,HRTOTLT,Grand total,count
+S_NH,HRTOTLT,Grand total,count
+S_OC,HRTOTLT,Grand total,count
+SAL_IS,SAINSTT,Instructional staff - total,count

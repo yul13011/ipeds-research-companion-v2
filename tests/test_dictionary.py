@@ -55,9 +55,11 @@ GOOD = {
         dict(group="Women's colleges", kind="none", status="decline", statement="IPEDS has no flag for this group.")],
     "group_members": [dict(group="Pair", unitid="1"), dict(group="Pair", unitid="2")],
     "school_nicknames": [dict(nickname="alpha", kind="direct", unitid="1")],
-    "rates": [dict(rate="Admission rate", rate_measure="DRVADM.DVADM01", numerator="DRVADM.ADMSSN", denominator="DRVADM.APPLCN")],
+    "rates": [dict(rate="Admission rate", rate_measure="DRVADM.DVADM01", numerator="DRVADM.ADMSSN", denominator="DRVADM.APPLCN", method="sum of counts")],
     "category_codes": [
-        dict(table="ENR", column="LEVEL", code="1", label="All students", role="total"),
+        dict(table="ENR", column="LEVEL", code="1", label="All students", role="total", default="yes"),
+        dict(table="ENR", column="STUDY", code="1", label="Main study", role="total", default="yes"),
+        dict(table="ENR", column="STUDY", code="2", label="Other study", role="part"),
         dict(table="ENR", column="LEVEL", code="2", label="Undergraduate", role="part", breakdown_set="By level", set_total="1", set_fixed="STUDY = 1"),
         dict(table="ENR", column="LEVEL", code="3", label="Graduate", role="part", breakdown_set="By level", set_total="1", set_fixed="STUDY = 1"),
         dict(table="ENR", column="LEVEL", code="4", label="Full-time", role="part", breakdown_set="By attendance", set_total="1", set_fixed="STUDY = 1"),
@@ -223,9 +225,28 @@ class LoaderLogic(unittest.TestCase):
         self.assertEqual(db.execute("SELECT COUNT(*) FROM breakdown_parts WHERE set_name='By aid'").fetchone()[0], 0)
         db.close()
 
+    def test_row_keys_and_defaults(self):
+        db = self.build()
+        self.assertEqual(db.execute('SELECT "column", default_code FROM row_keys WHERE "table"=\'ENR\'').fetchall(),
+                         [("LEVEL", "1"), ("STUDY", "1")])
+        db.close()
+
+    def test_two_defaults_for_one_column_stop_the_build(self):
+        codes = [dict(r) for r in GOOD["category_codes"]]
+        next(r for r in codes if r["column"] == "LEVEL" and r["code"] == "2")["default"] = "yes"   # LEVEL: two defaults
+        self.assertProblem("has 2 default codes", category_codes=codes)
+
+    def test_unknown_rate_method_stops_the_build(self):
+        self.assertProblem("must be one of", rates=[dict(GOOD["rates"][0], method="median")])
+
+    def test_rate_rows_sharing_a_measure_must_say_which_schools(self):
+        rates = GOOD["rates"] + [dict(rate="Admission rate, other", rate_measure="DRVADM.DVADM01",
+                                      numerator="DRVADM.ADMSSN", denominator="DRVADM.APPLCN", method="sum of counts")]
+        self.assertProblem("each must say which schools it applies to", rates=rates)
+
     def test_set_whose_rows_disagree_about_the_total_stops_the_build(self):
         codes = [dict(r) for r in GOOD["category_codes"]]
-        codes[1]["set_total"] = "9"
+        next(r for r in codes if r["column"] == "LEVEL" and r["code"] == "2")["set_total"] = "9"
         self.assertProblem("do not all name the same total", category_codes=codes)
 
     def assertProblem(self, text, **changes):
@@ -337,7 +358,7 @@ class RealDictionary(unittest.TestCase):
         universe = "(SELECT unitid FROM group_membership WHERE group_name='National universe')"
         rows = self.db.execute("SELECT rate, numerator, denominator, category_column, numerator_code, denominator_code, "
                                "nces_figure FROM dict_rates WHERE nces_figure IS NOT NULL").fetchall()
-        self.assertEqual(len(rows), 11)
+        self.assertEqual(len(rows), 12)
         for rate, num, den, cat, n_code, d_code, nces in rows:
             (nt, nc), (dt, dc) = num.split("."), den.split(".")
             wn = f' AND "{cat}" = {n_code}' if cat else ""
@@ -433,6 +454,104 @@ class RealDictionary(unittest.TestCase):
                             "SUM(c.chg3ay3 < t.TUFEYR3), SUM(c.chg3ay3 IS NOT NULL) FROM COST1 c LEFT JOIN DRVCOST t USING (UNITID)").fetchone()
         self.assertEqual(a[:3], (0, 0, 0))
         self.assertGreater(a[3], 3000)
+
+    def test_units(self):
+        rows = self.db.execute("SELECT \"table\", variable, format, unit FROM dict_measures WHERE in_first_version='yes'").fetchall()
+        self.assertEqual({u for *_, u in rows} - {None}, {"count", "dollars", "percent", "average", "ratio", "coded"})
+        unit = {(t, v): u for t, v, _, u in rows}
+        self.assertEqual(unit[("DRVEF", "ENRTOT")], "count")
+        self.assertEqual(unit[("SFA", "UPGRNTT")], "dollars")
+        self.assertEqual(unit[("DRVGR", "GBA6RTT")], "percent")
+        self.assertEqual(unit[("EFD", "STUFACR")], "ratio")
+        self.assertEqual(unit[("DRVCOST", "TUFEYR3")], "average")        # a published price is per student
+        self.assertEqual(unit[("DRVF", "F1ENDMFT")], "average")          # per FTE
+        self.assertEqual(unit[("HD", "SECTOR")], "coded")
+        self.assertIsNone(unit[("ADM", "SATVR25")])                       # percentile score: not summable
+        # Only quantities can be blank by mistake; every continuous measure outside the directory and test scores has a unit.
+        missing = [(t, v) for t, v, f, u in rows if f == "Cont" and u is None and t != "HD" and not v.startswith(("SAT", "ACT"))]
+        self.assertEqual(missing, [])
+        summable = self.db.execute("SELECT condition FROM dict_terms WHERE term='summable units'").fetchone()[0]
+        self.assertEqual(summable, "count, dollars")
+
+    def test_every_measure_named_by_a_term_or_rate_is_in_the_first_version(self):
+        left = self.db.execute("SELECT t.measure FROM dict_terms t JOIN dict_measures m ON UPPER(m.\"table\" || '.' || m.variable) "
+                               "= UPPER(t.measure) WHERE m.in_first_version <> 'yes'").fetchall()
+        self.assertEqual(left, [])
+
+    def test_default_rows(self):
+        keys = {(t, c): d for t, c, d in self.db.execute('SELECT "table", "column", default_code FROM row_keys')}
+        self.assertEqual(keys[("C_A", "MAJORNUM")], "1")
+        self.assertEqual(keys[("EFA", "EFALEVEL")], "1")
+        self.assertEqual(keys[("EAP", "EAPCAT")], "10000")
+        self.assertEqual([k for k, d in keys.items() if d is None], [("C_C", "AWLEVELC"), ("EFCP", "EFCIPLEV"), ("GR", "GRTYPE")])
+        self.assertNotIn(("EAP", "OCCUPCAT"), keys)                      # describes the row; the key is EAPCAT
+        # With the defaults, Yale has one row in the fall enrollment table: all students, 15,564.
+        self.assertEqual(self.db.execute("SELECT EFTOTLT FROM EFA WHERE UNITID=130794 AND EFALEVEL=1").fetchall(), [(15564,)])
+
+    def test_rates_say_which_schools_they_apply_to(self):
+        rows = dict(self.db.execute("SELECT rate, applies_to FROM dict_rates WHERE rate_measure='DRVGR.GRRTTOT'"))
+        self.assertEqual(set(rows.values()), {"Four or more years", "At least 2 but less than 4 years"})
+
+    def test_settings_for_unstated_things_and_the_ranking_guard(self):
+        got = dict(self.db.execute("SELECT term, condition FROM dict_terms WHERE kind='setting' AND is_default='yes'"))
+        self.assertEqual(got["no year stated"], "latest")
+        self.assertEqual(got["no group stated"], "National universe")
+        self.assertEqual(got["top with no number"], "10")
+        self.assertEqual(got["ranking guard"], "denominator >= 30")
+        self.assertIsNotNone(self.db.execute("SELECT 1 FROM group_list WHERE group_name='National universe'").fetchone())
+
+    def ratio(self, num, den, where="", universe="national"):
+        """Sum of numerators over sum of denominators, over schools with both, in a universe."""
+        schools = ("(SELECT unitid FROM group_membership WHERE group_name='National universe')" if universe == "national"
+                   else "(SELECT UNITID FROM HD WHERE FIPS BETWEEN 1 AND 56 AND PSET4FLG IN (1, 3))")
+        (nt, nc), (dt, dc) = num.split("."), den.split(".")
+        a, b = self.db.execute(f'SELECT SUM(n.v), SUM(d.v) FROM (SELECT UNITID, "{nc}" v FROM "{nt}" WHERE UNITID IN {schools}{where}) n '
+                               f'JOIN (SELECT UNITID, "{dc}" v FROM "{dt}" WHERE UNITID IN {schools}{where}) d USING (UNITID) '
+                               "WHERE n.v IS NOT NULL AND d.v IS NOT NULL").fetchone()
+        return a / b
+
+    def test_core_expenses_per_fte_student(self):
+        rows = self.db.execute("SELECT numerator, denominator, applies_to FROM dict_rates WHERE rate LIKE 'Core expenses per FTE%'").fetchall()
+        self.assertEqual(len(rows), 3)
+        self.assertEqual({d for _, d, _ in rows}, {"DRVEF12.FTE12MN"})
+        # NCES publishes public and private nonprofit together: each school has values on one form only.
+        a, b = self.db.execute("SELECT SUM(COALESCE(r.F1COREXP, r.F2COREXP)), SUM(e.FTE12MN) FROM DRVF r JOIN DRVEF12 e USING (UNITID) "
+                               "JOIN directory d USING (UNITID) WHERE d.CONTROL IN (1, 2) AND r.UNITID IN "
+                               "(SELECT unitid FROM group_membership WHERE group_name='National universe') "
+                               "AND COALESCE(r.F1COREXP, r.F2COREXP) IS NOT NULL AND e.FTE12MN IS NOT NULL").fetchone()
+        self.assertEqual(round(a / b), 38376)
+        self.assertEqual(round(self.ratio("DRVF.F1COREXP", "DRVEF12.FTE12MN")), 32973)
+
+    def test_average_salary(self):
+        all_ranks = " AND ARANK = 7"
+        self.assertEqual(round(self.ratio("SAL_IS.SAEQ9OT", "SAL_IS.SATOTLT", all_ranks, universe="with offices")), 100224)  # NCES
+        self.assertEqual(round(self.ratio("SAL_IS.SAEQ9OT", "SAL_IS.SATOTLT", all_ranks)), 100254)                          # app universe
+        ranks = self.db.execute("SELECT numerator_code FROM dict_rates WHERE rate LIKE 'Average salary%' ORDER BY numerator_code").fetchall()
+        self.assertEqual([r for (r,) in ranks], ["1", "2", "3", "4", "5", "6", "7"])
+        # The ready-made school figure equals outlays over staff at every school.
+        differ = self.db.execute("SELECT COUNT(*) FROM DRVHR h JOIN SAL_IS s USING (UNITID) WHERE s.ARANK = 7 AND s.SATOTLT > 0 "
+                                 "AND ABS(h.SALTOTL - s.SAEQ9OT * 1.0 / s.SATOTLT) > 1").fetchone()[0]
+        self.assertEqual(differ, 0)
+
+    def test_net_price_weights_line_up_and_await_review(self):
+        rows = self.db.execute("SELECT numerator, denominator, method, status FROM dict_rates WHERE rate LIKE 'Average net price%'").fetchall()
+        self.assertEqual({(m, s.split(":")[0]) for _, _, m, s in rows}, {("weighted average", "Pending owner review")})
+        for avg, count in [(n, d) for n, d, _, _ in rows]:
+            (at, ac), (ct, cc) = avg.split("."), count.split(".")
+            missing = self.db.execute(f'SELECT COUNT(*) FROM "{at}" a LEFT JOIN "{ct}" c USING (UNITID) '
+                                      f'WHERE a."{ac}" IS NOT NULL AND (c."{cc}" IS NULL OR c."{cc}" = 0)').fetchone()[0]
+            self.assertEqual(missing, 0, avg)
+
+    def test_finance_reporting_forms(self):
+        self.assertEqual([self.n(f"Reports on the {f} finance form") for f in ("GASB", "FASB", "for-profit")], [1911, 1750, 2046])
+        forms = dict(self.db.execute("SELECT variable, reporting_form FROM dict_measures WHERE \"table\" = 'DRVF' AND variable LIKE '%COREXP'"))
+        self.assertEqual(forms, {"F1COREXP": "GASB", "F2COREXP": "FASB", "F3COREXP": "for-profit"})
+        unformed = self.db.execute("SELECT COUNT(*) FROM dict_measures WHERE \"table\" IN ('DRVF', 'F_F1A', 'F_F2', 'F_F3') "
+                                   "AND reporting_form IS NULL AND format = 'Cont'").fetchone()[0]
+        self.assertEqual(unformed, 0)
+        rule = self.db.execute("SELECT condition, statement FROM dict_terms WHERE term='different reporting forms'").fetchone()
+        self.assertEqual(rule[0], "split by reporting_form")
+        self.assertIn("different accounting standards", rule[1])
 
     def test_every_table_states_its_period(self):
         blank = self.db.execute("SELECT \"table\" FROM dict_year_meaning WHERE period IS NULL OR kind IS NULL OR kind='needs review'").fetchall()
