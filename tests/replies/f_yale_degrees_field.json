@@ -1,0 +1,45 @@
+{
+ "question": "How many bachelor's degrees by field did Yale award?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "breakdown",
+   "measures": [
+    {
+     "id": "C_A.CTOTALT",
+     "row": []
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": {
+    "set": "Degrees by field of study",
+    "fixed": [
+     {
+      "column": "AWLEVEL",
+      "code": "5"
+     }
+    ]
+   },
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

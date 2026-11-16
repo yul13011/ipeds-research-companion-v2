@@ -1,0 +1,27 @@
+{
+ "question": "Do you have data on AI policies?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "data_exists",
+   "measures": [],
+   "schools": [],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": null,
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": "Institutional AI policies",
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

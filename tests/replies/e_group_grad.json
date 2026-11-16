@@ -1,0 +1,34 @@
+{
+ "question": "What is the graduation rate across all public two-year colleges?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "group",
+   "measures": [
+    {
+     "id": "DRVGR.GRRTTOT",
+     "row": []
+    }
+   ],
+   "schools": [],
+   "groups": [
+    "Public, 2-year"
+   ],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": null,
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

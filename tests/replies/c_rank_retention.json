@@ -1,0 +1,38 @@
+{
+ "question": "Which public four-year colleges in Texas have the highest retention rate?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "rank",
+   "measures": [
+    {
+     "id": "EFD.RET_PCF",
+     "row": []
+    }
+   ],
+   "schools": [],
+   "groups": [
+    "Public, 4-year or above",
+    "State: Texas"
+   ],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": null,
+   "split_by": null,
+   "sort": {
+    "order": "highest",
+    "limit": null
+   },
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

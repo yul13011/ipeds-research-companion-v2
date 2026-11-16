@@ -1,0 +1,41 @@
+{
+ "question": "add Northeastern",
+ "reply": {
+  "kind": "edit",
+  "request": null,
+  "options": [],
+  "chosen": [],
+  "decline": null,
+  "edit": {
+   "changes": [
+    {
+     "field": "schools",
+     "action": "add"
+    }
+   ],
+   "values": {
+    "operation": "schools",
+    "measures": [],
+    "schools": [
+     {
+      "name": "Northeastern",
+      "id": 167358
+     }
+    ],
+    "groups": [],
+    "peers_of": null,
+    "conditions": [],
+    "breakdown": null,
+    "split_by": null,
+    "sort": null,
+    "year": {
+     "stated": null,
+     "kind": null
+    },
+    "topic": null,
+    "readings": []
+   }
+  }
+ },
+ "after": "b_compare_grad"
+}

@@ -511,7 +511,7 @@ class RealDictionary(unittest.TestCase):
         return a / b
 
     def test_core_expenses_per_fte_student(self):
-        rows = self.db.execute("SELECT numerator, denominator, applies_to FROM dict_rates WHERE rate LIKE 'Core expenses per FTE%'").fetchall()
+        rows = self.db.execute("SELECT numerator, denominator, applies_to FROM dict_rates WHERE rate = 'Core expenses per FTE student'").fetchall()
         self.assertEqual(len(rows), 3)
         self.assertEqual({d for _, d, _ in rows}, {"DRVEF12.FTE12MN"})
         # NCES publishes public and private nonprofit together: each school has values on one form only.
@@ -543,7 +543,10 @@ class RealDictionary(unittest.TestCase):
             self.assertEqual(missing, 0, avg)
 
     def test_finance_reporting_forms(self):
-        self.assertEqual([self.n(f"Reports on the {f} finance form") for f in ("GASB", "FASB", "for-profit")], [1911, 1750, 2046])
+        counts = [self.n(f"Reports on the {f} finance form") for f in ("GASB", "FASB", "for-profit")]
+        expected = [self.db.execute(f"SELECT COUNT(*) FROM DRVF WHERE {c} IS NOT NULL").fetchone()[0]
+                    for c in ("F1COREXP", "F2COREXP", "F3COREXP")]
+        self.assertEqual(counts, expected)
         forms = dict(self.db.execute("SELECT variable, reporting_form FROM dict_measures WHERE \"table\" = 'DRVF' AND variable LIKE '%COREXP'"))
         self.assertEqual(forms, {"F1COREXP": "GASB", "F2COREXP": "FASB", "F3COREXP": "for-profit"})
         unformed = self.db.execute("SELECT COUNT(*) FROM dict_measures WHERE \"table\" IN ('DRVF', 'F_F1A', 'F_F2', 'F_F3') "

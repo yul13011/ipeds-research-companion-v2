@@ -1,0 +1,37 @@
+{
+ "question": "What was Yale's admission rate?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "schools",
+   "measures": [
+    {
+     "id": "DRVADM.DVADM01",
+     "row": []
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": null,
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

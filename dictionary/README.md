@@ -27,6 +27,7 @@ One row per IPEDS variable in the release (2,599).
 - `unit`: for first-version measures, one of `count`, `dollars`, `percent`, `average`, `ratio` or `coded`. Only the units named in the "summable units" setting in `terms.csv` (count and dollars) are added up across schools. A percent, average or ratio is computed for a group from its counts in `rates.csv`, or the group figure is declined. Blank means not summable (text, identifiers, test-score percentiles).
 - `priority`: 1 for ready-made and most-asked measures, then 2 and 3.
 - `in_first_version`: `yes` or `no`. A `no` means "IPEDS collects it, but it is not set up in this app yet".
+- `entering_cohort`: for graduation measures that cover one entering cohort, the cohort as a kind and an offset from the release year, such as `fall -6` (the 2024 release: students who entered in fall 2018). Blank means the table's rule in `year_meaning.csv`.
 - `period`: filled only when the variable reports a different year from its table (net price for 2023-24 in a 2024-25 table). Blank means the table's period in `year_meaning.csv`.
 - `plain_name`: your plain-English name. Blank means the IPEDS title is used.
 - `synonyms`: other words users say for this measure.
@@ -56,12 +57,13 @@ Words with more than one possible reading. One row per reading and measure. A re
 Every way a user can name a group of schools.
 
 - `group`: the group's name. Rows with the same name must all hold (only the national universe uses this).
-- `kind`: `column` (schools with these codes), `any value` (every value of the column is its own group, such as each state), `member list` (members are in `group_members.csv`), `per school` (depends on the school asked about, such as its comparison group), `has rows` (schools with at least one row in the named table), `universe` (the national universe), `none` (no definition; see `status`).
+- `kind`: `column` (schools with these codes), `any value` (every value of the column is its own group, such as each state), `member list` (members are in `group_members.csv`), `per school` (depends on the school asked about, such as its comparison group), `has rows` (schools with at least one row in the named table), `has value` (schools with a value in the named column), `universe` (the national universe), `none` (no definition; see `status`).
 - `words`: what users say.
 - `table`, `column`: where the codes are. Several columns mean a match in any of them.
 - `codes`: the codes that define the group, or `any`.
 - `statement`: the definition the app states in "Interpreted as".
 - `caveat`: a warning shown with the definition.
+- `word_note`: a sentence explaining which words the group stands for ("State schools" means public four-year). Shown in "Definitions & sources", not in "Interpreted as".
 - `status`: `in use` or `decline`.
 - `priority`: 1 for the groups most likely to be asked.
 - `note`: anything else.
@@ -117,6 +119,7 @@ What the year means for each table. Every result must state this period.
 - `table`, `year`: the table and the release year.
 - `kind`: fall, fiscal year, academic year, cohort, or 12 months July to June.
 - `period`: the period text shown to the user.
+- `entering_cohort`: for graduation and outcome tables, the entering cohort as offsets from the release year, by school level where they differ: `fall -6 for Four or more years; fall -3 for At least 2 but less than 4 years`. Each level name is a school group. A measure's own `entering_cohort` wins.
 - `title`: the IPEDS table title.
 - `caveat`: a warning shown whenever figures from this table are given for a group of schools, such as optional-year reporting.
 

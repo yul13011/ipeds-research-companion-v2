@@ -1,0 +1,45 @@
+{
+ "question": "Show Yale's undergraduate enrollment by race and ethnicity.",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "breakdown",
+   "measures": [
+    {
+     "id": "EFA.EFTOTLT",
+     "row": [
+      {
+       "column": "EFALEVEL",
+       "code": "2"
+      }
+     ]
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": {
+    "set": "By race and ethnicity",
+    "fixed": []
+   },
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

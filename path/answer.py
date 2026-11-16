@@ -1,0 +1,105 @@
+"""Runs the steps in order for one question. The only thing the page calls.
+
+    ask()          a typed question: shortlist, interpret (the model call), resolve, fetch, show
+    choose()       an option button: runs that option's request directly, with no model call
+    pick_school()  the school picker: fills in the school and runs the request, with no model call
+
+`state` is the conversation, kept by the page: "history" (requests answered, oldest first),
+"pending" (options on screen) and "picker" (a request waiting for a school).
+"""
+import sqlite3
+import time
+
+import config
+from path import fetch, interpret, resolve, show, shortlist
+
+
+def connect(db_path):
+    return sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+
+
+def release(db):
+    return db.execute("SELECT release FROM _tables ORDER BY year DESC LIMIT 1").fetchone()[0]
+
+
+def finish(out, state, db, log, row):
+    """Turn a resolve outcome into what the page shows, update the conversation, and write the logs."""
+    if out["kind"] == "many":
+        pages = [finish(o, state, db, log, dict(row, part=i)) for i, o in enumerate(out["outcomes"])]
+        return dict(kind="many", pages=pages)
+    row["outcome"] = out["kind"]
+    if out["kind"] == "ready":
+        plan = out["plan"]
+        result = fetch.fetch(plan, db)
+        page = show.render(plan, result, release(db))
+        state.setdefault("history", []).append(out["request"])
+        state["pending"], state["picker"] = None, None
+        row.update(request=out["request"], rows=len(result["rows"]))
+    elif out["kind"] == "clarify":
+        state["pending"] = out["options"]
+        page = dict(kind="clarify", message=out["question"], options=[o["label"] for o in out["options"]])
+        row["options"] = [o["request"] for o in out["options"]]
+    elif out["kind"] == "picker":
+        state["picker"] = out
+        page = dict(kind="picker", message=f'Which school do you mean by "{out["name"]}"?',
+                    candidates=[(c["id"], f"{c['name']} ({c['city']}, {c['state']})") for c in out["candidates"]])
+    else:
+        page = dict(kind=out["kind"], message=out["message"])
+        row.update(detail=out.get("detail"), missing=out.get("missing"))
+        if out["kind"] == "decline":
+            log.decline(dict(question=row.get("question"), wanted=out.get("wanted") or out.get("request"),
+                             missing=out["missing"], closest=out.get("closest"), message=out["message"]))
+    return page
+
+
+def ask(question, state, log, db_path=None, call=None, model=None):
+    db_path = db_path or config.LOCAL_DB.as_posix()
+    start = time.time()
+    history = state.get("history") or []
+    pending = state.get("pending") or []
+    carried = history[-1:] + [o["request"] for o in pending]
+    short = shortlist.shortlist(question, db_path, carried)
+    reply, meta = interpret.interpret(question, short, history[-1] if history else None, pending, call=call, model=model)
+    db = connect(db_path)
+    try:
+        out = resolve.resolve(reply, short, state, db, db_path)
+        row = dict(question=question, reply=reply, shortlist={k: [x.get("id") or x.get("name") or x.get("set") or x.get("topic")
+                                                                  or x.get("term") or [x.get("table"), x.get("column"), x.get("code")]
+                                                                  for x in v] for k, v in short.items()},
+                   model=meta["model"], tokens_in=meta["input_tokens"], tokens_out=meta["output_tokens"],
+                   cost_usd=meta["cost_usd"], model_seconds=meta["seconds"], model_error=meta["error"])
+        page = finish(out, state, db, log, row)
+    finally:
+        db.close()
+    row["seconds"] = round(time.time() - start, 2)
+    log.question(row)
+    page["seconds"] = row["seconds"]
+    return page
+
+
+def run_direct(request, state, log, db_path, question):
+    db_path = db_path or config.LOCAL_DB.as_posix()
+    start = time.time()
+    db = connect(db_path)
+    try:
+        out = resolve.resolve_request(request, resolve.Dictionary(db, db_path), None)
+        row = dict(question=question, reply=None, model=None)
+        page = finish(out, state, db, log, row)
+    finally:
+        db.close()
+    row["seconds"] = round(time.time() - start, 2)
+    log.question(row)
+    page["seconds"] = row["seconds"]
+    return page
+
+
+def choose(index, state, log, db_path=None):
+    option = state["pending"][index]
+    return run_direct(option["request"], state, log, db_path, question=f"[option] {option['label']}")
+
+
+def pick_school(unitid, state, log, db_path=None):
+    waiting = state["picker"]
+    request = waiting["request"]
+    request["schools"][waiting["index"]]["id"] = unitid
+    return run_direct(request, state, log, db_path, question=f"[picked school] {unitid}")

@@ -1,0 +1,50 @@
+{
+ "question": "Compare six-year graduation rates at RIT, WPI and Drexel.",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "schools",
+   "measures": [
+    {
+     "id": "DRVGR.GBA6RTT",
+     "row": []
+    }
+   ],
+   "schools": [
+    {
+     "name": "RIT",
+     "id": 195003
+    },
+    {
+     "name": "WPI",
+     "id": 168421
+    },
+    {
+     "name": "Drexel",
+     "id": 212054
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": null,
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": [
+    {
+     "term": "graduation rate",
+     "reading": "Bachelor's degree within six years"
+    }
+   ]
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

@@ -1,0 +1,410 @@
+"""Tests for Stage 3, the question path. No test calls the API: every model reply is a saved file in
+tests/replies/ or is written here. Logs go to a temporary folder, never the shared log.
+
+Run:  python -m unittest discover -s tests -v
+"""
+import json
+import sqlite3
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import config
+from path import answer, interpret, request as rq, shortlist, show
+from path.log import Log
+
+DB = config.LOCAL_DB.as_posix()
+REPLIES = Path(__file__).with_name("replies")
+
+
+def req(op, **parts):
+    r = rq.empty(op)
+    r.update(parts)
+    return r
+
+
+def M(i, row=()):
+    return dict(id=i, row=[dict(column=c, code=v) for c, v in row])
+
+
+def S(name, i):
+    return dict(name=name, id=i)
+
+
+def reply_request(r):
+    return dict(kind="request", request=r, edit=None, options=[], chosen=[], decline=None)
+
+
+def reply_edit(changes, values):
+    return dict(kind="edit", request=None, options=[], chosen=[], decline=None,
+                edit=dict(changes=[dict(field=f, action=a) for f, a in changes], values=values))
+
+
+def saved(call_reply):
+    """A stand-in for the API call that returns a fixed reply."""
+    return lambda system, user, model: (json.dumps(call_reply), {"input_tokens": 1000, "output_tokens": 100})
+
+
+class Request(unittest.TestCase):
+    def setUp(self):
+        self.base = req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003), S("WPI", 168421)])
+
+    def test_add_remove_replace(self):
+        added = rq.apply_edit(self.base, dict(changes=[dict(field="schools", action="add")],
+                                              values=req("schools", schools=[S("Drexel", 212054), S("RIT", 195003)])), [])
+        self.assertEqual([s["id"] for s in added["schools"]], [195003, 168421, 212054])      # no duplicate RIT
+        removed = rq.apply_edit(added, dict(changes=[dict(field="schools", action="remove")],
+                                            values=req("schools", schools=[S("WPI", 168421)])), [])
+        self.assertEqual([s["id"] for s in removed["schools"]], [195003, 212054])
+        swapped = rq.apply_edit(self.base, dict(changes=[dict(field="measures", action="replace")],
+                                                values=req("schools", measures=[M("DRVADM.DVADM01")])), [])
+        self.assertEqual(swapped["measures"], [M("DRVADM.DVADM01")])
+        self.assertEqual(swapped["schools"], self.base["schools"])                            # everything else kept
+
+    def test_any_field_can_change(self):
+        edit = dict(changes=[dict(field="operation", action="replace"), dict(field="groups", action="replace"),
+                             dict(field="sort", action="replace")],
+                    values=req("rank", groups=["State: Texas"], sort=dict(order="lowest", limit=5)))
+        new = rq.apply_edit(self.base, edit, [])
+        self.assertEqual((new["operation"], new["groups"], new["sort"]["order"]), ("rank", ["State: Texas"], "lowest"))
+        cleared = rq.apply_edit(new, dict(changes=[dict(field="sort", action="remove")], values=None), [])
+        self.assertIsNone(cleared["sort"])
+
+    def test_back_restores_the_request_before(self):
+        later = req("schools", measures=[M("DRVADM.DVADM01")])
+        self.assertEqual(rq.apply_edit(later, dict(changes=[dict(field="schools", action="back")], values=None),
+                                       [self.base, later]), self.base)
+
+    def test_schema_is_strict_everywhere(self):
+        def walk(node):
+            if isinstance(node, dict):
+                if node.get("type") == "object":
+                    self.assertFalse(node["additionalProperties"])
+                    self.assertEqual(sorted(node["required"]), sorted(node["properties"]))
+                for v in node.values():
+                    walk(v)
+            elif isinstance(node, list):
+                for v in node:
+                    walk(v)
+        walk(rq.REPLY_SCHEMA)
+
+
+@unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
+class Shortlist(unittest.TestCase):
+    def test_finds_schools_groups_and_measures(self):
+        s = shortlist.shortlist("Which public four-year colleges in Texas have the highest retention rate?", DB)
+        self.assertIn("State: Texas", [g["name"] for g in s["groups"]])
+        self.assertIn("Public, 4-year or above", [g["name"] for g in s["groups"]])
+        self.assertIn("EFD.RET_PCF", [m["id"] for m in s["measures"]])
+        s = shortlist.shortlist("Compare RIT, WPI and FRCC", DB)
+        self.assertLessEqual({195003, 168421, 127200}, {x["id"] for x in s["schools"]})        # by IPEDS alias
+
+    def test_measures_set_up_come_first(self):
+        s = shortlist.shortlist("What was Yale's admission rate?", DB)
+        flags = [m["set_up"] for m in s["measures"]]
+        self.assertLessEqual(flags.count(False), shortlist.NOT_SET_UP)
+        self.assertIn("DRVADM.DVADM01", [m["id"] for m in s["measures"]])
+
+    def test_a_matched_term_brings_its_measures(self):
+        s = shortlist.shortlist("How many faculty does Yale have?", DB)
+        self.assertIn("EAP.EAPTOT", [m["id"] for m in s["measures"]])
+        faculty = next(t for t in s["terms"] if t["term"] == "faculty")
+        self.assertEqual(faculty["always_ask"], "yes")
+
+    def test_previous_request_is_carried(self):
+        earlier = req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003)], groups=["State: Ohio"],
+                      readings=[dict(term="graduation rate", reading="Bachelor's degree within six years")])
+        s = shortlist.shortlist("add Northeastern", DB, [earlier])
+        ids = shortlist.ids(s)
+        self.assertLessEqual(rq.used_ids(earlier)["measure"], ids["measure"])
+        self.assertIn(195003, ids["school"])
+        self.assertIn("State: Ohio", ids["group"])
+        self.assertIn(("graduation rate", "Bachelor's degree within six years"), ids["reading"])
+
+
+@unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
+class Interpret(unittest.TestCase):
+    def setUp(self):
+        self.short = shortlist.shortlist("What was Yale's admission rate?", DB)
+        self.good = reply_request(req("schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)]))
+
+    def test_one_retry_then_a_plain_failure(self):
+        replies = iter(["not json", json.dumps(self.good)])
+        reply, meta = interpret.interpret("q", self.short, call=lambda s, u, m: (next(replies), {"input_tokens": 10, "output_tokens": 5}))
+        self.assertEqual((reply, meta["attempts"], meta["error"]), (self.good, 2, None))
+        reply, meta = interpret.interpret("q", self.short, call=lambda s, u, m: ("{}", {"input_tokens": 10, "output_tokens": 5}))
+        self.assertIsNone(reply)
+        self.assertEqual(meta["attempts"], 2)
+        self.assertIn("KeyError", meta["error"])
+
+    def test_reply_missing_its_part_is_retried(self):
+        broken = dict(self.good, request=None)
+        reply, meta = interpret.interpret("q", self.short, call=saved(broken))
+        self.assertIsNone(reply)
+        self.assertIn("without its request", meta["error"])
+
+    def test_prompt_shows_the_shortlist_only(self):
+        seen = {}
+        def call(system, user, model):
+            seen["text"] = system + user
+            return json.dumps(self.good), {"input_tokens": 1000, "output_tokens": 100}
+        _, meta = interpret.interpret("What was Yale's admission rate?", self.short, call=call, model="claude-haiku-5-5")
+        self.assertIn("DRVADM.DVADM01", seen["text"])
+        self.assertNotIn("SFA.UPGRNTP", seen["text"])                      # not on this shortlist
+        self.assertLess(meta["prompt_words"], 2500)
+        self.assertAlmostEqual(meta["cost_usd"], (1000 * 0.10 + 100 * 0.50) / 1e6)
+
+
+@unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
+class Path_(unittest.TestCase):
+    """The whole path, from saved replies to the page, checked against figures computed here from the data."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.db.close()
+        cls.dir.cleanup()
+
+    def v(self, sql, *args):
+        return self.db.execute(sql, args).fetchone()[0]
+
+    def ask(self, question, reply, state=None):
+        state = {} if state is None else state
+        return answer.ask(question, state, self.log, call=saved(reply)), state
+
+    def saved_case(self, name, state=None):
+        case = json.loads((REPLIES / f"{name}.json").read_text(encoding="utf-8"))
+        return self.ask(case["question"], case["reply"], state)
+
+    def column(self, page, name):
+        i = page["table"]["columns"].index(name)
+        return [r[i] for r in page["table"]["rows"]]
+
+    # ---- the nine questions of the design note
+    def test_a_lookup(self):
+        page, _ = self.saved_case("a_yale_admission")
+        self.assertEqual(page["table"]["rows"], [["Yale University", f"{self.v('SELECT DVADM01 FROM DRVADM WHERE UNITID=130794')}%"]])
+        self.assertIn("Fall 2024", page["interpreted"])
+        self.assertIn("provisional", page["warnings"][0])
+
+    def test_b_compare_and_i_add_a_school(self):
+        page, state = self.saved_case("b_compare_grad")
+        expected = [f"{self.v('SELECT GBA6RTT FROM DRVGR WHERE UNITID=?', u)}%" for u in (195003, 168421, 212054)]
+        self.assertEqual([r[1] for r in page["table"]["rows"]], expected)
+        page, _ = self.saved_case("i_add_northeastern", state)
+        self.assertEqual([r[0] for r in page["table"]["rows"]][-1], "Northeastern University")
+        self.assertEqual(len(page["table"]["rows"]), 4)
+
+    def test_c_rank_with_the_guard(self):
+        page, _ = self.saved_case("c_rank_retention")
+        self.assertEqual(page["table"]["rows"][0][1], "The University of Texas at Austin")
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        self.assertTrue(all(int(r[4].replace(",", "")) >= 30 for r in page["table"]["rows"]))
+        self.assertIn("fewer than 30 in the denominator", page["notes"][0])
+        self.assertIn("top 10", page["interpreted"])
+
+    def test_d_breakdown_stored_as_columns(self):
+        page, _ = self.saved_case("d_yale_race")
+        rows = {r[0]: int(r[1].replace(",", "")) for r in page["table"]["rows"]}
+        self.assertEqual(rows.pop("Total"), 6814)
+        self.assertEqual(sum(rows.values()), 6814)
+        self.assertEqual(len(rows), 9)
+
+    def test_e_group_rate_from_counts(self):
+        page, _ = self.saved_case("e_group_grad")
+        members = ("(SELECT unitid FROM group_membership WHERE group_name='Public, 2-year' AND unitid IN "
+                   "(SELECT unitid FROM group_membership WHERE group_name='National universe'))")
+        num = self.v(f"SELECT SUM(a.GRTOTLT) FROM GR a JOIN GR b USING (UNITID) WHERE a.GRTYPE=30 AND b.GRTYPE=29 "
+                     f"AND a.GRTOTLT IS NOT NULL AND b.GRTOTLT > 0 AND a.UNITID IN {members}")
+        den = self.v(f"SELECT SUM(b.GRTOTLT) FROM GR a JOIN GR b USING (UNITID) WHERE a.GRTYPE=30 AND b.GRTYPE=29 "
+                     f"AND a.GRTOTLT IS NOT NULL AND b.GRTOTLT > 0 AND a.UNITID IN {members}")
+        self.assertEqual(page["table"]["rows"][0][1], f"{100 * num / den:.1f}%")
+        self.assertEqual(page["counts"]["rows"][0][1:], [f"{num:,}", f"{den:,}"])
+        self.assertIn("bachelor's degrees are classified by IPEDS as four-year", " ".join(page["warnings"]))
+        self.assertIn("students who entered in fall 2021, status as of August 31, 2024", page["interpreted"])
+        self.assertIn("limited to the national universe", page["interpreted"])
+
+    def test_f_breakdown_with_a_changed_fixed_value(self):
+        page, _ = self.saved_case("f_yale_degrees_field")
+        rows = {r[0]: int(r[1].replace(",", "")) for r in page["table"]["rows"]}
+        total = self.v("SELECT CTOTALT FROM C_A WHERE unitid=130794 AND AWLEVEL=5 AND MAJORNUM=1 AND CIPCODE='99'")
+        self.assertEqual(rows.pop("Total"), total)
+        self.assertEqual(sum(rows.values()), total)
+        self.assertIn("Bachelor's degree", page["interpreted"])
+
+    def test_g_school_against_its_peers(self):
+        page, _ = self.saved_case("g_frcc_peers")
+        self.assertIn("own IPEDS comparison group (36 schools)", page["interpreted"])
+        self.assertEqual(page["counts"]["rows"][0], ["Front Range Community College", "Full-time retention rate, 2024", "1", "1"])
+        self.assertIn("rests on 1 students, fewer than 30", " ".join(page["warnings"]))     # shown, not hidden
+
+    def test_h_data_not_in_ipeds(self):
+        page, _ = self.saved_case("h_ai_policies")
+        self.assertEqual(page["message"], "IPEDS has no data on AI policies.")       # no pointer invented
+
+    # ---- rules
+    def test_name_not_on_the_shortlist_is_a_wrong_reading(self):
+        page, _ = self.ask("What was Yale's admission rate?",
+                           reply_request(req("schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)])))
+        self.assertEqual(page["kind"], "wrong_reading")
+        last = json.loads((Path(self.dir.name) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual(last["outcome"], "wrong_reading")
+        self.assertIn("SFA.UPGRNTP", json.dumps(last["detail"]))
+        self.assertIn("DRVADM.DVADM01", last["shortlist"]["measures"])          # the shortlist is logged
+
+    def test_unclear_school_opens_the_picker(self):
+        state = {}
+        page, _ = self.ask("How many degrees did Marian University award?",
+                           reply_request(req("schools", measures=[M("DRVC.BASDEG")], schools=[S("Marian University", None)])), state)
+        self.assertEqual(page["kind"], "picker")
+        self.assertGreaterEqual(sum("Marian University" in label for _, label in page["candidates"]), 2)
+        unitid = page["candidates"][0][0]
+        page = answer.pick_school(unitid, state, self.log)
+        self.assertEqual(page["kind"], "answer")
+
+    def test_always_ask_term_and_option_buttons(self):
+        state = {}
+        page, _ = self.ask("How many faculty does Yale have?",
+                           reply_request(req("schools", measures=[M("EAP.EAPTOT")], schools=[S("Yale", 130794)])), state)
+        self.assertEqual((page["kind"], page["options"]), ("clarify", ["Instructional staff", "All staff with faculty status"]))
+        page = answer.choose(0, dict(state), self.log)                       # a button runs the option directly
+        self.assertEqual(page["table"]["columns"], ["School", "Total", "Full-time", "Part-time"])
+        self.assertEqual(page["table"]["rows"][0][1:], ["3,800", "2,995", "805"])
+        self.assertIn("Counts include medical school staff", page["interpreted"])
+        typed = dict(kind="choose", request=None, edit=None, options=[], chosen=[1], decline=None)
+        page, _ = self.ask("the second one", typed, state)                   # a typed reply is matched to the options
+        self.assertEqual(page["table"]["rows"][0][1], "5,735")
+
+    def test_mixed_levels_ask_and_split(self):
+        state = {}
+        page, _ = self.ask("What is the graduation rate in Ohio?",
+                           reply_request(req("group", measures=[M("DRVGR.GRRTTOT")], groups=["State: Ohio"])), state)
+        self.assertEqual(page["kind"], "clarify")
+        self.assertEqual(page["options"], ["Four-year schools only", "Two-year schools only", "Both shown separately"])
+        page = answer.choose(2, state, self.log)
+        self.assertEqual(len(page["table"]["rows"]), 2)
+        self.assertTrue(page["table"]["rows"][0][0].startswith("Four or more years"))
+
+    def test_year_outside_the_data_is_declined_and_logged(self):
+        page, _ = self.ask("Yale's admission rate in 2015",
+                           reply_request(req("schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)],
+                                             year=dict(stated="2015", kind=None))))
+        self.assertEqual(page["kind"], "decline")
+        self.assertIn("one IPEDS release", page["message"])
+        last = json.loads((Path(self.dir.name) / "declines.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual(last["missing"], "years")
+
+    def test_average_with_no_rate_row_is_declined_for_a_group(self):
+        page, _ = self.ask("Average net price at private colleges",
+                           reply_request(req("group", measures=[M("COST2_NETPRICE.NPGRN2")], groups=["Private not-for-profit"])))
+        self.assertEqual(page["kind"], "decline")
+        self.assertIn("list or rank each school's figure", page["message"])
+
+    def test_group_average_from_counts(self):
+        page, _ = self.ask("What is the average Pell grant?", reply_request(req("group", measures=[M("SFA.UPGRNTA")])))
+        self.assertEqual(page["table"]["rows"][0][1], "$5,300")             # NCES 5,300
+        self.assertIn("national universe", page["interpreted"])
+
+    def test_finance_is_split_by_reporting_form(self):
+        page, _ = self.ask("Core expenses per FTE student nationally",
+                           reply_request(req("group", measures=[M("rate:Core expenses per FTE student")])))
+        self.assertEqual(len(page["table"]["rows"]), 3)
+        self.assertEqual(page["table"]["rows"][0][1], "$32,973")
+        self.assertIn("different accounting standards", page["interpreted"])
+
+    def test_group_total_is_a_sum(self):
+        page, _ = self.ask("Total fall enrollment", reply_request(req("group", measures=[M("DRVEF.ENRTOT")])))
+        expected = self.v("SELECT SUM(ENRTOT) FROM DRVEF WHERE UNITID IN (SELECT unitid FROM group_membership "
+                          "WHERE group_name='National universe')")
+        self.assertEqual(page["table"]["rows"][0][1], f"{expected:,}")
+
+    def test_declined_group(self):
+        page, _ = self.ask("Graduation rate at women's colleges",
+                           reply_request(req("group", measures=[M("DRVGR.GRRTTOT")], groups=["women's colleges"])))
+        self.assertEqual((page["kind"], page["message"]), ("decline", "IPEDS has no flag for this group."))
+
+    def test_data_exists_yes_and_not_set_up(self):
+        page, _ = self.ask("Do you have data on admission rates?",
+                           reply_request(req("data_exists", measures=[M("DRVADM.DVADM01")], topic="admission rates")))
+        self.assertTrue(page["message"].startswith("Yes."))
+        page, _ = self.ask("Do you have data on calendar systems?",
+                           reply_request(req("data_exists", measures=[M("IC.CALSYS")], topic="calendar systems")))
+        self.assertTrue(page["message"].startswith("IPEDS collects this, but it is not set up"))
+
+    def test_edits_now_for_texas_rank_them_break_down(self):
+        state = {}
+        self.ask("Fall enrollment in Ohio", reply_request(req("group", measures=[M("DRVEF.ENRTOT")], groups=["State: Ohio"])), state)
+        page, _ = self.ask("now for Texas", reply_edit([("groups", "replace")], req("group", groups=["State: Texas"])), state)
+        self.assertIn("Texas", page["interpreted"])
+        page, _ = self.ask("rank them", reply_edit([("operation", "replace")], req("rank")), state)
+        self.assertEqual(page["table"]["columns"][:2], ["Rank", "School"])
+        self.ask("Yale undergraduates", reply_request(req("schools", measures=[M("EFA.EFTOTLT", [("EFALEVEL", "2")])],
+                                                          schools=[S("Yale", 130794)])), state)
+        page, _ = self.ask("break that down by gender", reply_edit(
+            [("operation", "replace"), ("breakdown", "replace")], req("breakdown", breakdown=dict(set="By gender", fixed=[]))), state)
+        rows = {r[0]: r[1] for r in page["table"]["rows"]}
+        self.assertEqual(rows["Total"], "6,814")
+
+    # ---- change order after Stage 3
+    def test_cohort_period_from_offsets(self):
+        page, _ = self.saved_case("b_compare_grad")
+        self.assertIn("students who entered in fall 2018, status as of August 31, 2024", page["interpreted"])
+        two_year = self.v("SELECT UNITID FROM directory WHERE ICLEVEL=2 AND UNITID IN (SELECT UNITID FROM DRVGR WHERE GRRTTOT IS NOT NULL) LIMIT 1")
+        name = self.v("SELECT INSTNM FROM directory WHERE UNITID=?", two_year)
+        page, _ = self.ask(f"Graduation rate at Yale and {name}", reply_request(req(
+            "schools", measures=[M("DRVGR.GRRTTOT")], schools=[S("Yale", 130794), S(name, two_year)],
+            readings=[dict(term="graduation rate", reading="Total cohort within 150% of normal time")])))
+        self.assertIn("fall 2018 (four or more years schools) or fall 2021 (at least 2 but less than 4 years schools)",
+                      page["interpreted"])
+
+    def test_universe_applies_to_every_group_figure_unless_asked(self):
+        count = lambda page: int(page["table"]["rows"][0][1].replace(",", ""))
+        page, _ = self.ask("How many public two-year colleges are there?",
+                           reply_request(req("count_schools", groups=["Public, 2-year"])))
+        inside = count(page)
+        self.assertEqual(inside, self.v("SELECT COUNT(*) FROM group_membership a JOIN group_membership b USING (unitid) "
+                                        "WHERE a.group_name='Public, 2-year' AND b.group_name='National universe'"))
+        self.assertIn("limited to the national universe", page["interpreted"])
+        page, _ = self.ask("How many public two-year colleges are there, all institutions?",
+                           reply_request(req("count_schools", groups=["Public, 2-year"],
+                                             readings=[dict(term="national universe", reading="All institutions")])))
+        self.assertEqual(count(page), self.v("SELECT COUNT(*) FROM group_membership WHERE group_name='Public, 2-year'"))
+        self.assertGreater(count(page), inside)
+
+    def test_word_notes_move_to_definitions(self):
+        page, _ = self.saved_case("c_rank_retention")
+        self.assertNotIn("State schools", page["interpreted"])
+        self.assertIn('"State schools" and "public universities" mean public four-year.', page["definitions"][0]["notes"])
+
+    def test_plain_names_and_user_facing_statements(self):
+        page, _ = self.saved_case("d_yale_race")
+        self.assertTrue(page["interpreted"].startswith("Fall enrollment, All students, Undergraduate total"))
+        statements = [s for (s,) in self.db.execute("SELECT DISTINCT statement FROM dict_terms WHERE statement IS NOT NULL")]
+        self.assertFalse([s for s in statements if s.startswith("State ")])          # no instructions to the app left
+        grand = self.v("SELECT COUNT(*) FROM dict_measures WHERE in_first_version='yes' AND title='Grand total' AND plain_name IS NULL")
+        self.assertEqual(grand, 0)
+
+    def test_tests_never_write_to_the_shared_log(self):
+        shared = config.LOG_DIR
+        before = {p.name: p.stat().st_size for p in shared.glob("*.jsonl")} if shared.exists() else {}
+        self.ask("What was Yale's admission rate?",
+                 reply_request(req("schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)])))
+        after = {p.name: p.stat().st_size for p in shared.glob("*.jsonl")} if shared.exists() else {}
+        self.assertEqual(before, after)
+
+
+class Show(unittest.TestCase):
+    def test_formats(self):
+        self.assertEqual([show.fmt(c) for c in [(5, "percent"), (77.86, "percent"), (5300.4, "average"), (20066904, "count"),
+                                                 (14, "ratio"), None]], ["5%", "77.9%", "$5,300", "20,066,904", "14", "no value"])
+
+
+if __name__ == "__main__":
+    unittest.main()

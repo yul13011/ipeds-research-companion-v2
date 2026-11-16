@@ -1,0 +1,37 @@
+{
+ "question": "How does Front Range Community College compare with its peers on retention?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "school_vs_group",
+   "measures": [
+    {
+     "id": "EFD.RET_PCF",
+     "row": []
+    }
+   ],
+   "schools": [
+    {
+     "name": "Front Range Community College",
+     "id": 127200
+    }
+   ],
+   "groups": [],
+   "peers_of": 127200,
+   "conditions": [],
+   "breakdown": null,
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ }
+}

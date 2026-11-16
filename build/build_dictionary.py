@@ -119,10 +119,10 @@ def check(db):
     for rate, applies_to in db.execute("SELECT rate, applies_to FROM dict_rates WHERE applies_to IS NOT NULL"):
         if applies_to not in group_names:
             problems.append(f"rates.csv: '{rate}' applies to '{applies_to}', which is not a school group")
-    for rate_measure, n, n_scoped in db.execute("SELECT rate_measure, COUNT(*), COUNT(applies_to) FROM dict_rates "
-                                                "WHERE rate_measure IS NOT NULL GROUP BY 1 HAVING COUNT(*) > 1"):
+    for key, n, n_scoped in db.execute("SELECT COALESCE(rate_measure, rate), COUNT(*), COUNT(applies_to) FROM dict_rates "
+                                       "GROUP BY 1 HAVING COUNT(*) > 1"):
         if n_scoped < n:
-            problems.append(f"rates.csv: {rate_measure} has {n} rows, so each must say which schools it applies to")
+            problems.append(f"rates.csv: {key} has {n} rows, so each must say which schools it applies to")
 
     for table, column in db.execute('SELECT DISTINCT "table", "column" FROM dict_category_codes'):
         exists(f"{table}.{column}", "category_codes.csv")
@@ -155,7 +155,7 @@ def build_directory(db):
     """One row per school and year: identity columns from HD plus every column school_groups.csv names."""
     wanted = {}                                             # table -> columns, in first-seen order
     for table, column in db.execute('SELECT "table", "column" FROM dict_school_groups '
-                                    "WHERE kind NOT IN ('per school', 'has rows') AND \"column\" IS NOT NULL"):
+                                    "WHERE kind NOT IN ('per school', 'has rows', 'has value') AND \"column\" IS NOT NULL"):
         for col in split(column):
             if col not in IDENTITY and col not in wanted.setdefault(table, []):
                 wanted[table].append(col)
@@ -182,7 +182,7 @@ def build_groups(db):
         DROP TABLE IF EXISTS group_list;
         DROP TABLE IF EXISTS group_membership;
         CREATE TABLE group_list (group_name TEXT PRIMARY KEY, parent TEXT, kind TEXT, words TEXT, statement TEXT,
-                                 caveat TEXT, status TEXT, priority TEXT, n_schools INTEGER);
+                                 caveat TEXT, status TEXT, priority TEXT, n_schools INTEGER, word_note TEXT);
         CREATE TABLE group_membership (group_name TEXT, year INTEGER, unitid INTEGER);""")
     rows = db.execute('SELECT "group", kind, words, "table", "column", codes, statement, caveat, status, priority '
                       "FROM dict_school_groups ORDER BY rowid").fetchall()
@@ -200,12 +200,12 @@ def build_groups(db):
             for value in sorted(values):
                 label = labels.get(value, value)
                 child = f"{name}: {label}"
-                db.execute("INSERT OR IGNORE INTO group_list VALUES (?,?,?,?,?,?,?,?,NULL)",
+                db.execute("INSERT OR IGNORE INTO group_list VALUES (?,?,?,?,?,?,?,?,NULL,NULL)",
                            (child, name, kind, value if value != label else None, f"{statement}: {label}", caveat, status, priority))
                 db.execute(f"INSERT INTO group_membership SELECT ?, year, UNITID FROM directory WHERE {condition(column, [value])}", (child,))
             continue
         if name not in seen:
-            db.execute("INSERT INTO group_list VALUES (?,?,?,?,?,?,?,?,NULL)",
+            db.execute("INSERT INTO group_list VALUES (?,?,?,?,?,?,?,?,NULL,NULL)",
                        (name, None, kind, words, statement, caveat, status, priority))
         if kind in FILTER_KINDS:
             where = condition(column, split(codes))
@@ -214,6 +214,9 @@ def build_groups(db):
                            f"(SELECT UNITID FROM directory WHERE {where})", (name,))
             else:
                 db.execute(f"INSERT INTO group_membership SELECT ?, year, UNITID FROM directory WHERE {where}", (name,))
+        elif kind == "has value":                           # schools with a value in the named column
+            db.execute(f'INSERT INTO group_membership SELECT ?, d.year, d.UNITID FROM directory d JOIN "{table}" t '
+                       f'ON t.UNITID = d.UNITID AND t.year = d.year WHERE t."{column}" IS NOT NULL', (name,))
         elif kind == "has rows":                            # schools with at least one row in the named table
             db.execute(f'INSERT INTO group_membership SELECT ?, year, UNITID FROM directory d WHERE EXISTS '
                        f'(SELECT 1 FROM "{table}" t WHERE t.UNITID = d.UNITID AND t.year = d.year)', (name,))
@@ -224,6 +227,7 @@ def build_groups(db):
     db.execute("CREATE INDEX ix_group_membership ON group_membership (group_name, year, unitid)")
     db.execute("CREATE INDEX ix_group_membership_school ON group_membership (unitid, year)")
     db.execute("UPDATE group_list SET n_schools = (SELECT COUNT(*) FROM group_membership m WHERE m.group_name = group_list.group_name)")
+    db.execute('UPDATE group_list SET word_note = (SELECT MAX(word_note) FROM dict_school_groups g WHERE g."group" = group_list.group_name)')
 
 
 def conditions(fixed):
