@@ -1,0 +1,24 @@
+nickname,kind,unitid,name,search_phrase
+yale,direct,130794,Yale University,
+harvard,direct,166027,Harvard University,
+princeton,direct,186131,Princeton University,
+dartmouth,direct,182670,Dartmouth College,
+upenn,direct,215062,University of Pennsylvania,
+mit,direct,166683,Massachusetts Institute of Technology,
+ucla,direct,110662,University of California-Los Angeles,
+brown,alias,217156,Brown University,
+columbia,alias,190150,Columbia University in the City of New York,
+penn,alias,215062,University of Pennsylvania,
+university of pennsylvania,alias,215062,University of Pennsylvania,
+cornell,alias,190415,Cornell University,
+umich,picker,,,university of michigan
+uw madison,picker,,,university of wisconsin madison
+uconn,picker,,,university of connecticut
+umass,picker,,,university of massachusetts
+cal,picker,,,university of california berkeley
+berkeley,picker,,,university of california berkeley
+ut austin,picker,,,university of texas austin
+georgia tech,picker,,,georgia institute of technology
+virginia tech,picker,,,virginia polytechnic institute
+ole miss,picker,,,university of mississippi
+penn state,picker,,,pennsylvania state university

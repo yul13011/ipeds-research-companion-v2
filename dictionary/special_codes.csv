@@ -1,0 +1,37 @@
+applies_by,table,column,code,label,decision,shown_as,note
+codebook label,,,-1,Not reported,missing,Not reported,
+codebook label,,,-2,Not reported,missing,Not applicable,
+codebook label,,,-2,Not applicable,missing,Not applicable,
+codebook label,,,-1,Not applicable,missing,Not reported,
+codebook label,,,-2,not applicable,missing,Not applicable,
+codebook label,,,-3,{Not available},missing,Not available,
+codebook label,,,-3,Not available,missing,Not available,
+codebook label,,,-2,"Not applicable, first-professional only",missing,Not applicable,No cells hold it in 2024-25
+codebook label,,,-2,Not classified,keep,,Carnegie 2025 classifications
+codebook label,,,-2,Not Classified in SAEC,keep,,Carnegie 2025
+codebook label,,,-2,No research designation,keep,,Carnegie 2025 research designation
+codebook label,,,-2,"Not classified, not in classification universe",keep,,Carnegie 2000
+codebook label,,,-2,"Not applicable, not in Carnegie universe (not accredited or nondegree-granting)",keep,,Carnegie 2021 basic
+codebook label,,,-9,Not active,keep,,Survey response status flags
+codebook label,,,-9,{Not active},keep,,Survey response status flags
+codebook label,,,-2,"Not applicable, undergraduate detail",keep,,Row label in the 12-month enrollment table
+codebook label,,,-2,"Not applicable, current occupation does not map to occupations prior to 2012",keep,,Row label in two staff tables
+table and column,HD,F1SYSNAM,-2,,missing,Not applicable,School is not part of a system
+table and column,HD,F1SYSNAM,-1,,missing,Not reported,
+table and column,HD,CLOSEDAT,-2,,missing,Not applicable,School has not closed
+table and column,HD,OPEID,-2,,missing,Not applicable,
+table and column,HD,EIN,-1,,missing,Not reported,
+table and column,COST1,PRGMOFR,-2,,missing,Not applicable,Number of programs offered
+table and column,HD,NEWID,-2,,missing,Not applicable,No merged-school ID
+table and column,FLAGS,IDX_C,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_E12,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_COS,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_SFA,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_GR,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_GR2,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_OM,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_ADM,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_HR,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_EF,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_F,-2,,missing,Not applicable,No parent institution for this survey component
+table and column,FLAGS,IDX_AL,-2,,missing,Not applicable,No parent institution for this survey component

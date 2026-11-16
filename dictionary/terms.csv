@@ -1,0 +1,69 @@
+term,words,kind,reading,shown_as,measure,condition,is_default,default_for,always_ask,statement,status,note
+graduation rate,graduation rate; completion rate,measure,Bachelor's degree within six years,Bachelor's degree within six years,DRVGR.GBA6RTT,,yes,Four or more years,no,State which graduation rate was used.,in use,
+graduation rate,graduation rate; completion rate,measure,Total cohort within 150% of normal time,Total cohort within 150% of normal time,DRVGR.GRRTTOT,,yes,At least 2 but less than 4 years,no,State which graduation rate was used.,in use,
+graduation rate,graduation rate; completion rate,measure,Total cohort within 150% of normal time,Total cohort within 150% of normal time,DRVGR.GRRTTOT,,yes,Less than 2 years (below associate),no,State which graduation rate was used.,in use,
+graduation rate,graduation rate; completion rate,measure,Bachelor's degree within four years,Bachelor's degree within four years,DRVGR.GBA4RTT,,no,,no,State which graduation rate was used.,in use,
+graduation rate,graduation rate; completion rate,group,Four-year schools only,Four-year schools only,,only this group,no,Four or more years,mixed levels,State which graduation rate was used.,in use,
+graduation rate,graduation rate; completion rate,group,Two-year schools only,Two-year schools only,,only this group,no,At least 2 but less than 4 years,mixed levels,State which graduation rate was used.,in use,
+graduation rate,graduation rate; completion rate,group,Both shown separately,Both shown separately,,split by level,no,,mixed levels,State which graduation rate was used.,in use,
+net price,net price,measure,Students awarded grant or scholarship aid,"Average net price, students awarded grant or scholarship aid",COST2_NETPRICE.NPIST2,,yes,,no,State that the latest net price year is 2023-24.,in use,Public schools report this field
+net price,net price,measure,Students awarded grant or scholarship aid,"Average net price, students awarded grant or scholarship aid",COST2_NETPRICE.NPGRN2,,yes,,no,State that the latest net price year is 2023-24.,in use,Private schools report this field
+net price,net price,measure,All students awarded Title IV federal aid,"Average net price, students awarded Title IV federal aid",COST2_NETPRICE.NPIS42,,no,,no,State that the latest net price year is 2023-24.,in use,Public schools report this field
+net price,net price,measure,All students awarded Title IV federal aid,"Average net price, students awarded Title IV federal aid",COST2_NETPRICE.NPT42,,no,,no,State that the latest net price year is 2023-24.,in use,Private schools report this field
+enrollment,enrollment; students; headcount,measure,Fall total headcount,Fall total headcount,DRVEF.ENRTOT,,yes,,no,,in use,
+enrollment,enrollment; students; headcount,measure,Undergraduate fall enrollment,Undergraduate fall enrollment,DRVEF.EFUG,,no,,no,,in use,
+enrollment,enrollment; students; headcount,measure,Graduate fall enrollment,Graduate fall enrollment,DRVEF.EFGRAD,,no,,no,,in use,
+enrollment,enrollment; students; headcount,measure,12-month unduplicated headcount,12-month unduplicated headcount,DRVEF12.UNDUP,,no,,no,,in use,"Use only when the user says annual, 12-month or unduplicated"
+enrollment,enrollment; students; headcount,measure,Full-time equivalent fall enrollment,Full-time equivalent fall enrollment,DRVEF.FTE,,no,,no,,in use,
+faculty,faculty; how many faculty,measure,Instructional staff,Total,EAP.EAPTOT,EAPCAT = 21000,no,,yes,Counts include medical school staff.,in use,"From version 1's Yale faculty check. Yale: 3,800"
+faculty,faculty; how many faculty,measure,Instructional staff,Full-time,EAP.EAPFT,EAPCAT = 21000,no,,yes,Counts include medical school staff.,in use,"From version 1's Yale faculty check. Yale: 3,800"
+faculty,faculty; how many faculty,measure,Instructional staff,Part-time,EAP.EAPPT,EAPCAT = 21000,no,,yes,Counts include medical school staff.,in use,"From version 1's Yale faculty check. Yale: 3,800"
+faculty,faculty; how many faculty,measure,All staff with faculty status,Total,EAP.EAPTOT,EAPCAT = 10010,no,,yes,Counts include medical school staff.,in use,"From version 1's Yale faculty check. Yale: 5,735"
+faculty,faculty; how many faculty,measure,All staff with faculty status,Full-time,EAP.EAPFT,EAPCAT = 10010,no,,yes,Counts include medical school staff.,in use,"From version 1's Yale faculty check. Yale: 5,735"
+faculty,faculty; how many faculty,measure,All staff with faculty status,Part-time,EAP.EAPPT,EAPCAT = 10010,no,,yes,Counts include medical school staff.,in use,"From version 1's Yale faculty check. Yale: 5,735"
+faculty salary,faculty salary; average salary,measure,All ranks,All ranks,DRVHR.SALTOTL,,yes,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+faculty salary,faculty salary; average salary,measure,By rank,Professors,DRVHR.SalProf,,no,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+faculty salary,faculty salary; average salary,measure,By rank,Associate professors,DRVHR.SalAssc,,no,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+faculty salary,faculty salary; average salary,measure,By rank,Assistant professors,DRVHR.SalAsst,,no,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+faculty salary,faculty salary; average salary,measure,By rank,Instructors,DRVHR.SalInst,,no,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+faculty salary,faculty salary; average salary,measure,By rank,Lecturers,DRVHR.Sallect,,no,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+faculty salary,faculty salary; average salary,measure,By rank,No academic rank,DRVHR.SALNRNK,,no,,no,"Salary figures cover full-time instructional staff outside the medical school, equated to nine-month contracts.",in use,
+cost,cost; cost of attendance; how much does it cost,measure,Cost profile,"Total price, in-state students living on campus",DRVCOST.CINSON,,yes,,no,,in use,
+cost,cost; cost of attendance; how much does it cost,measure,Cost profile,"Total price, out-of-state students living on campus",DRVCOST.COTSON,,yes,,no,,in use,
+cost,cost; cost of attendance; how much does it cost,measure,Cost profile,Tuition and fees,DRVCOST.TUFEYR3,,yes,,no,,in use,
+cost,cost; cost of attendance; how much does it cost,measure,Cost profile,"Average net price, students awarded grant or scholarship aid",COST2_NETPRICE.NPIST2,,yes,,no,,in use,
+cost,cost; cost of attendance; how much does it cost,measure,Cost profile,"Average net price, students awarded grant or scholarship aid",COST2_NETPRICE.NPGRN2,,yes,,no,,in use,
+tuition,tuition,measure,"Published tuition and fees, in-state or in-district rate","Published tuition and fees, in-state or in-district rate",DRVCOST.TUFEYR3,,yes,,no,,in use,Out-of-state tuition is in COST1
+tuition,tuition,measure,Published out-of-state tuition and fees,Published out-of-state tuition and fees,COST1.chg3ay3,,no,,no,,in use,
+retention,retention; persistence,measure,Full-time retention rate,Full-time retention rate,EFD.RET_PCF,,yes,,no,,in use,
+retention,retention; persistence,measure,Part-time retention rate,Part-time retention rate,EFD.RET_PCP,,no,,no,,in use,Use when the user says part-time
+admission rate,admission rate; acceptance rate; selectivity,measure,"Percent admitted, total","Percent admitted, total",DRVADM.DVADM01,,yes,,no,,in use,
+degrees,degrees; degrees awarded,measure,Degrees by level,Associate's degrees,DRVC.ASCDEG,,yes,,no,,in use,
+degrees,degrees; degrees awarded,measure,Degrees by level,Bachelor's degrees,DRVC.BASDEG,,yes,,no,,in use,
+degrees,degrees; degrees awarded,measure,Degrees by level,Master's degrees,DRVC.MASDEG,,yes,,no,,in use,
+degrees,degrees; degrees awarded,measure,Degrees by level,"Doctor's degrees, research/scholarship",DRVC.DOCDEGRS,,yes,,no,,in use,
+degrees,degrees; degrees awarded,measure,Degrees by level,"Doctor's degrees, professional practice",DRVC.DOCDEGPP,,yes,,no,,in use,
+degrees,degrees; degrees awarded,measure,Degrees by level,"Doctor's degrees, other",DRVC.DOCDEGOT,,yes,,no,,in use,
+financial aid,financial aid; aid,measure,"Grant or scholarship aid, all undergraduates","Grant or scholarship aid, all undergraduates",SFA.UAGRNTP,,no,,yes,,in use,
+financial aid,financial aid; aid,measure,"Any financial aid, full-time first-time undergraduates","Any financial aid, full-time first-time undergraduates",SFA.ANYAIDP,,no,,yes,,in use,
+Pell,Pell,measure,Percent of undergraduates awarded Pell grants,Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,yes,,no,,in use,
+Pell,Pell,measure,Average Pell grant amount,Average Pell grant amount,SFA.UPGRNTA,,no,,no,,in use,
+Pell,Pell,measure,Number of undergraduates awarded Pell grants,Number of undergraduates awarded Pell grants,SFA.UPGRNTN,,no,,no,,in use,
+revenue,revenue,measure,Core revenues,Core revenues,DRVF.F1CORREV,,yes,,no,State the fiscal year. Finance is reported on three forms; a school has values on only one.,in use,Public schools (GASB form)
+revenue,revenue,measure,Core revenues,Core revenues,DRVF.F2CORREV,,yes,,no,State the fiscal year. Finance is reported on three forms; a school has values on only one.,in use,Private nonprofit schools (FASB form)
+revenue,revenue,measure,Core revenues,Core revenues,DRVF.F3CORREV,,yes,,no,State the fiscal year. Finance is reported on three forms; a school has values on only one.,in use,For-profit schools
+expenses,expenses; spending,measure,Core expenses,Core expenses,DRVF.F1COREXP,,yes,,no,State the fiscal year. Finance is reported on three forms; a school has values on only one.,in use,Public schools (GASB form)
+expenses,expenses; spending,measure,Core expenses,Core expenses,DRVF.F2COREXP,,yes,,no,State the fiscal year. Finance is reported on three forms; a school has values on only one.,in use,Private nonprofit schools (FASB form)
+expenses,expenses; spending,measure,Core expenses,Core expenses,DRVF.F3COREXP,,yes,,no,State the fiscal year. Finance is reported on three forms; a school has values on only one.,in use,For-profit schools
+endowment,endowment,measure,Endowment assets at the end of the fiscal year,Endowment assets at the end of the fiscal year,F_F1A.F1H02,,yes,,no,,in use,Public schools (GASB form)
+endowment,endowment,measure,Endowment assets at the end of the fiscal year,Endowment assets at the end of the fiscal year,F_F2.F2H02,,yes,,no,,in use,Private nonprofit schools (FASB form)
+endowment,endowment,measure,Endowment assets per FTE student,Endowment assets per FTE student,DRVF.F1ENDMFT,,no,,no,,in use,Public schools (GASB form)
+endowment,endowment,measure,Endowment assets per FTE student,Endowment assets per FTE student,DRVF.F2ENDMFT,,no,,no,,in use,Private nonprofit schools (FASB form)
+student-faculty ratio,student-faculty ratio,measure,Student-to-faculty ratio,Student-to-faculty ratio,EFD.STUFACR,,yes,,no,,in use,
+enrollment by major,enrollment by major; enrollment by program; enrollment by field,measure,Fall enrollment in nine selected fields,Fall enrollment in nine selected fields,EFCP.EFTOTLT,,yes,,no,"IPEDS collects fall enrollment by major for nine selected fields only: education, engineering, biological sciences, mathematics, physical sciences, business, law, dentistry and medicine. For other majors, degrees awarded by program is the nearest measure.",in use,
+peers,peers; peer institutions,group,The school's own IPEDS comparison group,The school's own IPEDS comparison group,,comparison group,yes,Has an IPEDS comparison group,no,State that the school's own IPEDS comparison group was used.,in use,"Available for 2,845 of 6,072 schools"
+peers,peers; peer institutions,group,Schools in the same state and sector,Schools in the same state and sector,,same state and sector,no,,no,State that the school's own IPEDS comparison group was used.,in use,
+peers,peers; peer institutions,group,Schools you name,Schools you name,,user named,no,,no,State that the school's own IPEDS comparison group was used.,in use,
+selective,selective; highly selective; elite schools,group,Admission rate under 10%,Admission rate under 10%,DRVADM.DVADM01,< 10,no,,yes,Selective is not an IPEDS category. State the admission-rate cut-off used.,in use,
+selective,selective; highly selective; elite schools,group,Admission rate under 25%,Admission rate under 25%,DRVADM.DVADM01,< 25,no,,yes,Selective is not an IPEDS category. State the admission-rate cut-off used.,in use,
+selective,selective; highly selective; elite schools,group,Admission rate under 50%,Admission rate under 50%,DRVADM.DVADM01,< 50,no,,yes,Selective is not an IPEDS category. State the admission-rate cut-off used.,in use,

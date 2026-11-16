@@ -1,0 +1,108 @@
+conversation,turn,question,repeat
+1,1,Which years are available for Ivy League admission rates? Compare the latest available year.,no
+2,1,Hello,no
+3,1,What was Yale’s admission rate in fall 2024?,no
+3,2,Show Yale's undergrad population by race and ethnicity,no
+4,1,How many bachelor’s degrees did Yale award in 2014–15?,no
+4,2,Compare Ivy League six-year bachelor graduation rates for the 2015 outcome year.,no
+4,3,Show Yale’s six-year bachelor graduation rate for entering cohorts 2009 through 2018.,no
+4,4,How does this trend compare to a the average among Phd-enrolling universities nationally?,no
+4,5,can you create a trend line for Yale's peers?,no
+4,6,Please create a trend for Ivies plus MIT and Stanford,no
+4,7,MIT is massachusetts institute of technology,no
+5,1,What was Yale’s admission rate in fall 2024?,yes
+6,1,"Show Yale, Harvard, and Princeton admission rates from 2015 through 2024.",no
+7,1,How many full-time and part-time instructional staff did Yale have in Fall 2024?,no
+8,1,How many bachelor’s degrees did Yale award in 2014–15?,yes
+8,2,how many degrees did Marian University in Indiana award in the last ten years?,no
+8,3,confirm 151786,no
+9,1,"Show Yale, Harvard, and Princeton admission rates from 2015 through 2024.",yes
+10,1,"Show Yale, Harvard, and Princeton admission rates from 2015 through 2024.",yes
+11,1,"how has cost of attendance changed at university of chicago compared to harvard, princeton, yale, and stanford?",no
+11,2,Compare Ivy League admission rates in fall 2024.,no
+11,3,how has this changed since 10 years ago?,no
+12,1,What was Yale’s admission rate in fall 2024?,yes
+12,2,What was Yale’s admission rate in fall 2024?,yes
+13,1,How much does it cost to attend Harvard College in 2024-25?,no
+14,1,what are the 10 institutions with the best return on investment?,no
+14,2,"rank based on the answers to (a), (b), and (c) for all four year institutions for the most recent 2 years for which there is IPEDS data",no
+14,3,"rank based on the answers to these three measures: 1. the average net price paid by students who were awarded grant or scholarship aid, ranked lowest first, 2. the graduation rate, ranked highest first, and 3. median earnings after graduation",no
+14,4,yes please,no
+14,5,rank using equal weighting for net price and graduation rate,no
+15,1,how many dual enrollment students attended public 2-year colleges in new york in 2023-2024,no
+15,2,at which 2 year colleges in new york are dual enrolled students at least 30% of the undergraduate headcount,no
+16,1,"Do Smith, Mount Holyoke, and Wellesley offer bachelor’s and master’s degrees?",no
+16,2,"Does Smith College offer academic counseling, career placement, and on-campus childcare?",no
+17,1,is there any data helpful in choosing variables to explain institutional ai policies across sector types,no
+17,2,yes,no
+18,1,"Do Smith, Mount Holyoke, and Wellesley offer bachelor’s and master’s degrees?",yes
+19,1,What was Yale’s admission rate in fall 2024?,yes
+20,1,How much does it cost to attend Harvard College in 2024-25?,yes
+21,1,What was Yale’s admission rate in fall 2024?,yes
+22,1,How much does it cost to attend Harvard College in 2024-25?,yes
+22,2,Show Yale’s undergraduate grant and scholarship percentages from 2014–15 through 2023–24.,no
+23,1,do you know the phd economics enrollment for past 5 years,no
+24,1,how many dual enrollment students are there?,no
+24,2,most recent year for all colleges,no
+24,3,both,no
+24,4,dual enrollment students for all colleges,no
+24,5,"how many colleges have more than 10,000 dual enrolled students?",no
+24,6,"can you list them in rank order from largest to smallest, showing the college name and number of dual enrollment students?",no
+25,1,How many graduate students did Yale enroll in fall 2024?,no
+26,1,Set y-axis range to 0–200,no
+27,1,Change the chart font,no
+28,1,Set x-axis range to 0–200,no
+29,1,Can you make the lines dashed?,no
+30,1,A test question,no
+31,1,Keep this question,no
+32,1,Keep this question,yes
+33,1,What data do we have on faculty?,no
+34,1,What data do we have on college tuition?,no
+35,1,What data do we have on graduation rates?,no
+36,1,Michigan enrollment,no
+36,2,Michigan enrollment,yes
+36,3,Michigan enrollment,yes
+36,4,Another topic for Michigan,no
+37,1,Reset the horizontal scale to between zero and ten,no
+38,1,A complex question,no
+39,1,First question,no
+39,2,And another question,no
+40,1,Hello,yes
+41,1,"Data extract: Applicants, Admission rate",no
+42,1,Hi,no
+43,1,Which years are available for Ivy League admission rates? Compare the latest available year.,yes
+44,1,UNTRUSTED_MESSAGE_123,no
+44,2,Next question,no
+45,1,Show a 10-year trend.,no
+45,2,Show a longitudinal trend,no
+46,1,Hello,yes
+47,1,Which years are available for Ivy League admission rates? Compare the latest available year.,yes
+48,1,how did the student body (characteristics) of Syracuse University change from 2015 to 2023,no
+49,1,How many graduate students did Yale enroll in fall 2024?,yes
+50,1,What about part time student persistence,no
+51,1,Set x-axis range to 0–200,yes
+52,1,Can you make the lines dashed?,yes
+53,1,What was Yale’s admission rate in fall 2024?,yes
+53,2,"Show Yale, Harvard, and Princeton admission rates from 2015 through 2024.",yes
+54,1,Compare Ivy League admission rates in fall 2024.,yes
+55,1,How does FRCC compare against other Colorado community colleges in enrollment and outcomes trends over time?,no
+55,2,All public 2-year colleges. Graduation rate.,no
+56,1,Keep this question,yes
+57,1,How many bachelor’s degrees did Yale award in 2014–15?,yes
+58,1,Compare Ivy League admission rates in fall 2024.,yes
+58,2,What is the 10-year trend in completion rates for Rochester Institute of Technology,no
+58,3,compare RIT's completion rate to its peer institutions,no
+58,4,compare RIT's completion rate to its peer institutions,yes
+58,5,"Worcester Polytechnic Institute, Case Western Reserve University, Stevens Institute of Technology, Drexel University and Northeastern University",no
+58,6,use the instiutions in the example set,no
+58,7,compare these same institutions on their ten year trends for expenditures per student FTE,no
+59,1,How many full-time and part-time instructional staff did Yale have in Fall 2024?,yes
+59,2,How many full-time and part-time instructional staff did Yale have in Fall 2024?,yes
+59,3,How many full-time and part-time instructional staff did Yale have in Fall 2024?,yes
+59,4,How many full-time and part-time instructional staff did Yale have in Fall 2024?,yes
+59,5,How many full-time and part-time instructional staff did Yale have in Fall 2024?,yes
+60,1,Any variable that shows economic Mobility,no
+60,2,Do you have something like income after graduation,no
+60,3,What is college scorecard,no
+60,4,What is the universe with the lowest net cost?,no
+60,5,Where does income data come from in ipeds,no

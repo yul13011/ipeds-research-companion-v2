@@ -1,0 +1,29 @@
+# Data: never in git. The local database is rebuilt by build/build_data.py.
+data/
+*.sqlite
+*.sqlite-journal
+*.db
+*.accdb
+
+# Secrets
+.env
+.env.*
+.streamlit/secrets.toml
+secrets.toml
+*.key
+
+# Local logs (question log, decline log)
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Office lock files
+~$*
+
+# Raw question log: holds session IDs and timestamps. The cleaned copy is docs/test_questions.csv.
+docs/question_log.csv
