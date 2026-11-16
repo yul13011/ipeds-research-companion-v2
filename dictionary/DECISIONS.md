@@ -81,3 +81,12 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Two-year graduation rate.** Added to `rates.csv`: `GRTYPE` 30 over 29. From counts 0.4267; NCES 0.427.
 - **Rate statuses.** All thirteen rates are marked tested as of 2026-11-15.
 - **Measure periods.** The `period` column in `measures.csv` is approved.
+
+## 2026-11-16: breakdown sets approved
+
+- **All twelve sets approved.** Nine stored as rows and three stored as columns; Stage 3 may use them.
+- **Rows with no detail.** Rows where IPEDS collects no detail at all are not failures. A breakdown asked for on such a row shows the total and says the detail is not collected. Reason: graduation rate by race is needed, and the 100%-of-normal-time rows have no detail by design.
+- **Gender.** The set is men and women. "Gender unknown" and "another gender" stay as their own measures. Reason: in the data, men plus women already equal the total.
+- **One code, one set: limit lifted.** `set_fixed` names a default that the request may change. The build tests each set at every value of the other category columns and loads only the values that pass. Reason: "bachelor's degrees by field" and "undergraduates by age" must work.
+- **Age caveat.** Enrollment by age is optional in even-numbered years; 2,576 of 5,842 schools reported it for fall 2024. `year_meaning.csv` gains a `caveat` column, shown whenever figures from that table are given for a group.
+- **Less-than-two-year graduation rate.** Left out for now.

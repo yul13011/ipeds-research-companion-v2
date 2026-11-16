@@ -67,6 +67,6 @@ Details of each stage, the slice scope, and what is not in the slice are in `doc
 
 ## Running things
 
-- Full build (data, cleaning, dictionary, directory; about a minute): `python build/build_data.py`
-- Reload the dictionary only (a few seconds; use after a change to any table except `special_codes.csv`): `python build/build_dictionary.py`
+- Full build (data, cleaning, dictionary, directory; about three minutes): `python build/build_data.py`
+- Reload the dictionary only (about a minute and a half, most of it testing breakdown sets; use after a change to any table except `special_codes.csv`): `python build/build_dictionary.py`
 - Run the tests: `python -m unittest discover -s tests -v`

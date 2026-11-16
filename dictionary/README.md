@@ -3,7 +3,7 @@
 This folder is the only home for conventions: what a word means, which counts sit behind a rate, which schools are in a group. No convention lives in code, in prompts or in any other file.
 
 - Each table is a CSV you can open in Excel. One row is one fact.
-- After any change, the build must be rerun. `python build/build_dictionary.py` reloads the tables (a few seconds) and stops with a list of problems if a row does not fit the data. A change to `special_codes.csv` needs the full build, `python build/build_data.py`.
+- After any change, the build must be rerun. `python build/build_dictionary.py` reloads the tables (about a minute and a half) and stops with a list of problems if a row does not fit the data. A change to `special_codes.csv` needs the full build, `python build/build_data.py`.
 - Every owner decision gets one dated line in `DECISIONS.md`.
 - Table names are the local names without the year (`HD`, not `HD2024`). A measure is written `TABLE.VARIABLE`, for example `DRVGR.GBA6RTT`.
 - Two columns hold short lists in one cell: `words` (separated by semicolons) and `codes` (separated by commas).
@@ -99,9 +99,9 @@ Every code in the category columns of the multi-row tables.
 
 - `table`, `column`, `code`, `label`: the code and its IPEDS label.
 - `role`: `total` or `part`, guessed from the label wording. It is a reading aid only; breakdowns use the three columns below.
-- `breakdown_set`: filled when this code is one part of a named breakdown, such as "Fall enrollment by level". A code can be in one set.
+- `breakdown_set`: filled when this code is one part of a named breakdown, such as "Fall enrollment by level".
 - `set_total`: the code of the row the parts add up to, or `sum of parts` when the data has no total row. The same on every row of the set.
-- `set_fixed`: in tables keyed by several category columns, the values the other columns are held at, such as `CIPCODE = 99; MAJORNUM = 1`. The same on every row of the set.
+- `set_fixed`: in tables keyed by several category columns, the default values the other columns are held at, such as `CIPCODE = 99; MAJORNUM = 1`. The same on every row of the set. A request may ask for another value (bachelor's degrees only, undergraduates only); the build tests the set at every value and allows only those that add up.
 
 The build tests each set: at every school, do the parts add up to the total? A set is loaded only for the count columns where it does. The breakdown operation uses only loaded sets.
 
@@ -113,6 +113,7 @@ What the year means for each table. Every result must state this period.
 - `kind`: fall, fiscal year, academic year, cohort, or 12 months July to June.
 - `period`: the period text shown to the user.
 - `title`: the IPEDS table title.
+- `caveat`: a warning shown whenever figures from this table are given for a group of schools, such as optional-year reporting.
 
 ## outside_ipeds.csv
 

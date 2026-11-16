@@ -12,6 +12,9 @@ What it does, in plain terms:
        group_membership  which schools are in each group
        breakdown_sets    every named breakdown, tested: do its parts add up to its total?
        breakdown_parts   the parts of each breakdown that passed
+       breakdown_slices  for sets in tables keyed by several category columns: every value of the
+                         other columns at which the set adds up (bachelor's degrees by field,
+                         undergraduates by age), not only the default
 
 No IPEDS convention is decided in this file. It only applies what the dictionary tables say.
 
@@ -223,7 +226,9 @@ def build_breakdown_sets(db):
 
     A set stored as ROWS (category_codes.csv) is tested for every count column of its table: at each
     school, do the part rows add up to the total row? It is loaded for the count columns that pass at
-    every school. A set stored as COLUMNS (measures.csv) is tested on every row of its table: do the
+    every school. Where the set holds other category columns fixed, those values are only the default:
+    the same test runs at every other value, and breakdown_slices records which values pass.
+    A set stored as COLUMNS (measures.csv) is tested on every row of its table: do the
     part columns add up to the total column? Rows where IPEDS collects no detail at all (every part
     is missing) cannot be broken down; they are counted in n_no_detail and are not failures.
     A set whose total is 'sum of parts' has no total in the
@@ -232,6 +237,9 @@ def build_breakdown_sets(db):
     db.executescript("""
         DROP TABLE IF EXISTS breakdown_sets;
         DROP TABLE IF EXISTS breakdown_parts;
+        DROP TABLE IF EXISTS breakdown_slices;
+        CREATE TABLE breakdown_slices (set_name TEXT, "table" TEXT, measure TEXT, slice TEXT,
+                                       n_tested INTEGER, n_ok INTEGER, status TEXT);
         CREATE TABLE breakdown_sets (set_name TEXT, "table" TEXT, stored_as TEXT, "column" TEXT, total TEXT, fixed TEXT,
                                      measure TEXT, n_parts INTEGER, n_tested INTEGER, n_ok INTEGER,
                                      n_no_detail INTEGER, status TEXT);
@@ -248,6 +256,7 @@ def build_breakdown_sets(db):
         counts = [m for (m,) in db.execute("SELECT variable FROM dict_measures WHERE \"table\"=? AND format='Cont' "
                                            "AND data_type='N'", (table,))]
         loaded = False
+        keys = [item.partition("=")[0].strip() for item in split(fixed, ";")]   # the other category columns
         for i in range(0, len(counts), 100):
             chunk = counts[i:i + 100]
             if total == ADDITIVE:
@@ -264,6 +273,16 @@ def build_breakdown_sets(db):
                 loaded = loaded or status != "failed"
                 db.execute("INSERT INTO breakdown_sets VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                            (name, table, "rows", column, total, fixed, m, len(parts), tested, ok, None, status))
+            if keys and total != ADDITIVE:                  # the same test at every value of the other columns
+                cols = ", ".join(f'"{k}"' for k in keys)
+                for row in db.execute(f'SELECT {cols}, {summary} FROM (SELECT {cols}, {per_school} FROM "{table}" '
+                                      f"GROUP BY UNITID, year, {cols}) GROUP BY {cols}").fetchall():
+                    where = "; ".join(f"{k} = {v}" for k, v in zip(keys, row))
+                    for j, m in enumerate(chunk):
+                        tested, ok = row[len(keys) + 2 * j] or 0, row[len(keys) + 2 * j + 1] or 0
+                        if tested:
+                            db.execute("INSERT INTO breakdown_slices VALUES (?,?,?,?,?,?,?)",
+                                       (name, table, m, where, tested, ok, "loaded" if tested == ok else "failed"))
         if loaded:
             db.executemany("INSERT INTO breakdown_parts VALUES (?,?,?,?)", [(name, table, c, label) for c, label in parts])
 
@@ -287,6 +306,9 @@ def build_breakdown_sets(db):
                     tested, ok, no_detail, status))
         if status != "failed":
             db.executemany("INSERT INTO breakdown_parts VALUES (?,?,?,?)", [(name, table, v, label) for v, label in parts])
+
+
+    db.execute('CREATE INDEX ix_breakdown_slices ON breakdown_slices (set_name, "table", measure, slice)')
 
 
 def build(local_db=None, folder=None):

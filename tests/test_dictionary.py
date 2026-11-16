@@ -190,6 +190,17 @@ class LoaderLogic(unittest.TestCase):
                          [("2", "Undergraduate"), ("3", "Graduate")])
         db.close()
 
+    def test_fixed_values_are_a_default_and_every_other_value_is_tested(self):
+        db = self.build()
+        slices = db.execute("SELECT slice, n_tested, n_ok, status FROM breakdown_slices WHERE set_name='By level' "
+                            "AND measure='CNT' ORDER BY slice").fetchall()
+        # STUDY = 1 is the default and adds up at both schools. STUDY = 2 has a part row but no total row, so it
+        # cannot be tested and is not offered.
+        self.assertEqual(slices, [("STUDY = 1", 2, 2, "loaded")])
+        bad = db.execute("SELECT status FROM breakdown_slices WHERE set_name='By attendance' AND measure='CNT'").fetchall()
+        self.assertEqual(bad, [("failed",)])
+        db.close()
+
     def test_row_set_that_does_not_add_up_is_not_loaded(self):
         db = self.build()
         self.assertEqual(self.sets(db, "By attendance")[1], ("CNT", 2, 1, "failed"))   # school 2: 4 + 5 is not 10
@@ -350,6 +361,35 @@ class RealDictionary(unittest.TestCase):
                                                  (name, measure)).fetchone()
             self.assertEqual((status, tested), ("loaded", ok), name)
             self.assertGreater(tested, 2000, name)
+
+    def test_a_request_may_change_the_fixed_values(self):
+        """Bachelor's degrees by field and undergraduates by age: the set adds up at those values too."""
+        def slice_of(name, measure, where):
+            return self.db.execute("SELECT n_tested, n_ok, status FROM breakdown_slices WHERE set_name=? AND measure=? AND slice=?",
+                                   (name, measure, where)).fetchone()
+        for name, measure, where in [("Degrees by field of study", "CTOTALT", "AWLEVEL = 5; MAJORNUM = 1"),
+                                     ("Degrees by field of study", "CTOTALT", "AWLEVEL = 12; MAJORNUM = 1"),
+                                     ("Fall enrollment by age", "EFAGE09", "LSTUDY = 2"),
+                                     ("Fall enrollment by age", "EFAGE09", "LSTUDY = 5"),
+                                     ("Staff by occupation", "EAPTOT", "FACSTAT = 0")]:
+            tested, ok, status = slice_of(name, measure, where)
+            self.assertEqual((status, tested), ("loaded", ok), f"{name} at {where}")
+            self.assertGreater(tested, 1000)
+        # Yale's bachelor's degrees by field add up to its bachelor's total.
+        parts = ", ".join("'" + p + "'" for (p,) in self.db.execute(
+            "SELECT part FROM breakdown_parts WHERE set_name='Degrees by field of study'"))
+        by_field, total = self.db.execute(
+            f"SELECT SUM(CASE WHEN CIPCODE IN ({parts}) THEN CTOTALT END), MAX(CASE WHEN CIPCODE='99' THEN CTOTALT END) "
+            "FROM C_A WHERE unitid=130794 AND AWLEVEL=5 AND MAJORNUM=1").fetchone()
+        self.assertEqual(by_field, total)
+        self.assertGreater(total, 1000)
+
+    def test_optional_year_table_carries_a_caveat(self):
+        rows = self.db.execute('SELECT "table", caveat FROM dict_year_meaning WHERE caveat IS NOT NULL').fetchall()
+        self.assertEqual([t for t, _ in rows], ["EFB"])
+        self.assertIn("2,576 of 5,842", rows[0][1])
+        self.assertEqual(self.db.execute("SELECT COUNT(DISTINCT UNITID) FROM EFB").fetchone()[0], 2576)
+        self.assertEqual(self.db.execute("SELECT COUNT(DISTINCT UNITID) FROM EFA").fetchone()[0], 5842)
 
     def test_a_rate_column_is_not_offered_as_a_breakdown_of_counts(self):
         """Percentages do not add up, so the set is not loaded for them."""
