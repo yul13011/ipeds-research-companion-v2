@@ -1,0 +1,72 @@
+source,case,title,period,expected,expected_scaled,actual,difference,status,note
+NCES,q1,Number of postsecondary institutions in the United States that award federal student aid,2024-25,5626.0,5626.0,5626,0.0,match,
+NCES,q2,Number of students enrolled in postsecondary institutions annually,2023-24,25662076.0,25662076.0,25670468,8392.0,differs,
+NCES,q3,Number of students enrolled in postsecondary institutions in the fall,2024,20066904.0,20066904.0,20066904,0.0,match,
+NCES,q4,Number of degree-seeking undergraduate students enrolled in postsecondary institutions in the fall who are transfer-in students,2024,1277289.0,1277289.0,1277289,0.0,match,
+NCES,q5,Number of degree-seeking undergraduate students enrolled in postsecondary institutions for the first-time in the fall,2024,3066637.0,3066637.0,3066637,0.0,match,
+NCES,q8,"Number of students, by age category, enrolled in postsecondary institutions in the fall",,,,,,no 2024-25 observation in the file,
+NCES,q12,Number of full-time instructional staff are employed by degree-granting postsecondary institutions,2024,624689.0,624689.0,628128,3439.0,differs,
+NCES,q13,Revenues (in thousands) of public postsecondary institutions using GASB standards,2024,553403556.0,,,,not covered,total revenues (not core) are not set up
+NCES,q15,Revenues (in thousands) of private not-for-profit postsecondary institutions using FASB standards,2024,327348748.0,,,,not covered,total revenues (not core) are not set up
+NCES,q17,Revenues (in thousands) of private for-profit postsecondary institutions using FASB standards,2024,20101654.0,,,,not covered,total revenues (not core) are not set up
+NCES,q19,Graduation rate within 150% of normal time at 4-year postsecondary institutions,2018,0.61,61.0,60.96782940958955,-0.032170590410451894,match,
+NCES,q20,Graduation rate within 150% of normal time for bachelor's or equivalent degree-seeking undergraduate students who received a bachelor’s or equivalent degree at 4-year postsecondary institutions.,2018,0.648,64.8,64.79356449815457,-0.0064355018454307356,match,
+NCES,q21,Graduation rate within 150% of normal time at 2-year postsecondary institutions,2021,0.42700000000000005,42.7,42.674753567912035,-0.025246432087968174,match,
+NCES,q22,Graduation rate within 150% of normal time at less-than 2-year postsecondary institutions,2021,0.7120000000000001,,,,not covered,less-than-two-year graduation rate left out by owner decision (2026-11)
+NCES,q24,Number of degrees/certificates awarded at postsecondary institutions,2023-24,5365113.0,5365113.0,5367633,2520.0,differs,
+NCES,q25,"Number of full-time, first-time students receiving financial aid",2023-24,2213974.0,2213974.0,2213974,0.0,match,
+NCES,q30,Number of people employed by postsecondary institutions,2024,4114069.0,4114069.0,3625678,-488391.0,differs,
+NCES,q32,Full-time retention rate in postsecondary institutions,2024,0.779,77.9,77.86452241135329,-0.0354775886467138,match,
+NCES,q33,Part-time retention rate in postsecondary institutions,2024,0.469,46.9,46.94942989173834,0.04942989173834178,match,
+NCES,q34,"Percent of full-time, first-time students receiving financial aid",2023-24,0.851,85.1,85.1384053704737,0.03840537047371129,match,
+NCES,q35,Percent of undergraduate students receiving Pell grants,2023-24,0.324,32.4,32.36056328628965,-0.03943671371035151,match,
+NCES,q36,Average amount of Pell grants for undergraduate students,2023-24,5300.0,5300.0,5299.835474123905,-0.16452587609455804,match,
+NCES,q37,Percent of undergraduate students receiving federal student loans,2023-24,0.278,27.800000000000004,27.780549644434053,-0.019450355565950872,match,
+NCES,q38,Average amount of federal student loans received by undergraduate students,2023-24,6670.0,,,,app decline,"""Average amount of federal student loans awarded to undergraduate students"" is reported as average for each school, and the dictionary has no counts to combine it across schools. The closest thing I can do: list or rank each school's figure."
+NCES,q39,Expenses (in thousands) of public postsecondary institutions using GASB standards,2024,499543441.0,,,,not covered,total expenses (not core) are not set up
+NCES,q40,Expenses (in thousands) of private not-for-profit postsecondary institutions using FASB standards,2024,283730107.0,,,,not covered,total expenses (not core) are not set up
+NCES,q41,Expenses (in thousands) of private for-profit  postsecondary institutions using FASB standards,2024,17441807.0,,,,not covered,total expenses (not core) are not set up
+NCES,q42,Percent of students enrolled in distance education courses,2024,0.5379999999999999,,,,app decline,"""Percent of students enrolled exclusively in distance education courses"" is reported as percent for each school, and the dictionary has no counts to combine it across schools. The closest thing I can do: list or rank each school's figure."
+NCES,q43,Number of full-time equivalent students enroll in postsecondary institutions annually,2023-24,16117442.0,16117442.0,16124697,7255.0,differs,
+NCES,q50,Adjusted 9-month average salary,2024,100224.0,100224.0,100253.52611459463,29.52611459462787,differs,
+NCES,q51,Number of full-time instructional staff,2024,741767.0,741767.0,740904,-863.0,differs,
+NCES,q101,"Number of applications for admission from first-time, degree/certificate-seeking undergraduate students were received by postsecondary institutions in the fall",2024,14751867.0,14751867.0,14751867,0.0,match,
+NCES,q102,"Percent of first-time, degree/certificate-seeking applicants to postsecondary institutions who were granted admission to enroll in the fall",2024,0.59,59.0,59.035198731116544,0.03519873111654448,match,
+NCES,q103,Percent of admitted first-time degree/certificate-seeking undergraduate students who enrolled at postsecondary institutions in the fall,2024,0.19399999999999998,19.4,19.391031639972194,-0.008968360027804323,match,
+NCES,q110,The total core expenses per full-time equivalent enrollment of public and private not-for-profit postsecondary institutions,2024,38376.0,,,,split by form (by rule),"Core expenses per FTE student (Reports on the GASB finance form): 32,973; Core expenses per FTE student (Reports on the FASB finance form): 52,613; Core expenses per FTE student (Reports on the for-profit finance form): 12,422"
+NCES,q150,Number of degree-seeking undergraduate students enrolled in postsecondary institutions for the first time in the fall,2024,3066637.0,3066637.0,3066637,0.0,match,
+NCES,q155,Number of degree-seeking undergraduate students who enrolled in postsecondary institutions within 12-months of graduating high school for the first time in the fall,2024,2270544.0,,,,not covered,first-time students from high school within 12 months not set up
+NCES,q200,Percent of undergraduate degree/certificate-seeking entering students,2016-17,0.473,0.473,0.473217313754777,0.00021731375477701542,match,
+NCES,q205,Average amount of tuition and required fees for full-time undergraduate students at public postsecondary institutions operating on an academic year calendar system,2024-25,7135.0,,,,not covered,average tuition by control: no rates.csv row
+NCES,q206,Average amount of tuition and required fees for full-time undergraduate students at private postsecondary institutions operating on an academic year calendar system,2024-25,28951.0,,,,not covered,average tuition by control: no rates.csv row
+NCES,q207,Average amount of tuition and required fees for full-time graduate students at public postsecondary institutions operating on an academic year calendar system,2024-25,12116.0,,,,not covered,graduate tuition not set up
+NCES,q208,average amount of tuition and required fees for full-time graduate students at private postsecondary institutions operating on an academic year calendar system,2024-25,21110.0,,,,not covered,graduate tuition not set up
+NCES,q210,Number of students awarded degrees/certificates at postsecondary institutions,2023-24,4826826.0,4826826.0,4829463,2637.0,differs,
+NCES,q220,"Average amount of grant or scholarship aid from the federal government, state/local government, or the institution awarded to full-time, first-time  undergraduate students",2023-24,13783.0,,,,app decline,"""Average amount of federal, state, local or institutional grant aid awarded"" is reported as average for each school, and the dictionary has no counts to combine it across schools. The closest thing I can do: list or rank each school's figure."
+NCES,q221,"Average amount of student loans  awarded to full-time, first-time undergraduate students",2023-24,7812.0,,,,app decline,"""Average amount of student loans awarded to full-time first-time undergraduates"" is reported as average for each school, and the dictionary has no counts to combine it across schools. The closest thing I can do: list or rank each school's figure."
+Yale,"fall enrollment, total",Yale University,2024-25 release,15564.0,,15564,0.0,match,
+Yale,"fall enrollment, undergraduate",Yale University,2024-25 release,6814.0,,6814,0.0,match,
+Yale,"fall enrollment, graduate",Yale University,2024-25 release,8750.0,,8750,0.0,match,
+Yale,applications,Yale University,2024-25 release,57517.0,,57517,0.0,match,
+Yale,admits,Yale University,2024-25 release,2227.0,,2227,0.0,match,
+Yale,matriculants,Yale University,2024-25 release,1554.0,,1554,0.0,match,
+Yale,admit rate (IPEDS reports a whole percent),Yale University,2024-25 release,3.9,,4,0.10000000000000009,match,
+Yale,yield (IPEDS reports a whole percent),Yale University,2024-25 release,69.8,,70,0.20000000000000284,match,
+Yale,SAT Verbal 25th percentile,Yale University,2024-25 release,730.0,,730,0.0,match,
+Yale,SAT Verbal 50th percentile,Yale University,2024-25 release,760.0,,760,0.0,match,
+Yale,SAT Verbal 75th percentile,Yale University,2024-25 release,780.0,,780,0.0,match,
+Yale,SAT Verbal 10th percentile,Yale University,2024-25 release,680.0,,,,not covered,"not collected by IPEDS, or a subgroup measure not set up"
+Yale,SAT Verbal 90th percentile,Yale University,2024-25 release,790.0,,,,not covered,"not collected by IPEDS, or a subgroup measure not set up"
+Yale,SAT Math 25th percentile,Yale University,2024-25 release,740.0,,740,0.0,match,
+Yale,SAT Math 50th percentile,Yale University,2024-25 release,780.0,,780,0.0,match,
+Yale,SAT Math 75th percentile,Yale University,2024-25 release,790.0,,790,0.0,match,
+Yale,SAT Math 10th percentile,Yale University,2024-25 release,680.0,,,,not covered,"not collected by IPEDS, or a subgroup measure not set up"
+Yale,SAT Math 90th percentile,Yale University,2024-25 release,800.0,,,,not covered,"not collected by IPEDS, or a subgroup measure not set up"
+Yale,2018 bachelor's cohort,Yale University,2024-25 release,1572.0,,1572,0.0,match,
+Yale,2018 cohort graduates in six years,Yale University,2024-25 release,1505.0,,1505,0.0,match,
+Yale,six-year graduation rate (IPEDS reports a whole percent),Yale University,2024-25 release,95.7,,96,0.29999999999999716,match,
+Plan,"Yale undergraduates by race: categories, total",V2_PLAN.md test table,2024-25 release,"9 categories, total 6814",,"9 categories, total 6814",,match,
+Plan,Bachelor's six-year rate by control (percent),V2_PLAN.md test table,2024-25 release,63.8 / 68.3 / 34.1,,63.8 / 68.3 / 34.1,,match,
+Plan,University of Michigan salary by rank: rows incl. all ranks (plan: seven),V2_PLAN.md test table,2024-25 release,7,,7,,match,
+Plan,RIT's IPEDS comparison group: schools,V2_PLAN.md test table,2024-25 release,11 (plan said 8),,11 (plan said 8),,match,
+Plan,"Lowest net price, four-year: top value is positive",V2_PLAN.md test table,2024-25 release,True,,True,,match,

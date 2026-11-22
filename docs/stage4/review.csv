@@ -1,0 +1,78 @@
+model,source,case,turn,measure_right,schools_right,score,cause,shortlist_miss,why
+sonnet,log,3,2,no,yes,wrong reading,model,,showed all students by race (15564); the level was not fixed to undergraduate (6814)
+sonnet,log,7,1,no,yes,wrong reading,model,,asked full-time and part-time; only the part-time instructional row was shown
+sonnet,log,13,1,yes,yes,correct answer,,,total price, tuition and net price with the one-year lag stated
+sonnet,log,15,1,yes,yes,correct answer,,,
+sonnet,log,16,1,yes,yes,correct answer,,,undergraduate and graduate offering and highest degree
+sonnet,log,17,1,yes,yes,wrong reading,path,,topic outside IPEDS shown as an empty "what data exists" table instead of the outside-IPEDS message
+sonnet,log,24,1,yes,yes,correct answer,,,
+sonnet,log,24,2,yes,yes,wrong reading,model,,"""most recent year"" was passed as a stated year, so the path declined for years"
+sonnet,log,24,3,,,wrong reading,model,,follows from 24.2: no pending choice
+sonnet,log,24,4,yes,yes,correct answer,,,
+sonnet,log,24,5,yes,yes,correct answer,,,count of schools with a condition
+sonnet,log,24,6,yes,yes,correct answer,,,
+sonnet,log,36,1,yes,no,wrong reading,model,,read as the Michigan state total (defensible) rather than the University of Michigan or a question
+sonnet,log,41,1,no,yes,correct decline,,yes,declined saying no applicants measure was on the shortlist; ADM.APPLCN was not shortlisted
+sonnet,log,50,1,yes,yes,wrong reading,model,,read as a one-school question with no school; should be the national group figure
+sonnet,log,55,2,yes,yes,correct answer,,,overall 150% rate for public two-year schools
+sonnet,log,58,5,yes,yes,wrong reading,path,,asked which level although all five schools are four-year
+sonnet,log,60,1,yes,yes,wrong reading,path,,topic outside IPEDS shown as an empty table
+sonnet,log,60,2,yes,yes,wrong reading,path,,topic outside IPEDS shown as an empty table
+sonnet,log,60,4,yes,yes,wrong reading,path,,ranking used only the private-school net price column; public schools (in-state net price) left out
+sonnet,eval,fu_netprice_narrow,1,yes,yes,correct decline,,,group average of net price is pending owner review (weighted average); decline is by design
+sonnet,eval,fu_netprice_narrow,2,yes,yes,correct decline,,,same: group average of net price pending
+sonnet,eval,fu_resort,1,yes,yes,wrong reading,path,,empty ranking: the public in-state net price column was ranked for private schools
+sonnet,eval,fu_resort,2,yes,yes,wrong reading,path,,same empty ranking
+sonnet,eval,fu_rechart,1,yes,yes,wrong reading,path,,same empty ranking
+sonnet,eval,fu_go_back,1,yes,yes,wrong reading,path,,same empty ranking
+sonnet,eval,fu_go_back,2,yes,yes,correct answer,,,
+sonnet,eval,fu_go_back,3,yes,yes,wrong reading,path,,same empty ranking
+sonnet,eval,faq_cost_harvard,1,yes,yes,correct answer,,,
+sonnet,eval,faq_instr_staff_yale,1,no,yes,wrong reading,model,,only the part-time instructional row was shown
+sonnet,eval,trap_netprice_lag,1,yes,yes,correct answer,,,states 2023-24 and the one-year lag
+sonnet,eval,trap_medical_scope,1,yes,yes,correct answer,,,states the medical-school exclusion
+sonnet,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,2023 read as 2023-24 and stated
+sonnet,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,
+sonnet,eval,probe_c_cmp_bach,1,yes,yes,correct answer,,,students receiving a bachelor's degree
+sonnet,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,expectation corrected: salaries in the 2024-25 release are for 2024-25 so 2023-24 is not held
+sonnet,eval,probe_sal_cmp,1,yes,yes,correct decline,,,expectation corrected as above
+sonnet,eval,probe_adm_act_yale,1,yes,yes,correct decline,,,IPEDS counts ACT submitters among enrolled students only; declined with that as the closest
+sonnet,eval,probe_cat_city_smith,1,no,yes,wrong reading,model,,read as a data-exists question; the city is in the directory
+haiku,log,3,2,no,yes,wrong reading,model,,declined saying the race set has no undergraduate level; the set's level can be fixed to undergraduate
+haiku,log,7,1,no,yes,wrong reading,model,,asked full-time and part-time; only the full-time instructional row was shown
+haiku,log,13,1,yes,yes,correct answer,,,
+haiku,log,15,1,yes,yes,correct answer,,,
+haiku,log,16,1,yes,yes,correct answer,,,undergraduate and graduate offering
+haiku,log,24,1,yes,yes,correct answer,,,
+haiku,log,24,2,no,yes,wrong reading,model,,"read ""most recent year for all colleges"" as a what-data-exists question"
+haiku,log,24,3,,,wrong reading,model,,follows from 24.2
+haiku,log,24,4,yes,yes,correct answer,,,
+haiku,log,24,5,yes,yes,correct answer,,,listed the 26 schools instead of counting them; the count is visible
+haiku,log,24,6,yes,yes,correct answer,,,
+haiku,log,36,1,yes,no,wrong reading,model,,read as the Michigan state total (defensible) rather than the University of Michigan or a question
+haiku,log,41,1,no,yes,correct decline,,yes,declined saying no applicants measure; ADM.APPLCN was not shortlisted
+haiku,log,50,1,yes,yes,correct answer,,,national part-time retention rate
+haiku,log,55,2,yes,yes,correct answer,,,
+haiku,log,58,3,yes,yes,correct answer,,,RIT beside its IPEDS comparison group
+haiku,log,58,5,yes,yes,correct answer,,,
+haiku,log,58,6,yes,no,wrong reading,model,,added ten unrelated schools (shortlist matches on the words) for "the example set"
+haiku,log,60,4,no,yes,wrong reading,model,,"declined ""net cost"" although net price was on the shortlist"
+haiku,eval,fu_netprice_narrow,1,yes,yes,correct decline,,,group average of net price is pending owner review
+haiku,eval,fu_netprice_narrow,2,yes,yes,correct decline,,,same
+haiku,eval,fu_resort,1,yes,yes,wrong reading,path,,empty ranking (public in-state net price column ranked for private schools)
+haiku,eval,fu_resort,2,yes,yes,wrong reading,path,,same
+haiku,eval,fu_rechart,1,yes,yes,wrong reading,path,,same
+haiku,eval,fu_go_back,1,yes,yes,wrong reading,path,,same
+haiku,eval,fu_go_back,2,yes,yes,correct answer,,,
+haiku,eval,fu_go_back,3,yes,yes,wrong reading,path,,same empty ranking
+haiku,eval,faq_cost_harvard,1,yes,yes,correct answer,,,
+haiku,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,total, full-time and part-time with the medical-school note
+haiku,eval,trap_netprice_lag,1,yes,yes,wrong reading,model,,declined for 2024-25 and offered 2023-24 instead of giving it with the lag stated (arguably acceptable)
+haiku,eval,trap_medical_scope,1,yes,yes,correct answer,,,
+haiku,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
+haiku,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,
+haiku,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,expectation corrected: salaries in the 2024-25 release are for 2024-25
+haiku,eval,probe_sal_cmp,1,yes,yes,correct decline,,,expectation corrected as above
+haiku,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,shows the IPEDS label (enrolled first-time submitters)
+haiku,eval,probe_adm_req_yale,1,no,yes,wrong reading,model,,gave score percentiles for a question about test requirements
+haiku,log,1,1,yes,yes,correct answer,,,answered the latest-year Ivy League comparison; did not say which years exist

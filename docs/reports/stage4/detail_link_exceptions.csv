@@ -1,0 +1,134 @@
+summary_measure,unitid,school,summary_value,detailed_value,flag
+DRVC.BASDEG,129020,University of Connecticut,5511.0,5739.0,parent
+DRVC.DOCDEGPP,129020,University of Connecticut,401.0,417.0,parent
+DRVC.DOCDEGRS,129020,University of Connecticut,360.0,376.0,parent
+DRVC.MASDEG,129020,University of Connecticut,1782.0,1858.0,parent
+DRVC.PBACERT,129020,University of Connecticut,566.0,590.0,parent
+DRVC.BASDEG,160621,Southern University and A & M College,612.0,756.0,parent
+DRVC.DOCDEGPP,160621,Southern University and A & M College,211.0,260.0,parent
+DRVC.DOCDEGRS,160621,Southern University and A & M College,29.0,36.0,parent
+DRVC.MASDEG,160621,Southern University and A & M College,222.0,274.0,parent
+DRVEF.EFGRAD,160621,Southern University and A & M College,1409.0,1566.0,parent
+DRVEF.EFGRADFT,160621,Southern University and A & M College,852.0,947.0,parent
+DRVEF.EFGRADPT,160621,Southern University and A & M College,557.0,619.0,parent
+DRVEF.EFUG,160621,Southern University and A & M College,6043.0,6713.0,parent
+DRVEF.EFUG1SFT,160621,Southern University and A & M College,1507.0,1674.0,parent
+DRVEF.EFUG1SPT,160621,Southern University and A & M College,37.0,41.0,parent
+DRVEF.EFUG1ST,160621,Southern University and A & M College,1544.0,1715.0,parent
+DRVEF.EFUGCNFT,160621,Southern University and A & M College,3192.0,3547.0,parent
+DRVEF.EFUGCNPT,160621,Southern University and A & M College,445.0,494.0,parent
+DRVEF.EFUGCNT,160621,Southern University and A & M College,3637.0,4041.0,parent
+DRVEF.EFUGFT,160621,Southern University and A & M College,4997.0,5552.0,parent
+DRVEF.EFUGNDFT,160621,Southern University and A & M College,12.0,13.0,parent
+DRVEF.EFUGNDG,160621,Southern University and A & M College,529.0,587.0,parent
+DRVEF.EFUGNDPT,160621,Southern University and A & M College,517.0,574.0,parent
+DRVEF.EFUGPT,160621,Southern University and A & M College,1046.0,1161.0,parent
+DRVEF.EFUGTRFT,160621,Southern University and A & M College,286.0,318.0,parent
+DRVEF.EFUGTRN,160621,Southern University and A & M College,333.0,370.0,parent
+DRVEF.EFUGTRPT,160621,Southern University and A & M College,47.0,52.0,parent
+DRVEF.ENRTOT,160621,Southern University and A & M College,7452.0,8279.0,parent
+DRVEF.EnrFt,160621,Southern University and A & M College,5849.0,6499.0,parent
+DRVEF.EnrPt,160621,Southern University and A & M College,1603.0,1780.0,parent
+DRVEF12.E12FT,160621,Southern University and A & M College,6226.0,6918.0,parent
+DRVEF12.E12GRAD,160621,Southern University and A & M College,1747.0,1941.0,parent
+DRVEF12.E12GRADFT,160621,Southern University and A & M College,1059.0,1177.0,parent
+DRVEF12.E12GRADPT,160621,Southern University and A & M College,688.0,764.0,parent
+DRVEF12.E12PT,160621,Southern University and A & M College,2095.0,2328.0,parent
+DRVEF12.E12UG1SFT,160621,Southern University and A & M College,1539.0,1710.0,parent
+DRVEF12.E12UG1SPT,160621,Southern University and A & M College,85.0,95.0,parent
+DRVEF12.E12UG1ST,160621,Southern University and A & M College,1624.0,1805.0,parent
+DRVEF12.E12UGCNFT,160621,Southern University and A & M College,3379.0,3754.0,parent
+DRVEF12.E12UGCNPT,160621,Southern University and A & M College,549.0,610.0,parent
+DRVEF12.E12UGCNT,160621,Southern University and A & M College,3928.0,4364.0,parent
+DRVEF12.E12UGFT,160621,Southern University and A & M College,5167.0,5741.0,parent
+DRVEF12.E12UGNDFT,160621,Southern University and A & M College,9.0,10.0,parent
+DRVEF12.E12UGNDG,160621,Southern University and A & M College,715.0,795.0,parent
+DRVEF12.E12UGNDPT,160621,Southern University and A & M College,706.0,785.0,parent
+DRVEF12.E12UGPT,160621,Southern University and A & M College,1407.0,1564.0,parent
+DRVEF12.E12UGTRFT,160621,Southern University and A & M College,240.0,267.0,parent
+DRVEF12.E12UGTRN,160621,Southern University and A & M College,307.0,341.0,parent
+DRVEF12.E12UGTRPT,160621,Southern University and A & M College,67.0,74.0,parent
+DRVEF12.UNDUP,160621,Southern University and A & M College,8321.0,9246.0,parent
+DRVEF12.UNDUPUG,160621,Southern University and A & M College,6574.0,7305.0,parent
+DRVC.BASDEG,209542,Oregon State University,5904.0,6215.0,parent
+DRVC.CERT1B,209542,Oregon State University,88.0,93.0,parent
+DRVC.DOCDEGPP,209542,Oregon State University,161.0,170.0,parent
+DRVC.DOCDEGRS,209542,Oregon State University,238.0,251.0,parent
+DRVC.MASDEG,209542,Oregon State University,1096.0,1154.0,parent
+DRVC.PBACERT,209542,Oregon State University,505.0,532.0,parent
+DRVC.CERT1B,246460,Central Texas Beauty College-Round Rock,20.0,,child
+DRVC.CERT2,246460,Central Texas Beauty College-Round Rock,23.0,,child
+DRVC.CERT1B,383464,Central Texas Beauty College-Temple,20.0,40.0,parent
+DRVC.CERT2,383464,Central Texas Beauty College-Temple,22.0,45.0,parent
+DRVC.BASDEG,436818,University of Connecticut-Waterbury Campus,57.0,,child
+DRVC.DOCDEGPP,436818,University of Connecticut-Waterbury Campus,4.0,,child
+DRVC.DOCDEGRS,436818,University of Connecticut-Waterbury Campus,4.0,,child
+DRVC.MASDEG,436818,University of Connecticut-Waterbury Campus,19.0,,child
+DRVC.PBACERT,436818,University of Connecticut-Waterbury Campus,6.0,,child
+DRVC.BASDEG,436827,University of Connecticut-Avery Point,57.0,,child
+DRVC.DOCDEGPP,436827,University of Connecticut-Avery Point,4.0,,child
+DRVC.DOCDEGRS,436827,University of Connecticut-Avery Point,4.0,,child
+DRVC.MASDEG,436827,University of Connecticut-Avery Point,19.0,,child
+DRVC.PBACERT,436827,University of Connecticut-Avery Point,6.0,,child
+DRVC.BASDEG,436836,University of Connecticut-Stamford,57.0,,child
+DRVC.DOCDEGPP,436836,University of Connecticut-Stamford,4.0,,child
+DRVC.DOCDEGRS,436836,University of Connecticut-Stamford,4.0,,child
+DRVC.MASDEG,436836,University of Connecticut-Stamford,19.0,,child
+DRVC.PBACERT,436836,University of Connecticut-Stamford,6.0,,child
+DRVC.BASDEG,440828,Oregon State University-Cascades Campus,311.0,,child
+DRVC.CERT1B,440828,Oregon State University-Cascades Campus,5.0,,child
+DRVC.DOCDEGPP,440828,Oregon State University-Cascades Campus,9.0,,child
+DRVC.DOCDEGRS,440828,Oregon State University-Cascades Campus,13.0,,child
+DRVC.MASDEG,440828,Oregon State University-Cascades Campus,58.0,,child
+DRVC.PBACERT,440828,Oregon State University-Cascades Campus,27.0,,child
+DRVC.BASDEG,440916,Southern University Law Center,144.0,,child
+DRVC.DOCDEGPP,440916,Southern University Law Center,49.0,,child
+DRVC.DOCDEGRS,440916,Southern University Law Center,7.0,,child
+DRVC.MASDEG,440916,Southern University Law Center,52.0,,child
+DRVEF.EFGRAD,440916,Southern University Law Center,157.0,,child
+DRVEF.EFGRADFT,440916,Southern University Law Center,95.0,,child
+DRVEF.EFGRADPT,440916,Southern University Law Center,62.0,,child
+DRVEF.EFUG,440916,Southern University Law Center,670.0,,child
+DRVEF.EFUG1SFT,440916,Southern University Law Center,167.0,,child
+DRVEF.EFUG1SPT,440916,Southern University Law Center,4.0,,child
+DRVEF.EFUG1ST,440916,Southern University Law Center,171.0,,child
+DRVEF.EFUGCNFT,440916,Southern University Law Center,355.0,,child
+DRVEF.EFUGCNPT,440916,Southern University Law Center,49.0,,child
+DRVEF.EFUGCNT,440916,Southern University Law Center,404.0,,child
+DRVEF.EFUGFT,440916,Southern University Law Center,555.0,,child
+DRVEF.EFUGNDFT,440916,Southern University Law Center,1.0,,child
+DRVEF.EFUGNDG,440916,Southern University Law Center,58.0,,child
+DRVEF.EFUGNDPT,440916,Southern University Law Center,57.0,,child
+DRVEF.EFUGPT,440916,Southern University Law Center,115.0,,child
+DRVEF.EFUGTRFT,440916,Southern University Law Center,32.0,,child
+DRVEF.EFUGTRN,440916,Southern University Law Center,37.0,,child
+DRVEF.EFUGTRPT,440916,Southern University Law Center,5.0,,child
+DRVEF.ENRTOT,440916,Southern University Law Center,827.0,,child
+DRVEF.EnrFt,440916,Southern University Law Center,650.0,,child
+DRVEF.EnrPt,440916,Southern University Law Center,177.0,,child
+DRVEF12.E12FT,440916,Southern University Law Center,692.0,,child
+DRVEF12.E12GRAD,440916,Southern University Law Center,194.0,,child
+DRVEF12.E12GRADFT,440916,Southern University Law Center,118.0,,child
+DRVEF12.E12GRADPT,440916,Southern University Law Center,76.0,,child
+DRVEF12.E12PT,440916,Southern University Law Center,233.0,,child
+DRVEF12.E12UG1SFT,440916,Southern University Law Center,171.0,,child
+DRVEF12.E12UG1SPT,440916,Southern University Law Center,10.0,,child
+DRVEF12.E12UG1ST,440916,Southern University Law Center,181.0,,child
+DRVEF12.E12UGCNFT,440916,Southern University Law Center,375.0,,child
+DRVEF12.E12UGCNPT,440916,Southern University Law Center,61.0,,child
+DRVEF12.E12UGCNT,440916,Southern University Law Center,436.0,,child
+DRVEF12.E12UGFT,440916,Southern University Law Center,574.0,,child
+DRVEF12.E12UGNDFT,440916,Southern University Law Center,1.0,,child
+DRVEF12.E12UGNDG,440916,Southern University Law Center,80.0,,child
+DRVEF12.E12UGNDPT,440916,Southern University Law Center,79.0,,child
+DRVEF12.E12UGPT,440916,Southern University Law Center,157.0,,child
+DRVEF12.E12UGTRFT,440916,Southern University Law Center,27.0,,child
+DRVEF12.E12UGTRN,440916,Southern University Law Center,34.0,,child
+DRVEF12.E12UGTRPT,440916,Southern University Law Center,7.0,,child
+DRVEF12.UNDUP,440916,Southern University Law Center,925.0,,child
+DRVEF12.UNDUPUG,440916,Southern University Law Center,731.0,,child
+DRVC.BASDEG,463056,University of Connecticut-Hartford Campus,57.0,,child
+DRVC.DOCDEGPP,463056,University of Connecticut-Hartford Campus,4.0,,child
+DRVC.DOCDEGRS,463056,University of Connecticut-Hartford Campus,4.0,,child
+DRVC.MASDEG,463056,University of Connecticut-Hartford Campus,19.0,,child
+DRVC.PBACERT,463056,University of Connecticut-Hartford Campus,6.0,,child

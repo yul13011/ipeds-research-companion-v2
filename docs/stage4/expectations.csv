@@ -1,0 +1,138 @@
+source,case,turn,category,expect,measures,schools,note
+log,1,1,trend,decline,DRVADM.DVADM01,,asks which years: one year only in the slice; the latest-year comparison could be answered
+log,2,1,greeting,,,,
+log,3,1,scored,answer,DRVADM.DVADM01,130794,
+log,3,2,scored,answer,*race,130794,undergraduate enrollment by race and ethnicity (a tested breakdown set)
+log,4,1,scored,decline,*bachelor's degrees,130794,2014-15 is not in the slice
+log,4,2,scored,decline,DRVGR.GBA6RTT,,2015 outcome year is not in the slice
+log,4,3,trend,decline,DRVGR.GBA6RTT,130794,cohorts 2009-2018: trend
+log,4,4,trend,decline,DRVGR.GBA6RTT,,trend compared to a group
+log,4,5,trend,decline|clarify,,130794,trend for peers
+log,4,6,trend,decline,,,trend for Ivies plus MIT and Stanford
+log,4,7,trend,decline|answer|clarify,,166683,follow-up naming MIT
+log,6,1,trend,decline,DRVADM.DVADM01,130794;166027;186131,2015-2024
+log,7,1,scored,answer|clarify,*instructional staff,130794,full-time and part-time instructional staff
+log,8,2,trend,decline|clarify,*degrees,151786,last ten years
+log,8,3,trend,decline|clarify|answer,,151786,confirms the school
+log,11,1,trend,decline,*cost of attendance,144050;166027;186131;130794;243744,change over time
+log,11,2,scored,answer,DRVADM.DVADM01,,Ivy League group
+log,11,3,trend,decline,DRVADM.DVADM01,,change since 10 years ago
+log,13,1,scored,answer,*cost of attendance,166027,
+log,14,1,scored,decline,,,return on investment is not in IPEDS
+log,14,2,scored,decline,,,composite ranking over two years
+log,14,3,scored,decline,,,composite ranking
+log,14,4,scored,decline|clarify,,,yes please (to the composite ranking)
+log,14,5,scored,decline,,,composite ranking with weights
+log,15,1,scored,answer,*dual enrollment,,public 2-year colleges in New York
+log,15,2,scored,decline|answer,,,share of headcount needs a formula (not in the slice)
+log,16,1,scored,answer|decline,*award levels offered,167835;166939;168218,
+log,16,2,scored,answer|decline,*student services,167835,
+log,17,1,scored,decline|answer,,,data on institutional AI policies: outside IPEDS
+log,17,2,scored,decline|answer|clarify,,,yes
+log,22,2,trend,decline,*grant aid percent,130794,2014-15 through 2023-24
+log,23,1,scored,decline,,,PhD economics enrollment by field is not in the slice
+log,24,1,scored,answer|clarify,*dual enrollment,,
+log,24,2,scored,answer|clarify,*dual enrollment,,
+log,24,3,scored,answer|clarify,*dual enrollment,,
+log,24,4,scored,answer,*dual enrollment,,
+log,24,5,scored,answer,*dual enrollment,,count of colleges over 10000
+log,24,6,scored,answer,*dual enrollment,,rank largest to smallest
+log,25,1,scored,answer,DRVEF.EFGRAD,130794,
+log,26,1,chart,,,,
+log,27,1,chart,,,,
+log,28,1,chart,,,,
+log,29,1,chart,,,,
+log,30,1,test,,,,
+log,31,1,test,,,,
+log,33,1,scored,answer,,,what data exists on faculty
+log,34,1,scored,answer,,,what data exists on tuition
+log,35,1,scored,answer,,,what data exists on graduation rates
+log,36,1,scored,clarify|answer,*enrollment,170976,Michigan enrollment: which school
+log,36,4,scored,clarify|decline,,,another topic for Michigan: unclear
+log,37,1,chart,,,,
+log,38,1,test,,,,
+log,39,1,test,,,,
+log,39,2,test,,,,
+log,41,1,scored,clarify|answer|decline,*applicants;admission rate,,data extract with no schools named
+log,42,1,greeting,,,,
+log,44,1,test,,,,
+log,44,2,test,,,,
+log,45,1,trend,decline,,,10-year trend
+log,45,2,trend,decline,,,longitudinal trend
+log,48,1,trend,decline,,196413,change 2015 to 2023
+log,50,1,scored,answer|clarify,EFD.RET_PCP,,part-time retention
+log,55,1,trend,decline,,127200,trends over time
+log,55,2,scored,answer,*graduation rate,,All public 2-year colleges
+log,58,2,trend,decline,*graduation rate,195003,10-year trend
+log,58,3,scored,answer|clarify,*graduation rate,195003,peers of RIT
+log,58,5,scored,answer,*graduation rate,168421;201645;186867;212054;167358,the named comparison schools
+log,58,6,scored,answer|clarify|decline,*graduation rate,,use the institutions in the example set
+log,58,7,trend,decline,*expenses per FTE,,ten-year trends
+log,60,1,scored,decline,,,economic mobility is outside IPEDS
+log,60,2,scored,decline,,,income after graduation is outside IPEDS
+log,60,3,scored,decline|answer,,,what College Scorecard is: outside IPEDS
+log,60,4,scored,answer|clarify,*net price,,lowest net price
+log,60,5,scored,decline,,,income data is not in IPEDS
+eval,fu_netprice_narrow,1,scored,answer|clarify,*net price,130794,net price lags a year: caveat or clarify
+eval,fu_netprice_narrow,2,scored,answer,*net price,,2023-24 grant-aided net price
+eval,fu_swap_institution,1,scored,answer,DRVADM.DVADM01,130794,
+eval,fu_swap_institution,2,scored,answer,DRVADM.DVADM01,,
+eval,fu_add_year,1,scored,decline|answer,*12-month headcount,130794,2022-23 is not in the slice (12-month data in the 2024-25 release is 2023-24)
+eval,fu_add_year,2,trend,decline,,130794,trend
+eval,fu_resort,1,scored,answer,*net price,,
+eval,fu_resort,2,scored,answer,*net price,,sort
+eval,fu_rechart,1,scored,answer,*net price,,
+eval,fu_rechart,2,chart,,,,
+eval,fu_go_back,1,scored,answer,*net price,,
+eval,fu_go_back,2,scored,answer,*net price,130794;166027,
+eval,fu_go_back,3,scored,answer,*net price,,added after the run (turn missed when the file was written)
+eval,fu_change_measure,1,scored,decline|answer,DRVGR.GBA6RTT,130794,2016 cohort is not in the slice (2018 cohort is)
+eval,fu_change_measure,2,scored,decline|answer|clarify,*bachelor's degrees,130794,
+eval,fu_add_institution,1,scored,answer,DRVADM.DVADM01,130794;166027,
+eval,fu_add_institution,2,scored,answer,DRVADM.DVADM01,130794;166027;186131,
+eval,faq_admrate_yale,1,scored,answer,DRVADM.DVADM01,130794,
+eval,faq_cost_harvard,1,scored,answer,*cost of attendance,166027,
+eval,faq_grant_pct_ivies,1,scored,answer,*grant aid percent,,
+eval,faq_bach_yale_1415,1,scored,decline,*bachelor's degrees,130794,2014-15 not in the slice
+eval,faq_instr_staff_yale,1,scored,answer|clarify,*instructional staff,130794,
+eval,faq_services_smith,1,scored,answer|decline,*student services,167835,
+eval,faq_ma_distance,1,scored,answer|decline,*distance education,,
+eval,refuse_faculty_sat,1,scored,decline,,,
+eval,refuse_nonbinary_faculty,1,scored,decline,,,
+eval,refuse_salary_by_field,1,scored,decline,,,
+eval,refuse_gradrate_2030,1,scored,decline,,,
+eval,refuse_student_debt,1,scored,decline,,,
+eval,refuse_student_names,1,scored,decline,,,
+eval,trap_faculty_ambiguity,1,scored,clarify|answer,*instructional staff,130794,
+eval,trap_netprice_lag,1,scored,clarify|answer,*net price,130794,the app must state the real period (2023-24)
+eval,trap_medical_scope,1,scored,clarify|answer,*salary,130794,
+eval,probe_c_mast_yale,1,scored,answer|decline,*master's degrees,130794,2023 read as 2022-23 is not in the slice; 2023-24 is
+eval,probe_c_doc_harv,1,scored,answer|decline,*doctoral degrees,166027,same year question
+eval,probe_c_cmp_bach,1,scored,answer|decline,*bachelor's degrees,130794;186131,
+eval,probe_al_books_harv,1,scored,answer|decline,*library books,166027,
+eval,probe_al_ebooks_yale,1,scored,answer|decline,*library e-books,130794,
+eval,probe_sal_prof_smith,1,scored,answer,*salary,167835,2023-24 salaries are in the 2024-25 release
+eval,probe_sal_cmp,1,scored,answer,*salary,167835;166939;168218,
+eval,probe_f_tuitrev_yale,1,scored,decline|answer,*tuition revenue,130794,2022-23 finance: check the release's fiscal year
+eval,probe_f_expenses_yale,1,scored,decline|answer,*expenses,130794,
+eval,probe_f_endow_harv,1,scored,decline|answer,*endowment,166027,
+eval,probe_eap_fac_yale,1,scored,decline|answer|clarify,*instructional staff,130794,fall 2023 is not in the slice
+eval,probe_s_total_smith,1,scored,decline|answer,*staff,167835,2023
+eval,probe_om_rate_yale,1,scored,answer|decline,*award within eight years,130794,
+eval,probe_om_behav,1,scored,answer|decline,*award within eight years,104151,Pell subgroup of Outcome Measures
+eval,probe_effy_yale,1,scored,decline|answer,*12-month headcount,130794,
+eval,probe_ef_dist_yale,1,scored,decline|answer,*distance education,130794,fall 2023 not in the slice
+eval,probe_ef_race_yale,1,scored,decline|answer,*race,130794,fall 2023 not in the slice
+eval,probe_cost_tuit_smith,1,scored,answer|decline,*tuition,167835,
+eval,probe_cost_roomboard_mh,1,scored,answer|decline,*room and board,166939,
+eval,probe_cost_netprice_we,1,scored,decline|answer,*net price,168218,2022-23 net price is not in the slice
+eval,probe_adm_act_yale,1,scored,answer,*ACT submitters,130794,
+eval,probe_adm_req_yale,1,scored,answer|decline,*test requirements,130794,
+eval,probe_agg_gradrate,1,scored,decline|answer,DRVGR.GBA6RTT,,2016 cohort not in the slice
+eval,probe_agg_instcount,1,scored,answer|decline,,,count of public four-year institutions
+eval,probe_agg_totalenr,1,scored,answer|decline,DRVEF.ENRTOT,,fall 2023 not in the slice
+eval,probe_def_retention,1,scored,answer,,,definition
+eval,probe_disc_finance,1,scored,answer,,,what data exists on finance
+eval,probe_trend_effy_yale,1,trend,decline,*12-month headcount,130794,trend
+eval,probe_cat_housing_smith,1,scored,answer|decline,*on-campus housing,167835,
+eval,probe_cat_city_smith,1,scored,answer|decline,*city,167835,
