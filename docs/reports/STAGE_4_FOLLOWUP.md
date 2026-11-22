@@ -181,7 +181,7 @@ Plainly:
 
 - 146 tests pass. New: `ChangeOrder1121` in `tests/test_path.py` (13 tests), plus two updated tests for decisions that have since changed (net price approved; the "average with no rate row" test now uses the federal loan average).
 - The question path is 1,944 lines, up from 1,838: resolve 675, fetch 360, shortlist 275, request 237, interpret 165, answer 105, show 100, log 27.
-- Scripts: `v1_grade.py` is new (95 lines). `stage4_grade.py` now takes run names.
+- Scripts: `v1_grade.py` is new (91 lines). `stage4_grade.py` now takes run names.
 
 ## Open questions for you
 
