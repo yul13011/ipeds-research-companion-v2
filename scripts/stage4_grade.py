@@ -85,7 +85,7 @@ def grade(model):
             m_ok = {"yes": True, "no": False}.get(rv["measure_right"], m_ok)
             s_ok = {"yes": True, "no": False}.get(rv["schools_right"], s_ok)
         expect = set((e["expect"] if e else "").split("|")) - {""}
-        if cat in ("greeting", "test", "chart"):
+        if cat in ("greeting", "test", "chart", "context", "display"):
             score = got
         elif got == "clarify":
             score = "clarifying question"
@@ -110,7 +110,7 @@ def grade(model):
 def dump():
     for model in MODELS:
         for t, g in zip([t for t in turns(model) if not t["repeat"]], grade(model)):
-            if g["category"] in ("greeting", "test", "chart"):
+            if g["category"] in ("greeting", "test", "chart", "context", "display"):
                 continue
             p = t["page"]
             print(f"\n### {model} {g['source']} {g['case']}.{g['turn']} [{g['category']}] expect {g['expect']} got {g['got']} -> {g['score']}")
@@ -158,7 +158,7 @@ def report():
                 rd = [r for r in g if r["category"] == "trend"]
                 print("    trend measure read right:", sum(r["measure_right"] is True for r in rd), "of", len(rd),
                       "; schools right:", sum(bool(r["schools_right"]) for r in rd))
-        for cat in ("greeting", "test", "chart"):
+        for cat in ("greeting", "test", "chart", "context", "display"):
             print(f"  {cat}:", dict(Counter(r["score"] for r in g if r["category"] == cat)))
         print("  unlisted:", [(r["case"], r["turn"]) for r in g if r["category"] == "unlisted"])
         all_t = turns(model)

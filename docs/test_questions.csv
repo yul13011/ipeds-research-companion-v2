@@ -106,3 +106,12 @@ conversation,turn,question,repeat
 60,3,What is college scorecard,no
 60,4,What is the universe with the lowest net cost?,no
 60,5,Where does income data come from in ipeds,no
+61,1,How many graduate students did Yale enroll in fall 2024?,yes
+62,1,hawaii,no
+62,2,i'd like a profile of students entering and graduating out of UH campuses,no
+62,3,"connect enrollment and graduation in STEM or med-related majors, by demographics (eg. ethnicity, HS of graduation, SAT)",no
+62,4,1 ALL 2 trend 3 yes 4 broad,no
+63,1,what was the fall enrollment for wsu tehc,no
+63,2,wichita state university tech is what I am looking for,no
+64,1,"Can you pull information for WSU Tech? For context, the actual institution to find when we ask questions about ""WSU Tech"" is Wichita State University Campus of Applied Sciences and Technology. Summarize 5-year trends for WSU Tech's graduation rates compared to the community colleges in the state of Kansas.",no
+64,2,Can you edit this table so that the period is summarized as a year and it is pivoted to columns. Remove the measure description as a column and use it as a table title.,no

@@ -52,7 +52,7 @@ def main():
         got = V1_CLASS.get(row["outcome"], row["outcome"])
         expect = set(e["expect"].split("|")) - {""}
         years = e["category"] == "trend" or ("not in the slice" in e["note"] and re.search(r"(?:19|20)\d\d", e["note"]))
-        if e["category"] in ("greeting", "test", "chart"):
+        if e["category"] in ("greeting", "test", "chart", "context", "display"):
             grade = "not scored"
         elif years:
             grade = "not comparable (version 1 held ten years)"

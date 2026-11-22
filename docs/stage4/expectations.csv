@@ -73,6 +73,15 @@ log,60,2,scored,decline,,,income after graduation is outside IPEDS
 log,60,3,scored,decline|answer,,,what College Scorecard is: outside IPEDS
 log,60,4,scored,answer|clarify,*net price,,lowest net price
 log,60,5,scored,decline,,,income data is not in IPEDS
+log,61,1,scored,answer,DRVEF.EFGRAD,130794,"added 2026-11-22; a repeat of conversations 25 and 49, so the runner skips it unless repeats are run"
+log,62,1,scored,clarify,,,"added 2026-11-22; ""hawaii"": schools in Hawaii, the University of Hawaii system, or a measure"
+log,62,2,scored,answer|clarify,*entering and graduating students,,added 2026-11-22; the University of Hawaii system (System: University of Hawaii Board of Regents) recognised as the group
+log,62,3,scored,answer|clarify,*completions by field and race; fall enrollment by race for major fields,,"added 2026-11-22; answer the parts IPEDS has and say what it lacks (graduation rates by major, high school of graduation, SAT by major, linking individual students)"
+log,62,4,context,,,,"added 2026-11-22; ""1 ALL / 2 trend / 3 yes / 4 broad"": context only, not scored"
+log,63,1,scored,clarify|answer,*fall enrollment,156107,"added 2026-11-22; ""wsu tehc"": clarify which WSU, or WSU Tech; Texas Tech (229115) is a wrong reading"
+log,63,2,scored,answer,*fall enrollment,156107,added 2026-11-22; WSU Tech; Wichita State main campus (156125) is a wrong reading
+log,64,1,trend,decline|answer,*graduation rate,156107,"added 2026-11-22; five-year trend against Kansas community colleges; until trends exist, the latest year with a note"
+log,64,2,display,,,,"added 2026-11-22; table pivot and title request: display request, not scored"
 eval,fu_netprice_narrow,1,scored,answer|clarify,*net price,130794,net price lags a year: caveat or clarify
 eval,fu_netprice_narrow,2,scored,answer,*net price,,2023-24 grant-aided net price
 eval,fu_swap_institution,1,scored,answer,DRVADM.DVADM01,130794,
