@@ -686,6 +686,16 @@ class ChangeOrder1121(unittest.TestCase):
             "schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)],
             readings=[dict(term="low-income", reading="Percent of undergraduates awarded Pell grants")])))
         self.assertIn("IPEDS does not measure income", page["interpreted"])
+        page = self.ask("Percent of undergraduates awarded Pell grants at Yale", reply_request(req(
+            "schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)])))
+        self.assertNotIn("IPEDS does not measure income", page["interpreted"])   # only when the reading was chosen
+
+    def test_ranking_weights_names_and_caps_one_table(self):
+        s = shortlist.shortlist("How many applicants did Yale have?", DB)
+        main = [m for m in s["measures"] if m["set_up"]][:shortlist.SET_UP]
+        self.assertEqual(main[0]["id"], "ADM.APPLCN")                       # was crowded out by the table title
+        tables = [m["table"] or "rate" for m in main]
+        self.assertLessEqual(max(tables.count(t) for t in tables), shortlist.PER_TABLE)
 
     def test_urm_is_outside_ipeds(self):
         s = shortlist.shortlist("What share of students are URM at Yale?", DB)

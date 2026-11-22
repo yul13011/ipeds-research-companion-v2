@@ -50,6 +50,7 @@ Words with more than one possible reading. One row per reading and measure. A re
 - `is_default`: `yes` if this reading is used when the user does not say which.
 - `default_for`: a school group. The default applies only to schools in that group. Blank means all schools.
 - `applies_to`: for a reading that names one measure per kind of school, the school group each measure applies to (for example net price: `Public` uses the in-state measure, `Private, nonprofit or for-profit` the all-students one). Each school takes the measure that applies to it; a group with more than one kind is shown separately for each, with the "kind of school" statement.
+- `statement_when`: for a term's statement, `always` (shown whenever one of its measures appears, for example the net-price lag) or `chosen` (shown only when the model chose this term's reading, for example "low-income").
 - `always_ask`: `yes` if the app must ask the user to choose. `no` if it uses the default; when no default applies to the school, it asks. `mixed levels` marks the options offered only when a group mixes school levels.
 - `statement`: what the app must say whenever this term is used.
 - `status`: `in use`, or `pending owner approval` (loaded but not used).

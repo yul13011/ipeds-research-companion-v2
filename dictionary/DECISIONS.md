@@ -211,3 +211,10 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **tuition revenue.** Added to the tuition revenue per FTE measures.
 - **URM, underrepresented minority.** A row in `outside_ipeds.csv`: IPEDS reports race categories, and combining them into a group is planned for a later stage.
 - **Statements on measures.** `measures.csv` gains `statement`, shown whenever an answer uses the measure, the same way a category row's statement is. The first-time and persistence statements use it, so they show whenever those measures are used, not only when the user wrote the shorthand. The path does not read the user's wording.
+
+## 2026-11-21: shortlist ranking and term statements
+
+- **Field weights in the search.** A match in a measure's name or synonyms counts three times a match in its table's title or description. The constant is `NAME_WEIGHT` in `shortlist.py`; it is search tuning, not an IPEDS convention.
+- **At most five of the fifteen main slots from one table** (`PER_TABLE`). The rest of a table stays reachable through its category rows and sets.
+- **Grouping near-duplicates: not now.** It goes into the next stage, with meaning search.
+- **A term's statement only when its reading was chosen, where the dictionary says so.** `terms.csv` gains `statement_when`: `chosen` shows the statement only when the model chose that term's reading; `always` shows it whenever one of the term's measures appears. "low-income" is `chosen`. The other terms stay `always`, because their statements carry caveats that apply to every use of the measure, such as the net-price lag and the graduation-rate levels. A row can be switched in the table. Measure statements (first-time, persistence) are unchanged.

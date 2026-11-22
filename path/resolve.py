@@ -406,6 +406,9 @@ def apply_readings(request, d, plan):
                 return outcome("clarify", question=f'"{term}" can mean different things. Which did you mean?',
                                options=[dict(label=r, request=with_reading(request, d, term, r)) for r in readings])
             statement = rows[0][7]
+            when = d.one("SELECT statement_when FROM dict_terms WHERE term=? AND kind='measure' LIMIT 1", term)
+            if when and when[0] == "chosen" and term not in done:
+                statement = None                        # shown only when the model chose this term's reading
             if statement and statement not in plan["statements"]:
                 plan["statements"].append(statement)
             shown = {x[2]: x[8] for x in rows if x[2]}

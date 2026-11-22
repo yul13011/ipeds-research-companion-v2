@@ -230,3 +230,28 @@ Plainly:
   3. **Group near-duplicates.** Measures in one table whose names differ only by a subgroup should take one slot: the best-scoring one, with "and N similar" for the model. "Differ only by a subgroup" means the same name apart from one category word, read from the dictionary's own category labels, not from a word list in code.
 
   Fixes 1 and 2 are small, about 20 lines in `shortlist.py`, and the comparison script checks them across all 146 questions. Fix 3 is larger.
+
+## Addendum: ranking fixes 1 and 2 (2026-11-21)
+
+- **Built:**
+  - name and synonym matches count three times a match in the table title or description;
+  - at most five of the fifteen main slots from one table;
+  - `statement_when` in `terms.csv` ("low-income" shows its statement only when its reading is chosen).
+
+  155 tests pass.
+- **Compared on all 146 questions, old search against new on the same dictionary.** Run with `scripts/shortlist_compare.py --code`; the shortlist changed for 135 questions.
+  - Applicants: now 1st for "How many applicants did Yale have?" (it was off the list) and 2nd for "Data extract: Applicants, Admission rate".
+  - Outcome Measures crowding: gone. No table holds more than five main slots, and the four questions no longer fill with one table:
+    - part-time persistence: the right measure is still 1st;
+    - RIT 10-year trend: the bachelor's rate moved from 21st to 6th;
+    - RIT vs peers: still 21st, kept on the list by the "graduation rate" term.
+  - **Freshmen: still not fixed.** "How many freshmen did Yale enroll?" does not reach the fall first-time count. The light word trim does not join "enroll" and "enrollment", but does join "enroll" and "enrolled", so Outcome Measures "enrolled" measures outrank it.
+  - **Three right measures dropped out:**
+    - "Do Smith, Mount Holyoke, and Wellesley offer bachelor's and master's degrees?" loses the undergraduate and graduate offering measures. "offer" matched only their description ("offering" is not trimmed to "offer"), which now counts less.
+    - "How many of Yale's admitted students submitted ACT scores" loses ADM.ACTNUM. Five ACT score percentiles fill the admissions table's five slots, and weaker measures from other tables take the rest.
+    - "What data do you have on institutional finances?" keeps 5 of the 11 finance measures the model listed before. This is the cap working as intended for a broad question; the full list is still available through the term.
+- **Proposed next fixes** (not done):
+  - **(a)** Extend the light word trim to "-ing" and "-ment", applied the same way to the question and the dictionary. Expected to fix the offering and freshmen cases. Small.
+  - **(b)** Make the cap soft: a sixth measure from one table may enter if it scores at least twice the best remaining measure from other tables. That keeps ACT submitters when the question is clearly about admissions. Small.
+
+  Both can be checked with the same comparison.

@@ -14,6 +14,9 @@ from collections import Counter
 from path.request import TAG_RANGES
 
 SET_UP, NOT_SET_UP = 15, 5         # measures: the best set-up ones, then a few IPEDS collects but the app has not set up
+PER_TABLE = 5                       # at most this many of the set-up measures from one table
+NAME_WEIGHT = 3                     # a match in a measure's name or synonyms counts this many times one in its table title
+                                    # or description
 LIMITS = {"measures": 60, "terms": 5, "schools": 10, "groups": 15, "rows": 15, "sets": 8, "outside": 3}
 ROWS_PER_TABLE = 6                  # category rows searched within each shortlisted multi-row table
 CUTOFF = 0.25                       # keep entries scoring at least this share of the best entry of their kind
@@ -50,20 +53,36 @@ class BM25:
         self.idf = idf
         self.k1, self.b = k1, b
 
-    def search(self, text, limit):
+    def scores(self, text):
         query = set(words(text)) & set(self.idf)
-        if not query:
-            return []
-        scores = []
+        out = {}
         for key, doc, length in zip(self.keys, self.docs, self.lengths):
             s = sum(self.idf[w] * doc[w] * (self.k1 + 1) / (doc[w] + self.k1 * (1 - self.b + self.b * length / self.avg))
                     for w in query if w in doc)
             if s > 0:
-                scores.append((s, key))
-        scores.sort(key=lambda x: -x[0])
-        if not scores:
-            return []
-        return [key for s, key in scores[:limit] if s >= CUTOFF * scores[0][0]]
+                out[key] = s
+        return out
+
+    def search(self, text, limit):
+        return best(self.scores(text), limit)
+
+
+def best(scores, limit):
+    ranked = sorted(scores.items(), key=lambda x: -x[1])
+    return [key for key, s in ranked[:limit] if s >= CUTOFF * ranked[0][1]] if ranked else []
+
+
+class FieldBM25:
+    """BM25 over two fields: a match in the main field (name and synonyms) counts NAME_WEIGHT times a match in the
+    context field (the table's title and the description), so a table title helps choose the table without lifting
+    every measure in it equally."""
+    def __init__(self, docs, idf):
+        self.main = BM25([(k, main) for k, main, _ in docs], idf)
+        self.context = BM25([(k, context) for k, _, context in docs], idf)
+
+    def search(self, text, limit):
+        main, context = self.main.scores(text), self.context.scores(text)
+        return best({k: NAME_WEIGHT * main.get(k, 0) + context.get(k, 0) for k in main.keys() | context.keys()}, limit)
 
 
 def build_index(db):
@@ -80,10 +99,12 @@ def build_index(db):
         name = plain or title
         measures[f"{t}.{v}"] = dict(id=f"{t}.{v}", name=name, table=t, unit=unit, period=period or periods.get(t),
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),
-                                    text=" ".join([name, name, syn or "", syn or "", titles.get(t, ""), (desc or "")[:300]]))
+                                    main=f"{name} {syn or ''}", context=f"{titles.get(t, '')} {(desc or '')[:300]}")
+        measures[f"{t}.{v}"]["text"] = measures[f"{t}.{v}"]["main"] + " " + measures[f"{t}.{v}"]["context"]
     for rate, syn in q("SELECT rate, MAX(synonyms) FROM dict_rates WHERE rate_measure IS NULL GROUP BY rate"):
         measures[f"rate:{rate}"] = dict(id=f"rate:{rate}", name=rate, table=None, unit="computed from counts",
-                                        period=None, set_up=True, many_rows=False, text=f"{rate} {rate} {syn or ''} {syn or ''}")
+                                        period=None, set_up=True, many_rows=False, main=f"{rate} {syn or ''}", context="",
+                                        text=f"{rate} {syn or ''}")
     terms = {}
     for term, words_, kind, reading, measure, condition, default, default_for, ask, statement in q(
             "SELECT term, words, kind, reading, measure, condition, is_default, default_for, always_ask, statement "
@@ -130,6 +151,7 @@ def build_index(db):
     idf = rarity([e["text"] for _, entries in kinds for e in entries.values()])
     for kind, entries in kinds:
         index[kind] = (BM25([(k, e["text"]) for k, e in entries.items()], idf), entries)
+    index["measures"] = (FieldBM25([(k, e["main"], e["context"]) for k, e in measures.items()], idf), measures)
     support = {}
     for s, t, how, measure, total in q("SELECT set_name, \"table\", stored_as, measure, total FROM breakdown_sets "
                                        "WHERE status IN ('loaded', 'additive')"):
@@ -177,7 +199,13 @@ def shortlist(question, db_path, carried=()):
 
     entries = index["measures"][1]
     ranked = list(found["measures"])
-    keep = [k for k in ranked if entries[k]["set_up"]][:SET_UP] + [k for k in ranked if not entries[k]["set_up"]][:NOT_SET_UP]
+    per_table, set_up = Counter(), []
+    for k in ranked:                            # the best set-up measures, at most PER_TABLE from one table
+        table = entries[k]["table"] or "rate"
+        if entries[k]["set_up"] and per_table[table] < PER_TABLE and len(set_up) < SET_UP:
+            per_table[table] += 1
+            set_up.append(k)
+    keep = set_up + [k for k in ranked if not entries[k]["set_up"]][:NOT_SET_UP]
     measures = {k: entries[k] for k in keep}
     for t in found["terms"].values():           # a matched term brings the measures of its readings
         for r in t["readings"]:

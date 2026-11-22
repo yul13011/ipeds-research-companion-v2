@@ -1,6 +1,7 @@
 """Compare shortlists from two builds of the dictionary, with no model call.
 
-    python scripts/shortlist_compare.py BEFORE.sqlite [AFTER.sqlite]
+    python scripts/shortlist_compare.py BEFORE.sqlite [AFTER.sqlite]     two dictionary builds, the current search code
+    python scripts/shortlist_compare.py --code OLD_shortlist.py           an earlier search code, the current build
 
 Questions: the nine design questions (tests/replies), every distinct logged question, and every eval-set turn.
 Each is shortlisted on its own (no earlier request carried, which the live path would add for follow-ups).
@@ -58,20 +59,28 @@ def right_measures():
     return out
 
 
-def ranked(question, db):
-    s = shortlist.shortlist(question, db)
+def ranked(question, db, module=shortlist):
+    s = module.shortlist(question, db)
     ids = [m["id"] for m in s["measures"]]
     tables = Counter(i.partition(".")[0] for i in ids[:SET_UP])
     return ids, tables
 
 
 def main():
-    before, after = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else config.LOCAL_DB.as_posix()
+    old = shortlist
+    if sys.argv[1] == "--code":                         # an earlier version of the search, on the current build
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("shortlist_old", sys.argv[2])
+        old = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(old)
+        before = after = config.LOCAL_DB.as_posix()
+    else:
+        before, after = sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else config.LOCAL_DB.as_posix()
     right = right_measures()
     rows = []
     for source, case, turn, question, saved in questions():
         want = (right.get((source, case, turn)) or set()) | saved
-        b_ids, b_tab = ranked(question, before)
+        b_ids, b_tab = ranked(question, before, old)
         a_ids, a_tab = ranked(question, after)
         dropped = sorted(m for m in want if m in b_ids and m not in a_ids)
         gained = sorted(m for m in want if m not in b_ids and m in a_ids)
