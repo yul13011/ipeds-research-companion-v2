@@ -25,8 +25,10 @@ Rules:
 - Choose kind, and fill `requests` to match:
   request: one complete request for a new question (its label can be empty).
   edit: a follow-up that changes the PREVIOUS REQUEST ("add Northeastern", "now for Texas", "rank them",
-        "break that down by gender", "go back"). List each changed field in `changes` with add, remove, replace
-        or back, and put only the new values in one item of `requests`. Leave everything else to the previous request.
+        "break that down by gender"). List each changed field in `changes` with add, remove or replace, and put only
+        the new values in one item of `requests`. Leave everything else to the previous request.
+        "Go back", "as before", "back to all eight": one change with action back (any field). The app restores
+        the whole earlier request, operation included; do not rebuild it field by field.
   options: the question has two or three reasonable readings. Give each as a complete request with a short label.
   choose: the user is answering the PENDING OPTIONS ("the first one", "B", "both"). Give their 0-based numbers.
   decline: nothing in the shortlist can answer it, or it asks for something IPEDS does not hold (see OUTSIDE IPEDS),
@@ -66,7 +68,8 @@ def render(short, previous, pending, question):
     for m in short["measures"]:
         flag = " | not set up in this app yet" if not m["set_up"] else ""
         b = (f" | breakdowns: {', '.join(m['breakdowns'])}" if m["breakdowns"] else "") + \
-            (f" | breakdowns through the detailed table: {', '.join(m['breakdowns_via_detail'])}" if m["breakdowns_via_detail"] else "")
+            (f" | breakdowns through the detailed table, held at {m.get('detail_held') or 'this measure'}: "
+             f"{', '.join(m['breakdowns_via_detail'])}" if m["breakdowns_via_detail"] else "")
         cats = "".join(f" | categories by {c['column']} (default: {c['default']}): {', '.join(c['tags']) or 'none shortlisted'}"
                        for c in m.get("categories", []))
         rows.append(f"  {m['tag']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{cats}{b}{flag}")
@@ -87,8 +90,9 @@ def render(short, previous, pending, question):
              for g in short["groups"]])
     section("rows", ["Category rows (tag | label | for measures):"] +
             [f"  {r['tag']} | {r['label']} | {', '.join(r['for'])}" for r in short["rows"]])
-    section("sets", ["Breakdown sets (tag | set | for measures):"] +
-            [f"  {s['tag']} | {s['set']} | {', '.join(s['for'])}" for s in short["sets"]])
+    section("sets", ["Breakdown sets (tag | set | for measures | held at):"] +
+            [f"  {s['tag']} | {s['set']} | {', '.join(s['for'])} | {s.get('held') or 'the measure row chosen'}"
+             for s in short["sets"]])
     section("outside", ["Outside IPEDS (tag | topic):"] + [f"  {o['tag']} | {o['topic']}" for o in short["outside"]])
     convo = ["PREVIOUS REQUEST: " + (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
     if pending:

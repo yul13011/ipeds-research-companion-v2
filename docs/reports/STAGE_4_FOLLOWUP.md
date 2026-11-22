@@ -189,3 +189,12 @@ Plainly:
 2. **"Go back" in an edit:** fix it so "back" restores the whole earlier request, as proposed above?
 3. **Haiku output tokens:** try low effort for Haiku and measure accuracy and tokens again?
 4. **"Yale's undergraduates by race":** the remaining model error. One option is to show the breakdown set's fixed level (undergraduate or all students) on the shortlist line for the set. That would be a shortlist change, like the category columns.
+
+## Addendum: owner decisions (2026-11-21)
+
+- **Staff total.** The grand total stays the default. Every answer that uses it now says it excludes graduate assistants, and they can be asked for as their own figure. The note lives in a new `statement` column of `category_codes.csv`.
+- **"Go back".** The path's `back` already restored the whole earlier request. In the run, the model rebuilt it field by field instead. The instructions now say to use `back`. A three-turn test covers it: rank, then "Just Yale and Harvard", then back to a ranking of all eight. Not checked live.
+- **Haiku effort** is unchanged.
+- **Breakdown sets on the shortlist** now show where they are held, and a measure broken down through its detailed table shows the level it carries over (for example "All students, Undergraduate total").
+- **Finding: why "undergrad" fails.** For "Show Yale's undergrad population by race and ethnicity", neither the undergraduate measure nor the undergraduate row reaches the shortlist: "undergrad" does not match "undergraduate". So the model has no tag for the undergraduate level. With "undergraduate" spelled out, the shortlist carries the undergraduate measure and its held level. The fix is a synonym ("undergrad", and perhaps "grad" for graduate) in `measures.csv` or `category_codes.csv`, which needs your approval as a change order. Not done.
+- 149 tests pass.

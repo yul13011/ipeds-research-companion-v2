@@ -5,6 +5,7 @@ words they share, weighting rare words more (BM25, the standard search-engine sc
 returns the best few of each kind for the model to choose from. Anything the previous request
 or a pending clarifying question used is carried along, so a follow-up can refer back to it.
 """
+import json
 import math
 import re
 import sqlite3
@@ -108,8 +109,20 @@ def build_index(db):
     rows = {(t, c, code): dict(table=t, column=c, code=code, label=label, text=label)
             for t, c, code, label in q('SELECT k."table", k."column", c.code, c.label FROM row_keys k JOIN dict_category_codes c '
                                        'ON c."table" = k."table" AND UPPER(c."column") = UPPER(k."column")')}
-    sets = {(s, t): dict(set=s, table=t, stored_as=how, text=f"{s} {titles.get(t, '')}")
-            for s, t, how in q("SELECT DISTINCT set_name, \"table\", stored_as FROM breakdown_sets WHERE status <> 'failed'")}
+    labels = {(t, c.upper(), str(code)): label for t, c, code, label in q('SELECT "table", "column", code, label FROM dict_category_codes')}
+    def held(table, pairs):                     # {column: code} -> "label; label", in the words IPEDS uses
+        return "; ".join(labels.get((table, c.upper(), str(v)), f"{c} {v}") for c, v in pairs.items())
+    def parse(fixed):
+        return {k.strip(): v.strip() for k, _, v in (x.partition("=") for x in (fixed or "").split(";")) if k.strip()}
+    sets = {}
+    defaults = {}
+    for t, column, label in q('SELECT "table", "column", default_label FROM row_keys'):
+        defaults.setdefault(t, []).append(f"{column} {label or 'overall total'}")
+    for s, t, how, fixed in q("SELECT set_name, \"table\", stored_as, MAX(fixed) FROM breakdown_sets WHERE status <> 'failed' "
+                              "GROUP BY set_name, \"table\", stored_as"):
+        level = held(t, parse(fixed)) or (f"the measure's row ({'; '.join(defaults[t])} unless `row` names another)"
+                                          if t in defaults else "")
+        sets[(s, t)] = dict(set=s, table=t, stored_as=how, held=level, text=f"{s} {titles.get(t, '')}")
     outside = {t: dict(topic=t, what_to_say=say, pointer=p, text=f"{t} {ex or ''}")
                for t, ex, say, p in q("SELECT topic, example_wording, what_to_say, pointer FROM dict_outside_ipeds")}
     kinds = [("measures", measures), ("terms", terms), ("schools", schools), ("groups", groups),
@@ -125,6 +138,8 @@ def build_index(db):
             support[mid].append((s, t))
     index["support"] = support
     index["detailed"] = {m: d for m, d in q("SELECT measure, detailed FROM detail_links")}
+    index["detail_held"] = {m: held(d.partition(".")[0], json.loads(r)) for m, d, r in
+                            q("SELECT measure, detailed, rows FROM detail_links WHERE status = 'loaded'")}
     index["row_keys"] = {}                       # each multi-row table's category columns and their default rows
     for t, column, label in q('SELECT "table", "column", default_label FROM row_keys'):
         index["row_keys"].setdefault(t, []).append((column, label))
@@ -244,6 +259,7 @@ def tag(short, index):
         detailed = index["detailed"].get(m["id"])
         via = [by_set[k] for k in index["support"].get(detailed, []) if k in by_set] if detailed else []
         m["breakdowns"], m["breakdowns_via_detail"] = own, [b for b in via if b not in own]
+        m["detail_held"] = index.get("detail_held", {}).get(m["id"]) if m["breakdowns_via_detail"] else None
     for r in short["rows"]:
         r["for"] = [m["tag"] for m in short["measures"] if m["table"] == r["table"]]
     for m in short["measures"]:                 # a measure's category columns, with the rows shortlisted for each

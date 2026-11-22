@@ -111,6 +111,7 @@ Every code in the category columns of the multi-row tables.
 - `role`: `total` or `part`, guessed from the label wording. It is a reading aid only; breakdowns use the three columns below.
 - `breakdown_set`: filled when this code is one part of a named breakdown, such as "Fall enrollment by level".
 - `set_total`: the code of the row the parts add up to, or `sum of parts` when the data has no total row. The same on every row of the set.
+- `statement`: a sentence shown whenever an answer uses this row, such as the staff grand total's note that it excludes graduate assistants.
 - `set_fixed`: in tables keyed by several category columns, the default values the other columns are held at, such as `CIPCODE = 99; MAJORNUM = 1`. The same on every row of the set. A request may ask for another value (bachelor's degrees only, undergraduates only); the build tests the set at every value and allows only those that add up.
 
 The build tests each set: at every school, do the parts add up to the total? A set is loaded only for the count columns where it does. The breakdown operation uses only loaded sets.

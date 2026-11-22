@@ -624,6 +624,40 @@ class ChangeOrder1121(unittest.TestCase):
             "school_vs_group", measures=[M("DRVGR.GBA6RTT")], groups=["IPEDS comparison group"], peers_of=195003)))
         self.assertEqual(len(page["table"]["rows"]), 2)                     # RIT, and its comparison group
 
+    def test_staff_total_says_it_excludes_graduate_assistants_and_offers_them(self):
+        page = self.ask("How many staff did Yale employ in fall 2024?",
+                        reply_request(req("schools", measures=[M("S_OC.HRTOTLT")], schools=[S("Yale", 130794)])))
+        self.assertIn("excludes graduate assistants", page["interpreted"])
+        page = self.ask("How many graduate assistants did Yale have in fall 2024?", reply_request(req(
+            "schools", measures=[M("S_OC.HRTOTLT", [("STAFFCAT", "4400")])], schools=[S("Yale", 130794)])))
+        ga = self.db.execute("SELECT HRTOTLT FROM S_OC WHERE UNITID=130794 AND STAFFCAT=4400").fetchone()[0]
+        self.assertEqual(page["table"]["rows"][0][1], f"{ga:,}")
+        self.assertNotIn("excludes graduate assistants", page["interpreted"])
+
+    def test_go_back_restores_the_whole_earlier_request(self):
+        state = {}
+        q = "Compare net price for grant-aided students across the Ivy League"
+        self.ask(q, reply_request(req("rank", measures=self.NET, groups=["Ivy League"], readings=self.READ)), state)
+        narrow = dict(kind="edit", request=None, options=[], chosen=[], decline=None,
+                      edit=dict(changes=[dict(field="operation", action="replace"), dict(field="groups", action="remove"),
+                                         dict(field="schools", action="add")],
+                                values=dict(rq.empty("schools"), schools=[S("Yale", 130794), S("Harvard", 166027)])))
+        page = self.ask(q + " Just Yale and Harvard.", narrow, state)
+        self.assertEqual(len(page["table"]["rows"]), 2)
+        back = dict(kind="edit", request=None, options=[], chosen=[], decline=None,
+                    edit=dict(changes=[dict(field="schools", action="back")], values=rq.empty("schools")))
+        page = self.ask(q + " Actually, go back to all eight.", back, state)
+        self.assertEqual(page["table"]["columns"][0], "Rank")              # the operation comes back too
+        self.assertEqual(len(page["table"]["rows"]), 8)
+
+    def test_shortlist_shows_where_a_breakdown_is_held(self):
+        s = shortlist.shortlist("Yale fall undergraduate enrollment by race and ethnicity", DB)
+        ug = next(m for m in s["measures"] if m["id"] == "DRVEF.EFUG")
+        self.assertEqual(ug["detail_held"], "All students, Undergraduate total")
+        text, _ = interpret.render(s, None, None, "q")
+        self.assertIn("held at All students, Undergraduate total", text)
+        self.assertIn("unless `row` names another", text)                   # column sets keep the measure's row
+
     def test_shortlist_shows_category_columns(self):
         s = shortlist.shortlist("How many full-time and part-time instructional staff did Yale have in Fall 2024?", DB)
         staff = next(m for m in s["measures"] if m["id"] == "S_OC.HRTOTLT")

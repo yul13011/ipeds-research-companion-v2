@@ -155,6 +155,9 @@ def resolve_request(request, d, short, new_question=False):
         if got["kind"] != "ready":
             return dict(got, request=request)
         plan["measures"].append(got["measure"])
+        for said in got["measure"].get("row_statements", []):
+            if said not in plan["statements"]:
+                plan["statements"].append(said)
     pair_measures(plan, d, request["year"])
     for c in request["conditions"]:
         got = measure({"id": c["measure"], "row": []}, d, None)
@@ -548,6 +551,9 @@ def measure(m, d, year):
                               table, column_)
                 return outcome("need_row", name=name, column=column_, options=options)
             info["rows"][column_] = code
+            said = d.one('SELECT statement FROM dict_category_codes WHERE "table"=? AND "column"=? AND code=?', table, column_, code)
+            if said and said[0]:
+                info.setdefault("row_statements", []).append(said[0])
             if code != default:                         # a row the user asked for is named in "Interpreted as"
                 label = d.one('SELECT label FROM dict_category_codes WHERE "table"=? AND "column"=? AND code=?', table, column_, code)
                 info.setdefault("row_labels", []).append(label[0] if label else f"{column_} {code}")
