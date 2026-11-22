@@ -35,7 +35,7 @@ The repair route ends in a rebuild of the middle of the app anyway, and doing th
 
 ## Version 2 structure
 
-Version 2 has one path for every question, with one model call before the data and one after. This is a design sketch; it has not been built or tested.
+Version 2 has one path for every question. It was built for the 2024-25 release in the first slice. How a question travels through it is described in "How the app understands a question".
 
 ### Built once, before any question
 
@@ -49,18 +49,7 @@ Three tables do the work that the catalog planner does live today.
 
 ### The seven steps a question goes through
 
-Steps 3 and 7 call a model. The other five are code only.
-
-1. **Question arrives.** The app keeps the previous request as a structured object, so "add Harvard" edits that object.
-2. **Shortlist** (code only). A text search of the measure dictionary and the school directory finds the 20 or so most likely measures and any school names.
-3. **Interpret** (model call). The model picks from the shortlist and returns one structured request: the operation, the measures, the schools or a group, and the years.
-   - If the question is ambiguous, it returns two or three complete options. Picking one runs it directly.
-   - If the data is not in IPEDS, it declines and says where the data lives.
-4. **Resolve and check** (code only). Code turns names into schools, with the picker when a name is unclear, and applies the rules in the measure dictionary.
-   - Anything the measure table does not cover gets a quick, specific reply and is logged, so the owner can see what to add.
-5. **Fetch** (code only). One query per operation type against the measure table.
-6. **Show table and chart** (code only). The table, chart and sources appear as soon as the data is back.
-7. **Write summary** (model call). The summary streams in under the table and is checked against the rows.
+See "How the app understands a question", part 1. The step numbers in the table below refer to that list.
 
 ### How version 2 maps to version 1
 
@@ -74,6 +63,66 @@ Steps 3 and 7 call a model. The other five are code only.
 | Six fetch paths | Step 5, one |
 
 **Operations supported first:** lookup, compare, trend, rank, group figure, list schools matching a condition, define a measure, and "what do you have on X".
+
+## How the app understands a question
+
+This section describes how a question is understood, from the moment it arrives to the answer. "Question types version 2 should answer" lists *what* must be understood; this section covers *how*. Each step is marked with when it is, or will be, built.
+
+**The principle.** The AI does one job: working out what the user means. It chooses only from real dictionary entries and never produces a number. The app's own code checks its choices, applies the owner's conventions and produces every figure.
+
+### 1. The flow
+
+1. **The question arrives.** The app keeps the previous request, so a follow-up edits it. *Built.*
+2. **Find candidates** (code). The search picks about 20 likely measures, plus matching schools, groups, terms, category rows and breakdowns. This is the shortlist. Each item gets a short tag. *Built; improved in stages 5 and 6 (part 2 below).*
+3. **Interpret** (one AI call). The AI reads the question and the shortlist and fills in a structured request: what to do, which measures, which schools or group, which years. It uses only tags from the shortlist. If the question is ambiguous, it offers two or three readings for the user to pick from. If nothing fits, it says so. *Built.*
+4. **Check and apply the rules** (code). Code rejects any tag that was not on the shortlist, then applies the dictionary's conventions in a fixed order of precedence: what the user said wins over a chosen reading, which wins over a dictionary default. This is also where the app stops to ask, with a school picker or option buttons. *Built.*
+5. **Get the numbers** (code). One query routine per operation. *Built.*
+6. **Show the answer** (code). "Interpreted as", written by code from the dictionary so it cannot be invented; then the table, notes, warnings, and definitions and sources. *Built.* A basic chart is added in stage 5.
+7. **Write a summary** (a second AI call). Two or three sentences about the table, checked against it. *Stage 5.*
+
+### 2. Finding the right candidates
+
+The AI can only choose what the search finds, so the search has to catch any phrasing. It works as a ladder: each step runs only when the one before it does not produce a good fit.
+
+| Step | How it's done | What it does | Catches | When |
+| --- | --- | --- | --- | --- |
+| Word search | Python code, no LLM | Matches the question's words to dictionary names, synonyms, titles and descriptions, after trimming word endings. A match in a measure's own name counts more than a match in its table's title, and one table cannot fill the list | Most questions | Built |
+| Synonyms | Owner-reviewed dictionary, used by the Python code; no LLM | Everyday words added to dictionary entries: undergrad, COA, FT and PT, admit rate | Common shorthand | Built; grows from the logs |
+| Misspelling tolerance | Python code, no LLM | Matches words a letter or two off, in measure words and school names | "admisisons", "Yael" | Stage 5, part 5.0 |
+| Meaning search | Python code using a small meaning model; no LLM | Matches by meaning, not spelling, merged into the same shortlist | "How many kids go there?" finds total enrollment | Stage 5, part 5d |
+| The AI's own search | LLM, through a function call to the app's Python search | When nothing on the shortlist fits, the AI rewrites the question in IPEDS terms and searches again, at most twice | Nicknames, abbreviations, indirect phrasing | Stage 5, part 5d |
+| Web search | LLM, through a function call to web search | When all else fails, a web search to learn what an unfamiliar term means. Anything found is shown with its source, and a list of schools is confirmed by the user before use | ROI, summer melt, AAU members, Mizzou | Stage 6 |
+
+**Learning from misses.** Every time the right measure does not reach the shortlist, it is logged. The owner reviews the log periodically and adds the missing words as synonyms. *Logging built; review is ongoing.*
+
+**How it is measured.** How often the shortlist misses the right measure, and how many questions are misread, before and after each step. Meaning search is fuzzy (it can rank "transfer-out rate" near "graduation rate"), so misreadings are counted as well as misses.
+
+Better matching finds the right variable; it does not add new kinds of calculation. Those are covered in "New kinds of calculation".
+
+### 3. When nothing fits
+
+A question about data the app cannot find gets one of four answers, and the app says which.
+
+1. **Yes.** The matching measures and the years available.
+2. **IPEDS collects it, but it is not set up in the app yet.**
+3. **IPEDS does not collect it.** Only when the owner-reviewed outside-IPEDS table lists the topic, with a pointer to another source if the table names one.
+4. **Not found.** Nothing matched the words used. The app suggests rephrasing or offers the closest matches, and logs it as a search miss.
+
+The app never decides on its own that IPEDS lacks something: a failed search is not evidence that the data does not exist. When the stage 6 web search explains a topic the outside-IPEDS table does not list, the app says it found no IPEDS variable for it, says what IPEDS does cover, and logs the topic for review. Pointers to other sources found on the web are labelled as unreviewed. *Answers 1 to 3 built; answer 4 and this rule are stage 5, part 5.0.*
+
+Messages to the user are written by code from the dictionary. The AI's own explanation of a decline goes to the log only, so users never see internal words such as "shortlist". *Stage 5, part 5.0.*
+
+### 4. Conventions
+
+What a word means is decided by the dictionary, never by the AI or by code: defaults for terms with several meanings ("graduation rate", "faculty"), terms that always prompt a choice, group definitions ("the Northeast", "state schools", "small"), and what each period means. See "Groups of schools" and "One home for conventions". The AI identifies which term or group the user meant; the dictionary supplies its meaning, and "Interpreted as" states it.
+
+### 5. Conversation memory
+
+- **Follow-ups edit the previous request.** "Add Northeastern", "now for Texas", "break that down by gender", "go back to all eight". Any field can be changed. *Built.*
+- **Clarifications are remembered.** When the app has asked a question, the next message is read against the options it offered, so "the second one" or "both" works. *Built.*
+- **Declined requests are remembered too.** A declined or partly answered request stays as the previous request, so "show 2023-24" after a declined ten-year question applies to the same school and measure. Choosing an option clears the pending question. *Stage 5, part 5.0; found in owner testing.*
+- **Declines can be asked about.** The reason is stored with the request, so "why not?", "where can I find that?" and "what can you show instead?" are answered from it (items 48 and 49). *Stage 5, part 5.0.*
+- **Answer what can be answered.** When part of a request is out of range, such as twenty years when the data holds ten, the app shows what it has and says what is missing, instead of declining the whole request. *Stage 5, part 5.0.*
 
 ## Question types version 2 should answer
 
@@ -105,6 +154,7 @@ This list combines four sources: the real question log, the version 1 evaluation
 | 20 | Cohort and class-year framing | "Six-year graduation rate for the 2018 entering cohort" · "SAT scores for the Class of 2027" | Evaluation, Yale benchmark | First version, from the dictionary's year-meaning field |
 | 21 | Custom grouping of categories | Graduation rate for under-represented minority students, a grouping the user defines | Yale benchmark | Next stage after the first slice, through category sets; needs an owner rule for students of unknown race |
 | 22 | Custom calculation across measures | "Rank using equal weighting for net price and graduation rate" | Question log | Next stage after the first slice for ratios, differences, percent change and shares, through the formula field; weighted composite rankings later |
+| 50 | Request a data extract | "Download enrollment for all public universities, with sector, state and city" · "A spreadsheet of graduation rates for Big Ten schools since 2015, with Carnegie class" | Owner | Stage 7, as data extracts (added Nov 22, 2026) |
 
 Examples marked NCES or Yale benchmark are phrased from the benchmark tables, which hold figures and titles, not user questions.
 
@@ -121,8 +171,10 @@ Examples marked NCES or Yale benchmark are phrased from the benchmark tables, wh
 | 29 | Change the display | "Sort them from lowest to highest" · "Make it a bar chart" | Evaluation |
 | 30 | Answer a clarifying question | "A" · "yes" · "both" | Question log |
 | 31 | Two requests in one message | "Which years are available for Ivy League admission rates? Compare the latest available year" | Example button |
+| 48 | Respond to a decline by changing the request | After "Marian University's degrees for the last ten years" is declined for years: "Show 2023-24" · After a measure is not set up: "Use the closest one, then" · After a group is declined: "OK, use all public universities instead" | Owner testing |
+| 49 | Ask about a decline | "Why not?" · "Where can I find that data?" · "What can you show me instead?" | Owner testing |
 
-All of these are first-version items, because the previous request is kept as a structured object that a follow-up edits.
+All of these are first-version items, because the previous request is kept as a structured object that a follow-up edits. Items 48 and 49 were added on Nov 22, 2026. They need a declined or clarified request to be kept as the previous request, which owner testing showed the first slice does not yet do.
 
 ### Questions about the data
 
@@ -132,8 +184,12 @@ All of these are first-version items, because the previous request is kept as a 
 | 33 | What data exists on a topic | "What data do you have on institutional finances?" | Evaluation |
 | 34 | Which years are available | "Which years do you have for net price?" | Example button |
 | 35 | Why IPEDS differs from a school's own figure | Yale's own published figures differ from IPEDS in 13 of 242 benchmark comparisons, as recorded in the project's design notes; IPEDS reports Yale University, not Yale College | Yale benchmark |
+| 44 | Explain a concept or term | "What does FTE mean?" · "What is an adjusted cohort?" · "What's the difference between retention and persistence?" | Owner |
+| 45 | Explain how IPEDS measures something, and its limits | "Why doesn't the IPEDS graduation rate count transfer students?" · "Why is net price a year behind?" | Owner |
+| 46 | Compare similar measures | "Graduation rate or Outcome Measures award rate: which should I use?" · "Total price versus net price" | Owner |
+| 47 | Suggest the measures that fit an intention | "How can I tell how well a college serves low-income students?" · "What should I look at to judge student success at community colleges?" | Owner |
 
-Items 32 to 34 are first-version items answered from the measure dictionary. Item 35 is later; the first version can state the IPEDS definition and reporting unit.
+Items 32 to 34 are first-version items answered from the measure dictionary. Item 35 is later; the first version can state the IPEDS definition and reporting unit. Items 44 to 47 were added on Nov 22, 2026. Items 44 and 45 are built in stage 5, items 46 and 47 in stage 6; the app answers them from the dictionary where it can, and offers to run the measures it suggests.
 
 ### Requests to decline or answer with a caution
 
@@ -160,7 +216,7 @@ Three additions to the version 2 structure are needed to cover the list above. A
 
 ### Left for later
 
-- Custom groupings of categories (item 21) and custom calculations across measures (item 22) are not in the first slice. They are planned for the stage after it; see "Staying open to new kinds of questions". Weighted composite rankings stay later.
+- Custom groupings of categories (item 21) and custom calculations across measures (item 22) are not in the first slice. They are planned for the stage after it; see "New kinds of calculation". Weighted composite rankings stay later.
 - Explaining differences from a school's own published figures (item 35).
 - Nothing else is excluded by design. Any question still needs its measure named in the dictionary.
 
@@ -233,12 +289,7 @@ The scripts draft everything from the codebook. These are the decisions the code
 
 ## Next steps
 
-1. The owner reviews the draft dictionary workbook.
-2. Claude Code builds the first slice for 2024-25 only: stacked tables, dictionary, and steps 2 to 6 of the flow, without the written summary.
-3. Run the 37 logged questions and the NCES and Yale benchmarks through the slice.
-4. If it clearly beats the current app, extend to all ten years and add the summary. If not, stop and review.
-   - The same stage adds the formula field and category sets, guided by the decline log from the first slice.
-5. The current app stays live throughout, with only the few cheap fixes applied.
+The first slice is done; see "Results of the first slice". The current plan is "Stage 5 plan", followed by "Stage 6 and later". The current app stays live throughout, with only the few cheap fixes applied.
 
 ## Version 1 features and when version 2 gets them
 
@@ -275,16 +326,6 @@ Every version 1 feature is kept. The first slice includes only what is needed to
 
 The chart, export and page code works from finished result rows, so it should carry over with modest adaptation. This has not been tested.
 
-## Questions about what data exists
-
-A question such as "do you have data on X?" gets one of three answers, and the app says which.
-
-1. **Yes.** The app names the matching measures and the years available.
-2. **IPEDS collects it, but it is not set up in the app yet.** The app says so plainly.
-3. **IPEDS does not collect it.** The app says so, and points elsewhere only when the "Outside IPEDS" tab of the dictionary workbook names a source. Example: return on investment points to College Scorecard; AI policies has no source to point to.
-
-The workbook's measure list covers every IPEDS variable in the release, so a topic with no match there is case 3. Pointers come from the owner-reviewed tab, never from the model's general knowledge.
-
 ## How the work is organised
 
 Planning and building are kept apart, so version 2 does not grow by patches.
@@ -314,7 +355,7 @@ Users often ask about a group, such as "schools in the Northeast", "all public i
 
 **Not in IPEDS.** Hispanic-serving institutions, other minority-serving designations beyond HBCU and tribal, women's colleges, flagship universities, and named associations are not flagged. Each needs either a hand-kept list or a rule the owner sets.
 
-## Staying open to new kinds of questions
+## New kinds of calculation
 
 The rule that the model never writes SQL means the app answers only questions that fit an operation it has. This section sets out how version 2 stays flexible within that rule. None of it has been built or tested.
 
@@ -366,21 +407,72 @@ Recorded Nov 21, 2026. Details are in `docs/reports/STAGE_4.md` and `STAGE_4_FOL
 
 **Recommendation, pending the owner.** The slice meets the test in "Next steps": go on to all ten years and the written summary.
 
-## Matching any phrasing to IPEDS variables
+## Stage 5 plan
 
-Recorded Nov 21, 2026. Users can phrase a question any way. The model only chooses from the shortlist, so the search must put the right variables on it whatever words the user uses. The safeguard does not change: the model picks only real dictionary entries, and code produces every number.
+Agreed Nov 22, 2026. The owner accepted the recommended answers to the six decisions below.
 
-**Now (end of the first slice).**
+**Goal.** Version 2 answers questions across all ten years, including trends; understands questions with misspellings, abbreviations and informal wording; and adds a short written summary. At the end of stage 5, version 2 should do almost everything version 1 did with data, more reliably.
 
-- **Word-start matching** in the text search, so "undergrad" finds "undergraduate" and "admit" finds "admitted".
-- **A reviewed list of common shorthand** added as synonyms (COA, FT and PT, freshman, admit rate and similar). Words with two meanings, such as "grad" (graduate or graduation), go on every measure they could mean, and the model picks from context.
+**Parts.** Claude Code stops for review after each.
 
-**Next stage.** Three layers:
+| Part | What it does |
+| --- | --- |
+| 5.0 Fixes from owner testing | Set out in parts 2, 3 and 5 of "How the app understands a question": misspelling tolerance; the "not found" answer, so "IPEDS does not collect this" comes only from the outside-IPEDS table; user messages written by code, not the AI's internal explanation; declined and clarified requests kept as the previous request, with the pending question cleared once answered; questions about a decline (items 48 and 49); and answering the part of a request that can be answered. |
+| 5a Stack the ten years | Add the 2015-16 to 2023-24 releases to the local database. Report row counts per table and year, columns that change type, tables present only in some years, and variables renamed between years. |
+| 5b Dictionary across years | Years each measure is available. Year rules written as offsets (net price lags one year; graduation cohorts entered years before; finance covers the previous fiscal year). Category codes that changed (field-of-study codes revised in 2020, "another gender" added, Carnegie changes). Comparability breaks: years where a definition changed. School directory over time: name changes, closures, mergers, and the national universe and comparison groups for each year. Claude Code first sends the owner a gap list and waits. |
+| 5c Trend questions | A school, several schools or a group over time; "since 2015", "the last five years", and the change between two years. Missing years are gaps, never zero. A note when a comparability break falls inside the period. |
+| 5d Understanding any phrasing | Meaning search and the AI's own search, as set out in part 2 of "How the app understands a question". For meaning search, Claude Code first compares a light local package (fastembed) with sentence-transformers on the badly written test set: accuracy, time added and install size. Near-duplicate measures are grouped so they do not crowd the shortlist. A new test set of 30 to 50 badly written questions (misspellings, abbreviations such as UConn and Mizzou, informal phrasing, "RTI"). |
+| 5e Written summary | A second AI call writes two or three sentences about the table, given only the table and its notes. Code checks that every number in the summary appears in the table; if not, the summary is dropped. |
+| 5f Explaining terms and concepts | Items 44 and 45. Fuller explanations of IPEDS terms built from the dictionary: definition, period, year rules and caveats. A reviewed concepts table of 30 to 50 general terms (FTE, adjusted cohort, retention versus persistence, net versus sticker price, Pell as an income proxy, provisional versus final data), drafted for the owner to review; the app answers from it first, and otherwise labels a general explanation as such and logs the question for review. |
+| 5g Measure it | NCES trend tables and Yale benchmarks across ten years; the full question set with trend questions scored; the badly written set; version 1 against version 2 on trend questions; time and cost per question. |
 
-1. **Two searches feeding one shortlist.** Text search catches exact things: school names, IPEDS terms, codes. Meaning search catches loose phrasing ("how many kids go there" finds total enrollment). Each dictionary entry gets a meaning fingerprint once, in advance; each question gets one when it arrives. The results of both searches are merged.
-2. **A second chance.** If the model finds nothing on the shortlist that fits, it writes better search words in IPEDS terms and the search runs once more. The extra model call happens only on hard questions.
-3. **Learning from the logs.** Every shortlist miss is logged and reviewed periodically, and the missing words are added as synonyms.
+**Decisions.**
 
-**How it is measured.** The shortlist-miss rate on the question set, before and after each layer. Meaning search is fuzzy (it can rank "transfer-out rate" near "graduation rate"), so the number of wrong readings is checked too, not only the misses.
+1. **Group membership over time:** each year's own list of schools, as NCES does, stated in the answer. "Today's schools only" is offered as an option.
+2. **Comparability breaks:** show the trend with a note and mark the year. Data is never hidden.
+3. **Charts:** a basic automatic chart in the owner's palette: a line for trends, bars for comparisons. The formatting panel comes later.
+4. **Summary:** two or three sentences, neutral, no interpretation beyond the numbers. It can be switched off.
+5. **Speed:** typical questions under 5 seconds, hard ones under 10.
+6. **Meaning search setup:** Claude Code compares the options (outside service or a small local model; setup, cost, hosting on Render) and proposes one before building.
 
-**What this does not cover.** Better matching finds the right variable; it does not add calculations. Questions needing a calculation no operation supports are handled by the formula field and category sets (see "Staying open to new kinds of questions") and by the decline log.
+**Success test.**
+
+- Benchmarks match NCES trend tables across ten years, apart from known definition differences.
+- At least 90% of scored questions right or acceptable, trend questions included.
+- No false "IPEDS does not collect this" in any test set.
+- The speed limits above.
+
+## Stage 6 and later
+
+**Stage 6: flexibility.**
+
+- **Groups from a list the user confirms**, which the web search below depends on.
+- **The formula field and category sets** (see "New kinds of calculation").
+- **Comparing similar measures and suggesting measures for a goal** (items 46 and 47). These need "use when" and "limits" notes on about 100 key measures, drafted for the owner to review, and the meaning search from stage 5.
+- **Web search to understand unfamiliar questions.** The last step of the search ladder in "How the app understands a question", part 2; its safeguards and the rule for "IPEDS does not collect this" are in part 3. It helps in these areas:
+
+| Area | Examples | What the search does |
+| --- | --- | --- |
+| Unfamiliar terms and jargon | ROI, summer melt, stop-outs, swirl, DFW rate, gainful employment, the 90/10 rule | Learns the meaning, then checks whether an IPEDS variable measures it |
+| Topics outside IPEDS | Earnings, student debt, campus crime, athletics budgets, research spending | Confirms IPEDS does not cover it and finds where the data lives (College Scorecard, Clery data, EADA, NSF HERD) |
+| Fields of study | STEM, data science, nursing, pre-med | Finds the official field codes behind the term |
+| School names | Mizzou, Ole Miss, SCAD, renamed or merged schools, foreign universities | Finds the official name to match in the directory, or establishes the school is not in IPEDS |
+| Groups of schools | AAU members, Public Ivies, Hispanic-serving institutions, Jesuit colleges, COFHE | Finds a membership list to propose, with its source |
+| Staff and student categories | Adjuncts, TAs, postdocs, non-traditional students | Maps the term to the nearest IPEDS category |
+| Figures from other sources | U.S. News graduation rates, Common Data Set acceptance rates | Explains how that definition differs from IPEDS |
+| Policies and events | Test-optional schools, the Pell expansion, schools that closed this year | Works out what is meant and what IPEDS can show |
+
+Confirmed web lists and reviewed topics are added to the dictionary over time, so the web search becomes a way to find what to add, not a permanent source.
+
+**Stage 7: version 1 features.** The format-chart panel, chart edits by chat, downloads, the Explore page, "Need ideas?", and the About page.
+
+**Data extracts.** Added Nov 22, 2026. Built in stage 7 with the version 1 features, or as its own stage after it. Users download data for their own research, asking in plain language or through a simple builder panel. The extract holds:
+
+- **One row per school**, or per school and year when several years are asked for, with the IPEDS ID and name.
+- **The requested measures**, following the same dictionary rules as answers: the right periods, missing values left blank, never zero.
+- **The school characteristics the user picks**: sector, control, level, state, city, region, Carnegie class, size, system and others, taken from the directory for the same year as the data.
+- **A documentation sheet**: each column's definition, period and source table, any notes (provisional data, exclusions), the group definition used, and the date produced.
+
+The extract uses the same code that builds answers, so an extract and an on-screen answer always agree, and the AI never produces a number. To decide when it is built: the layout for several years (one row per school and year, one column per year, or both), the format (Excel with the documentation sheet, CSV, or both), and limits or warnings for very large requests.
+
+**Switching the Render link.** After stage 7, or earlier if the owner decides. The existing service is switched to the new repository; it is never deleted.
