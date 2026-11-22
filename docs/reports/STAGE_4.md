@@ -1,5 +1,7 @@
 # Stage 4 report: measuring the question path
 
+> **Correction (2026-11-21, later the same day).** Defect B below was a grading error. For the three Sonnet answers on topics outside IPEDS, the page did show the outside-IPEDS message; my review script printed only the heading. They are correct declines. Sonnet's scored line is therefore 27 correct answers, 52 correct declines, 8 clarifying questions and 15 wrong readings. Only the empty table drawn under the message was a real defect. See `STAGE_4_FOLLOWUP.md`.
+
 Date: 2026-11-21. Data: the IPEDS 2024-25 provisional release only. Models: Haiku (`claude-haiku-5-5`) and Sonnet (`claude-sonnet-5-5`).
 
 This report has three parts:

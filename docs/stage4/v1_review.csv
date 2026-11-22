@@ -1,0 +1,8 @@
+conversation,turn,v1_grade,why
+50,1,wrong reading,"interpretation names Odessa College, a school the user never named (single-turn conversation)"
+3,2,answered as expected (reading checked),interpretation is Yale undergraduates by race and ethnicity
+15,1,answered as expected (reading checked),interpretation is the New York public two-year dual-enrollment total
+24,4,answered as expected (reading checked),interpretation is the national dual-enrollment total
+24,5,answered as expected (reading checked),interpretation is the count of colleges above 10000
+58,6,answered as expected (reading checked),interpretation uses RIT and the named comparison schools
+60,4,answered as expected (reading checked),interpretation is the lowest four-year net price for grant-aided students

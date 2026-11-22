@@ -20,6 +20,7 @@ County,any value,a county by name,HD,COUNTYNM,any,County,,,in use,2,
 Public,column,public,HD,CONTROL,1,Public,,,in use,1,
 Private not-for-profit,column,private nonprofit; private; private colleges,HD,CONTROL,2,Private not-for-profit,,"""Private"" alone and ""private colleges"" mean private nonprofit, all levels.",in use,1,
 Private for-profit,column,for-profit; proprietary,HD,CONTROL,3,Private for-profit,,,in use,1,
+"Private, nonprofit or for-profit",column,,HD,CONTROL,"2, 3","Private schools, nonprofit or for-profit",,,in use,1,Used by the net-price readings: private schools report net price for all students.
 Four or more years,column,four-year,HD,ICLEVEL,1,Four or more years,,,in use,1,
 At least 2 but less than 4 years,column,two-year,HD,ICLEVEL,2,At least 2 but less than 4 years,,,in use,1,
 Less than 2 years (below associate),column,less-than-two-year; trade and vocational schools,HD,ICLEVEL,3,Less than 2 years (below associate),,,in use,1,

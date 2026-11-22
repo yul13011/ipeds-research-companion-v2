@@ -125,6 +125,9 @@ def build_index(db):
             support[mid].append((s, t))
     index["support"] = support
     index["detailed"] = {m: d for m, d in q("SELECT measure, detailed FROM detail_links")}
+    index["row_keys"] = {}                       # each multi-row table's category columns and their default rows
+    for t, column, label in q('SELECT "table", "column", default_label FROM row_keys'):
+        index["row_keys"].setdefault(t, []).append((column, label))
     index["picker_phrases"] = q("SELECT nickname, search_phrase FROM dict_school_nicknames WHERE search_phrase IS NOT NULL")
     index["first_version"] = {}
     for m in measures.values():
@@ -243,6 +246,10 @@ def tag(short, index):
         m["breakdowns"], m["breakdowns_via_detail"] = own, [b for b in via if b not in own]
     for r in short["rows"]:
         r["for"] = [m["tag"] for m in short["measures"] if m["table"] == r["table"]]
+    for m in short["measures"]:                 # a measure's category columns, with the rows shortlisted for each
+        m["categories"] = [dict(column=c, default=label or "overall total",
+                                tags=[r["tag"] for r in short["rows"] if r["table"] == m["table"] and r["column"].upper() == c.upper()])
+                           for c, label in index.get("row_keys", {}).get(m["table"], [])]
     for s in short["sets"]:
         s["for"] = [m["tag"] for m in short["measures"] if s["tag"] in m["breakdowns"] + m["breakdowns_via_detail"]]
     for t in short["terms"]:

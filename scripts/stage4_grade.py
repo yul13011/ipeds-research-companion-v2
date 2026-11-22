@@ -1,7 +1,8 @@
 """Stage 4: grade the two runs against docs/stage4/expectations.csv and the manual review in docs/stage4/review.csv.
 
-    python scripts/stage4_grade.py dump      prints each scored turn for manual review
-    python scripts/stage4_grade.py           writes docs/reports/stage4/scorecard.csv and prints the tables used in STAGE_4.md
+    python scripts/stage4_grade.py [runs] dump   prints each scored turn for manual review
+    python scripts/stage4_grade.py [runs]        writes docs/reports/stage4/scorecard_<run>.csv and prints the tables
+Runs are folder names under logs/stage4 (default: haiku_before sonnet, the first Stage 4 runs).
 
 Outcome classes: answer, decline, clarify (a clarifying question or a school picker), wrong (the app's own
 wrong-reading reply), error. A turn is a correct answer when an answer was expected and the measure and schools
@@ -19,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import config
 
-MODELS = ("haiku", "sonnet")
+MODELS = tuple(a for a in sys.argv[1:] if a != "dump") or ("haiku_before", "sonnet")   # run folders under logs/stage4
 EXP = {(r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(ROOT / "docs" / "stage4" / "expectations.csv", encoding="utf-8"))}
 REVIEW_FILE = ROOT / "docs" / "stage4" / "review.csv"
 REVIEW = {(r["model"], r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(REVIEW_FILE, encoding="utf-8"))} if REVIEW_FILE.exists() else {}
@@ -121,7 +122,9 @@ def dump():
                 print("  reply kind:", r.get("kind"), "| decline:", json.dumps(r.get("decline"))[:200] if r.get("decline") else "")
             parts = p.get("parts") or [p]
             for q in parts:
-                print("  shown:", (q.get("interpreted") or q.get("message") or "")[:400].replace("\n", " "))
+                print("  shown:", (q.get("interpreted") or "")[:300].replace("\n", " "))
+                if q.get("message"):
+                    print("  message:", q["message"][:300].replace("\n", " "))
                 if q.get("table"):
                     print("  table:", q["table"]["columns"], q["table"]["rows"][:3])
                 if q.get("options"):
@@ -140,10 +143,11 @@ def report():
         rows += grade(model)
     path = ROOT / "docs" / "reports" / "stage4"
     path.mkdir(parents=True, exist_ok=True)
-    with open(path / "scorecard.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0]))
-        w.writeheader()
-        w.writerows(rows)
+    for model in MODELS:
+        with open(path / f"scorecard_{model}.csv", "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0]))
+            w.writeheader()
+            w.writerows(r for r in rows if r["model"] == model)
     for model in MODELS:
         g = [r for r in rows if r["model"] == model]
         print(f"\n## {model}")
@@ -165,4 +169,4 @@ def report():
 
 
 if __name__ == "__main__":
-    dump() if sys.argv[1:] == ["dump"] else report()
+    dump() if "dump" in sys.argv[1:] else report()

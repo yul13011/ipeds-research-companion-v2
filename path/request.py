@@ -38,7 +38,7 @@ OPERATIONS = {
 LIST_FIELDS = ("measures", "schools", "groups", "conditions", "readings")
 SCALAR_FIELDS = ("operation", "peers_of", "breakdown", "split_by", "sort", "year", "topic")
 COMPARISONS = (">", ">=", "<", "<=", "=", "!=")
-YEAR_KINDS = ("fall", "fiscal year", "academic year", "aid year", "entering cohort", "class year", "calendar year")
+YEAR_KINDS = ("fall", "fiscal year", "academic year", "aid year", "entering cohort", "class year", "calendar year", "latest")
 MISSING = ("measure", "group", "calculation", "breakdown", "years", "not in IPEDS", "not a data question", "other")
 
 

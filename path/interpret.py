@@ -31,14 +31,18 @@ Rules:
   choose: the user is answering the PENDING OPTIONS ("the first one", "B", "both"). Give their 0-based numbers.
   decline: nothing in the shortlist can answer it, or it asks for something IPEDS does not hold (see OUTSIDE IPEDS),
         individual records, a measure applied to the wrong population, or it is not a question about data.
-        Say plainly what is missing and name the closest thing the app can do.
+        Say plainly what is missing and name the closest thing the app can do. Keep reason and closest to one
+        short sentence each (at most 25 words).
 - Operations: {operations}
 - measures: pick the measure that matches. For a multi-row measure, name a category row (R tag listed for that
   measure) only when the user asks for one, such as transfer-in students; otherwise leave `row` empty and the app
-  uses the overall total.
+  uses the overall total. A measure lists its categories (such as full-time/part-time or level) with their R tags.
+  When the user asks for several categories of one measure ("full-time and part-time", "undergraduates"), list the
+  measure once per category, each with its R tag; a breakdown keeps the category the user asked for in `row`.
 - breakdown: use a breakdown set (B tag) listed for the measure you chose. A set listed "through the detailed table"
   also works for that measure.
 - TERMS: a term lists its readings, each with a T tag. If the user said which reading they mean, put its tag in `readings`.
+  If the user named a specific reading (such as the overall 150% rate), always give its T tag.
   If the term says "always ask" and the user did not say, return options, one per reading.
   Otherwise use the reading marked default.
 - schools: write each name as the user wrote it, with its S tag if the shortlist clearly has that school,
@@ -47,6 +51,7 @@ Rules:
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
 - year: copy the year as the user stated it, or leave it empty. Set kind only if the user said (fall, fiscal year, ...).
+  For "the latest" or "the most recent year", leave stated empty and set kind to latest.
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
   If nothing matches, put the user's topic in plain words in topic.
 """
@@ -62,7 +67,9 @@ def render(short, previous, pending, question):
         flag = " | not set up in this app yet" if not m["set_up"] else ""
         b = (f" | breakdowns: {', '.join(m['breakdowns'])}" if m["breakdowns"] else "") + \
             (f" | breakdowns through the detailed table: {', '.join(m['breakdowns_via_detail'])}" if m["breakdowns_via_detail"] else "")
-        rows.append(f"  {m['tag']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{b}{flag}")
+        cats = "".join(f" | categories by {c['column']} (default: {c['default']}): {', '.join(c['tags']) or 'none shortlisted'}"
+                       for c in m.get("categories", []))
+        rows.append(f"  {m['tag']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{cats}{b}{flag}")
     section("measures", ["Measures (tag | name | period | unit):"] + rows)
     rows = []
     for t in short["terms"]:

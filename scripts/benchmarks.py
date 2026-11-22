@@ -72,7 +72,7 @@ NCES = {
     103: (req("group", [M("DRVADM.DVADM04")]), 100),
     110: (req("group", [M("rate:Core expenses per FTE student")]), 1),
     150: (req("group", [M("EFC.EFRES01")]), 1),
-    200: (req("group", [M("rate:Award within eight years (Outcome Measures)")]), 1),
+    200: (req("group", [M("rate:Award within eight years (Outcome Measures)")]), 100),
     210: (req("group", [M("C_B.CSTOTLT")]), 1),
     220: (req("group", [M("SFA.AGRNT_A")]), 1),
     221: (req("group", [M("SFA.LOAN_A")]), 1),
@@ -151,7 +151,7 @@ def main():
                     note = "; ".join(f"{label}: {v:,.0f}" for label, v in values)
                     row.update(status="split by form (by rule)", actual=None, note=note)
                 else:
-                    tolerance = 0.0005 if q == 200 else 0.05 if scale == 100 else (0.5 if expected < 1e5 and not float(expected).is_integer() or q in (36, 50, 220, 221, 110) else 0)
+                    tolerance = 0.05 if scale == 100 else (0.5 if expected < 1e5 and not float(expected).is_integer() or q in (36, 50, 220, 221, 110) else 0)
                     diff = actual - expected * scale if actual is not None else None
                     row.update(actual=actual, expected_scaled=expected * scale, difference=diff,
                                status="match" if diff is not None and abs(diff) <= tolerance else "differs",

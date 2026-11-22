@@ -352,8 +352,8 @@ class Path_(unittest.TestCase):
         self.assertEqual(last["missing"], "years")
 
     def test_average_with_no_rate_row_is_declined_for_a_group(self):
-        page, _ = self.ask("Average net price at private colleges",
-                           reply_request(req("group", measures=[M("COST2_NETPRICE.NPGRN2")], groups=["Private not-for-profit"])))
+        page, _ = self.ask("Average federal loan at private colleges",
+                           reply_request(req("group", measures=[M("SFA.UFLOANA")], groups=["Private not-for-profit"])))
         self.assertEqual(page["kind"], "decline")
         self.assertIn("list or rank each school's figure", page["message"])
 
@@ -522,6 +522,114 @@ class Precedence(unittest.TestCase):
         from path.resolve import first_present
         self.assertEqual(first_present({"awlevel": "5"}, {"AWLEVEL": "12", "MAJORNUM": "1"}, {"CIPCODE": "99", "MAJORNUM": "2"}),
                          {"AWLEVEL": "5", "MAJORNUM": "1", "CIPCODE": "99"})
+
+
+class ChangeOrder1121(unittest.TestCase):
+    """The change order of 2026-11-21: defects A to F, net-price group averages, state-or-school names, categories."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        cls.NET = [M("COST2_NETPRICE.NPIST2"), M("COST2_NETPRICE.NPGRN2")]
+        cls.READ = [dict(term="net price", reading="Students awarded grant or scholarship aid")]
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.db.close()
+        cls.dir.cleanup()
+
+    def ask(self, question, reply, state=None):
+        return answer.ask(question, {} if state is None else state, self.log, call=saved(reply))
+
+    def members(self, group):
+        return {u for (u,) in self.db.execute("SELECT unitid FROM group_membership WHERE group_name=?", (group,))}
+
+    def test_a_net_price_ranking_uses_the_measure_for_each_kind_of_school(self):
+        page = self.ask("Compare net price for grant-aided students across the Ivy League",
+                        reply_request(req("rank", measures=self.NET, groups=["Ivy League"], readings=self.READ)))
+        self.assertEqual(len(page["table"]["rows"]), 8)                     # was empty: the public column was ranked
+
+    def test_a_empty_ranking_says_so(self):
+        page = self.ask("Rank administrative units by enrollment",
+                        reply_request(req("rank", measures=[M("DRVEF.ENRTOT")], groups=["Administrative Unit"])))
+        self.assertEqual(page["table"]["rows"], [])
+        self.assertTrue(any(n.startswith("No school in") for n in page["notes"]))
+
+    def test_net_price_group_average_is_weighted_by_the_cohort(self):
+        page = self.ask("Average net price for grant-aided students in the Ivy League",
+                        reply_request(req("group", measures=self.NET, groups=["Ivy League"], readings=self.READ)))
+        ivy = self.members("Ivy League")
+        rows = self.db.execute("SELECT n.NPGRN2, c.GRNTN2 FROM COST2_NETPRICE n JOIN COST2_FINANCIALAID c USING (UNITID, year) "
+                               "WHERE n.NPGRN2 IS NOT NULL AND c.GRNTN2 > 0 AND n.UNITID IN (%s)" % ",".join(map(str, ivy))).fetchall()
+        expected = sum(a * b for a, b in rows) / sum(b for _, b in rows)
+        self.assertEqual(len(page["table"]["rows"]), 1)                     # all private: one figure
+        self.assertEqual(page["table"]["rows"][0][1], show.fmt((expected, "average")))
+
+    def test_net_price_group_mixing_public_and_private_is_split_with_a_statement(self):
+        page = self.ask("Average net price for grant-aided students in Ohio",
+                        reply_request(req("group", measures=self.NET, groups=["State: Ohio"], readings=self.READ)))
+        labels = [r[0] for r in page["table"]["rows"]]
+        self.assertEqual(len(labels), 2)
+        self.assertTrue(any("(Public)" in x for x in labels) and any("(Private, nonprofit or for-profit)" in x for x in labels))
+        self.assertIn("kind of school", page["interpreted"])
+
+    def test_b_topic_outside_ipeds_has_no_empty_table(self):
+        page = self.ask("Any variable that shows economic mobility", reply_request(req(
+            "data_exists", topic="Earnings after graduation; return on investment; economic mobility")))
+        self.assertEqual(page["table"]["columns"], [])
+        self.assertIn("College Scorecard", page["message"])
+
+    def test_c_level_check_covers_the_named_schools(self):
+        names = [S("Worcester Polytechnic Institute", 168421), S("Case Western Reserve University", 201645),
+                 S("Drexel University", 212054)]
+        page = self.ask("Graduation rate at Worcester Polytechnic Institute, Case Western Reserve University and Drexel University",
+                        reply_request(req("school_vs_group", measures=[M("DRVGR.GBA6RTT")], schools=names)))
+        self.assertNotEqual(page["kind"], "clarify")                        # all four-year: no level question
+
+    def test_d_rate_from_counts_is_shown_as_a_percent(self):
+        page = self.ask("Award within eight years, Outcome Measures, national",
+                        reply_request(req("group", measures=[M("rate:Award within eight years (Outcome Measures)")])))
+        self.assertEqual(page["table"]["rows"][0][1], "47.3%")              # NCES 47.3; was "$0"
+
+    def test_e_a_chosen_reading_wins_over_the_level_default(self):
+        page = self.ask("Graduation rate within 150% of normal time at four-year schools", reply_request(req(
+            "group", measures=[M("DRVGR.GRRTTOT")], groups=["Four or more years"],
+            readings=[dict(term="graduation rate", reading="Total cohort within 150% of normal time")])))
+        self.assertEqual(page["table"]["rows"][0][1], "61.0%")             # NCES 61; the bachelor's rate would be 64.8
+
+    def test_f_latest_year_is_not_a_stated_year(self):
+        page = self.ask("Dual enrollment, most recent year, all colleges", reply_request(req(
+            "group", measures=[M("EFFY_HS.EFYTOTLT")], year=dict(stated="most recent year", kind="latest"))))
+        self.assertEqual(page["kind"], "answer")
+
+    def test_state_or_school_name_asks(self):
+        page = self.ask("Michigan enrollment", reply_request(req("group", measures=[M("DRVEF.ENRTOT")], groups=["State: Michigan"])))
+        self.assertEqual(page["kind"], "clarify")
+        self.assertIn("University of Michigan-Ann Arbor", page["options"])
+        page = self.ask("How many colleges are in Michigan?", reply_request(req("count_schools", groups=["State: Michigan"])))
+        self.assertEqual(page["kind"], "answer")                            # counting schools: only the state makes sense
+
+    def test_one_measure_at_two_category_rows_keeps_both_columns(self):
+        page = self.ask("How many full-time and part-time instructional staff did Yale have in Fall 2024?", reply_request(req(
+            "schools", schools=[S("Yale", 130794)],
+            measures=[M("S_OC.HRTOTLT", [("STAFFCAT", "2210")]), M("S_OC.HRTOTLT", [("STAFFCAT", "3210")])])))
+        ft, pt = [self.db.execute("SELECT HRTOTLT FROM S_OC WHERE UNITID=130794 AND STAFFCAT=?", (c,)).fetchone()[0]
+                  for c in (2210, 3210)]
+        self.assertEqual(page["table"]["rows"][0][1:], [f"{ft:,}", f"{pt:,}"])
+
+    def test_per_school_group_means_its_peers(self):
+        page = self.ask("compare RIT's completion rate to its peer institutions", reply_request(req(
+            "school_vs_group", measures=[M("DRVGR.GBA6RTT")], groups=["IPEDS comparison group"], peers_of=195003)))
+        self.assertEqual(len(page["table"]["rows"]), 2)                     # RIT, and its comparison group
+
+    def test_shortlist_shows_category_columns(self):
+        s = shortlist.shortlist("How many full-time and part-time instructional staff did Yale have in Fall 2024?", DB)
+        staff = next(m for m in s["measures"] if m["id"] == "S_OC.HRTOTLT")
+        self.assertEqual(staff["categories"][0]["column"].upper(), "STAFFCAT")
+        text, _ = interpret.render(s, None, None, "q")
+        self.assertIn("categories by STAFFCAT (default: Grand Total)", text)
 
 
 class Show(unittest.TestCase):

@@ -48,6 +48,7 @@ Words with more than one possible reading. One row per reading and measure. A re
 - `condition`: a filter on the measure. `EAPCAT = 21000` picks one category row. `< 25` keeps schools below a cut-off. For peers: `comparison group`, `same state and sector` or `user named`. For a group that mixes levels: `only this group` (keep the schools in `default_for`) or `split by level`.
 - `is_default`: `yes` if this reading is used when the user does not say which.
 - `default_for`: a school group. The default applies only to schools in that group. Blank means all schools.
+- `applies_to`: for a reading that names one measure per kind of school, the school group each measure applies to (for example net price: `Public` uses the in-state measure, `Private, nonprofit or for-profit` the all-students one). Each school takes the measure that applies to it; a group with more than one kind is shown separately for each, with the "kind of school" statement.
 - `always_ask`: `yes` if the app must ask the user to choose. `no` if it uses the default; when no default applies to the school, it asks. `mixed levels` marks the options offered only when a group mixes school levels.
 - `statement`: what the app must say whenever this term is used.
 - `status`: `in use`, or `pending owner approval` (loaded but not used).
@@ -97,6 +98,7 @@ The counts behind each rate, so a group rate is computed by summing counts, neve
 - `numerator_code`, `denominator_code`: the row codes to use.
 - `method`: how schools are combined. `sum of counts`: add the numerators, add the denominators, then divide (rates, and averages such as dollars per student). `weighted average`: the numerator is each school's own average and the denominator its count of students; the group figure is the sum of average times count, divided by the sum of counts (net price, where IPEDS gives no total).
 - `applies_to`: the school group the counts apply to, when the rate is defined only for some schools. Rows that share a ready-made rate must each name one.
+- `unit`: how the group figure is shown: `percent` (a share of counts, shown as a percent) or `dollars` (an amount per person or per FTE).
 - `nces_figure`: the published national figure for 2024-25, used as a test.
 - `status`: whether it has been tested.
 

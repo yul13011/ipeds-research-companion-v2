@@ -44,7 +44,7 @@ def cell(value, unit):
 
 def unit_of(m):
     """The unit a figure is shown in. A rate computed from counts takes the unit of its ready-made measure."""
-    return "average" if m["unit"] == "computed from counts" else m["unit"]
+    return {"computed from counts": "average", "dollars": "average"}.get(m["unit"], m["unit"])
 
 
 def count_column(data, ref, category, code):
@@ -53,7 +53,13 @@ def count_column(data, ref, category, code):
 
 
 def school_values(m, data, units=None):
-    """{UNITID: value} for a measure. A computed rate divides each school's own counts."""
+    """{UNITID: value} for a measure. A computed rate divides each school's own counts. A measure by kind of
+    school takes, for each school, the part that applies to it."""
+    if m.get("parts"):
+        out = {}
+        for p in m["parts"]:
+            out.update({u: v for u, v in school_values(p, data, units).items() if u in p["members"]})
+        return out
     if m["column"]:
         return data.column(m["table"], m["column"], m["rows"], units=units)
     out = {}
@@ -62,7 +68,7 @@ def school_values(m, data, units=None):
         den = count_column(data, r["denominator"], r["category"], r["denominator_code"])
         for u in num.keys() & den.keys():
             if (r["members"] is None or u in r["members"]) and num[u] is not None and den[u]:
-                out[u] = num[u] if r["method"] == "weighted average" else num[u] / den[u]
+                out[u] = num[u] if r["method"] == "weighted average" else num[u] / den[u] * (100 if m["unit"] == "percent" else 1)
     return out
 
 
@@ -163,8 +169,10 @@ def fetch(plan, db):
 def schools(plan, data, result):
     ids = [s["id"] for s in plan["schools"]]
     columns, merged = [], {}                            # measures with the same heading share one column
-    for m in plan["measures"]:
+    for m in plan["measures"]:                          # a measure asked for at several category rows keeps one column each
         key = m.get("shown_as") or m["name"]
+        if key in merged and merged[key][0]["rows"] != m["rows"]:
+            key += "".join(f", {x}" for x in m.get("row_labels", []))
         if key not in merged:
             merged[key] = []
             columns.append(key)
@@ -216,6 +224,8 @@ def rank(plan, data, result):
     result["columns"] = ["Rank", "School", "State", m["name"]] + (["Denominator"] if plan["guard"] else [])
     for i, (v, u) in enumerate(top, 1):
         result["rows"].append([i, names[u][0], names[u][1], cell(v, unit_of(m))] + ([cell(counts[u][1], "count")] if plan["guard"] else []))
+    if not kept and plan.get("empty_ranking"):
+        result["notes"].append(plan["empty_ranking"].format(scope=plan["scope"], measure=m["name"]))
     result["notes"].append(f"{len(kept):,} of {len(members):,} schools ranked; {no_value:,} left out with no value or a value of "
                            "zero or below" + (f"; {small:,} left out with fewer than {plan['guard']} in the denominator" if plan["guard"] else "") + ".")
 
@@ -345,6 +355,6 @@ def breakdown(plan, data, result):
 
 def topic(plan, data, result):
     t = plan["topic"]
-    result["columns"] = ["Measure", "Period", "Set up in this app"]
+    result["columns"] = ["Measure", "Period", "Set up in this app"] if t["measures"] else []
     for m in t["measures"]:
         result["rows"].append([m["name"], m["period"], "yes" if m["set_up"] == "yes" else "not yet"])

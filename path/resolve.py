@@ -109,7 +109,7 @@ def resolve(reply, short, state, db, db_path):
         if not history:
             return outcome("wrong_reading", message="There is no earlier question to change.", detail="edit")
         request = apply_edit(history[-1], reply["edit"], history)    # the shortlist carries the previous request's items
-    return resolve_request(request, d, short)
+    return resolve_request(request, d, short, new_question=kind == "request")
 
 
 def off_shortlist(request, short):
@@ -121,7 +121,7 @@ def off_shortlist(request, short):
     return bad or None
 
 
-def resolve_request(request, d, short):
+def resolve_request(request, d, short, new_question=False):
     """Check one request against the shortlist and the dictionary, and build the plan."""
     bad = off_shortlist(request, short)
     if bad:
@@ -129,6 +129,9 @@ def resolve_request(request, d, short):
     for i, s in enumerate(request["schools"]):
         if s["id"] is None:
             return outcome("picker", name=s["name"], index=i, request=request, candidates=sl.search_schools(s["name"], d.db_path))
+    ask = state_or_school(request, d) if new_question else None
+    if ask:
+        return ask
     request = copy.deepcopy(request)
     op = request["operation"]
     plan = dict(operation=op, request=request, measures=[], schools=[dict(id=s["id"], name=d.name(s["id"])) for s in request["schools"]],
@@ -152,6 +155,7 @@ def resolve_request(request, d, short):
         if got["kind"] != "ready":
             return dict(got, request=request)
         plan["measures"].append(got["measure"])
+    pair_measures(plan, d, request["year"])
     for c in request["conditions"]:
         got = measure({"id": c["measure"], "row": []}, d, None)
         if got["kind"] != "ready":
@@ -190,6 +194,75 @@ def resolve_request(request, d, short):
         plan["small_cohort"] = dict(threshold=threshold, text=d.setting("small cohort")[1])
     plan["campus_notes"] = dict(d.q("SELECT condition, statement FROM dict_terms WHERE term='related campus'"))
     return outcome("ready", plan=plan, request=request)
+
+
+SCHOOL_OPTIONS = 3
+
+
+def state_or_school(request, d):
+    """A name that is both a state and a school ("Michigan"): ask which, as the "state or school" setting says.
+    Asked for a new question whose only group is a state, with no school named, when a school is called by the
+    state's name: the setting's condition lists those name patterns ("University of {state}"). Not asked when the
+    question counts or lists schools, which only a group can answer."""
+    if request["schools"] or len(request["groups"]) != 1 or \
+            request["operation"] in ("count_schools", "list", "define", "data_exists"):
+        return None
+    group = request["groups"][0]
+    row = d.one("SELECT parent, statement FROM group_list WHERE group_name=?", group)
+    condition, question = d.setting("state or school")
+    if not row or row[0] != "State" or not question:
+        return None
+    state = group.partition(": ")[2]
+    found = []
+    for pattern in (p.strip() for p in (condition or "").split(";") if p.strip()):
+        name = pattern.format(state=state)
+        for u, n in d.q("SELECT UNITID, INSTNM FROM directory WHERE INSTNM = ? OR INSTNM LIKE ? ORDER BY INSTNM", name, name + "-%"):
+            if u not in {f["id"] for f in found}:
+                found.append(dict(id=u, name=n))
+    found = found[:SCHOOL_OPTIONS]
+    if not found:
+        return None
+    options = [dict(label=row[1] or group, request=request)]
+    for s in found:
+        r = copy.deepcopy(request)
+        r["groups"], r["schools"] = [], [dict(name=s["name"], id=s["id"])]
+        if r["operation"] in ("group", "split"):
+            r["operation"] = "schools"
+        options.append(dict(label=s["name"], request=r))
+    return outcome("clarify", question=question.format(state=state), options=options)
+
+
+def pair_measures(plan, d, year):
+    """A term reading that names one measure per kind of school (terms.csv applies_to, such as net price) becomes one
+    measure: each school takes the measure that applies to it, and a group with more than one kind is shown
+    separately for each."""
+    out, done = [], set()
+    covered = plan["members"] if plan["members"] is not None else {s["id"] for s in plan["schools"]}
+    for m in plan["measures"]:
+        row = d.one("SELECT term, reading FROM dict_terms WHERE measure=? AND COALESCE(applies_to, '') <> '' "
+                    "AND status='in use' ORDER BY rowid", m["id"])
+        if not row:
+            out.append(m)
+            continue
+        if row in done:
+            continue
+        done.add(row)
+        parts = []
+        for mid, applies, shown in d.q("SELECT measure, applies_to, shown_as FROM dict_terms WHERE term=? AND reading=? "
+                                       "AND COALESCE(applies_to, '') <> '' AND status='in use' ORDER BY rowid", *row):
+            got = dict(kind="ready", measure=m) if mid == m["id"] else measure({"id": mid, "row": []}, d, year)
+            if got["kind"] == "ready":
+                parts.append(dict(got["measure"], applies_to=applies, members=d.members(applies), shown_as=shown))
+        if len(parts) < 2:
+            out.append(m)
+            continue
+        out.append(dict(parts[0], name=parts[0]["shown_as"] or parts[0]["name"], parts=parts,
+                        rates=[r for p in parts for r in p["rates"]]))
+        kinds = [p["applies_to"] for p in parts if p["members"] & covered]
+        statement = d.setting("kind of school", "Measure by kind of school")[1]
+        if len(kinds) > 1 and statement:
+            plan["statements"].append(statement.format(kinds=", ".join(p["applies_to"] for p in parts)))
+    plan["measures"] = out
 
 
 def cohort_period(m, covered, d):
@@ -339,7 +412,9 @@ def apply_readings(request, d, plan):
 
 def level_defaults(request, d, plan):
     """A term whose default depends on the school, such as graduation rate by level: use it, or ask when schools mix."""
-    covered = plan["members"] if plan["members"] is not None else {s["id"] for s in request["schools"]}
+    named = {s["id"] for s in request["schools"]}
+    covered = named if named and plan.get("group_defaulted") else \
+        plan["members"] if plan["members"] is not None else named
     chosen = {r["term"] for r in request["readings"]}
     for m in request["measures"]:
         for (term,) in d.q("SELECT DISTINCT term FROM dict_terms WHERE measure=? AND default_for IS NOT NULL", m["id"]):
@@ -372,6 +447,11 @@ def scope(request, d, plan):
         elif row and row[1] == "split by level":
             request["operation"], request["split_by"] = "split", "level"
             plan["operation"] = "split"
+    for name in list(names):                            # a group defined per school (its own comparison group) is "its peers"
+        if d.one("SELECT kind FROM group_list WHERE group_name=?", name) == ("per school",):
+            names.remove(name)
+            if request["peers_of"] is None and request["schools"]:
+                request["peers_of"] = request["schools"][0]["id"]
     if request["peers_of"] is not None:
         stop = peers(request, d, plan)
         if stop:
@@ -383,6 +463,7 @@ def scope(request, d, plan):
     if not names and plan["members"] is None:
         names = [d.setting("no group stated")[0]]
         plan["statements"].append(d.setting("no group stated")[1])
+        plan["group_defaulted"] = True
     members, parts = None, []
     for name in names:
         row = d.one("SELECT statement, caveat, status, word_note FROM group_list WHERE group_name=?", name)
@@ -442,8 +523,8 @@ def measure(m, d, year):
     """One measure: its table, column, rows, period, unit, form, and the rate rows behind it."""
     if m["id"].startswith("rate:"):
         name = m["id"][5:]
-        numerator = d.one("SELECT numerator FROM dict_rates WHERE rate=?", name)[0]
-        info = dict(id=m["id"], name=name, table=None, column=None, rows={}, unit="computed from counts",
+        numerator, unit = d.one("SELECT numerator, unit FROM dict_rates WHERE rate=?", name)
+        info = dict(id=m["id"], name=name, table=None, column=None, rows={}, unit=unit or "computed from counts",
                     definition=name, source=None, own_period=None, form=None, period_table=numerator.partition(".")[0])
     else:
         row = d.one('SELECT "table", variable, COALESCE(plain_name, title), unit, reporting_form, in_first_version, '
@@ -475,7 +556,7 @@ def measure(m, d, year):
                                        info["period_table"])
     info.update(period=info["own_period"] or period, period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
                 parent_child=[c.strip().partition(".")[2] for c in flag.split(";")] if flag else None)
-    if year and year.get("stated"):
+    if year and year.get("stated") and year.get("kind") != "latest":
         stated = set(re.findall(r"(?:19|20)\d\d", year["stated"]))
         shown = set(re.findall(r"(?:19|20)\d\d", info["period"] or "")) | {str(d.year)}
         if not stated or len(stated) > 2 or not stated <= shown:
@@ -520,9 +601,9 @@ def group_method(plan, d):
             m["method"] = "rate"
             live = [r for r in m["rates"] if r["members"] is None or plan["members"] & r["members"]]
             m["rates"] = live or m["rates"]
-            if len(live) > 1:
+            if len(live) > 1 and not m.get("parts"):    # a measure by kind of school already has its statement
                 plan["statements"].append(forms_statement if any(r["form"] for r in live)
-                                          else "Shown separately for each kind of school the rate is defined for.")
+                                          else d.setting("kind of school", "Rate by kind of school")[1])
             out.append(m)
         elif m["unit"] in summable:
             m["method"] = "sum"
@@ -591,3 +672,4 @@ def rank_plan(request, plan, d):
         plan["guard"] = int(re.findall(r"\d+", condition)[0])
         plan["statements"].append(statement)
     plan["statements"].append("Schools with no value, or a value of zero or below, are left out of the ranking.")
+    plan["empty_ranking"] = d.setting("empty ranking")[1]

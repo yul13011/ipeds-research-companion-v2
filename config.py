@@ -21,7 +21,7 @@ RELEASES = [
 ]
 
 # The interpret step's model call. The key is read from the ANTHROPIC_API_KEY environment variable.
-INTERPRET_MODEL = os.environ.get("IPEDS_MODEL", "claude-sonnet-5-5")
+INTERPRET_MODEL = os.environ.get("IPEDS_MODEL", "claude-haiku-5-5")
 INTERPRET_EFFORT = os.environ.get("IPEDS_EFFORT", "medium")
 MODELS = {"Haiku": "claude-haiku-5-5", "Sonnet": "claude-sonnet-5-5"}
 PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)}   # US$ per million tokens, in and out

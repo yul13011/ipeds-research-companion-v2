@@ -533,9 +533,10 @@ class RealDictionary(unittest.TestCase):
                                  "AND ABS(h.SALTOTL - s.SAEQ9OT * 1.0 / s.SATOTLT) > 1").fetchone()[0]
         self.assertEqual(differ, 0)
 
-    def test_net_price_weights_line_up_and_await_review(self):
+    def test_net_price_weights_line_up_and_are_approved(self):
         rows = self.db.execute("SELECT numerator, denominator, method, status FROM dict_rates WHERE rate LIKE 'Average net price%'").fetchall()
-        self.assertEqual({(m, s.split(":")[0]) for _, _, m, s in rows}, {("weighted average", "Pending owner review")})
+        self.assertEqual(len(rows), 4)                          # grant-aided and Title IV, public and private
+        self.assertEqual({(m, s.split(":")[0]) for _, _, m, s in rows}, {("weighted average", "Approved 2026-11-21")})
         for avg, count in [(n, d) for n, d, _, _ in rows]:
             (at, ac), (ct, cc) = avg.split("."), count.split(".")
             missing = self.db.execute(f'SELECT COUNT(*) FROM "{at}" a LEFT JOIN "{ct}" c USING (UNITID) '
