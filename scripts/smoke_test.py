@@ -63,12 +63,14 @@ for path in cases:
         sections.setdefault(current or "SHORTLIST", []).append(line)
     parts = {"instructions": count(system) - baseline}
     parts.update({name: count(text="\n".join(lines)) - baseline for name, lines in sections.items()})
-    parts["reply shape and call overhead"] = row["tokens_in"] - count(system, user) if row["tokens_in"] else 0
+    total_in = (row["tokens_in"] or 0) + (row.get("cache_write") or 0) + (row.get("cache_read") or 0)
+    parts["reply shape and call overhead"] = total_in - count(system, user) if total_in else 0
     for k, v in parts.items():
         where[k].append(v)
     expected = case["reply"].get("request") or case["reply"].get("edit")
     got = row.get("reply") or {}
-    print(f"\n## {case['question']}\n  outcome: {page['kind']}   {row['seconds']}s   tokens in {row['tokens_in']:,}, "
+    print(f"\n## {case['question']}\n  outcome: {page['kind']}   {row['seconds']}s   tokens in {total_in:,} "
+          f"(uncached {row['tokens_in']:,}, cache written {row.get('cache_write') or 0:,}, cache read {row.get('cache_read') or 0:,}), "
           f"out {row['tokens_out']:,}   ${row.get('cost_usd', 0):.4f}")
     print("  model, in tags:", json.dumps(row.get("raw_reply")))
     print("  model, mapped:", json.dumps(got.get("request") or got.get("edit") or got.get("decline") or got.get("options")))
