@@ -14,7 +14,8 @@ from collections import Counter
 from path.request import TAG_RANGES
 
 SET_UP, NOT_SET_UP = 15, 5         # measures: the best set-up ones, then a few IPEDS collects but the app has not set up
-PER_TABLE = 5                       # at most this many of the set-up measures from one table
+PER_TABLE = 5                       # at most this many of the set-up measures from one table, unless ...
+SOFT_CAP = 2                        # ... a further one scores at least this many times the next measure from another table
 NAME_WEIGHT = 3                     # a match in a measure's name or synonyms counts this many times one in its table title
                                     # or description
 LIMITS = {"measures": 60, "terms": 5, "schools": 10, "groups": 15, "rows": 15, "sets": 8, "outside": 3}
@@ -24,7 +25,9 @@ _INDEX = {}
 
 
 def words(text):
-    """Lower-case words, with a light trim so 'rates' finds 'rate' and 'awarded' finds 'award'."""
+    """Lower-case words, with a light trim so 'rates' finds 'rate', 'awarded' finds 'award', 'offering' finds 'offer' and
+    'enrollment' finds 'enroll'. The same trim is applied to the question and to the dictionary. (A standard English
+    stemmer would need a package that is not installed; these hand rules are the owner-approved fallback.)"""
     out = []
     for w in re.findall(r"[a-z0-9]+", (text or "").lower().replace("'s", "")):
         if len(w) > 4 and w.endswith("ies"):
@@ -33,6 +36,10 @@ def words(text):
             w = w[:-1]
         elif len(w) > 5 and w.endswith("ed"):
             w = w[:-2]
+        elif len(w) > 5 and w.endswith("ing"):
+            w = w[:-3]
+        elif len(w) > 6 and w.endswith("ment"):
+            w = w[:-4]
         out.append(w)
     return out
 
@@ -80,9 +87,12 @@ class FieldBM25:
         self.main = BM25([(k, main) for k, main, _ in docs], idf)
         self.context = BM25([(k, context) for k, _, context in docs], idf)
 
-    def search(self, text, limit):
+    def scores(self, text):
         main, context = self.main.scores(text), self.context.scores(text)
-        return best({k: NAME_WEIGHT * main.get(k, 0) + context.get(k, 0) for k in main.keys() | context.keys()}, limit)
+        return {k: NAME_WEIGHT * main.get(k, 0) + context.get(k, 0) for k in main.keys() | context.keys()}
+
+    def search(self, text, limit):
+        return best(self.scores(text), limit)
 
 
 def build_index(db):
@@ -199,12 +209,19 @@ def shortlist(question, db_path, carried=()):
 
     entries = index["measures"][1]
     ranked = list(found["measures"])
-    per_table, set_up = Counter(), []
-    for k in ranked:                            # the best set-up measures, at most PER_TABLE from one table
-        table = entries[k]["table"] or "rate"
-        if entries[k]["set_up"] and per_table[table] < PER_TABLE and len(set_up) < SET_UP:
+    score = index["measures"][0].scores(question)
+    per_table, set_up, held_back = Counter(), [], []
+    for k in (k for k in ranked if entries[k]["set_up"]):    # the best set-up measures, at most PER_TABLE per table,
+        table = entries[k]["table"] or "rate"               # unless a held-back one clearly outscores the next one
+        if per_table[table] >= PER_TABLE:
+            held_back.append(k)
+            continue
+        while held_back and len(set_up) < SET_UP and score[held_back[0]] >= SOFT_CAP * score[k]:
+            set_up.append(held_back.pop(0))
+        if len(set_up) < SET_UP:
             per_table[table] += 1
             set_up.append(k)
+    set_up += held_back[:SET_UP - len(set_up)]
     keep = set_up + [k for k in ranked if not entries[k]["set_up"]][:NOT_SET_UP]
     measures = {k: entries[k] for k in keep}
     for t in found["terms"].values():           # a matched term brings the measures of its readings

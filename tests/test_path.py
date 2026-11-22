@@ -694,8 +694,16 @@ class ChangeOrder1121(unittest.TestCase):
         s = shortlist.shortlist("How many applicants did Yale have?", DB)
         main = [m for m in s["measures"] if m["set_up"]][:shortlist.SET_UP]
         self.assertEqual(main[0]["id"], "ADM.APPLCN")                       # was crowded out by the table title
-        tables = [m["table"] or "rate" for m in main]
+        s = shortlist.shortlist("What about part time student persistence", DB)   # no table clearly wins: the cap holds
+        tables = [m["table"] or "rate" for m in s["measures"] if m["set_up"]][:shortlist.SET_UP]
         self.assertLessEqual(max(tables.count(t) for t in tables), shortlist.PER_TABLE)
+        s = shortlist.shortlist("How many of Yale's admitted students submitted ACT scores for fall 2024?", DB)
+        self.assertIn("ADM.ACTNUM", [m["id"] for m in s["measures"]])      # a sixth admissions measure, let in by score
+
+    def test_word_endings_offering_and_enrollment(self):
+        self.assertEqual(shortlist.words("offering enrollment enrolled"), ["offer", "enroll", "enroll"])
+        s = shortlist.shortlist("Do Smith, Mount Holyoke, and Wellesley offer bachelor's and master's degrees?", DB)
+        self.assertIn("HD.UGOFFER", [m["id"] for m in s["measures"]])
 
     def test_urm_is_outside_ipeds(self):
         s = shortlist.shortlist("What share of students are URM at Yale?", DB)

@@ -218,3 +218,9 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **At most five of the fifteen main slots from one table** (`PER_TABLE`). The rest of a table stays reachable through its category rows and sets.
 - **Grouping near-duplicates: not now.** It goes into the next stage, with meaning search.
 - **A term's statement only when its reading was chosen, where the dictionary says so.** `terms.csv` gains `statement_when`: `chosen` shows the statement only when the model chose that term's reading; `always` shows it whenever one of the term's measures appears. "low-income" is `chosen`. The other terms stay `always`, because their statements carry caveats that apply to every use of the measure, such as the net-price lag and the graduation-rate levels. A row can be switched in the table. Measure statements (first-time, persistence) are unchanged.
+
+## 2026-11-21: last changes to the text search for this slice
+
+- **Word endings.** No English stemmer is installed, and the owner asked to be told before any package is installed. So the owner-approved fallback is used: hand rules that also trim "-ing" (more than five letters) and "-ment" (more than six), applied the same way to the question and the dictionary. "offering" now finds "offer", and "enrollment" finds "enroll".
+- **Soft per-table cap.** At most five of the fifteen main slots from one table, unless a further measure from that table scores at least twice the next measure from another table (`SOFT_CAP` in `shortlist.py`).
+- **The text search is frozen for this slice.** No further ranking changes. The remaining shortlist misses are listed in the Stage 4 follow-up report, as input for the next stage's meaning search.

@@ -255,3 +255,38 @@ Plainly:
   - **(b)** Make the cap soft: a sixth measure from one table may enter if it scores at least twice the best remaining measure from other tables. That keeps ACT submitters when the question is clearly about admissions. Small.
 
   Both can be checked with the same comparison.
+
+## Addendum: last search changes, and the search frozen (2026-11-21)
+
+- **Built:**
+  - Word endings: no English stemmer is installed, so I did not install one, as you asked. I used the approved fallback: hand rules for "-ing" and "-ment".
+  - The soft per-table cap: a sixth measure from one table enters if it scores at least twice the next measure from another table.
+
+  156 tests pass.
+- **The named questions** (rank of the right measure on the shortlist; "-" means not on it):
+
+  | Question | Original search | After fixes 1–2 | Now |
+  | --- | --- | --- | --- |
+  | "How many freshmen did Yale enroll?" (DRVEF.EFUG1ST) | - | - | 5 |
+  | "Do Smith, Mount Holyoke, and Wellesley offer bachelor's and master's degrees?" (HD.UGOFFER) | 4 | - | 7 |
+  | "How many of Yale's admitted students submitted ACT scores" (ADM.ACTNUM) | 1 | - | 1 |
+  | "How many applicants did Yale have?" (ADM.APPLCN) | - | 1 | 1 |
+  | "Data extract: Applicants, Admission rate" (ADM.APPLCN) | - | 2 | 2 |
+  | "What about part time student persistence" (EFD.RET_PCP) | 1 | 1 | 1 |
+  | "10-year trend in completion rates for RIT" (DRVGR.GBA6RTT) | 21 | 6 | 6 |
+  | "compare RIT's completion rate to its peer institutions" (DRVGR.GBA6RTT) | 21 | 21 | 21 (kept by the "graduation rate" term) |
+
+- **Dropped out across all 146 questions** (original search against now): one. "What data do you have on institutional finances?" loses DRVF.F1COREXP, one of the 11 finance measures the model listed; F3COREXP was missing in both. This is the cap on a broad question.
+- **Crowding.** The soft cap lets one table fill 10 or more main slots again where nothing else competes. That happens on 7 questions compared with the original search, mostly trend questions with no right measure ("Please create a trend…", "Now plot it from 2015 through 2024"), plus "how many dual enrollment students", "income after graduation" and the five named comparison schools. No right measure is lost in any of them.
+
+### Remaining shortlist misses: input for the next stage's meaning search
+
+The text search is frozen for this slice. What the next stage's meaning search should handle:
+
+1. **Follow-up turns with no content words**: "What about Harvard?", "Sort them…", "Add Princeton.", "Just Yale and Harvard.", "how has this changed…", "most recent year for all colleges". The live path carries the earlier request's measures, so these work in the app. A meaning search should still read them from context.
+2. **Groups not in the dictionary**: "PhD-enrolling universities" (Carnegie doctoral classes).
+3. **Breadth on "what data exists" questions**: "institutional finances" lists only part of the finance family under the cap.
+4. **Measures reached only through a term, not the search**: "RIT's completion rate" ranks the bachelor's graduation rate 21st, and only the "graduation rate" term keeps it on the list.
+5. **Weak ranking on short, general words**: "freshmen" (5th), "offer" (7th), and "Show a 10-year trend" filled with Outcome Measures. A meaning search would rank by sense, not shared words.
+6. **Items the dictionary does not carry as measures**: a school's city ("What city is Smith College located in?"), and admissions test requirements (the admission-considerations codes are on the shortlist, but the model did not use them).
+7. **Near-duplicate grouping**: decided for the next stage (fix 3).
