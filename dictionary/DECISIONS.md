@@ -285,3 +285,9 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
   No dictionary row was changed in this part.
 - **Build fix: a group defined by several conditions now narrows year by year.** Before, a school meeting a condition in any year could stay in another year's group. With ten years loaded, this would have changed the national universe for 2024; it is 5,626, as before.
 - **One step to add or replace a release:** `python build/build_data.py --release <folder>`. It removes every row of that year first, so a replaced release leaves nothing behind. The runbook is `UPDATING.md`.
+
+## 2026-11-22: owner decisions on the part 5a report
+
+- **Part 5a approved.**
+- **Cost and aid tables reorganised in 2024-25.** In part 5b, a variable-by-variable mapping of the old tables (IC_AY, IC_PY, SFA_P1, SFA_P2, DRVIC) to the new ones (COST1, COST2_FINANCIALAID, COST2_NETPRICE, SFA, DRVCOST) is proposed for review. Where an old and a new table report the same aid year, the same school must give the same value in both; any mismatches are reported.
+- **The local database stays where it is,** in OneDrive (`data/ipeds_v2.sqlite`, untracked).
