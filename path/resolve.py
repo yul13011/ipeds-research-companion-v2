@@ -531,15 +531,17 @@ def measure(m, d, year):
                     definition=name, source=None, own_period=None, form=None, period_table=numerator.partition(".")[0])
     else:
         row = d.one('SELECT "table", variable, COALESCE(plain_name, title), unit, reporting_form, in_first_version, '
-                    'period, long_description FROM dict_measures WHERE "table" || \'.\' || variable = ?', m["id"])
+                    'period, long_description, statement FROM dict_measures WHERE "table" || \'.\' || variable = ?', m["id"])
         if row is None:
             return decline(f"{m['id']} is not a measure in the dictionary.", "measure")
-        table, column, name, unit, form, set_up, own_period, definition = row
+        table, column, name, unit, form, set_up, own_period, definition, said = row
         if set_up != "yes":
             return decline(f'IPEDS collects "{name}", but it is not set up in this app yet.', "measure", wanted=m["id"])
         source = d.one("SELECT source_table FROM _tables WHERE local_table=? AND year=?", table, d.year)[0]
         info = dict(id=m["id"], name=name, table=table, column=column, rows={}, unit=unit, form=form,
                     definition=definition, source=source, own_period=own_period, period_table=table)
+        if said:                                        # a measure's own statement, shown whenever it is used
+            info.setdefault("row_statements", []).append(said)
         given = rows_of(m)
         info["given"] = given
         keys = d.q('SELECT "column", default_code, default_label FROM row_keys WHERE "table"=?', table)

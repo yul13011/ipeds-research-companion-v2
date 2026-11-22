@@ -11,3 +11,4 @@ SAT or ACT 10th and 90th percentiles,"""90th percentile SAT""",No,"IPEDS collect
 Individual student records,"""list every student's name and GPA""",No,IPEDS is institution-level data. No individual records exist.,
 Rankings and reputation,"""best colleges""",No,IPEDS has no rankings. The app can rank schools on a named IPEDS measure.,
 Years outside 2015-16 to 2024-25,"""graduation rate in 2030""; ""admissions in 1976""",Not in this app,The app holds ten releases. Earlier years exist in IPEDS but are not loaded.,NCES IPEDS Data Center for earlier years
+Underrepresented minority (URM) students,"""URM""; ""underrepresented minority""",No,"IPEDS reports race and ethnicity categories, not an underrepresented-minority group. Combining categories into such a group is planned for a later stage; the categories themselves can be shown now.",

@@ -666,6 +666,31 @@ class ChangeOrder1121(unittest.TestCase):
         s = shortlist.shortlist("What is the grad rate at RIT?", DB)
         self.assertIn("DRVGR.GRRTTOT", [m["id"] for m in s["measures"]])
 
+    def test_shorthand_reaches_the_shortlist(self):
+        cases = {"What is the universe with the lowest net cost?": "COST2_NETPRICE.NPGRN2",
+                 "What is Yale's SFR?": "EFD.STUFACR",
+                 "Spending per student at public universities": "rate:Core expenses per FTE student",
+                 "How many freshmen did Yale enroll?": "DRVEF12.E12UG1ST"}
+        for question, wanted in cases.items():
+            self.assertIn(wanted, [m["id"] for m in shortlist.shortlist(question, DB)["measures"]], question)
+
+    def test_first_time_and_retention_statements(self):
+        page = self.ask("How many freshmen did Yale enroll?",
+                        reply_request(req("schools", measures=[M("DRVEF12.E12UG1ST")], schools=[S("Yale", 130794)])))
+        self.assertIn("first-year transfer students are not included", page["interpreted"])
+        page = self.ask("What is the persistence rate nationally?", reply_request(req("group", measures=[M("EFD.RET_PCF")])))
+        self.assertIn("IPEDS calls this the retention rate", page["interpreted"])
+
+    def test_low_income_is_a_term_with_its_statement(self):
+        page = self.ask("Share of low-income students at Yale", reply_request(req(
+            "schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)],
+            readings=[dict(term="low-income", reading="Percent of undergraduates awarded Pell grants")])))
+        self.assertIn("IPEDS does not measure income", page["interpreted"])
+
+    def test_urm_is_outside_ipeds(self):
+        s = shortlist.shortlist("What share of students are URM at Yale?", DB)
+        self.assertIn("Underrepresented minority (URM) students", [o["topic"] for o in s["outside"]])
+
     def test_shortlist_shows_category_columns(self):
         s = shortlist.shortlist("How many full-time and part-time instructional staff did Yale have in Fall 2024?", DB)
         staff = next(m for m in s["measures"] if m["id"] == "S_OC.HRTOTLT")

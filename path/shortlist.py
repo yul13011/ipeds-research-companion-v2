@@ -81,9 +81,9 @@ def build_index(db):
         measures[f"{t}.{v}"] = dict(id=f"{t}.{v}", name=name, table=t, unit=unit, period=period or periods.get(t),
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),
                                     text=" ".join([name, name, syn or "", syn or "", titles.get(t, ""), (desc or "")[:300]]))
-    for (rate,) in q("SELECT DISTINCT rate FROM dict_rates WHERE rate_measure IS NULL"):
+    for rate, syn in q("SELECT rate, MAX(synonyms) FROM dict_rates WHERE rate_measure IS NULL GROUP BY rate"):
         measures[f"rate:{rate}"] = dict(id=f"rate:{rate}", name=rate, table=None, unit="computed from counts",
-                                        period=None, set_up=True, many_rows=False, text=rate + " " + rate)
+                                        period=None, set_up=True, many_rows=False, text=f"{rate} {rate} {syn or ''} {syn or ''}")
     terms = {}
     for term, words_, kind, reading, measure, condition, default, default_for, ask, statement in q(
             "SELECT term, words, kind, reading, measure, condition, is_default, default_for, always_ask, statement "

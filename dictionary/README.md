@@ -31,6 +31,7 @@ One row per IPEDS variable in the release (2,599).
 - `period`: filled only when the variable reports a different year from its table (net price for 2023-24 in a 2024-25 table). Blank means the table's period in `year_meaning.csv`.
 - `plain_name`: your plain-English name. Blank means the IPEDS title is used.
 - `synonyms`: other words users say for this measure.
+- `statement`: a sentence shown whenever an answer uses this measure, such as the note that IPEDS counts first-time students, not first-year students.
 - `detailed_measure`: for a summary measure, the same figure in a detailed table, written `TABLE.COLUMN where COLUMN = code; ...`, for example `EFA.EFTOTLT where EFALEVEL = 2` for undergraduate enrollment. When a breakdown is asked for on the summary measure, the app uses the detailed one and says so. The build checks that the two agree at every school and lists the schools where they do not (schools that report together with a related campus).
 - `breakdown_set`: filled when this column is one part of a breakdown stored as columns, such as "By race and ethnicity" or "By gender". All the columns of one table with the same name form the set.
 - `set_total`: the column that the parts add up to, or `sum of parts` when the data has no total column. The build tests that the parts add up on every row; a set that fails is not loaded.
@@ -98,6 +99,7 @@ The counts behind each rate, so a group rate is computed by summing counts, neve
 - `numerator_code`, `denominator_code`: the row codes to use.
 - `method`: how schools are combined. `sum of counts`: add the numerators, add the denominators, then divide (rates, and averages such as dollars per student). `weighted average`: the numerator is each school's own average and the denominator its count of students; the group figure is the sum of average times count, divided by the sum of counts (net price, where IPEDS gives no total).
 - `applies_to`: the school group the counts apply to, when the rate is defined only for some schools. Rows that share a ready-made rate must each name one.
+- `synonyms`: for a rate with no ready-made measure, other words users say for it (used to find it for the shortlist).
 - `unit`: how the group figure is shown: `percent` (a share of counts, shown as a percent) or `dollars` (an amount per person or per FTE).
 - `nces_figure`: the published national figure for 2024-25, used as a test.
 - `status`: whether it has been tested.

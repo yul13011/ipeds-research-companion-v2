@@ -180,3 +180,34 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **"undergrad" and "grad".** "undergrad" is added to the synonyms of every measure whose name contains "undergraduate" (208 measures), and to every category row so labelled (220 rows). "grad" is added to every measure whose name contains "graduate" (not "undergraduate") or "graduation rate" (110 measures), and to every row labelled graduate (49 rows). "grad" is deliberately on both meanings ("grad students", "grad rate"); the model picks from context.
 - **Synonyms for category rows.** `category_codes.csv` gains `synonyms`, used only to find a row for the shortlist, the same way measure synonyms are used.
 - **Further shorthand** (first-year, FT/PT, admit rate, and others) is drafted for the owner's review and not yet added.
+
+## 2026-11-21: shorthand synonyms, second set
+
+- **Approved unmarked rows added:**
+  - PT
+  - applicants / apps / applications → ADM.APPLCN
+  - admits / admitted students → ADM.ADMSSN
+  - matriculants / enrollees / yield count → ADM.ENRLT
+  - completers
+  - net cost
+  - Pell rate / percent Pell
+  - endowment per student
+  - census enrollment / fall census
+  - SFR / S/F ratio / student faculty ratio
+  - dual enrollment / dual credit / concurrent enrollment / early college
+  - eight-year completion / 8-year award rate
+- **first-year, freshman, freshmen.** Added to every first-version measure and category row labelled first-time (170 measures, 43 rows). Each carries the statement: "IPEDS counts first-time students (new to college); first-year transfer students are not included."
+- **FT.** Added to full-time measures and rows only, not full-time equivalent.
+- **selectivity.** Added to the admission rate and the SAT and ACT score measures.
+- **persistence, persistence rate.** Added to both retention rates, with the statement "IPEDS calls this the retention rate; it is what is often called persistence." Also added to the Outcome Measures still-enrolled measures, with the statement "IPEDS reports this as students still enrolled (Outcome Measures); it is one meaning of persistence."
+- **completions, awards conferred.** Added to the awards total and the degree-by-level counts.
+- **FTE, FTE enrollment.** Added to 12-month FTE enrollment and to every staff FTE measure (not to "per FTE" ratios).
+- **COA, cost of attendance, sticker price.** Added to all nine total-price measures.
+- **low-income.** A term with one reading, the percent of undergraduates awarded Pell grants, and the statement "IPEDS does not measure income; the Pell share is a common proxy."
+- **faculty.** No change; the existing term covers it.
+- **professors, full professors.** Added to the instructional staff measures, salary by rank, and the Professor rank rows.
+- **student body.** Added to total fall enrollment.
+- **spending per student.** Added to instruction expenses per FTE, and to core expenses per FTE (a rate, so `rates.csv` gains `synonyms`).
+- **tuition revenue.** Added to the tuition revenue per FTE measures.
+- **URM, underrepresented minority.** A row in `outside_ipeds.csv`: IPEDS reports race categories, and combining them into a group is planned for a later stage.
+- **Statements on measures.** `measures.csv` gains `statement`, shown whenever an answer uses the measure, the same way a category row's statement is. The first-time and persistence statements use it, so they show whenever those measures are used, not only when the user wrote the shorthand. The path does not read the user's wording.

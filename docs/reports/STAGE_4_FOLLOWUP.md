@@ -198,3 +198,35 @@ Plainly:
 - **Breakdown sets on the shortlist** now show where they are held, and a measure broken down through its detailed table shows the level it carries over (for example "All students, Undergraduate total").
 - **Finding: why "undergrad" fails.** For "Show Yale's undergrad population by race and ethnicity", neither the undergraduate measure nor the undergraduate row reaches the shortlist: "undergrad" does not match "undergraduate". So the model has no tag for the undergraduate level. With "undergraduate" spelled out, the shortlist carries the undergraduate measure and its held level. The fix is a synonym ("undergrad", and perhaps "grad" for graduate) in `measures.csv` or `category_codes.csv`, which needs your approval as a change order. Not done.
 - 149 tests pass.
+
+## Addendum: shorthand synonyms and their effect on the shortlist (2026-11-21)
+
+- **Added as decided** (see DECISIONS.md). New dictionary columns:
+  - `measures.statement`, shown whenever the measure is used;
+  - `rates.synonyms`, for core expenses per FTE.
+
+  Also new: a "low-income" term and a URM row in `outside_ipeds.csv`. 154 tests pass.
+- **Shortlist before and after, no model call** (`scripts/shortlist_compare.py`, results in `docs/reports/stage4/shortlist_compare.csv`):
+  - 146 questions: 9 design, 83 distinct logged, 54 eval turns.
+  - The shortlist changed for 64 of them.
+  - A right measure is known for 56. Here, "right measure" means an expectation ID, a saved design reply, or a measure from a correct answer in the last Haiku run.
+  - **No right measure dropped out.** Nine were missing both before and after. Eight of those are follow-up turns ("What about Harvard?", "Sort them…"), where the live path carries the earlier request's measures onto the shortlist; this check does not.
+  - **Four questions now fill with near-duplicates from one table.** All four are crowded by Outcome Measures, whose many Pell / non-Pell / cohort variants now carry "persistence" or "eight-year completion":
+
+    | Question | Largest table among the 15 set-up slots, before → after |
+    | --- | --- |
+    | "What about part time student persistence" | DRVEF 5 → DRVOM 12 |
+    | "What is the 10-year trend in completion rates for RIT" | DRVGR 10 → DRVOM 12 |
+    | "compare RIT's completion rate to its peer institutions" | DRVGR 13 → DRVOM 12 |
+    | "Show a 10-year trend" | DRVGR 11 → DRVOM 12 |
+
+    In the first, the right measure moved from 11th to 1st. In the RIT questions, the graduation rates stay on the list through the "graduation rate" term. So nothing is lost yet, but those slots no longer show alternatives.
+- **Ranking problems the synonyms could not fix:**
+  - "How many applicants did Yale have?" still leaves ADM.APPLCN out of the top 15 set-up measures, despite the new synonym. All admissions measures share a table title that names applicants, so ten "admission considerations" measures outrank it, and the 12-month enrollment measures take the rest.
+  - "How many freshmen did Yale enroll?" fills with 12-month first-time measures, and the fall measure (DRVEF.EFUG1ST) does not reach the list.
+- **How I would fix the ranking** (not done; needs your go):
+  1. **Field weights.** Score a match in a measure's name or synonyms well above a match in its table's title or description (BM25F, standard practice). The table title should help choose the table, not lift every measure in it equally.
+  2. **One table cannot fill the list.** At most five of the fifteen set-up slots from one table. The rest of that table stays reachable through its category rows and the measures a matched row or set brings, as now.
+  3. **Group near-duplicates.** Measures in one table whose names differ only by a subgroup should take one slot: the best-scoring one, with "and N similar" for the model. "Differ only by a subgroup" means the same name apart from one category word, read from the dictionary's own category labels, not from a word list in code.
+
+  Fixes 1 and 2 are small, about 20 lines in `shortlist.py`, and the comparison script checks them across all 146 questions. Fix 3 is larger.
