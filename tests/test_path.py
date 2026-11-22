@@ -882,6 +882,15 @@ class Stage50(unittest.TestCase):
         self.assertEqual(page["kind"], "answer")
         self.assertEqual(page["table"]["rows"][0][0], "Marian University")
 
+    def test_an_outside_row_covers_only_its_part(self):
+        topic = "Graduation rates by major"
+        request = req("group", measures=[M("DRVEF.ENRTOT")], topic=topic)
+        q = "total fall enrollment, and graduation rates by major"
+        for reply in (reply_request(request), reply_decline("not in IPEDS", request)):
+            page = self.ask(q, reply, {})
+            self.assertEqual(page["kind"], "answer")                       # the part IPEDS has is answered
+            self.assertIn("not by major", page["interpreted"])             # and the part it lacks is named
+
     def test_choosing_an_option_clears_the_pending_question(self):
         state = {"pending": [dict(label="A", request=req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)]))]}
         answer.choose(0, state, self.log)

@@ -163,7 +163,7 @@ haiku,owner,o47_cc_success,1,not yet due (stage 6),What should I look at to judg
 haiku,owner,o47_financial_health,1,not yet due (stage 6),How do I measure a college's financial health?,answer,decline,,True,decline,,3.74,0.000656,10662,430,not found,,
 haiku,owner,o47_selectivity,1,not yet due (stage 6),What's a good measure of how selective a school is?,answer,clarify,,True,clarify,,4.69,0.001025,11979,906,,,
 haiku,owner,o48_marian,1,scored,How many degrees did Marian University award over the last ten years?,clarify|decline,clarify,,False,clarifying question,,7.83,0.00153,13832,1544,,,
-haiku,owner,o48_marian,2,scored,show 2023-24,answer,decline,,False,wrong reading,"after the school picker, ""show 2023-24"" had no previous request to edit (the picker's request was not kept); fixed after the run",5.98,0.000545,8563,628,not found,path,
+haiku,owner,o48_marian,2,scored,show 2023-24,clarify,decline,,False,wrong reading,"after the school picker, ""show 2023-24"" had no previous request to edit (the picker's request was not kept); fixed after the run",5.98,0.000545,8563,628,not found,path,
 haiku,owner,o48_roi,1,scored,What's the ROI for Yale?,decline,decline,True,True,correct decline,,3.25,0.000656,10442,474,not collected,,
 haiku,owner,o48_roi,2,scored,Where can I find that?,answer|decline,decline,True,True,correct decline,,1.63,0.000286,8771,69,,,
 haiku,owner,o49_hsi,1,scored,Graduation rate for Hispanic-serving institutions,decline,decline,,True,correct decline,,6.15,0.000977,10306,1144,group not available,,

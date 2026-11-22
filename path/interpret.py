@@ -38,6 +38,8 @@ Rules:
         years (years not held), measure (no listed measure fits), group, calculation, breakdown,
         not a data question, other. Use "not in IPEDS" only with an outside-IPEDS topic (O tag) in the request;
         never decide on your own that IPEDS lacks something: if nothing listed fits, use measure.
+        If one part of the question is outside IPEDS (O tag) and another part can be answered, do not decline:
+        return a request for the part that can be answered, with the O tag in outside.
         reason and closest are for the app's log only; keep each to one short sentence (at most 25 words).
   about_decline: the user asks about the answer the app just declined: "why not?" (about = why),
         "where can I find that?" (where), "what can you show instead?" (instead). Fill decline.about only.

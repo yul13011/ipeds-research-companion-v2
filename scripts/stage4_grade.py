@@ -170,6 +170,10 @@ def report():
         all_t = turns(model)
         print(f"  time: total {sum(t['seconds'] for t in all_t):.0f}s, mean {sum(t['seconds'] for t in all_t) / len(all_t):.2f}s per turn;"
               f" cost ${sum(t.get('cost_usd') or 0 for t in all_t):.4f} for {len(all_t)} turns")
+        times = sorted(t["seconds"] for t in all_t)
+        slow = times[int(len(times) * 0.9):]                # the slowest tenth of questions (owner decision 2026-11-22)
+        print(f"  slowest tenth: {len(slow)} turns from {slow[0]:.2f}s to {slow[-1]:.2f}s, mean {sum(slow) / len(slow):.2f}s;"
+              f" 90th percentile {times[int(len(times) * 0.9)]:.2f}s")
         sm = [r for r in g if r["shortlist_miss"] in ("yes", "no")]
         print("  shortlist misses:", sum(r["shortlist_miss"] == "yes" for r in sm), "of", len(sm), "turns where a measure was wanted")
 

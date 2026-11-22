@@ -4676,7 +4676,7 @@ SFA,UAGRNTP,"Percent of undergraduate students awarded federal, state, local, in
 
 Grant aid includes grant or scholarship aid awarded, from the federal government, a state or local government, the institution, and other sources known by the institution
 
-Undergraduate - A student enrolled in a 4- or 5-year bachelor's degree program, an associate's degree program, or a vocational or technical program below the baccalaureate",Cont,N,one row per school,percent,,1,yes,,,,undergrad,,,,
+Undergraduate - A student enrolled in a 4- or 5-year bachelor's degree program, an associate's degree program, or a vocational or technical program below the baccalaureate",Cont,N,one row per school,percent,,1,yes,,,,undergrad; grant and scholarship percentage; grant and scholarship percentages; percent receiving grants or scholarships; percent awarded grants or scholarships,,,,
 SFA,UAGRNTT,"Total amount of federal, state, local, institutional or other sources of grant aid awarded to undergraduate students","Total amount of grant or scholarship aid awarded to all undergraduates  from the federal government, state/local government, the institution, and other sources known to the institution",Cont,N,one row per school,dollars,,1,yes,,,,undergrad,,,,
 SFA,UAGRNTA,"Average amount of federal, state, local, institutional or other sources of grant aid awarded to undergraduate students","Average amount of federal, state, local, institutional or other sources of grant aid  awarded to undergraduate students
 

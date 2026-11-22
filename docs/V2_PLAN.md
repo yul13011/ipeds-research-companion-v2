@@ -82,7 +82,7 @@ This section describes how a question is understood, from the moment it arrives 
 
 ### 2. Finding the right candidates
 
-The AI can only choose what the search finds, so the search has to catch any phrasing. It works as a ladder: each step runs only when the one before it does not produce a good fit.
+The AI can only choose what the search finds, so the search has to catch any phrasing. The first four steps below are code and run on every question; their results are merged into one shortlist. The AI's own search runs only when nothing on that shortlist fits, and the web search only when that also fails.
 
 | Step | How it's done | What it does | Catches | When |
 | --- | --- | --- | --- | --- |
@@ -418,12 +418,12 @@ Agreed Nov 22, 2026. The owner accepted the recommended answers to the six decis
 | Part | What it does |
 | --- | --- |
 | 5.0 Fixes from owner testing | Set out in parts 2, 3 and 5 of "How the app understands a question": misspelling tolerance; the "not found" answer, so "IPEDS does not collect this" comes only from the outside-IPEDS table; user messages written by code, not the AI's internal explanation; declined and clarified requests kept as the previous request, with the pending question cleared once answered; questions about a decline (items 48 and 49); and answering the part of a request that can be answered. |
-| 5a Stack the ten years | Add the 2015-16 to 2023-24 releases to the local database. Report row counts per table and year, columns that change type, tables present only in some years, and variables renamed between years. |
-| 5b Dictionary across years | Years each measure is available. Year rules written as offsets (net price lags one year; graduation cohorts entered years before; finance covers the previous fiscal year). Category codes that changed (field-of-study codes revised in 2020, "another gender" added, Carnegie changes). Comparability breaks: years where a definition changed. School directory over time: name changes, closures, mergers, and the national universe and comparison groups for each year. Claude Code first sends the owner a gap list and waits. |
+| 5a Stack the ten years | Add the 2015-16 to 2023-24 releases to the local database. Report row counts per table and year, columns that change type, tables present only in some years, and variables renamed between years. Adding or replacing a release is built as one repeatable, tested step, with a runbook, `UPDATING.md` (see "Keeping the app up to date"). |
+| 5b Dictionary across years | Years each measure is available. Year rules written as offsets (net price lags one year; graduation cohorts entered years before; finance covers the previous fiscal year). Category codes that changed (field-of-study codes revised in 2020, "another gender" added, Carnegie changes). Comparability breaks: years where a definition changed, drafted from the codebooks with NCES's 2019 IPEDS overview (`docs/sources`) as a starting source. School directory over time: name changes, closures, mergers, and the national universe and comparison groups for each year. Claude Code first sends the owner a gap list and waits. |
 | 5c Trend questions | A school, several schools or a group over time; "since 2015", "the last five years", and the change between two years. Missing years are gaps, never zero. A note when a comparability break falls inside the period. |
 | 5d Understanding any phrasing | Meaning search and the AI's own search, as set out in part 2 of "How the app understands a question". For meaning search, Claude Code first compares a light local package (fastembed) with sentence-transformers on the badly written test set: accuracy, time added and install size. Near-duplicate measures are grouped so they do not crowd the shortlist. A new test set of 30 to 50 badly written questions (misspellings, abbreviations such as UConn and Mizzou, informal phrasing, "RTI"). |
 | 5e Written summary | A second AI call writes two or three sentences about the table, given only the table and its notes. Code checks that every number in the summary appears in the table; if not, the summary is dropped. |
-| 5f Explaining terms and concepts | Items 44 and 45. Fuller explanations of IPEDS terms built from the dictionary: definition, period, year rules and caveats. A reviewed concepts table of 30 to 50 general terms (FTE, adjusted cohort, retention versus persistence, net versus sticker price, Pell as an income proxy, provisional versus final data), drafted for the owner to review; the app answers from it first, and otherwise labels a general explanation as such and logs the question for review. |
+| 5f Explaining terms and concepts | Items 44 and 45. Fuller explanations of IPEDS terms built from the dictionary: definition, period, year rules and caveats. The official IPEDS glossary (2025-26 edition, about 600 terms, in `docs/sources`) is loaded into the dictionary unchanged. A reviewed concepts table covers what the glossary does not, plus plain-English versions of key terms; its terms are chosen from evidence (questions users asked, words the app shows, IR concepts that change how a number is read, how IPEDS works) and drafted for the owner to review. Explanations draw on the concepts table, then the glossary, then the dictionary, then the AI's general knowledge labelled as such and logged for review; the app says which source it used. |
 | 5g Measure it | NCES trend tables and Yale benchmarks across ten years; the full question set with trend questions scored; the badly written set; version 1 against version 2 on trend questions; time and cost per question. |
 
 **Decisions.**
@@ -433,7 +433,7 @@ Agreed Nov 22, 2026. The owner accepted the recommended answers to the six decis
 3. **Charts:** a basic automatic chart in the owner's palette: a line for trends, bars for comparisons. The formatting panel comes later.
 4. **Summary:** two or three sentences, neutral, no interpretation beyond the numbers. It can be switched off.
 5. **Speed:** typical questions under 5 seconds, hard ones under 10.
-6. **Meaning search setup:** Claude Code compares the options (outside service or a small local model; setup, cost, hosting on Render) and proposes one before building.
+6. **Meaning search setup:** a small local model, so there is no outside service or second provider. Claude Code compares two local packages, fastembed and sentence-transformers (accuracy, time added, install size, hosting on Render), and proposes one before building.
 
 **Success test.**
 
@@ -475,4 +475,28 @@ Confirmed web lists and reviewed topics are added to the dictionary over time, s
 
 The extract uses the same code that builds answers, so an extract and an on-screen answer always agree, and the AI never produces a number. To decide when it is built: the layout for several years (one row per school and year, one column per year, or both), the format (Excel with the documentation sheet, CSV, or both), and limits or warnings for very large requests.
 
+**Before version 1 is retired.** Bring the Access-to-SQLite converter and the cross-year index into version 2, with a way to add a new release to the index, so version 2 no longer depends on version 1's data folder.
+
 **Switching the Render link.** After stage 7, or earlier if the owner decides. The existing service is switched to the new repository; it is never deleted.
+
+## Keeping the app up to date
+
+Recorded Nov 22, 2026. Each year IPEDS publishes two releases: the provisional data for the newest year, and the final data for the year before, which replaces its provisional release. The app is updated each time.
+
+**The yearly update.**
+
+1. Download the new releases from NCES (Access databases).
+2. Convert them to SQLite.
+3. Add them to the cross-year index, which maps table families and renamed variables across years.
+4. In the settings file, replace last year's provisional release with its final version and add the new provisional release.
+5. Run the build. It cleans each year with that year's own codebook and checks every dictionary rule against the data, stopping with a list of problems if anything does not fit.
+6. The owner reviews the gap list: new variables to set up or leave aside, changed codes, and any new comparability break. Each change goes into the dictionary with a line in `DECISIONS.md`.
+7. Run the tests and benchmarks, adding the new year's NCES figures as known answers, and rerun the question set.
+8. Write a release note: how much last year's figures moved between provisional and final, and what is new.
+9. Publish the new data to Render and switch the app over.
+
+The app labels each year as provisional or final.
+
+**Decision.** All years are kept as they accumulate; there is no rolling window. The database grows by about 300 MB a year.
+
+**What makes this routine.** Adding or replacing a release is one repeatable, tested step, built in stage 5, part 5a, and written up in `UPDATING.md` with the exact commands. The converter and the cross-year index move into version 2 before version 1 is retired (see "Stage 6 and later"). With these in place, most steps are scripts and the owner's work is mainly the review in step 6: expected to take a day or two a year, longer in a year when IPEDS redesigns a survey.

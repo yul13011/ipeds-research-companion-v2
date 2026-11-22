@@ -164,7 +164,7 @@ owner,o47_cc_success,1,scored,answer,*Outcome Measures; 150% graduation rate; re
 owner,o47_financial_health,1,scored,answer,*equity ratio; expenses per student; endowment,,6,Available measures; IPEDS has no single financial-health score
 owner,o47_selectivity,1,scored,answer,*admission rate; yield; test scores,,6,"Admission rate, yield, test scores, noting test-optional limits"
 owner,o48_marian,1,scored,decline|clarify,*degrees,151786,5.0,Ten years against the one-year data: declined for years (or which Marian)
-owner,o48_marian,2,scored,answer,*degrees awarded,151786,5.0,Marian University's (Indianapolis) 2023-24 degrees
+owner,o48_marian,2,scored,clarify,*degrees awarded,151786,5.0,"Owner decision 2026-11-22: asks again which Marian, with 2023-24 applied"
 owner,o48_roi,1,scored,decline,,130794,5.0,Return on investment is not in IPEDS
 owner,o48_roi,2,scored,answer|decline,,,5.0,"Points to College Scorecard, from the outside-IPEDS table"
 owner,o49_hsi,1,scored,decline,*graduation rate,,5.0,No IPEDS flag for Hispanic-serving institutions

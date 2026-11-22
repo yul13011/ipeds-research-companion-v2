@@ -137,6 +137,10 @@ def model_decline(reply, short, d):
             return dict(got, log=log)
     topic = (request or {}).get("topic")
     outside = d.one("SELECT what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", topic) if topic else None
+    if outside and request["measures"] and request["operation"] not in ("define", "data_exists"):
+        got = resolve_request(request, d, short)        # the outside row covers only its part: answer the rest
+        if got["kind"] == "ready":
+            return dict(got, log=log)
     if outside:
         return decline(d, "not collected", request, say=outside[0], pointer=outside[1], log=log)
     if request and missing == "group" and request["groups"]:
@@ -340,6 +344,11 @@ def resolve_request(request, d, short, new_question=False):
         threshold = int(re.findall(r"\d+", d.setting("ranking guard")[0])[0])
         plan["small_cohort"] = dict(threshold=threshold, text=d.setting("small cohort")[1])
     plan["campus_notes"] = dict(d.q("SELECT condition, statement FROM dict_terms WHERE term='related campus'"))
+    outside = d.one("SELECT what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"]) \
+        if request.get("topic") else None
+    if outside:                                         # a part of the question IPEDS lacks, named beside the answer
+        plan["statements"].append(say(d, "not collected partly", say=outside[0]) +
+                                  (" " + say(d, "not collected source", pointer=outside[1]) if outside[1] else ""))
     return outcome("ready", plan=plan, request=request)
 
 

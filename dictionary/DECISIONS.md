@@ -254,3 +254,16 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
   - Option labels written by the model have tag codes (S4, M7) removed before they are shown.
   - A school picker keeps its request as the previous request, so "show 2023-24" asks again with the change.
   - The instructions say to list every measure of a broad topic in "what data exists" answers (up to 15), and to copy a period or trend ("since 2015", "the last ten years") into the year as written.
+
+## 2026-11-22: owner decisions on the part 5.0 report
+
+- **Judging wrong readings.** A path defect must never appear. Model readings are tracked as a rate over two runs of the full set, must stay at or above 90% right or acceptable, and are reported with the range across the runs. A model misreading that recurs across runs is addressed through a synonym, a dictionary row or an instruction line, never a special-case patch.
+- **Synonym approved:** "grant and scholarship percentage" and close variants (grant and scholarship percentages; percent receiving grants or scholarships; percent awarded grants or scholarships) on SFA.UAGRNTP.
+- **Marian:** the question is kept as written. The expected outcome for turn 2 is that the app asks again which Marian, with 2023-24 applied.
+- **Decline messages approved,** with three changes:
+  - "not collected source": "You may find this in {pointer}."
+  - "calculation average": "{what} is reported separately for each school, so I can't combine it into one figure for a group."
+  - "breakdown does not add up": "The breakdown "{set}" isn't shown for {where}, because its parts don't add up to the total in the IPEDS data."
+- **Short plain names** for first-version measures with long IPEDS titles are drafted for review in `docs/stage4/plain_names_draft.csv` (`scripts/plain_names_draft.py`). Not loaded until approved.
+- **An outside-IPEDS row covers only the part of a question it matches.** When other parts can be answered, they are answered, and the part IPEDS lacks is named beside the answer (message row "not collected partly"). The instructions say to return a request for the part that can be answered, with the outside-IPEDS topic beside it.
+- **Timing.** Reports give the slowest tenth of questions as well as the average time.
