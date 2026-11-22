@@ -40,7 +40,7 @@ def count(system=None, text="x"):
 
 baseline = count()
 cases = sorted(p for p in Path(__file__).resolve().parents[1].joinpath("tests", "replies").glob("*.json")
-               if not p.name.startswith("real_"))
+               if not p.name.startswith("real"))
 states, total, where = {}, 0.0, defaultdict(list)
 for path in cases:
     case = json.loads(path.read_text(encoding="utf-8"))
