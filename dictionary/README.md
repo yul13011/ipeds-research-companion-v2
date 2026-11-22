@@ -107,6 +107,7 @@ The counts behind each rate, so a group rate is computed by summing counts, neve
 Every code in the category columns of the multi-row tables.
 
 - `table`, `column`, `code`, `label`: the code and its IPEDS label.
+- `synonyms`: other words users say for this row, separated by semicolons (for example `undergrad` on rows labelled undergraduate). Used only to find the row for the shortlist.
 - `default`: `yes` on the one code used when a request does not name this column. Only columns that pick out the row take a default; columns that just describe the row (the occupation column in a table keyed by a combined staff category) take none. The build checks that the defaults pick exactly one row per school. A column with no default makes the app ask.
 - `role`: `total` or `part`, guessed from the label wording. It is a reading aid only; breakdowns use the three columns below.
 - `breakdown_set`: filled when this code is one part of a named breakdown, such as "Fall enrollment by level".

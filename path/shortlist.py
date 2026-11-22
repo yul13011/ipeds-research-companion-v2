@@ -106,8 +106,8 @@ def build_index(db):
                for u, name, alias, city, st in q("SELECT UNITID, INSTNM, IALIAS, CITY, STABBR FROM directory")}
     groups = {g: dict(name=g, statement=s, status=status, text=" ".join([g, w or "", s or ""]))
               for g, w, s, status in q("SELECT group_name, words, statement, status FROM group_list")}
-    rows = {(t, c, code): dict(table=t, column=c, code=code, label=label, text=label)
-            for t, c, code, label in q('SELECT k."table", k."column", c.code, c.label FROM row_keys k JOIN dict_category_codes c '
+    rows = {(t, c, code): dict(table=t, column=c, code=code, label=label, text=f"{label} {syn or ''}")
+            for t, c, code, label, syn in q('SELECT k."table", k."column", c.code, c.label, c.synonyms FROM row_keys k JOIN dict_category_codes c '
                                        'ON c."table" = k."table" AND UPPER(c."column") = UPPER(k."column")')}
     labels = {(t, c.upper(), str(code)): label for t, c, code, label in q('SELECT "table", "column", code, label FROM dict_category_codes')}
     def held(table, pairs):                     # {column: code} -> "label; label", in the words IPEDS uses

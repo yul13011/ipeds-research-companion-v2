@@ -174,3 +174,9 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **"Go back" restores the whole earlier request, operation included.** The path already did this for the `back` action. In the Stage 4 run the model rebuilt the request field by field instead. The instructions now name `back` for "go back", "as before" and "back to all eight", and say not to rebuild field by field. A test covers the three-turn case.
 - **Haiku effort stays at its current setting.** Low effort is not tried; accuracy comes first at this stage.
 - **Breakdown sets show where they are held.** Each set on the shortlist shows the values it is held at (for example "Grand total; First major"), or, for a set stored as columns, that it keeps the measure's own category row unless `row` names another. A measure broken down through its detailed table shows the level it carries over (for example "All students, Undergraduate total").
+
+## 2026-11-21: shorthand synonyms, first set
+
+- **"undergrad" and "grad".** "undergrad" is added to the synonyms of every measure whose name contains "undergraduate" (208 measures), and to every category row so labelled (220 rows). "grad" is added to every measure whose name contains "graduate" (not "undergraduate") or "graduation rate" (110 measures), and to every row labelled graduate (49 rows). "grad" is deliberately on both meanings ("grad students", "grad rate"); the model picks from context.
+- **Synonyms for category rows.** `category_codes.csv` gains `synonyms`, used only to find a row for the shortlist, the same way measure synonyms are used.
+- **Further shorthand** (first-year, FT/PT, admit rate, and others) is drafted for the owner's review and not yet added.

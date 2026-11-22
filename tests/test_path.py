@@ -658,6 +658,14 @@ class ChangeOrder1121(unittest.TestCase):
         self.assertIn("held at All students, Undergraduate total", text)
         self.assertIn("unless `row` names another", text)                   # column sets keep the measure's row
 
+    def test_undergrad_and_grad_shorthand_reach_the_shortlist(self):
+        s = shortlist.shortlist("Show Yale's undergrad population by race and ethnicity", DB)
+        self.assertIn(("EFA", "2"), {(r["table"], r["code"]) for r in s["rows"]})    # the undergraduate row
+        s = shortlist.shortlist("How many grad students did Yale enroll?", DB)
+        self.assertIn("DRVEF12.E12GRAD", [m["id"] for m in s["measures"]])
+        s = shortlist.shortlist("What is the grad rate at RIT?", DB)
+        self.assertIn("DRVGR.GRRTTOT", [m["id"] for m in s["measures"]])
+
     def test_shortlist_shows_category_columns(self):
         s = shortlist.shortlist("How many full-time and part-time instructional staff did Yale have in Fall 2024?", DB)
         staff = next(m for m in s["measures"] if m["id"] == "S_OC.HRTOTLT")

@@ -353,3 +353,34 @@ Every IPEDS convention the app uses lives in one folder, `dictionary`, at the to
 - **The model sees only the shortlist for the current question,** never whole tables. Code applies the rule for whatever the model picks.
 
 **How a change is made.** A change is decided in chat and written as a short change order. Claude Code changes the table row, adds a line to the decision log, rebuilds the database and runs the tests. Claude Code is the only editor of project files. The exception is a bulk edit, such as drafting many synonyms, which is written into the table directly while Claude Code is idle and then rebuilt and tested.
+
+## Results of the first slice (2024-25 only)
+
+Recorded Nov 21, 2026. Details are in `docs/reports/STAGE_4.md` and `STAGE_4_FOLLOWUP.md`.
+
+- **Known answers.** All covered Yale figures and most NCES figures match exactly. The rest differ by a few hundredths of a percent (provisional data) or by definition (graduate assistants in staff counts; administrative offices in average salary).
+- **Real questions.** Of 102 scored questions on Haiku, 40 were answered correctly, 49 correctly declined, 6 got a clarifying question and 7 were misread: 93% right or acceptable. Most declines are for years outside the one release.
+- **Model.** Haiku reads as well as Sonnet at about a fifteenth of the cost, about $0.0007 per question, and about 3.6 seconds per question. Haiku is the default; Sonnet is a setting.
+- **Version 1 beside version 2.** On the 42 logged questions both saw, version 2 had no errors or empty answers (version 1 had 5), declined correctly far more often, and asked far fewer clarifying questions. Version 1's log does not record its figures, so its accuracy cannot be checked from the log.
+- **Size.** The question path is about 1,850 lines; 146 tests.
+
+**Recommendation, pending the owner.** The slice meets the test in "Next steps": go on to all ten years and the written summary.
+
+## Matching any phrasing to IPEDS variables
+
+Recorded Nov 21, 2026. Users can phrase a question any way. The model only chooses from the shortlist, so the search must put the right variables on it whatever words the user uses. The safeguard does not change: the model picks only real dictionary entries, and code produces every number.
+
+**Now (end of the first slice).**
+
+- **Word-start matching** in the text search, so "undergrad" finds "undergraduate" and "admit" finds "admitted".
+- **A reviewed list of common shorthand** added as synonyms (COA, FT and PT, freshman, admit rate and similar). Words with two meanings, such as "grad" (graduate or graduation), go on every measure they could mean, and the model picks from context.
+
+**Next stage.** Three layers:
+
+1. **Two searches feeding one shortlist.** Text search catches exact things: school names, IPEDS terms, codes. Meaning search catches loose phrasing ("how many kids go there" finds total enrollment). Each dictionary entry gets a meaning fingerprint once, in advance; each question gets one when it arrives. The results of both searches are merged.
+2. **A second chance.** If the model finds nothing on the shortlist that fits, it writes better search words in IPEDS terms and the search runs once more. The extra model call happens only on hard questions.
+3. **Learning from the logs.** Every shortlist miss is logged and reviewed periodically, and the missing words are added as synonyms.
+
+**How it is measured.** The shortlist-miss rate on the question set, before and after each layer. Meaning search is fuzzy (it can rank "transfer-out rate" near "graduation rate"), so the number of wrong readings is checked too, not only the misses.
+
+**What this does not cover.** Better matching finds the right variable; it does not add calculations. Questions needing a calculation no operation supports are handled by the formula field and category sets (see "Staying open to new kinds of questions") and by the decline log.

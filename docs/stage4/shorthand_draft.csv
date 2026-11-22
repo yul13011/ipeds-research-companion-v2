@@ -1,0 +1,29 @@
+words,two_meanings,measures,already_have,rows,example_measures,note
+first-year; freshman; freshmen,yes,170,0,43,ADM.SATNUM; ADM.SATPCT; ADM.ACTNUM; ADM.ACTPCT; DRVEF12.E12UG1ST; DRVEF12.E12UG1SFT,"IPEDS 'first-time' means new to college; a first-year transfer student is first-year but not first-time. 'first-year' also appears in 'first-year retention', which already has its own synonym."
+FT,yes,131,0,196,DRVEF12.E12FT; DRVEF12.E12UGFT; DRVEF12.E12UG1SFT; DRVEF12.E12UGTRFT; DRVEF12.E12UGCNFT; DRVEF12.E12UGNDFT,Could be read as FTE.
+PT,no,78,0,123,DRVEF12.E12PT; DRVEF12.E12UGPT; DRVEF12.E12UG1SPT; DRVEF12.E12UGTRPT; DRVEF12.E12UGCNPT; DRVEF12.E12UGNDPT,
+admit rate; acceptance rate,no,1,1,0,DRVADM.DVADM01,Already on DVADM01; nothing to add.
+selectivity,yes,1,0,0,DRVADM.DVADM01,Also used for test scores or a Carnegie selectivity class.
+applicants; apps; applications,no,1,0,0,ADM.APPLCN,Fixes the Stage 4 shortlist miss ('Data extract: Applicants').
+admits; admitted students,no,1,0,0,ADM.ADMSSN,
+matriculants; enrollees; yield count,no,1,0,0,ADM.ENRLT,The Yale benchmark files call ENRLT 'matrics'.
+yield,no,9,1,0,DRVADM.DVADM04; DRVADM.DVADM05; DRVADM.DVADM06; DRVADM.DVADM07; DRVADM.DVADM08; DRVADM.DVADM09,Already in the names; only DVADM04 has it as a synonym. Nothing needed.
+persistence; persistence rate,yes,2,0,0,EFD.RET_PCF; EFD.RET_PCP,"In IR, persistence can also mean still enrolled anywhere (Outcome Measures 'still enrolled' / 'enrolled elsewhere')."
+completions; awards conferred,yes,12,0,0,C_A.CTOTALT; DRVC.ASCDEG; DRVC.BASDEG; DRVC.MASDEG; DRVC.DOCDEGRS; DRVC.DOCDEGPP,'completion rate' means graduation rate (already a 'graduation rate' word). Only the plural 'completions' is proposed.
+completers,no,9,0,0,C_B.CSTOTLT; DRVC.SASCDEG; DRVC.SBASDEG; DRVC.SMASDEG; DRVC.SDOCDEG; DRVC.SCERT1A,"Students, not awards."
+FTE; FTE enrollment,yes,1,0,0,DRVEF12.FTE12MN,"FTE also names staff FTE (library FTE staff, instructional FTE)."
+COA; cost of attendance; sticker price,yes,9,0,0,DRVCOST.CINDON; DRVCOST.CINSON; DRVCOST.COTSON; DRVCOST.CINDOFF; DRVCOST.CINSOFF; DRVCOST.COTSOFF,'cost' alone is a term with readings (cost profile). COA and sticker price are already on CINSON only.
+net cost,no,4,0,0,COST2_NETPRICE.NPIST2; COST2_NETPRICE.NPGRN2; COST2_NETPRICE.NPIS42; COST2_NETPRICE.NPT42,Would have fixed the Stage 4 'universe with the lowest net cost' reading.
+Pell rate; percent Pell,no,1,0,0,SFA.UPGRNTP,'Pell' itself is already in every Pell measure's name.
+low-income,yes,1,0,0,SFA.UPGRNTP,Pell is a proxy for low income; IPEDS has no income measure. Not recommended.
+endowment per student,no,2,0,0,DRVF.F1ENDMFT; DRVF.F2ENDMFT,IPEDS divides by FTE enrollment.
+faculty,yes,10,2,193,DRVHR.SALTOTL; DRVHR.SalProf; DRVHR.SalAssc; DRVHR.SalAsst; DRVHR.SalInst; DRVHR.Sallect,'faculty' is already a term with readings (instructional staff; staff with faculty status).
+professors; full professors,yes,1,0,2,DRVHR.SalProf,Colloquially 'professors' means all faculty; in IPEDS it is one rank.
+student body,yes,1,0,0,DRVEF.ENRTOT,"Often means characteristics (race, gender, age), not just the count."
+census enrollment; fall census,no,1,0,0,DRVEF.ENRTOT,
+SFR; S/F ratio; student faculty ratio,no,1,0,0,EFD.STUFACR,
+dual enrollment; dual credit; concurrent enrollment; early college,no,1,0,0,EFFY_HS.EFYTOTLT,
+eight-year completion; 8-year award rate,no,12,0,0,DRVOM.OM1TotlAwdp8; DRVOM.OM1PellAwdp8; DRVOM.OM1nPelAwdp8; DRVOM.OM2TotlAwdp8; DRVOM.OM2PellAwdp8; DRVOM.OM2nPelAwdp8,Outcome Measures.
+spending per student,yes,3,0,0,DRVF.F1INSTFT; DRVF.F2INSTFT; DRVF.F3INSTFT,Core expenses per FTE or instruction expenses per FTE.
+tuition revenue,yes,3,0,0,DRVF.F1TUFEFT; DRVF.F2TUFEFT; DRVF.F3TUFEFT,Per FTE in the app; a total is not set up.
+URM; underrepresented minority,yes,0,0,0,,"No IPEDS measure; it is a grouping of race categories. Proposed for outside-IPEDS or a future set, not as a synonym."
