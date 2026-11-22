@@ -122,6 +122,32 @@ def additive_total(measures, data):
     return None
 
 
+def campus_notes(plan, data, result, shown):
+    """For each school shown, the note that IPEDS reports its data together with a related campus, where it does."""
+    templates = plan.get("campus_notes") or {}
+    for flag_column, parent_column in {tuple(m["parent_child"]) for m in plan["measures"] if m.get("parent_child")}:
+        for u in shown:
+            row = data.q(f'SELECT "{flag_column}", "{parent_column}" FROM FLAGS WHERE UNITID=?', u)
+            if not row or row[0][0] not in (1, 2):
+                continue
+            flag, parent = row[0]
+            if flag == 2:
+                campuses = data.names([parent]).get(parent, (str(parent),))[0]
+            else:
+                children = [c for (c,) in data.q(f'SELECT UNITID FROM FLAGS WHERE "{parent_column}"=? AND "{flag_column}"=2', u)]
+                campuses = ", ".join(sorted(n for n, _ in data.names(children).values()))
+            note = templates.get(str(flag), "").format(school=data.names([u]).get(u, (str(u),))[0], campuses=campuses)
+            if note and note not in result["warnings"]:
+                result["warnings"].append(note)
+
+
+def shown_schools(plan, result):
+    """The schools an answer names: the schools asked about, or the schools listed in its table."""
+    if plan["operation"] in ("rank", "list"):
+        return result.get("listed", [])
+    return [s["id"] for s in plan["schools"]]
+
+
 def fetch(plan, db):
     data = Data(db)
     op = plan["operation"]
@@ -130,6 +156,7 @@ def fetch(plan, db):
            "define": topic, "data_exists": topic}[op]
     result = dict(columns=[], rows=[], counts_columns=[], counts=[], notes=[], missing=[], warnings=[])
     run(plan, data, result)
+    campus_notes(plan, data, result, shown_schools(plan, result))
     return result
 
 
@@ -185,6 +212,7 @@ def rank(plan, data, result):
     kept.sort(key=lambda x: -x[0] if plan["sort"]["order"] == "highest" else x[0])
     top = kept[:plan["sort"]["limit"]]
     names = data.names([u for _, u in top])
+    result["listed"] = [u for _, u in top]
     result["columns"] = ["Rank", "School", "State", m["name"]] + (["Denominator"] if plan["guard"] else [])
     for i, (v, u) in enumerate(top, 1):
         result["rows"].append([i, names[u][0], names[u][1], cell(v, unit_of(m))] + ([cell(counts[u][1], "count")] if plan["guard"] else []))
@@ -216,6 +244,7 @@ def listing(plan, data, result):
     shown_measures = [c["measure"] for c in plan["conditions"]] + plan["measures"]
     values = [school_values(m, data) for m in shown_measures]
     names = data.names(sorted(members))
+    result["listed"] = sorted(members)
     result["columns"] = ["School", "State"] + [m["name"] for m in shown_measures]
     for u in sorted(members, key=lambda u: names[u][0]):
         result["rows"].append([names[u][0], names[u][1]] + [shown(m, v.get(u), data) for m, v in zip(shown_measures, values)])

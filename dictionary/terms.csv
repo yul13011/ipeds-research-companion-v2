@@ -83,3 +83,5 @@ small cohort,,setting,Small-cohort warning,Small-cohort warning,,denominator < g
 cohort period,,setting,Entering cohort,Entering cohort,,template,yes,,no,"students who entered in {cohort}, {status}",in use,
 detailed measure,,setting,Switch to the detailed table,Switch to the detailed table,,template,yes,,no,"{summary} has no breakdown of its own, so it is broken down using {detailed}, which reports the same figure in more detail.",in use,
 detail differs,,setting,Detail reported with a related campus,Detail reported with a related campus,,template,yes,,no,"{school} reports its detail together with a related campus, so the detailed total ({detailed}) differs from the summary figure ({summary}).",in use,
+related campus,,setting,Parent record,Parent record,,1,yes,,no,IPEDS reports {school}'s data for this survey together with its related campuses: {campuses}.,in use,
+related campus,,setting,Child record,Child record,,2,no,,no,"IPEDS reports {school}'s data for this survey with its parent campus, {campuses}.",in use,

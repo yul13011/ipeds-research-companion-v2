@@ -46,11 +46,14 @@ def obj(**props):
     return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}
 
 
-# The shape the model must reply in, built for each question from its shortlist. The model answers in tags
-# (M1, S1, G1, R1, B1, T1, O1): every field that names something accepts only the tags on that question's
-# shortlist, so the model cannot type an ID wrongly. Unused fields are null or empty lists. The request shape
-# appears once, as the items of `requests`, which keeps the schema small: one item for a new question, one
-# holding an edit's new values, or two or three options with labels. from_wire() maps tags back to real IDs.
+# The shape the model must reply in. The model answers in tags (M1, S1, G1, R1, B1, T1, O1), so it cannot type
+# an ID wrongly. The tag ranges are the same for every question, so the shape never changes and the API can cache
+# it with the instructions; a tag that is not on the question's shortlist is rejected by resolve as a wrong reading.
+# Unused fields are null or empty lists. The request shape appears once, as the items of `requests`: one item for
+# a new question, one holding an edit's new values, or two or three options with labels. from_wire() maps tags
+# back to real IDs.
+TAG_RANGES = {"measures": ("M", 64), "schools": ("S", 16), "groups": ("G", 20), "rows": ("R", 64), "sets": ("B", 32),
+              "readings": ("T", 24), "outside": ("O", 4)}
 STRING, INTEGER = {"type": "string"}, {"type": "integer"}
 
 
@@ -63,9 +66,9 @@ def maybe(schema):
     return schema if schema == {"type": "null"} else {"anyOf": [schema, {"type": "null"}]}
 
 
-def reply_schema(tags):
-    """The structured-output schema for one question. `tags` is shortlist["tags"]."""
-    of = lambda kind: one_of(sorted((t for t, (k, _) in tags.items() if k == kind), key=lambda t: (len(t), t)))
+def reply_schema():
+    """The structured-output schema, the same for every question."""
+    of = lambda kind: one_of([f"{TAG_RANGES[kind][0]}{i}" for i in range(1, TAG_RANGES[kind][1] + 1)])
     request = obj(
         label=STRING,
         operation={"type": "string", "enum": list(OPERATIONS)},
@@ -94,9 +97,15 @@ def reply_schema(tags):
     )
 
 
-def request_from_wire(r, tags):
-    """One request as the model wrote it, in tags, turned into the request the code uses (real IDs, None for unused)."""
-    look = lambda t, kind: tags[t][1] if t in tags and tags[t][0] == kind else None
+def request_from_wire(r, tags, unknown=None):
+    """One request as the model wrote it, in tags, turned into the request the code uses (real IDs, None for unused).
+    Tags that are not on this question's shortlist are added to `unknown`."""
+    def look(t, kind):
+        if t in tags and tags[t][0] == kind:
+            return tags[t][1]
+        if t and unknown is not None:
+            unknown.append(t)
+        return None
     def rows_for(table, tag_list):
         pairs = [look(t, "rows") for t in tag_list or []]
         return [dict(column=p[1], code=p[2]) for p in pairs if p and (table is None or p[0] == table)]
@@ -132,14 +141,19 @@ def from_wire(reply, tags=None):
     if "requests" not in reply:
         return copy.deepcopy(reply)
     kind = reply["kind"]
-    items = [request_from_wire(r, tags or {}) for r in reply["requests"]]
+    unknown = []
+    items = [request_from_wire(r, tags or {}, unknown) for r in reply["requests"]]
     labels = [r.get("label") or f"Option {i + 1}" for i, r in enumerate(reply["requests"])]
     return dict(kind=kind,
                 request=items[0] if kind == "request" and items else None,
                 edit=dict(changes=reply["changes"], values=items[0] if items else None) if kind == "edit" else None,
                 options=[dict(label=l, request=r) for l, r in zip(labels, items)] if kind == "options" else [],
                 chosen=reply.get("chosen") or [],
-                decline=reply.get("decline") if kind == "decline" else None)
+                decline=reply.get("decline") if kind == "decline" else None,
+                unknown_tags=sorted(set(unknown)))
+
+
+REPLY_SCHEMA = reply_schema()
 
 
 def to_wire(r, tags):

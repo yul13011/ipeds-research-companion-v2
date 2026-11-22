@@ -48,6 +48,28 @@ class Dictionary:
         return row[0] if row else str(unitid)
 
 
+def first_present(*layers):
+    """The precedence rule. A value can come from several places; the first layer that has it wins:
+        1. what the user stated (the request itself)
+        2. a reading the user chose for a term
+        3. values already decided, carried over when a summary measure switches to its detailed one
+        4. a dictionary default, which only fills what is still empty
+    Each layer is {key: value}. Every place in resolve that merges values uses this function."""
+    out = {}
+    for layer in layers:
+        for key, value in (layer or {}).items():
+            out.setdefault(key.upper() if isinstance(key, str) else key, value)
+    return out
+
+
+def rows_of(m):
+    return {p["column"].upper(): p["code"] for p in m.get("row") or []}
+
+
+def as_row(layer):
+    return [dict(column=k, code=str(v)) for k, v in layer.items()]
+
+
 def outcome(kind, **parts):
     return dict(kind=kind, **parts)
 
@@ -63,6 +85,8 @@ def resolve(reply, short, state, db, db_path):
     d = Dictionary(db, db_path)
     if reply is None:
         return outcome("failure", message="Sorry, I could not read that question. Please try asking it another way.")
+    if reply.get("unknown_tags"):                       # a tag that was not on this question's shortlist
+        return outcome("wrong_reading", message=WRONG, detail={"tags not on the shortlist": reply["unknown_tags"]})
     kind = reply["kind"]
     if kind == "decline":
         x = reply["decline"]
@@ -112,10 +136,12 @@ def resolve_request(request, d, short):
                 statements=[], caveats=[], word_notes=[], topic=None, small_cohort=None)
     if op in ("define", "data_exists"):
         return topic_plan(plan, request, d)
+    stop = apply_readings(request, d, plan)              # 1 and 2: stated values, then chosen readings
+    if stop:
+        return stop
     if request["breakdown"]:
-        switch_to_detail(request, d, plan)
-
-    for step in (apply_readings, scope, level_defaults):
+        switch_to_detail(request, d, plan)              # 3: carries over every row, level and reading decided
+    for step in (scope, level_defaults):                # 4: defaults fill what is still empty
         stop = step(request, d, plan)
         if stop:
             return stop
@@ -162,6 +188,7 @@ def resolve_request(request, d, short):
     if op == "school_vs_group" and plan["measures"][0]["rates"]:
         threshold = int(re.findall(r"\d+", d.setting("ranking guard")[0])[0])
         plan["small_cohort"] = dict(threshold=threshold, text=d.setting("small cohort")[1])
+    plan["campus_notes"] = dict(d.q("SELECT condition, statement FROM dict_terms WHERE term='related campus'"))
     return outcome("ready", plan=plan, request=request)
 
 
@@ -205,7 +232,7 @@ def switch_to_detail(request, d, plan):
     for m in request["measures"]:
         if supports(d, m["id"], request["breakdown"]["set"]):
             continue
-        link = d.one("SELECT detailed, rows FROM detail_links WHERE measure=?", m["id"])
+        link = d.one("SELECT detailed, rows FROM detail_links WHERE measure=? AND status='loaded'", m["id"])
         if not link:
             continue
         detailed, rows = link[0], json.loads(link[1])
@@ -221,7 +248,7 @@ def switch_to_detail(request, d, plan):
             if unitid in {s["id"] for s in request["schools"]}:
                 plan["caveats"].append(d.setting("detail differs")[1].format(
                     school=d.name(unitid), summary=f"{summary:,.0f}", detailed="no row" if value is None else f"{value:,.0f}"))
-        m["id"], m["row"] = detailed, [dict(column=k, code=str(v)) for k, v in rows.items()]
+        m["id"], m["row"] = detailed, as_row(first_present(rows_of(m), rows))
 
 
 def topic_plan(plan, request, d):
@@ -268,12 +295,32 @@ def row_from(condition):
     return []
 
 
+def fill_reading(request, d, term, reading):
+    """Apply a chosen reading under the precedence rule: a measure the user stated wins over the reading's, and the
+    reading only fills rows and measures that are still empty."""
+    rows = term_readings(d, term)
+    picked = [x for x in rows if x[0] == reading]
+    offered = {x[2]: row_from(x[3]) for x in picked if x[1] == "measure" and x[2]}
+    in_term = {x[2] for x in rows if x[2]}
+    stated = {m["id"]: m for m in request["measures"]}
+    if offered and stated.keys() & offered.keys():      # the reading covers a stated measure: merge, stated rows first
+        merged = [dict(id=mid, row=as_row(first_present(rows_of(stated.get(mid, {})), rows_of({"row": extra}))))
+                  for mid, extra in offered.items()]
+        request["measures"] = merged + [m for m in request["measures"] if m["id"] not in offered]
+    elif offered and not stated.keys() & in_term:       # no measure of this term stated yet: the reading fills it
+        request["measures"] += [dict(id=mid, row=extra) for mid, extra in offered.items()]
+    for x in picked:                                    # a cut-off, such as admission rate < 25, adds a condition
+        if x[1] == "group" and x[2] and (x[3] or "")[:1] in "<>":
+            comparison, value = x[3].split()
+            condition = dict(measure=x[2], comparison=comparison, value=value)
+            if condition not in request["conditions"]:
+                request["conditions"].append(condition)
+
+
 def apply_readings(request, d, plan):
     """Apply the readings the user chose; ask where a measure term must ask; collect each term's statement."""
     for chosen in list(request["readings"]):
-        if any(x[1] == "measure" or (x[1] == "group" and (x[3] or "")[:1] in "<>")
-               for x in term_readings(d, chosen["term"]) if x[0] == chosen["reading"]):
-            request.update(with_reading(request, d, chosen["term"], chosen["reading"]))
+        fill_reading(request, d, chosen["term"], chosen["reading"])
     done = {r["term"] for r in request["readings"]}
     for m in request["measures"]:
         for (term,) in d.q("SELECT DISTINCT term FROM dict_terms WHERE measure=? AND kind='measure' AND status='in use'", m["id"]):
@@ -409,9 +456,12 @@ def measure(m, d, year):
         source = d.one("SELECT source_table FROM _tables WHERE local_table=? AND year=?", table, d.year)[0]
         info = dict(id=m["id"], name=name, table=table, column=column, rows={}, unit=unit, form=form,
                     definition=definition, source=source, own_period=own_period, period_table=table)
-        given = {p["column"].upper(): p["code"] for p in m["row"]}
-        for column_, default, _ in d.q('SELECT "column", default_code, default_label FROM row_keys WHERE "table"=?', table):
-            code = given.get(column_.upper(), default)
+        given = rows_of(m)
+        info["given"] = given
+        keys = d.q('SELECT "column", default_code, default_label FROM row_keys WHERE "table"=?', table)
+        decided = first_present(given, {k: v for k, v, _ in keys if v is not None})
+        for column_, default, _ in keys:
+            code = decided.get(column_.upper())
             if code is None:
                 options = d.q('SELECT code, label FROM dict_category_codes WHERE "table"=? AND "column"=? ORDER BY rowid',
                               table, column_)
@@ -421,8 +471,10 @@ def measure(m, d, year):
                 label = d.one('SELECT label FROM dict_category_codes WHERE "table"=? AND "column"=? AND code=?', table, column_, code)
                 info.setdefault("row_labels", []).append(label[0] if label else f"{column_} {code}")
     info["shown_as"] = m.get("shown_as")
-    kind, period, caveat = d.one('SELECT kind, period, caveat FROM dict_year_meaning WHERE "table"=?', info["period_table"])
-    info.update(period=info["own_period"] or period, period_kind=kind, caveat=caveat, rates=rate_rows(d, info))
+    kind, period, caveat, flag = d.one('SELECT kind, period, caveat, parent_child_flag FROM dict_year_meaning WHERE "table"=?',
+                                       info["period_table"])
+    info.update(period=info["own_period"] or period, period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
+                parent_child=[c.strip().partition(".")[2] for c in flag.split(";")] if flag else None)
     if year and year.get("stated"):
         stated = set(re.findall(r"(?:19|20)\d\d", year["stated"]))
         shown = set(re.findall(r"(?:19|20)\d\d", info["period"] or "")) | {str(d.year)}
@@ -505,8 +557,11 @@ def breakdown(request, plan, d):
     parts = d.q('SELECT part, label FROM breakdown_parts WHERE set_name=? AND "table"=?', b["set"], m["table"])
     info = dict(set=b["set"], stored_as=stored_as, column=column, total=total, parts=parts, fixed={})
     if stored_as == "rows":
-        info["fixed"] = {k.strip(): v.strip() for k, _, v in (x.partition("=") for x in (fixed or "").split(";")) if k.strip()}
-        info["fixed"].update({p["column"].upper(): p["code"] for p in b["fixed"]})
+        defaults = {k.strip().upper(): v.strip() for k, _, v in (x.partition("=") for x in (fixed or "").split(";")) if k.strip()}
+        stated = {p["column"].upper(): p["code"] for p in b["fixed"]}
+        decided = {k: v for k, v in m.get("given", {}).items() if k != column.upper()}
+        layered = first_present(stated, decided, defaults)
+        info["fixed"] = {k: str(layered[k]) for k in list(defaults) + [k for k in stated if k not in defaults]}
         if info["fixed"]:
             where = "; ".join(f"{k} = {v}" for k, v in info["fixed"].items())
             ok = d.one('SELECT status FROM breakdown_slices WHERE set_name=? AND "table"=? AND measure=? AND slice=?',

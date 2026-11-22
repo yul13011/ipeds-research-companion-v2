@@ -10,6 +10,8 @@ import re
 import sqlite3
 from collections import Counter
 
+from path.request import TAG_RANGES
+
 SET_UP, NOT_SET_UP = 15, 5         # measures: the best set-up ones, then a few IPEDS collects but the app has not set up
 LIMITS = {"measures": 60, "terms": 5, "schools": 10, "groups": 15, "rows": 15, "sets": 8, "outside": 3}
 ROWS_PER_TABLE = 6                  # category rows searched within each shortlisted multi-row table
@@ -211,6 +213,9 @@ PREFIX = {"measures": "M", "schools": "S", "groups": "G", "rows": "R", "sets": "
 def tag(short, index):
     """Give every shortlist item a short tag (M1, S1, G1, R1, B1, T1, O1). The model answers in tags only;
     short["tags"] maps each tag back to what it stands for."""
+    for kind, (_, most) in TAG_RANGES.items():          # the reply shape has a fixed number of tags of each kind
+        if kind in short:
+            short[kind] = short[kind][:most]
     tables = {m["table"] for m in short["measures"]}
     short["rows"] = [r for r in short["rows"] if r["table"] in tables]   # a row is only useful with its measure
     tags = {}
@@ -223,10 +228,12 @@ def tag(short, index):
             tags[item["tag"]] = (kind, key)
     n = 0
     for t in short["terms"]:
+        t["readings"] = t["readings"][:max(0, TAG_RANGES["readings"][1] - n)]
         for r in t["readings"]:
             n += 1
             r["tag"] = f"T{n}"
             tags[r["tag"]] = ("readings", (t["term"], r["reading"]))
+    short["terms"] = [t for t in short["terms"] if t["readings"]]
     by_measure = {m["id"]: m["tag"] for m in short["measures"]}
     by_set = {(s["set"], s["table"]): s["tag"] for s in short["sets"]}
     for m in short["measures"]:                 # which breakdowns each measure supports, own or through its detailed table

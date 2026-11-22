@@ -386,8 +386,9 @@ def build_detail_links(db):
     """For each summary measure with a detailed equivalent: do the two agree at every school? A school with a summary
     of 0 and no detailed row agrees (IPEDS reports no row for nothing). Returns a list of problems."""
     db.executescript("""DROP TABLE IF EXISTS detail_links; DROP TABLE IF EXISTS detail_link_exceptions;
-        CREATE TABLE detail_links (measure TEXT, detailed TEXT, rows TEXT, n_schools INTEGER, n_agree INTEGER);
-        CREATE TABLE detail_link_exceptions (measure TEXT, unitid INTEGER, summary REAL, detailed REAL);""")
+        CREATE TABLE detail_links (measure TEXT, detailed TEXT, rows TEXT, n_schools INTEGER, n_agree INTEGER,
+                                   n_flagged INTEGER, n_unexplained INTEGER, status TEXT);
+        CREATE TABLE detail_link_exceptions (measure TEXT, unitid INTEGER, summary REAL, detailed REAL, flag INTEGER);""")
     problems = []
     measures = {f"{t}.{v}".upper() for t, v in db.execute('SELECT "table", variable FROM dict_measures')}
     for table, column, text in db.execute('SELECT "table", variable, detailed_measure FROM dict_measures '
@@ -403,9 +404,18 @@ def build_detail_links(db):
                            f'WHERE {where}) d ON d.UNITID = s.UNITID AND d.year = s.year WHERE s."{column}" IS NOT NULL',
                            list(rows.values())).fetchall()
         differ = [(u, s, x) for u, s, x in pairs if not (s == x or (s == 0 and x is None))]
-        db.execute("INSERT INTO detail_links VALUES (?,?,?,?,?)", (f"{table}.{column}", f"{dt}.{dc}",
-                                                                   json.dumps(rows), len(pairs), len(pairs) - len(differ)))
-        db.executemany("INSERT INTO detail_link_exceptions VALUES (?,?,?,?)", [(f"{table}.{column}", u, s, x) for u, s, x in differ])
+        rule = db.execute('SELECT parent_child_flag FROM dict_year_meaning WHERE "table"=?', (dt,)).fetchone()
+        flags = {}
+        if rule and rule[0]:                            # schools IPEDS flags as reporting with a related campus
+            flag_column = rule[0].split(";")[0].strip().partition(".")[2]
+            flags = dict(db.execute(f'SELECT UNITID, "{flag_column}" FROM FLAGS WHERE "{flag_column}" IN (1, 2)').fetchall())
+        flagged = [u for u, _, _ in differ if u in flags]
+        unexplained = len(differ) - len(flagged)
+        db.execute("INSERT INTO detail_links VALUES (?,?,?,?,?,?,?,?)",
+                   (f"{table}.{column}", f"{dt}.{dc}", json.dumps(rows), len(pairs), len(pairs) - len(differ), len(flagged),
+                    unexplained, "loaded" if unexplained == 0 else "failed"))
+        db.executemany("INSERT INTO detail_link_exceptions VALUES (?,?,?,?,?)",
+                       [(f"{table}.{column}", u, s, x, flags.get(u)) for u, s, x in differ])
     return problems
 
 
@@ -441,6 +451,9 @@ if __name__ == "__main__":
                                                  len(con.execute("PRAGMA table_info(directory)").fetchall())))
     print("groups: %d, memberships: %d" % (con.execute("SELECT COUNT(*) FROM group_list").fetchone()[0],
                                            con.execute("SELECT COUNT(*) FROM group_membership").fetchone()[0]))
+    print("detail links: " + ", ".join(f"{n} {s}" for s, n in con.execute("SELECT status, COUNT(*) FROM detail_links GROUP BY 1")))
+    for (m,) in con.execute("SELECT measure FROM detail_links WHERE status = 'failed'"):
+        print(f"  not loaded: {m} differs at a school IPEDS does not flag as reporting with a related campus")
     print("breakdown sets (set and count column): " + ", ".join(f"{n} {s}" for s, n in con.execute(
         "SELECT status, COUNT(*) FROM breakdown_sets GROUP BY 1")))
     con.close()

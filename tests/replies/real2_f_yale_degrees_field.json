@@ -1,0 +1,83 @@
+{
+ "question": "How many bachelor's degrees by field did Yale award?",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "breakdown",
+   "measures": [
+    {
+     "id": "DRVC.BASDEG",
+     "row": []
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": {
+    "set": "Degrees by field of study",
+    "fixed": []
+   },
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": []
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ },
+ "model_wrote_in_tags": {
+  "kind": "request",
+  "requests": [
+   {
+    "label": "",
+    "operation": "breakdown",
+    "measures": [
+     {
+      "measure": "M4",
+      "row": []
+     }
+    ],
+    "schools": [
+     {
+      "name": "Yale",
+      "school": "S1"
+     }
+    ],
+    "groups": [],
+    "peers_of": null,
+    "conditions": [],
+    "breakdown": {
+     "set": "B1",
+     "fixed": []
+    },
+    "split_by": null,
+    "sort": null,
+    "year": {
+     "stated": null,
+     "kind": null
+    },
+    "topic": null,
+    "outside": null,
+    "readings": []
+   }
+  ],
+  "changes": [],
+  "chosen": [],
+  "decline": null
+ },
+ "expect": "answer",
+ "adapted_to_tags": [],
+ "source": "live smoke test with tags, Sonnet, 2026-11-16"
+}

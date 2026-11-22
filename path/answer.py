@@ -66,6 +66,7 @@ def ask(question, state, log, db_path=None, call=None, model=None):
         row = dict(question=question, reply=reply, shortlist={t: key for t, (_, key) in short["tags"].items()},
                    raw_reply=meta.get("raw_reply"), prompt_parts=meta.get("prompt_parts"),
                    model=meta["model"], tokens_in=meta["input_tokens"], tokens_out=meta["output_tokens"],
+                   cache_write=meta.get("cache_write_tokens"), cache_read=meta.get("cache_read_tokens"),
                    cost_usd=meta["cost_usd"], model_seconds=meta["seconds"], model_error=meta["error"])
         page = finish(out, state, db, log, row)
     finally:

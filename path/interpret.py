@@ -11,7 +11,7 @@ import json
 import time
 
 import config
-from path.request import COMPARISONS, OPERATIONS, from_wire, reply_schema, to_wire
+from path.request import COMPARISONS, OPERATIONS, REPLY_SCHEMA, from_wire, to_wire
 
 INSTRUCTIONS = """You read questions about U.S. colleges for an app that answers them from IPEDS data.
 You do not answer the question. You turn it into one structured reply that code will run.
@@ -109,13 +109,17 @@ def call_api(system, user, model, schema):
     """One call to the Anthropic API with the reply held to this question's shape. Returns (reply text, usage)."""
     import anthropic
     client = anthropic.Anthropic()                  # reads ANTHROPIC_API_KEY from the environment
-    response = client.messages.create(
-        model=model, max_tokens=8000, system=system, messages=[{"role": "user", "content": user}],
+    response = client.messages.create(              # the instructions and the reply shape are the same for every
+        model=model, max_tokens=8000,                   # question, so they are cached; only the shortlist changes
+        system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
+        messages=[{"role": "user", "content": user}],
         output_config={"format": {"type": "json_schema", "schema": schema}, "effort": config.INTERPRET_EFFORT})
     if response.stop_reason in ("refusal", "max_tokens"):
         raise ValueError(f"the model stopped early ({response.stop_reason})")
     text = next(b.text for b in response.content if b.type == "text")
-    return text, {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens}
+    u = response.usage
+    return text, {"input_tokens": u.input_tokens, "output_tokens": u.output_tokens,
+                  "cache_write_tokens": u.cache_creation_input_tokens or 0, "cache_read_tokens": u.cache_read_input_tokens or 0}
 
 
 def interpret(question, short, previous=None, pending=None, call=None, model=None):
@@ -125,8 +129,9 @@ def interpret(question, short, previous=None, pending=None, call=None, model=Non
     system = INSTRUCTIONS.format(operations="; ".join(f"{k}: {v}" for k, v in OPERATIONS.items()),
                                  comparisons=", ".join(COMPARISONS))
     user, parts = render(short, previous, pending, question)
-    schema = reply_schema(short["tags"])
-    meta = {"model": model, "attempts": 0, "input_tokens": 0, "output_tokens": 0, "error": None,
+    schema = REPLY_SCHEMA
+    meta = {"model": model, "attempts": 0, "input_tokens": 0, "output_tokens": 0, "cache_write_tokens": 0,
+            "cache_read_tokens": 0, "error": None,
             "prompt_words": len((system + user).split()),
             "prompt_parts": dict(instructions=len(system.split()), **parts, schema_characters=len(json.dumps(schema))),
             "system": system, "user": user}
@@ -135,8 +140,8 @@ def interpret(question, short, previous=None, pending=None, call=None, model=Non
         meta["attempts"] += 1
         try:
             text, usage = call(system, user, model, schema)
-            meta["input_tokens"] += usage["input_tokens"]
-            meta["output_tokens"] += usage["output_tokens"]
+            for key in ("input_tokens", "output_tokens", "cache_write_tokens", "cache_read_tokens"):
+                meta[key] += usage.get(key, 0)
             meta["raw_reply"] = json.loads(text)
             reply = from_wire(meta["raw_reply"], short["tags"])
             problem = check(reply)
@@ -147,6 +152,7 @@ def interpret(question, short, previous=None, pending=None, call=None, model=Non
         except Exception as e:                      # any failure is recorded and retried once
             reply, meta["error"] = None, f"{type(e).__name__}: {e}"
     price_in, price_out = config.PRICES.get(model, (0, 0))
-    meta["cost_usd"] = round((meta["input_tokens"] * price_in + meta["output_tokens"] * price_out) / 1e6, 6)
+    meta["cost_usd"] = round((meta["input_tokens"] * price_in + meta["cache_write_tokens"] * price_in * 1.25 +
+                              meta["cache_read_tokens"] * price_in * 0.1 + meta["output_tokens"] * price_out) / 1e6, 6)
     meta["seconds"] = round(time.time() - start, 2)
     return reply, meta

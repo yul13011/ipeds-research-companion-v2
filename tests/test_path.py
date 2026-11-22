@@ -82,11 +82,19 @@ class Request(unittest.TestCase):
             "T1": ("readings", ("ranking guard", "Include all schools")), "O1": ("outside", "Loan default rates")}
 
     def test_schema_stays_within_the_api_limit(self):
-        """The API allows at most 16 fields that can be empty (union-typed); each takes only this shortlist's tags."""
-        text = json.dumps(rq.reply_schema(self.TAGS))
+        """The API allows at most 16 fields that can be empty (union-typed); the tag ranges are fixed."""
+        text = json.dumps(rq.REPLY_SCHEMA)
         self.assertLessEqual(text.count('"anyOf"'), 16)
         self.assertNotIn('"none"', text.lower())
-        self.assertIn('"enum": ["M1", "M2"]', text)
+        self.assertIn('"M64"', text)
+        self.assertNotIn('"M65"', text)
+
+    def test_tag_not_on_the_shortlist_is_reported(self):
+        wire = dict(label="", operation="schools", measures=[dict(measure="M40", row=[])], schools=[], groups=[], peers_of=None,
+                    conditions=[], breakdown=None, split_by=None, sort=None, year=dict(stated=None, kind=None), topic=None,
+                    outside=None, readings=[])
+        reply = rq.from_wire(dict(kind="request", requests=[wire], changes=[], chosen=[], decline=None), self.TAGS)
+        self.assertEqual(reply["unknown_tags"], ["M40"])
 
     def test_tags_map_back_to_ids(self):
         wire = dict(label="", operation="breakdown", measures=[dict(measure="M2", row=["R1"])], schools=[dict(name="Yale", school="S1"),
@@ -108,7 +116,7 @@ class Request(unittest.TestCase):
         self.assertEqual(reply["edit"]["values"], r)
 
     def test_request_shape_appears_once_in_the_reply_shape(self):
-        self.assertEqual(json.dumps(rq.reply_schema(self.TAGS)).count('"peers_of": {'), 1)
+        self.assertEqual(json.dumps(rq.REPLY_SCHEMA).count('"peers_of": {'), 1)
 
     def test_schema_is_strict_everywhere(self):
         def walk(node):
@@ -121,7 +129,7 @@ class Request(unittest.TestCase):
             elif isinstance(node, list):
                 for v in node:
                     walk(v)
-        walk(rq.reply_schema(self.TAGS))
+        walk(rq.REPLY_SCHEMA)
 
 
 @unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
@@ -187,8 +195,7 @@ class Interpret(unittest.TestCase):
         _, meta = interpret.interpret("What was Yale's admission rate?", self.short, call=call, model="claude-haiku-5-5")
         self.assertIn("Percent admitted, total", seen["text"])
         self.assertNotIn("DRVADM.DVADM01", seen["text"])                   # tags, not IDs
-        measure_tags = seen["schema"]["properties"]["requests"]["items"]["properties"]["measures"]["items"]["properties"]["measure"]["enum"]
-        self.assertEqual(len(measure_tags), len(self.short["measures"]))   # only this shortlist's tags are accepted
+        self.assertEqual(seen["schema"], rq.REPLY_SCHEMA)                  # the same shape for every question
         self.assertLess(meta["prompt_words"], 2500)
         self.assertAlmostEqual(meta["cost_usd"], (1000 * 0.10 + 100 * 0.50) / 1e6)
 
@@ -286,6 +293,13 @@ class Path_(unittest.TestCase):
         self.assertEqual(page["message"], "IPEDS has no data on AI policies.")       # no pointer invented
 
     # ---- rules
+    def test_tag_off_the_shortlist_is_a_wrong_reading(self):
+        wire = dict(label="", operation="schools", measures=[dict(measure="M64", row=[])], schools=[dict(name="Yale", school="S1")],
+                    groups=[], peers_of=None, conditions=[], breakdown=None, split_by=None, sort=None,
+                    year=dict(stated=None, kind=None), topic=None, outside=None, readings=[])
+        page, _ = self.ask("What was Yale's admission rate?", dict(kind="request", requests=[wire], changes=[], chosen=[], decline=None))
+        self.assertEqual(page["kind"], "wrong_reading")
+
     def test_name_not_on_the_shortlist_is_a_wrong_reading(self):
         page, _ = self.ask("What was Yale's admission rate?",
                            reply_request(req("schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)])))
@@ -469,6 +483,45 @@ class RealReplies(unittest.TestCase):
         self.assertEqual(rows["Total"], "6,814")
         self.assertIn("Undergraduate enrollment has no breakdown of its own, so it is broken down using Fall enrollment, "
                       "All students, Undergraduate total", page["interpreted"])
+
+
+    def run_second(self, name):
+        case = json.loads((REPLIES / f"real2_{name}.json").read_text(encoding="utf-8"))
+        return answer.ask(case["question"], {}, self.log, call=saved(case["reply"]))
+
+    def test_d2_reading_then_switch_keeps_the_detailed_measure(self):
+        """Live reply: undergraduate enrollment (summary), the race set and the reading 'Undergraduate fall enrollment'."""
+        page = self.run_second("d_yale_race")
+        self.assertEqual(page["kind"], "answer")
+        self.assertEqual({r[0]: r[1] for r in page["table"]["rows"]}["Total"], "6,814")
+        self.assertIn("broken down using Fall enrollment, All students, Undergraduate total", page["interpreted"])
+
+    def test_f2_switch_keeps_the_bachelors_level(self):
+        """Live reply: bachelor's degrees (summary) with the field breakdown; the set's default level must not win."""
+        page = self.run_second("f_yale_degrees_field")
+        rows = {r[0]: int(r[1].replace(",", "")) for r in page["table"]["rows"]}
+        db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        bachelors = db.execute("SELECT CTOTALT FROM C_A WHERE unitid=130794 AND AWLEVEL=5 AND MAJORNUM=1 AND CIPCODE='99'").fetchone()[0]
+        db.close()
+        self.assertEqual(rows.pop("Total"), bachelors)
+        self.assertEqual(sum(rows.values()), bachelors)
+        self.assertNotIn("Degrees total", page["interpreted"])
+
+
+    def test_flagged_school_gets_the_related_campus_note(self):
+        page = answer.ask("Southern University and A & M College enrollment", {}, self.log, call=saved(reply_request(req(
+            "schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Southern University and A & M College", 160621)]))))
+        self.assertIn("together with its related campuses: Southern University Law Center", " ".join(page["warnings"]))
+        page = answer.ask("Southern University Law Center enrollment", {}, self.log, call=saved(reply_request(req(
+            "schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Southern University Law Center", 440916)]))))
+        self.assertIn("with its parent campus, Southern University and A & M College", " ".join(page["warnings"]))
+
+
+class Precedence(unittest.TestCase):
+    def test_first_layer_wins_and_defaults_only_fill(self):
+        from path.resolve import first_present
+        self.assertEqual(first_present({"awlevel": "5"}, {"AWLEVEL": "12", "MAJORNUM": "1"}, {"CIPCODE": "99", "MAJORNUM": "2"}),
+                         {"AWLEVEL": "5", "MAJORNUM": "1", "CIPCODE": "99"})
 
 
 class Show(unittest.TestCase):

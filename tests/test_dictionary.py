@@ -557,8 +557,10 @@ class RealDictionary(unittest.TestCase):
         self.assertIn("different accounting standards", rule[1])
 
     def test_detail_links(self):
-        rows = self.db.execute("SELECT measure, detailed, n_schools, n_agree FROM detail_links").fetchall()
+        rows = self.db.execute("SELECT measure, detailed, n_schools, n_agree FROM detail_links WHERE status='loaded'").fetchall()
         self.assertEqual(len(rows), 54)
+        unexplained = self.db.execute("SELECT COUNT(*) FROM detail_link_exceptions WHERE flag IS NULL").fetchone()[0]
+        self.assertEqual(unexplained, 0)                             # every difference is at a parent or child campus
         link = {m: (d, n, a) for m, d, n, a in rows}
         self.assertEqual(link["DRVEF.EFUG"][0], "EFA.EFTOTLT")
         for measure, (_, n, agree) in link.items():                 # only a few campuses reporting together differ

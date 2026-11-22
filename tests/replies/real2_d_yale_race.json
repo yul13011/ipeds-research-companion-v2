@@ -1,0 +1,90 @@
+{
+ "question": "Show Yale's undergraduate enrollment by race and ethnicity.",
+ "reply": {
+  "kind": "request",
+  "request": {
+   "operation": "breakdown",
+   "measures": [
+    {
+     "id": "DRVEF.EFUG",
+     "row": []
+    }
+   ],
+   "schools": [
+    {
+     "name": "Yale",
+     "id": 130794
+    }
+   ],
+   "groups": [],
+   "peers_of": null,
+   "conditions": [],
+   "breakdown": {
+    "set": "By race and ethnicity",
+    "fixed": []
+   },
+   "split_by": null,
+   "sort": null,
+   "year": {
+    "stated": null,
+    "kind": null
+   },
+   "topic": null,
+   "readings": [
+    {
+     "term": "enrollment",
+     "reading": "Undergraduate fall enrollment"
+    }
+   ]
+  },
+  "edit": null,
+  "options": [],
+  "chosen": [],
+  "decline": null
+ },
+ "model_wrote_in_tags": {
+  "kind": "request",
+  "requests": [
+   {
+    "label": "",
+    "operation": "breakdown",
+    "measures": [
+     {
+      "measure": "M22",
+      "row": []
+     }
+    ],
+    "schools": [
+     {
+      "name": "Yale",
+      "school": "S1"
+     }
+    ],
+    "groups": [],
+    "peers_of": null,
+    "conditions": [],
+    "breakdown": {
+     "set": "B5",
+     "fixed": []
+    },
+    "split_by": null,
+    "sort": null,
+    "year": {
+     "stated": null,
+     "kind": null
+    },
+    "topic": null,
+    "outside": null,
+    "readings": [
+     "T3"
+    ]
+   }
+  ],
+  "changes": [],
+  "chosen": [],
+  "decline": null
+ },
+ "expect": "answer",
+ "adapted_to_tags": [],
+ "source": "live smoke test with tags, Sonnet, 2026-11-16"
+}

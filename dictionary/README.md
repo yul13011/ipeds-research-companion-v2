@@ -122,6 +122,7 @@ What the year means for each table. Every result must state this period.
 - `period`: the period text shown to the user.
 - `entering_cohort`: for graduation and outcome tables, the entering cohort as offsets from the release year, by school level where they differ: `fall -6 for Four or more years; fall -3 for At least 2 but less than 4 years`. Each level name is a school group. A measure's own `entering_cohort` wins.
 - `title`: the IPEDS table title.
+- `parent_child_flag`: the two `FLAGS` columns that say whether a school reports this survey together with a related campus, written `FLAGS.PRCH_EF; FLAGS.IDX_EF`. The first holds 1 (parent record, includes data from child campuses) or 2 (child record, data reported with the parent); the second holds the parent's ID. A summary-to-detailed link may differ only at such schools, and any answer that shows such a school says which campus it reports with (the "related campus" setting).
 - `caveat`: a warning shown whenever figures from this table are given for a group of schools, such as optional-year reporting.
 
 ## outside_ipeds.csv
