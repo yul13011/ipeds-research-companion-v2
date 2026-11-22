@@ -22,6 +22,7 @@ total across measures) and `category_sets` (several categories of one breakdown 
 are new fields beside `measures` and `breakdown`; nothing here changes when they are added.
 """
 import copy
+import re
 
 OPERATIONS = {
     "schools": "show one or more measures for one or more named schools",
@@ -87,13 +88,14 @@ def reply_schema():
         readings={"type": "array", "items": of("readings")},
     )
     return obj(
-        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline"]},
+        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline", "about_decline"]},
         requests={"type": "array", "items": request},
         changes={"type": "array", "items": obj(
             field={"type": "string", "enum": list(LIST_FIELDS + SCALAR_FIELDS)},
             action={"type": "string", "enum": ["add", "remove", "replace", "back"]})},
         chosen={"type": "array", "items": INTEGER},
-        decline=maybe(obj(reason=STRING, wanted=STRING, missing={"type": "string", "enum": list(MISSING)}, closest=STRING)),
+        decline=maybe(obj(reason=STRING, wanted=STRING, missing={"type": "string", "enum": list(MISSING)}, closest=STRING,
+                          about=maybe({"type": "string", "enum": ["why", "where", "instead"]}))),
     )
 
 
@@ -143,14 +145,19 @@ def from_wire(reply, tags=None):
     kind = reply["kind"]
     unknown = []
     items = [request_from_wire(r, tags or {}, unknown) for r in reply["requests"]]
-    labels = [r.get("label") or f"Option {i + 1}" for i, r in enumerate(reply["requests"])]
+    labels = [no_tags(r.get("label")) or f"Option {i + 1}" for i, r in enumerate(reply["requests"])]
     return dict(kind=kind,
-                request=items[0] if kind == "request" and items else None,
+                request=items[0] if kind in ("request", "decline") and items else None,
                 edit=dict(changes=reply["changes"], values=items[0] if items else None) if kind == "edit" else None,
                 options=[dict(label=l, request=r) for l, r in zip(labels, items)] if kind == "options" else [],
                 chosen=reply.get("chosen") or [],
-                decline=reply.get("decline") if kind == "decline" else None,
+                decline=reply.get("decline") if kind in ("decline", "about_decline") else None,
                 unknown_tags=sorted(set(unknown)))
+
+
+def no_tags(label):
+    """An option label as the user sees it: the model's tags (M7, S4) are taken out."""
+    return re.sub(r"\s*\(?\b[MSGRBTO]\d{1,2}\b\)?", "", label or "").strip()
 
 
 REPLY_SCHEMA = reply_schema()

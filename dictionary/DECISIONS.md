@@ -229,3 +229,28 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 
 - **Three rows added to `outside_ipeds.csv`:** graduation rates by major, high school of graduation, and linking individual student records. Each says what IPEDS does report instead (degrees by field, first-time students by state of residence, school-level figures) and where the data can be found.
 - **No more school nicknames.** The drafted "WSU Tech" nickname is not added. The directory already carries "WSU Tech" as that school's alias.
+
+## 2026-11-22: Stage 5, part 5.0 (fixes from owner testing)
+
+- **Misspelling tolerance in the search.** A question word the search does not know is matched to the index words it misspells. Words of four letters or fewer may only swap two neighbouring letters (Yael → Yale, tehc → tech). Five to seven letters may be one letter off; eight or more, two. The question's own word is kept beside the correction. The limits are search constants in `shortlist.py`. This is the agreed exception to the search freeze.
+- **The four answers.**
+  - "IPEDS does not collect this" comes only from a row in `outside_ipeds.csv`.
+  - A model decline saying "not in IPEDS" without such a row, a "measure" decline, and a "what data exists" question with nothing matched all become "not found". That answer names the closest matches from the search and is logged as a search miss.
+  - The instructions no longer let the model decide that IPEDS lacks something.
+- **Messages written by code from the dictionary.** Every message shown when the app cannot answer, or answers in part, is a "message" row in `terms.csv`, by kind of decline. The rows are drafts, used while building and listed in the 5.0 report for owner review. The model's own explanation goes to the question log (`model_explanation`) only. No message contains internal words (shortlist, tag, dictionary, measure codes); a test checks this.
+- **Declined, clarified and partly answered requests are kept as the previous request.** A follow-up such as "show 2023-24" edits it. The model's decline reply now carries the request it would have made. Choosing an option or a school clears the pending question.
+- **Questions about a decline** (types 48 and 49). The decline's message, its outside-IPEDS source if any, and an alternative built from the request are stored with it. A new reply kind, `about_decline`, answers "why not?" (the message), "where can I find that?" (the source, or "I don't have another source to point you to for this.") and "what can you show instead?" (the alternative, run).
+- **Answer what can be answered.**
+  - When some of the years asked for are held, the held year is shown and the missing years are named.
+  - When one of several measures is not set up, the others are answered and the missing one named.
+  - When none of the years is held, the decline names all the measures asked for (or the reading chosen, such as "degrees by level"), not only the first.
+- **Alternatives build on the request.** The alternative offered with a decline is made by code from the request in hand: the same request for the year held, without the unavailable group or breakdown, as a ranking of each school's figure, or the nearest set-up measure of the same table. It is never the model's own suggestion.
+- **Fixes found in the 5.0 rerun.**
+  - "ROI" is added to the example wording of the outside-IPEDS row on earnings and return on investment, so "What's the ROI for Yale?" reaches it.
+  - An edit made while options are open ("show 2023-24" after "which Marian University?") is applied to every option, and the app asks again (message row "which did you mean").
+  - When the model declines a group it named, the app's own check runs, so the group's own statement ("IPEDS has no flag for this group") is shown.
+- **Further fixes found in the later 5.0 reruns.**
+  - A school-against-group comparison shows every school named, not only the first.
+  - Option labels written by the model have tag codes (S4, M7) removed before they are shown.
+  - A school picker keeps its request as the previous request, so "show 2023-24" asks again with the change.
+  - The instructions say to list every measure of a broad topic in "what data exists" answers (up to 15), and to copy a period or trend ("since 2015", "the last ten years") into the year as written.

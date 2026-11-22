@@ -28,25 +28,41 @@ def finish(out, state, db, log, row):
         pages = [finish(o, state, db, log, dict(row, part=i)) for i, o in enumerate(out["outcomes"])]
         return dict(kind="many", pages=pages)
     row["outcome"] = out["kind"]
+    if out.get("log"):                                  # the model's own explanation: log only, never shown
+        row["model_explanation"] = out["log"]
+    if out.get("search_miss") or (out.get("plan") or {}).get("search_miss"):
+        row["search_miss"] = True
+    if out["kind"] == "about":                          # a question about the last decline, answered from it
+        return dict(kind="decline", message=out["message"])
     if out["kind"] == "ready":
         plan = out["plan"]
         result = fetch.fetch(plan, db)
         page = show.render(plan, result, release(db))
         state.setdefault("history", []).append(out["request"])
-        state["pending"], state["picker"] = None, None
+        state["pending"], state["picker"], state["last_decline"] = None, None, None
+        if out.get("instead"):
+            page["message"] = out["instead"]
         row.update(request=out["request"], rows=len(result["rows"]))
     elif out["kind"] == "clarify":
         state["pending"] = out["options"]
+        if out.get("request"):                          # kept as the previous request while the question is open
+            state.setdefault("history", []).append(out["request"])
         page = dict(kind="clarify", message=out["question"], options=[o["label"] for o in out["options"]])
         row["options"] = [o["request"] for o in out["options"]]
     elif out["kind"] == "picker":
         state["picker"] = out
+        state.setdefault("history", []).append(out["request"])  # kept, so "show 2023-24" edits it before a school is picked
         page = dict(kind="picker", message=f'Which school do you mean by "{out["name"]}"?',
                     candidates=[(c["id"], f"{c['name']} ({c['city']}, {c['state']})") for c in out["candidates"]])
     else:
         page = dict(kind=out["kind"], message=out["message"])
         row.update(detail=out.get("detail"), missing=out.get("missing"))
         if out["kind"] == "decline":
+            if out.get("request"):                      # kept, so "show 2023-24" or "why not?" can follow
+                state.setdefault("history", []).append(out["request"])
+            state["last_decline"] = dict(message=out["message"], missing=out["missing"], pointer=out.get("pointer"),
+                                         closest=out.get("closest"), request=out.get("request"))
+            state["pending"] = None
             log.decline(dict(question=row.get("question"), wanted=out.get("wanted") or out.get("request"),
                              missing=out["missing"], closest=out.get("closest"), message=out["message"]))
     return page
@@ -59,7 +75,9 @@ def ask(question, state, log, db_path=None, call=None, model=None):
     pending = state.get("pending") or []
     carried = history[-1:] + [o["request"] for o in pending]
     short = shortlist.shortlist(question, db_path, carried)
-    reply, meta = interpret.interpret(question, short, history[-1] if history else None, pending, call=call, model=model)
+    declined = (state.get("last_decline") or {}).get("missing")
+    reply, meta = interpret.interpret(question, short, history[-1] if history else None, pending, call=call, model=model,
+                                      declined=declined)
     db = connect(db_path)
     try:
         out = resolve.resolve(reply, short, state, db, db_path)
@@ -95,11 +113,13 @@ def run_direct(request, state, log, db_path, question):
 
 def choose(index, state, log, db_path=None):
     option = state["pending"][index]
+    state["pending"] = None                             # choosing an option answers the open question
     return run_direct(option["request"], state, log, db_path, question=f"[option] {option['label']}")
 
 
 def pick_school(unitid, state, log, db_path=None):
     waiting = state["picker"]
+    state["picker"] = None                              # picking a school answers the open question
     request = waiting["request"]
     request["schools"][waiting["index"]]["id"] = unitid
     return run_direct(request, state, log, db_path, question=f"[picked school] {unitid}")

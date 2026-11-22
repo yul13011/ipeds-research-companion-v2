@@ -35,7 +35,7 @@ def interpreted(plan):
         measures=", ".join(names) or "schools", who=who, order=(plan["sort"] or {}).get("order", ""),
         set=" ".join([(plan["breakdown"] or {}).get("set", "").lower()] +
                      [f"({x})" for x in (plan["breakdown"] or {}).get("fixed_labels", [])]), split=plan["split"] or "",
-        school=plan["schools"][0]["name"] if plan["schools"] else "", topic=(plan["topic"] or {}).get("asked") or "the topic")
+        school=", ".join(s["name"] for s in plan["schools"]), topic=(plan["topic"] or {}).get("asked") or "the topic")
     periods = list(dict.fromkeys(m["period"] for m in plan["measures"] if m.get("period")))
     if periods:
         text += f" ({'; '.join(periods)})"
@@ -69,11 +69,10 @@ def definitions(plan):
 
 def topic_message(plan):
     t = plan["topic"]
-    if t["outside"]:
-        o = t["outside"]
-        return o["say"] + (f" See: {o['pointer']}." if o["pointer"] else "")
-    if not t["measures"]:
-        return f"IPEDS does not collect data on {t['asked'] or 'that topic'}."
+    if t["outside"]:                                    # "IPEDS does not collect this": only from the outside-IPEDS table
+        return t.get("say") or t["outside"]["say"]
+    if not t["measures"]:                               # nothing matched: "not found", with the closest matches
+        return t.get("not_found") or ""
     if plan["operation"] == "define":
         return "\n\n".join(f"**{m['name']}** ({m['period']}): {m['definition']}" for m in t["measures"])
     ready = [m for m in t["measures"] if m["set_up"] == "yes"]

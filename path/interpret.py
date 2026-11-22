@@ -31,10 +31,16 @@ Rules:
         the whole earlier request, operation included; do not rebuild it field by field.
   options: the question has two or three reasonable readings. Give each as a complete request with a short label.
   choose: the user is answering the PENDING OPTIONS ("the first one", "B", "both"). Give their 0-based numbers.
-  decline: nothing in the shortlist can answer it, or it asks for something IPEDS does not hold (see OUTSIDE IPEDS),
-        individual records, a measure applied to the wrong population, or it is not a question about data.
-        Say plainly what is missing and name the closest thing the app can do. Keep reason and closest to one
-        short sentence each (at most 25 words).
+        If PENDING OPTIONS are open and the user changes something without choosing ("show 2023-24"), return an
+        edit with that change; the app applies it to every option and asks again.
+  decline: the question cannot be run as asked. Put in `requests` the one request you would have made, as far as
+        the question allows (its school, group, measure and year), so a follow-up can change it. Set `missing`:
+        years (years not held), measure (no listed measure fits), group, calculation, breakdown,
+        not a data question, other. Use "not in IPEDS" only with an outside-IPEDS topic (O tag) in the request;
+        never decide on your own that IPEDS lacks something: if nothing listed fits, use measure.
+        reason and closest are for the app's log only; keep each to one short sentence (at most 25 words).
+  about_decline: the user asks about the answer the app just declined: "why not?" (about = why),
+        "where can I find that?" (where), "what can you show instead?" (instead). Fill decline.about only.
 - Operations: {operations}
 - measures: pick the measure that matches. For a multi-row measure, name a category row (R tag listed for that
   measure) only when the user asks for one, such as transfer-in students; otherwise leave `row` empty and the app
@@ -53,13 +59,15 @@ Rules:
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
 - year: copy the year as the user stated it, or leave it empty. Set kind only if the user said (fall, fiscal year, ...).
-  For "the latest" or "the most recent year", leave stated empty and set kind to latest.
+  For "the latest" or "the most recent year", leave stated empty and set kind to latest. For a period or a trend
+  ("since 2015", "the last ten years", "2015 through 2024"), copy the period into stated as written.
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
-  If nothing matches, put the user's topic in plain words in topic.
+  For a broad topic ("admissions", "finance", "faculty"), list every shortlist measure that belongs to it, up to 15.
+  Only if no listed measure belongs to the topic, put the user's topic in plain words in topic.
 """
 
 
-def render(short, previous, pending, question):
+def render(short, previous, pending, question, declined=None):
     """The shortlist and conversation as plain text for the model, in tags. Returns (text, words per part)."""
     parts = {}
     def section(name, lines):
@@ -94,7 +102,8 @@ def render(short, previous, pending, question):
             [f"  {s['tag']} | {s['set']} | {', '.join(s['for'])} | {s.get('held') or 'the measure row chosen'}"
              for s in short["sets"]])
     section("outside", ["Outside IPEDS (tag | topic):"] + [f"  {o['tag']} | {o['topic']}" for o in short["outside"]])
-    convo = ["PREVIOUS REQUEST: " + (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
+    convo = ["PREVIOUS REQUEST" + (f" (the app declined it: {declined})" if declined else "") + ": " +
+             (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
     if pending:
         convo += ["PENDING OPTIONS:"] + [f"  {i}: {o['label']}" for i, o in enumerate(pending)]
     section("conversation", convo)
@@ -133,13 +142,13 @@ def call_api(system, user, model, schema):
                   "cache_write_tokens": u.cache_creation_input_tokens or 0, "cache_read_tokens": u.cache_read_input_tokens or 0}
 
 
-def interpret(question, short, previous=None, pending=None, call=None, model=None):
+def interpret(question, short, previous=None, pending=None, call=None, model=None, declined=None):
     """Returns (reply, meta). On two failed attempts the reply is None and meta["error"] says why."""
     model = model or config.INTERPRET_MODEL
     call = call or call_api
     system = INSTRUCTIONS.format(operations="; ".join(f"{k}: {v}" for k, v in OPERATIONS.items()),
                                  comparisons=", ".join(COMPARISONS))
-    user, parts = render(short, previous, pending, question)
+    user, parts = render(short, previous, pending, question, declined)
     schema = REPLY_SCHEMA
     meta = {"model": model, "attempts": 0, "input_tokens": 0, "output_tokens": 0, "cache_write_tokens": 0,
             "cache_read_tokens": 0, "error": None,

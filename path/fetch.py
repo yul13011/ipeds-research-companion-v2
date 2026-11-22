@@ -298,20 +298,21 @@ def split(plan, data, result):
 
 
 def school_vs_group(plan, data, result):
-    school = plan["schools"][0]
+    """Each school named, beside the group (the group figure leaves the named schools out)."""
     result["columns"] = ["", "Measure", "Value", "Schools reporting", "Schools with no value"]
     result["counts_columns"] = ["", "Measure", "Numerator (sum)", "Denominator (sum)"]
-    for m in plan["measures"]:
-        v = school_values(m, data, [school["id"]]).get(school["id"])
-        result["rows"].append([school["name"], m["name"], cell(v, unit_of(m)), cell(int(v is not None), "count"),
-                               cell(int(v is None), "count")])
-        num, den, _ = school_counts(m, data).get(school["id"], (None, None, None)) if m["rates"] else (None, None, None)
-        if num is not None or den is not None:
-            result["counts"].append([school["name"], m["name"], cell(num, "count"), cell(den, "count")])
-        small = plan.get("small_cohort")
-        if small and den is not None and den < small["threshold"]:
-            result["warnings"].append(small["text"].format(school=school["name"], count=f"{den:,}", threshold=small["threshold"]))
-    group_rows(plan, plan["members"] - {school["id"]}, data, result, prefix=(plan["scope"],))
+    for school in plan["schools"]:
+        for m in plan["measures"]:
+            v = school_values(m, data, [school["id"]]).get(school["id"])
+            result["rows"].append([school["name"], m["name"], cell(v, unit_of(m)), cell(int(v is not None), "count"),
+                                   cell(int(v is None), "count")])
+            num, den, _ = school_counts(m, data).get(school["id"], (None, None, None)) if m["rates"] else (None, None, None)
+            if num is not None or den is not None:
+                result["counts"].append([school["name"], m["name"], cell(num, "count"), cell(den, "count")])
+            small = plan.get("small_cohort")
+            if small and den is not None and den < small["threshold"]:
+                result["warnings"].append(small["text"].format(school=school["name"], count=f"{den:,}", threshold=small["threshold"]))
+    group_rows(plan, plan["members"] - {s["id"] for s in plan["schools"]}, data, result, prefix=(plan["scope"],))
 
 
 def breakdown(plan, data, result):

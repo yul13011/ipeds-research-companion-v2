@@ -18,7 +18,7 @@ import re
 from path import shortlist as sl
 from path.request import apply_edit, used_ids
 
-WRONG = "Sorry, I could not read that question reliably. Could you ask it another way?"
+CLOSEST_MATCHES = 3                 # how many of the best shortlisted measures a "not found" answer names
 
 
 class Dictionary:
@@ -74,42 +74,157 @@ def outcome(kind, **parts):
     return dict(kind=kind, **parts)
 
 
-def decline(message, missing, request=None, wanted="", closest=""):
-    if closest and closest not in message:
-        message += f" The closest thing I can do: {closest}."
-    return outcome("decline", message=message, missing=missing, request=request, wanted=wanted, closest=closest)
+class _Blank(dict):
+    def __missing__(self, key):
+        return ""
+
+
+def say(d, key, **fields):
+    """A message to the user, written from the "message" rows of terms.csv."""
+    return (d.setting("message", key)[1] or "").format_map(_Blank(fields)).strip()
+
+
+def decline(d, key, request=None, wanted="", closest=None, pointer=None, log=None, **fields):
+    """A decline, by kind (`key`, a "message" row). `closest` is {"text", "request"}: an alternative built from the
+    request in hand, offered after the message and stored for "what can you show instead?". The model's own words,
+    if any, go to `log` and are never shown."""
+    message = say(d, key, **fields)
+    if pointer:
+        message += " " + say(d, "not collected source", pointer=pointer)
+    if closest and closest.get("text"):
+        message += " " + say(d, "instead", closest=closest["text"])
+    return outcome("decline", message=message, missing=key, request=request, wanted=wanted, closest=closest,
+                   pointer=pointer, reason=message, log=log)
+
+
+def label_of(request, d, names):
+    """How a request's measures are named in a message: the reading the user chose, or the measures themselves."""
+    for r in request.get("readings") or []:
+        row = d.one("SELECT COUNT(*) FROM dict_terms WHERE term=? AND reading=? AND kind='measure'", r["term"], r["reading"])
+        if row and row[0] > 1:
+            return r["reading"].lower()
+    names = list(dict.fromkeys(names))
+    if len(names) <= 2:
+        return " and ".join(names)
+    return f"{names[0]} and {len(names) - 1} other figures"
+
+
+def without(request, **changes):
+    r = copy.deepcopy(request)
+    r.update(changes)
+    return r
+
+
+def closest_matches(short):
+    names = [m["name"] for m in (short or {}).get("measures", []) if m.get("set_up")][:CLOSEST_MATCHES]
+    return "; ".join(names)
+
+
+def model_decline(reply, short, d):
+    """A decline from the model. The kind decides the message; the model's own explanation goes to the log only.
+    "IPEDS does not collect this" needs an outside-IPEDS row; any other "not in IPEDS" becomes "not found"."""
+    x, request = reply["decline"], reply.get("request")
+    log = dict(reason=x.get("reason"), wanted=x.get("wanted"), closest=x.get("closest"), missing=x.get("missing"))
+    missing = x.get("missing")
+    if request and missing == "years" and request["measures"]:
+        got = resolve_request(request, d, short)        # the app's own year check: answers what it can, or says why not
+        return dict(got, log=log) if got["kind"] != "ready" else got
+    if request and missing == "measure" and request["measures"] and all(
+            (d.one("SELECT in_first_version FROM dict_measures WHERE \"table\" || '.' || variable = ?", m["id"]) or ("",))[0] != "yes"
+            for m in request["measures"] if not m["id"].startswith("rate:")):
+        got = resolve_request(request, d, short)        # every measure it found is collected but not set up
+        if got["kind"] == "decline":
+            return dict(got, log=log)
+    topic = (request or {}).get("topic")
+    outside = d.one("SELECT what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", topic) if topic else None
+    if outside:
+        return decline(d, "not collected", request, say=outside[0], pointer=outside[1], log=log)
+    if request and missing == "group" and request["groups"]:
+        got = resolve_request(request, d, short)        # the group's own entry says why it is not available
+        if got["kind"] == "decline":
+            return dict(got, log=log)
+        if request["measures"]:
+            return decline(d, "group", request, log=log, closest=dict(text="the same figure for all U.S. schools",
+                                                                      request=without(request, groups=[])))
+    if request and missing == "breakdown" and request["breakdown"] and request["measures"]:
+        return decline(d, "breakdown", request, log=log, closest=dict(text="the figure without the breakdown",
+                                                                      request=without(request, breakdown=None)))
+    if missing in ("calculation", "not a data question", "other"):
+        return decline(d, missing, request, log=log)
+    if missing == "years":
+        return decline(d, "other", request, log=log)
+    matches = closest_matches(short)                    # measure, not in IPEDS without an outside row, anything else
+    message_closest = dict(text=None, matches=matches)
+    out = decline(d, "not found", request, log=log, closest=message_closest)
+    if matches:
+        out["message"] += " " + say(d, "closest matches", matches=matches)
+    out["search_miss"] = True
+    return out
 
 
 def resolve(reply, short, state, db, db_path):
     """`state` holds the conversation: "history" (earlier requests, oldest first) and "pending" (options shown)."""
     d = Dictionary(db, db_path)
     if reply is None:
-        return outcome("failure", message="Sorry, I could not read that question. Please try asking it another way.")
+        return outcome("failure", message=say(d, "could not read"))
     if reply.get("unknown_tags"):                       # a tag that was not on this question's shortlist
-        return outcome("wrong_reading", message=WRONG, detail={"tags not on the shortlist": reply["unknown_tags"]})
+        return outcome("wrong_reading", message=say(d, "could not read"), detail={"tags not on the shortlist": reply["unknown_tags"]})
     kind = reply["kind"]
     if kind == "decline":
-        x = reply["decline"]
-        return decline(x["reason"], x["missing"], wanted=x["wanted"], closest=x["closest"])
+        bad = off_shortlist(reply["request"], short) if reply.get("request") else None
+        if bad:
+            return outcome("wrong_reading", message=say(d, "could not read"), detail=bad)
+        return model_decline(reply, short, d)
+    if kind == "about_decline":                         # "why not?", "where can I find that?", "what can you show instead?"
+        return about_decline(reply, state, d)
     if kind == "choose":
         pending = state.get("pending") or []
         picked = [pending[i]["request"] for i in reply["chosen"] if 0 <= i < len(pending)]
         if not picked:
-            return outcome("wrong_reading", message="Sorry, I could not tell which option you meant.", detail="choose")
+            return outcome("wrong_reading", message=say(d, "which option"), detail="choose")
         results = [resolve_request(r, d, None) for r in picked]       # options were checked when they were shown
         return results[0] if len(results) == 1 else outcome("many", outcomes=results)
     if kind == "options":
         good = [o for o in reply["options"] if not off_shortlist(o["request"], short)]
         if not good:
-            return outcome("wrong_reading", message=WRONG, detail=off_shortlist(reply["options"][0]["request"], short))
+            return outcome("wrong_reading", message=say(d, "could not read"), detail=off_shortlist(reply["options"][0]["request"], short))
         return outcome("clarify", question="Which did you mean?", options=good)
     request = reply["request"]
+    if kind == "edit" and state.get("pending"):        # a change made while options are open applies to every option
+        options = []
+        for o in state["pending"]:
+            changed = apply_edit(o["request"], reply["edit"], [o["request"]])
+            year = changed["year"]["stated"] if changed["year"] != o["request"]["year"] else None
+            options.append(dict(label=o["label"] + (f" ({year})" if year else ""), request=changed))
+        return outcome("clarify", question=say(d, "which did you mean"), options=options)
     if kind == "edit":
         history = state.get("history") or []
         if not history:
-            return outcome("wrong_reading", message="There is no earlier question to change.", detail="edit")
+            return outcome("wrong_reading", message=say(d, "nothing to change"), detail="edit")
         request = apply_edit(history[-1], reply["edit"], history)    # the shortlist carries the previous request's items
-    return resolve_request(request, d, short, new_question=kind == "request")
+    out = resolve_request(request, d, short, new_question=kind == "request")
+    if out["kind"] == "clarify" and "request" not in out:
+        out["request"] = request                        # kept as the previous request while the question is open
+    return out
+
+
+def about_decline(reply, state, d):
+    """A question about the last decline, answered from what was stored with it."""
+    last = state.get("last_decline")
+    about = (reply.get("decline") or {}).get("about") or "why"
+    if not last:
+        return outcome("about", message=say(d, "why none"))
+    if about == "where":
+        return outcome("about", message=say(d, "not collected source", pointer=last["pointer"]) if last.get("pointer")
+                       else say(d, "where none"))
+    if about == "instead":
+        closest = last.get("closest") or {}
+        if closest.get("request"):
+            return dict(resolve_request(closest["request"], d, None), instead=say(d, "instead", closest=closest["text"]))
+        if closest.get("matches"):
+            return outcome("about", message=say(d, "closest matches", matches=closest["matches"]))
+        return outcome("about", message=say(d, "instead none"))
+    return outcome("about", message=last["message"])
 
 
 def off_shortlist(request, short):
@@ -125,7 +240,7 @@ def resolve_request(request, d, short, new_question=False):
     """Check one request against the shortlist and the dictionary, and build the plan."""
     bad = off_shortlist(request, short)
     if bad:
-        return outcome("wrong_reading", message=WRONG, detail=bad, request=request)
+        return outcome("wrong_reading", message=say(d, "could not read"), detail=bad, request=request)
     for i, s in enumerate(request["schools"]):
         if s["id"] is None:
             return outcome("picker", name=s["name"], index=i, request=request, candidates=sl.search_schools(s["name"], d.db_path))
@@ -138,7 +253,7 @@ def resolve_request(request, d, short, new_question=False):
                 members=None, scope=None, conditions=[], breakdown=None, split=None, sort=None, guard=None,
                 statements=[], caveats=[], word_notes=[], topic=None, small_cohort=None)
     if op in ("define", "data_exists"):
-        return topic_plan(plan, request, d)
+        return topic_plan(plan, request, d, short)
     stop = apply_readings(request, d, plan)              # 1 and 2: stated values, then chosen readings
     if stop:
         return stop
@@ -148,16 +263,45 @@ def resolve_request(request, d, short, new_question=False):
         stop = step(request, d, plan)
         if stop:
             return stop
+    not_set_up, no_years = [], []
     for m in request["measures"]:
         got = measure(m, d, request["year"])
         if got["kind"] == "need_row":
             return row_question(request, m, got)
+        if got["kind"] == "not_set_up":
+            not_set_up.append(got)
+            continue
         if got["kind"] != "ready":
             return dict(got, request=request)
+        if got["measure"]["years"]["held"] is False:
+            no_years.append(got["measure"])
+            continue
         plan["measures"].append(got["measure"])
         for said in got["measure"].get("row_statements", []):
             if said not in plan["statements"]:
                 plan["statements"].append(said)
+    if not plan["measures"] and no_years:               # none of the years asked for is held
+        names = label_of(request, d, [m["name"] for m in no_years])
+        held = "; ".join(dict.fromkeys(m["period"] for m in no_years))
+        return decline(d, "years", request, wanted=request["year"]["stated"], what=names, held=held,
+                       asked=request["year"]["stated"],
+                       closest=dict(text=f"{names} for {held}", request=without(request, year=dict(stated=None, kind="latest"))))
+    if not plan["measures"] and not_set_up:
+        first = not_set_up[0]
+        near = first.get("closest")
+        closest = dict(text=near["text"], request=without(request, measures=[dict(id=near["measure"], row=[])])) if near else None
+        return decline(d, "not set up", request, wanted=first["id"], what=first["name"], closest=closest)
+    for got in not_set_up:                              # answer the rest, and say what is left out
+        plan["statements"].append(say(d, "not set up partly", what=got["name"]))
+    if no_years:
+        plan["statements"].append(say(d, "years", what=label_of(request, d, [m["name"] for m in no_years]),
+                                      held="; ".join(dict.fromkeys(m["period"] for m in no_years)), asked=request["year"]["stated"]))
+    partly = [m for m in plan["measures"] if m["years"]["missing"]]
+    if partly:
+        missing = sorted({y for m in partly for y in m["years"]["missing"]})
+        plan["statements"].append(say(d, "years partly", what=label_of(request, d, [m["name"] for m in partly]),
+                                      held="; ".join(dict.fromkeys(m["period"] for m in partly)),
+                                      missing=", ".join(missing), verb="is" if len(missing) == 1 else "are"))
     pair_measures(plan, d, request["year"])
     for c in request["conditions"]:
         got = measure({"id": c["measure"], "row": []}, d, None)
@@ -169,18 +313,18 @@ def resolve_request(request, d, short, new_question=False):
         m["period"] = cohort_period(m, covered, d) or m["period"]
     op = request["operation"]                          # a chosen reading may have changed it (split by level)
     if not plan["measures"] and op not in ("count_schools", "list"):
-        return decline("The question did not name a measure the app has.", "measure", request)
+        return decline(d, "no measure", request)
     if op == "schools" and not plan["schools"]:
-        return decline("The question did not name a school.", "group", request)
+        return decline(d, "no school", request)
     if op == "school_vs_group" and (not plan["schools"] or plan["members"] is None):
-        return decline("A comparison needs one school and a group: its peers, or a named group.", "group", request)
+        return decline(d, "needs a comparison group", request)
 
     if request["breakdown"]:
         stop = breakdown(request, plan, d)
         if stop:
             return stop
     elif op == "breakdown":
-        return decline("The question did not name a breakdown.", "breakdown", request)
+        return decline(d, "no breakdown", request)
     if op in ("group", "split", "school_vs_group") or (op == "breakdown" and plan["members"] is not None):
         stop = group_method(plan, d)
         if stop:
@@ -327,7 +471,7 @@ def switch_to_detail(request, d, plan):
         m["id"], m["row"] = detailed, as_row(first_present(rows_of(m), rows))
 
 
-def topic_plan(plan, request, d):
+def topic_plan(plan, request, d, short=None):
     """define and data_exists: which of the three answers applies is decided by the dictionary."""
     found = []
     for m in request["measures"]:
@@ -339,6 +483,14 @@ def topic_plan(plan, request, d):
     outside = d.one("SELECT topic, what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"] or "")
     plan["topic"] = dict(asked=request["topic"], measures=found,
                          outside=dict(zip(("topic", "say", "pointer"), outside)) if outside else None)
+    if not found and not outside:                       # nothing matched: "not found", never "IPEDS does not collect"
+        matches = closest_matches(short)
+        plan["topic"]["not_found"] = say(d, "not found topic", topic=request["topic"] or "that") + \
+            (" " + say(d, "closest matches", matches=matches) if matches else "")
+        plan["search_miss"] = True
+    elif outside:
+        plan["topic"]["say"] = say(d, "not collected", say=outside[1]) + \
+            (" " + say(d, "not collected source", pointer=outside[2]) if outside[2] else "")
     return outcome("ready", plan=plan, request=request)
 
 
@@ -474,10 +626,13 @@ def scope(request, d, plan):
     for name in names:
         row = d.one("SELECT statement, caveat, status, word_note FROM group_list WHERE group_name=?", name)
         if row is None:
-            return decline(f'"{name}" is not a group the app knows.', "group", request)
+            return decline(d, "unknown group", request, what=name)
         statement, caveat, status, note = row
         if status == "decline":
-            return decline(statement, "group", request, wanted=name)
+            national = dict(text="the same figure for all U.S. schools",
+                            request=without(request, groups=[g for g in request["groups"] if g != name]))
+            return decline(d, "group not available", request, wanted=name, statement=statement,
+                           closest=national if request["measures"] else None)
         found = d.members(name)
         members = found if members is None else members & found
         parts.append((statement or name).rstrip("."))
@@ -518,7 +673,7 @@ def peers(request, d, plan):
                                               state, sector, school)}
         plan["scope"] = f"schools in the same state and sector as {d.name(school)}"
     else:
-        return decline("Name the schools to compare with, and ask again.", "group", request)
+        return decline(d, "needs a comparison group", request)
     if not plan["schools"]:
         plan["schools"] = [dict(id=school, name=d.name(school))]
     return None
@@ -536,10 +691,13 @@ def measure(m, d, year):
         row = d.one('SELECT "table", variable, COALESCE(plain_name, title), unit, reporting_form, in_first_version, '
                     'period, long_description, statement FROM dict_measures WHERE "table" || \'.\' || variable = ?', m["id"])
         if row is None:
-            return decline(f"{m['id']} is not a measure in the dictionary.", "measure")
+            return decline(d, "not found")
         table, column, name, unit, form, set_up, own_period, definition, said = row
-        if set_up != "yes":
-            return decline(f'IPEDS collects "{name}", but it is not set up in this app yet.', "measure", wanted=m["id"])
+        if set_up != "yes":                             # the nearest set-up measure of the same table, as an alternative
+            near = d.one('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures '
+                         'WHERE "table"=? AND in_first_version=\'yes\' ORDER BY rowid LIMIT 1', table)
+            return outcome("not_set_up", id=m["id"], name=name,
+                           closest=dict(text=near[1], request=None, measure=near[0]) if near else None)
         source = d.one("SELECT source_table FROM _tables WHERE local_table=? AND year=?", table, d.year)[0]
         info = dict(id=m["id"], name=name, table=table, column=column, rows={}, unit=unit, form=form,
                     definition=definition, source=source, own_period=own_period, period_table=table)
@@ -567,12 +725,14 @@ def measure(m, d, year):
                                        info["period_table"])
     info.update(period=info["own_period"] or period, period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
                 parent_child=[c.strip().partition(".")[2] for c in flag.split(";")] if flag else None)
+    info["years"] = dict(held=True, missing=[])        # which of the years asked for are held
     if year and year.get("stated") and year.get("kind") != "latest":
         stated = set(re.findall(r"(?:19|20)\d\d", year["stated"]))
         shown = set(re.findall(r"(?:19|20)\d\d", info["period"] or "")) | {str(d.year)}
-        if not stated or len(stated) > 2 or not stated <= shown:
-            return decline(f"This first version holds one IPEDS release: {info['name']} is for {info['period']}. "
-                           f"It cannot show {year['stated']}.", "years", wanted=year["stated"])
+        if not stated & shown:
+            info["years"] = dict(held=False, missing=sorted(stated))
+        elif not stated <= shown:
+            info["years"] = dict(held=True, missing=sorted(stated - shown))
     return outcome("ready", measure=info)
 
 
@@ -629,9 +789,9 @@ def group_method(plan, d):
                 if len(out) > 1 and forms_statement not in plan["statements"]:
                     plan["statements"].append(forms_statement)
         else:
-            return decline(f'"{m["name"]}" is reported as {m["unit"] or "a value"} for each school, and the dictionary has no '
-                           "counts to combine it across schools.", "calculation", plan["request"],
-                           closest="list or rank each school's figure")
+            return decline(d, "calculation average", plan["request"], what=m["name"], unit=m["unit"] or "a value",
+                           closest=dict(text="each school's figure, ranked",
+                                        request=without(plan["request"], operation="rank", sort=None)))
         if m["caveat"] and m["caveat"] not in plan["caveats"]:
             plan["caveats"].append(m["caveat"])
     plan["measures"] = out
@@ -644,7 +804,8 @@ def breakdown(request, plan, d):
     row = d.one('SELECT stored_as, "column", total, fixed FROM breakdown_sets WHERE set_name=? AND "table"=? '
                 "AND (measure=? OR stored_as='columns') AND status IN ('loaded', 'additive')", b["set"], m["table"], m["column"])
     if row is None:
-        return decline(f'There is no tested breakdown "{b["set"]}" for {m["name"]}.', "breakdown", request)
+        return decline(d, "breakdown not tested", request, set=b["set"], what=m["name"],
+                       closest=dict(text=f"{m['name']} without the breakdown", request=without(request, breakdown=None)))
     stored_as, column, total, fixed = row
     parts = d.q('SELECT part, label FROM breakdown_parts WHERE set_name=? AND "table"=?', b["set"], m["table"])
     info = dict(set=b["set"], stored_as=stored_as, column=column, total=total, parts=parts, fixed={})
@@ -659,7 +820,7 @@ def breakdown(request, plan, d):
             ok = d.one('SELECT status FROM breakdown_slices WHERE set_name=? AND "table"=? AND measure=? AND slice=?',
                        b["set"], m["table"], m["column"], where)
             if not ok or ok[0] != "loaded":
-                return decline(f'The breakdown "{b["set"]}" does not add up at {where}, so it is not shown.', "breakdown", request)
+                return decline(d, "breakdown does not add up", request, set=b["set"], where=where)
         for key in list(m["rows"]):                     # the set's own column and fixed columns replace the defaults
             if key.upper() == column.upper() or key.upper() in info["fixed"]:
                 del m["rows"][key]

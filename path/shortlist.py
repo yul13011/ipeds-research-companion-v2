@@ -21,6 +21,8 @@ NAME_WEIGHT = 3                     # a match in a measure's name or synonyms co
 LIMITS = {"measures": 60, "terms": 5, "schools": 10, "groups": 15, "rows": 15, "sets": 8, "outside": 3}
 ROWS_PER_TABLE = 6                  # category rows searched within each shortlisted multi-row table
 CUTOFF = 0.25                       # keep entries scoring at least this share of the best entry of their kind
+SWAP_ONLY_UP_TO, ONE_OFF_UP_TO = 4, 7   # misspellings: words of up to 4 letters may only swap two neighbouring letters;
+                                        # up to 7 letters, one letter off; longer words, two letters off
 _INDEX = {}
 
 
@@ -42,6 +44,51 @@ def words(text):
             w = w[:-4]
         out.append(w)
     return out
+
+
+def distance(a, b, most):
+    """Edits between two words (insert, delete, change, or swap two neighbouring letters), stopping above `most`."""
+    if abs(len(a) - len(b)) > most:
+        return most + 1
+    prev2, prev = None, list(range(len(b) + 1))
+    for i in range(1, len(a) + 1):
+        cur = [i] + [0] * len(b)
+        for j in range(1, len(b) + 1):
+            cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] != b[j - 1]))
+            if i > 1 and j > 1 and a[i - 1] == b[j - 2] and a[i - 2] == b[j - 1]:
+                cur[j] = min(cur[j], prev2[j - 2] + 1)
+        if min(cur) > most:
+            return most + 1
+        prev2, prev = prev, cur
+    return prev[-1]
+
+
+def swapped(a, b):
+    """True if b is a with two neighbouring letters swapped."""
+    return len(a) == len(b) and sorted(a) == sorted(b) and \
+        [i for i in range(len(a)) if a[i] != b[i]] in ([[i, i + 1] for i in range(len(a) - 1)])
+
+
+def corrected(text, vocabulary):
+    """The question with each word the index does not know matched to the index words it is a misspelling of
+    (SWAP_ONLY_UP_TO, ONE_OFF_UP_TO). The question's own words are kept; corrections are added beside them. Applied
+    to the question only, against the index's own (trimmed) words, so both sides are compared the same way."""
+    extra = []
+    for w in set(words(text)):
+        if w in vocabulary.get(len(w), ()) or w.isdigit() or len(w) < 3:
+            continue
+        if len(w) <= SWAP_ONLY_UP_TO:
+            found = [v for v in vocabulary.get(len(w), ()) if swapped(w, v)]
+        else:
+            most = 1 if len(w) <= ONE_OFF_UP_TO else 2
+            found = []
+            for n in range(len(w) - most, len(w) + most + 1):
+                found += [(distance(w, v, most), v) for v in vocabulary.get(n, ())
+                          if v[0] == w[0] or v[:2] == w[1::-1]]
+            best = min((d for d, _ in found), default=most + 1)
+            found = [v for d, v in found if d == best and d <= most]
+        extra += found
+    return text + (" " + " ".join(sorted(set(extra))) if extra else "")
 
 
 def rarity(all_texts):
@@ -159,6 +206,9 @@ def build_index(db):
     kinds = [("measures", measures), ("terms", terms), ("schools", schools), ("groups", groups),
              ("rows", rows), ("sets", sets), ("outside", outside)]
     idf = rarity([e["text"] for _, entries in kinds for e in entries.values()])
+    index["vocabulary"] = {}
+    for w in idf:                               # the index's own words, by length, for misspelling tolerance
+        index["vocabulary"].setdefault(len(w), set()).add(w)
     for kind, entries in kinds:
         index[kind] = (BM25([(k, e["text"]) for k, e in entries.items()], idf), entries)
     index["measures"] = (FieldBM25([(k, e["main"], e["context"]) for k, e in measures.items()], idf), measures)
@@ -198,6 +248,7 @@ def public(entry):
 def shortlist(question, db_path, carried=()):
     """The shortlist for one question. `carried` is a list of earlier requests whose items must stay available."""
     index = get_index(db_path)
+    question = corrected(question, index["vocabulary"])
     found = {}
     for kind, limit in LIMITS.items():
         bm25, entries = index[kind]

@@ -1,7 +1,7 @@
 model,source,case,turn,measure_right,schools_right,score,cause,shortlist_miss,why
 sonnet,log,3,2,no,yes,wrong reading,model,,showed all students by race (15564); the level was not fixed to undergraduate (6814)
 sonnet,log,7,1,no,yes,wrong reading,model,,asked full-time and part-time; only the part-time instructional row was shown
-sonnet,log,13,1,yes,yes,correct answer,,,total price, tuition and net price with the one-year lag stated
+sonnet,log,13,1,yes,yes,correct answer,,,"total price,  tuition and net price with the one-year lag stated"
 sonnet,log,15,1,yes,yes,correct answer,,,
 sonnet,log,16,1,yes,yes,correct answer,,,undergraduate and graduate offering and highest degree
 sonnet,log,17,1,yes,yes,correct decline,,,the outside-IPEDS message was shown (first graded wrong by mistake: the grader printed only the heading)
@@ -55,7 +55,7 @@ haiku_before,log,50,1,yes,yes,correct answer,,,national part-time retention rate
 haiku_before,log,55,2,yes,yes,correct answer,,,
 haiku_before,log,58,3,yes,yes,correct answer,,,RIT beside its IPEDS comparison group
 haiku_before,log,58,5,yes,yes,correct answer,,,
-haiku_before,log,58,6,yes,no,wrong reading,model,,added ten unrelated schools (shortlist matches on the words) for "the example set"
+haiku_before,log,58,6,yes,no,wrong reading,model,,"added ten unrelated schools (shortlist matches on the words) for ""the example set"""
 haiku_before,log,60,4,no,yes,wrong reading,model,,"declined ""net cost"" although net price was on the shortlist"
 haiku_before,eval,fu_netprice_narrow,1,yes,yes,correct decline,,,group average of net price is pending owner review
 haiku_before,eval,fu_netprice_narrow,2,yes,yes,correct decline,,,same
@@ -66,7 +66,7 @@ haiku_before,eval,fu_go_back,1,yes,yes,wrong reading,path,,same
 haiku_before,eval,fu_go_back,2,yes,yes,correct answer,,,
 haiku_before,eval,fu_go_back,3,yes,yes,wrong reading,path,,same empty ranking
 haiku_before,eval,faq_cost_harvard,1,yes,yes,correct answer,,,
-haiku_before,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,total, full-time and part-time with the medical-school note
+haiku_before,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,"total,  full-time and part-time with the medical-school note"
 haiku_before,eval,trap_netprice_lag,1,yes,yes,wrong reading,model,,declined for 2024-25 and offered 2023-24 instead of giving it with the lag stated (arguably acceptable)
 haiku_before,eval,trap_medical_scope,1,yes,yes,correct answer,,,
 haiku_before,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
@@ -76,40 +76,113 @@ haiku_before,eval,probe_sal_cmp,1,yes,yes,correct decline,,,expectation correcte
 haiku_before,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,shows the IPEDS label (enrolled first-time submitters)
 haiku_before,eval,probe_adm_req_yale,1,no,yes,wrong reading,model,,gave score percentiles for a question about test requirements
 haiku_before,log,1,1,yes,yes,correct answer,,,answered the latest-year Ivy League comparison; did not say which years exist
-haiku,log,3,2,no,yes,wrong reading,model,,still declines: says the race set has no undergraduate level although the shortlist now lists the level column
-haiku,log,7,1,yes,yes,correct answer,,,full-time and part-time shown in two columns (2995 and 805)
+haiku_stage4,log,3,2,no,yes,wrong reading,model,,still declines: says the race set has no undergraduate level although the shortlist now lists the level column
+haiku_stage4,log,7,1,yes,yes,correct answer,,,full-time and part-time shown in two columns (2995 and 805)
+haiku_stage4,log,13,1,yes,yes,correct answer,,,
+haiku_stage4,log,15,1,yes,yes,correct answer,,,
+haiku_stage4,log,16,1,yes,yes,correct answer,,,undergraduate and graduate offering
+haiku_stage4,log,24,1,yes,yes,correct answer,,,
+haiku_stage4,log,24,2,yes,yes,correct answer,,,"""most recent year"" now answered (defect F)"
+haiku_stage4,log,24,3,,,wrong reading,model,,"""both"" with nothing pending (the previous turn was answered, so there was no choice to make)"
+haiku_stage4,log,24,4,yes,yes,correct answer,,,
+haiku_stage4,log,24,5,yes,yes,correct answer,,,
+haiku_stage4,log,24,6,yes,yes,correct answer,,,
+haiku_stage4,log,41,1,no,yes,correct decline,,yes,declined saying no applicants measure; ADM.APPLCN was not shortlisted
+haiku_stage4,log,55,2,yes,yes,correct answer,,,
+haiku_stage4,log,58,3,yes,yes,correct answer,,,RIT beside its IPEDS comparison group
+haiku_stage4,log,58,5,yes,yes,correct answer,,,
+haiku_stage4,log,58,6,yes,no,wrong reading,model,,"added ten unrelated schools for ""the example set"""
+haiku_stage4,log,60,4,no,yes,wrong reading,model,,"declined ""net cost"" although net price was on the shortlist"
+haiku_stage4,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,Yale beside the Ivy League weighted average (approved)
+haiku_stage4,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,
+haiku_stage4,eval,fu_resort,1,yes,yes,correct answer,,,ranking now lists all eight (defect A)
+haiku_stage4,eval,fu_resort,2,yes,yes,correct answer,,,
+haiku_stage4,eval,fu_rechart,1,yes,yes,correct answer,,,
+haiku_stage4,eval,fu_go_back,1,yes,yes,correct answer,,,
+haiku_stage4,eval,fu_go_back,2,yes,yes,correct answer,,,
+haiku_stage4,eval,fu_go_back,3,yes,no,wrong reading,path,,"""go back to all eight"": the edit restored the group but kept the one-school operation, so the path asked for a school"
+haiku_stage4,eval,faq_cost_harvard,1,yes,yes,correct answer,,,
+haiku_stage4,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,
+haiku_stage4,eval,faq_ma_distance,1,yes,yes,correct answer,,,lists Massachusetts schools with the exclusive distance-education percent
+haiku_stage4,eval,trap_netprice_lag,1,yes,yes,wrong reading,model,,declined for 2024-25 and offered 2023-24 instead of giving it with the lag stated (arguably acceptable)
+haiku_stage4,eval,trap_medical_scope,1,yes,yes,correct answer,,,
+haiku_stage4,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
+haiku_stage4,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,
+haiku_stage4,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,salaries in the 2024-25 release are for 2024-25
+haiku_stage4,eval,probe_sal_cmp,1,yes,yes,correct decline,,,as above
+haiku_stage4,eval,probe_cost_tuit_smith,1,yes,yes,correct answer,,,tuition and fees 2023-24 from the 2024-25 release
+haiku_stage4,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,shows the IPEDS label (enrolled first-time submitters)
+haiku_stage4,eval,probe_adm_req_yale,1,no,yes,wrong reading,model,,gave score percentiles for a question about test requirements
+haiku_5_0_third,log,3,2,yes,yes,correct answer,,,undergraduates by race (6814): fixed since Stage 4
+haiku_5_0_third,log,13,1,yes,yes,correct answer,,,
+haiku_5_0_third,log,15,1,yes,yes,correct answer,,,
+haiku_5_0_third,log,22,2,no,yes,wrong reading,model,,picked institutional grant aid (first-time) for undergraduate grant and scholarship percentages; the held year shown with the missing years named
+haiku_5_0_third,log,24,1,yes,yes,correct answer,,,
+haiku_5_0_third,log,24,2,yes,yes,correct answer,,,
+haiku_5_0_third,log,24,4,yes,yes,correct answer,,,
+haiku_5_0_third,log,24,5,yes,yes,correct answer,,,
+haiku_5_0_third,log,24,6,yes,yes,correct answer,,,
+haiku_5_0_third,log,55,2,yes,yes,correct answer,,,
+haiku_5_0_third,log,58,3,yes,yes,correct answer,,,
+haiku_5_0_third,log,58,5,yes,yes,correct answer,,,the five schools shown (beside RIT's comparison group)
+haiku_5_0_third,log,60,4,yes,yes,correct answer,,,net price ranked nationally: fixed since Stage 4
+haiku_5_0_third,log,62,3,yes,yes,wrong reading,model,,declined with the outside-IPEDS row on graduation rates by major instead of answering the parts IPEDS has (new question)
+haiku_5_0_third,log,63,1,yes,yes,correct answer,,,"WSU Tech found from ""wsu tehc""; not Texas Tech"
+haiku_5_0_third,log,63,2,yes,yes,correct answer,,,WSU Tech
+haiku_5_0_third,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_resort,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_resort,2,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_rechart,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_go_back,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_go_back,2,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_go_back,3,yes,yes,correct answer,,,
+haiku_5_0_third,eval,fu_change_measure,2,yes,yes,correct answer,,,bachelor's degrees shown (the earlier graduation rate kept beside it)
+haiku_5_0_third,eval,faq_cost_harvard,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,faq_ma_distance,1,no,yes,wrong reading,model,,listed Massachusetts schools by undergraduate offering instead of distance education
+haiku_5_0_third,eval,trap_netprice_lag,1,yes,yes,correct answer,,,2023-24 with the lag stated: fixed since Stage 4
+haiku_5_0_third,eval,trap_medical_scope,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,salaries in the 2024-25 release are for 2024-25
+haiku_5_0_third,eval,probe_sal_cmp,1,yes,yes,correct decline,,,as above
+haiku_5_0_third,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,
+haiku_5_0_third,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,the test-score policy (test optional): fixed since Stage 4
 haiku,log,13,1,yes,yes,correct answer,,,
 haiku,log,15,1,yes,yes,correct answer,,,
-haiku,log,16,1,yes,yes,correct answer,,,undergraduate and graduate offering
 haiku,log,24,1,yes,yes,correct answer,,,
-haiku,log,24,2,yes,yes,correct answer,,,"""most recent year"" now answered (defect F)"
-haiku,log,24,3,,,wrong reading,model,,"""both"" with nothing pending (the previous turn was answered, so there was no choice to make)"
+haiku,log,24,2,yes,yes,correct answer,,,
 haiku,log,24,4,yes,yes,correct answer,,,
-haiku,log,24,5,yes,yes,correct answer,,,
-haiku,log,24,6,yes,yes,correct answer,,,
-haiku,log,41,1,no,yes,correct decline,,yes,declined saying no applicants measure; ADM.APPLCN was not shortlisted
-haiku,log,55,2,yes,yes,correct answer,,,
-haiku,log,58,3,yes,yes,correct answer,,,RIT beside its IPEDS comparison group
-haiku,log,58,5,yes,yes,correct answer,,,
-haiku,log,58,6,yes,no,wrong reading,model,,added ten unrelated schools for "the example set"
-haiku,log,60,4,no,yes,wrong reading,model,,"declined ""net cost"" although net price was on the shortlist"
-haiku,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,Yale beside the Ivy League weighted average (approved)
-haiku,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,
-haiku,eval,fu_resort,1,yes,yes,correct answer,,,ranking now lists all eight (defect A)
-haiku,eval,fu_resort,2,yes,yes,correct answer,,,
-haiku,eval,fu_rechart,1,yes,yes,correct answer,,,
+haiku,log,62,3,yes,yes,wrong reading,model,,declined with the outside-IPEDS row on graduation rates by major instead of answering the parts IPEDS has (new question)
 haiku,eval,fu_go_back,1,yes,yes,correct answer,,,
-haiku,eval,fu_go_back,2,yes,yes,correct answer,,,
-haiku,eval,fu_go_back,3,yes,no,wrong reading,path,,"""go back to all eight"": the edit restored the group but kept the one-school operation, so the path asked for a school"
+haiku,eval,fu_go_back,3,yes,yes,correct answer,,,
 haiku,eval,faq_cost_harvard,1,yes,yes,correct answer,,,
-haiku,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,
-haiku,eval,faq_ma_distance,1,yes,yes,correct answer,,,lists Massachusetts schools with the exclusive distance-education percent
-haiku,eval,trap_netprice_lag,1,yes,yes,wrong reading,model,,declined for 2024-25 and offered 2023-24 instead of giving it with the lag stated (arguably acceptable)
 haiku,eval,trap_medical_scope,1,yes,yes,correct answer,,,
-haiku,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
 haiku,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,
 haiku,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,salaries in the 2024-25 release are for 2024-25
 haiku,eval,probe_sal_cmp,1,yes,yes,correct decline,,,as above
-haiku,eval,probe_cost_tuit_smith,1,yes,yes,correct answer,,,tuition and fees 2023-24 from the 2024-25 release
-haiku,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,shows the IPEDS label (enrolled first-time submitters)
-haiku,eval,probe_adm_req_yale,1,no,yes,wrong reading,model,,gave score percentiles for a question about test requirements
+haiku,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,
+haiku,log,3,2,yes,yes,correct answer,,,undergraduates by race (6814)
+haiku,log,11,1,yes,yes,wrong reading,model,,trend question answered for 2024-25 only with no note that other years are missing (the model left the period empty)
+haiku,log,22,2,no,yes,wrong reading,model,yes,institutional grant aid picked for undergraduate grant and scholarship percentages; the undergraduate grant measure (SFA.UAGRNTP) was not on the shortlist
+haiku,log,24,5,yes,yes,correct answer,,,
+haiku,log,24,6,yes,yes,wrong reading,model,,listed the schools by name instead of ranking them largest to smallest
+haiku,log,55,2,yes,yes,correct answer,,,ranked all public two-year colleges by graduation rate (a reasonable reading)
+haiku,log,58,3,yes,yes,correct answer,,,
+haiku,log,58,5,yes,yes,correct answer,,,the five schools
+haiku,log,60,4,yes,yes,correct answer,,,
+haiku,log,63,1,yes,yes,correct answer,,,"WSU Tech from ""wsu tehc""; not Texas Tech"
+haiku,log,63,2,yes,yes,correct answer,,,WSU Tech
+haiku,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,
+haiku,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,
+haiku,eval,fu_resort,1,yes,yes,correct answer,,,
+haiku,eval,fu_resort,2,yes,yes,correct answer,,,
+haiku,eval,fu_rechart,1,yes,yes,correct answer,,,
+haiku,eval,fu_go_back,2,yes,yes,correct answer,,,
+haiku,eval,fu_change_measure,2,yes,yes,correct answer,,,
+haiku,eval,faq_ma_distance,1,no,yes,wrong reading,model,,listed schools by undergraduate offering instead of distance education (the distance-education measures ranked 1st and 2nd on the shortlist)
+haiku,eval,refuse_nonbinary_faculty,1,no,yes,wrong reading,model,,showed the men/women breakdown instead of saying IPEDS does not report nonbinary staff
+haiku,eval,trap_netprice_lag,1,yes,yes,correct answer,,,
+haiku,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
+haiku,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,
+haiku,owner,o48_marian,2,,,wrong reading,path,,"after the school picker, ""show 2023-24"" had no previous request to edit (the picker's request was not kept); fixed after the run"

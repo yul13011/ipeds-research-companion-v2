@@ -347,7 +347,7 @@ class Path_(unittest.TestCase):
                            reply_request(req("schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)],
                                              year=dict(stated="2015", kind=None))))
         self.assertEqual(page["kind"], "decline")
-        self.assertIn("one IPEDS release", page["message"])
+        self.assertIn("for Academic year Fall 2024 only, so I can't show 2015", page["message"])
         last = json.loads((Path(self.dir.name) / "declines.jsonl").read_text(encoding="utf-8").splitlines()[-1])
         self.assertEqual(last["missing"], "years")
 
@@ -355,7 +355,7 @@ class Path_(unittest.TestCase):
         page, _ = self.ask("Average federal loan at private colleges",
                            reply_request(req("group", measures=[M("SFA.UFLOANA")], groups=["Private not-for-profit"])))
         self.assertEqual(page["kind"], "decline")
-        self.assertIn("list or rank each school's figure", page["message"])
+        self.assertIn("Instead, I can show each school's figure, ranked.", page["message"])
 
     def test_group_average_from_counts(self):
         page, _ = self.ask("What is the average Pell grant?", reply_request(req("group", measures=[M("SFA.UPGRNTA")])))
@@ -378,7 +378,8 @@ class Path_(unittest.TestCase):
     def test_declined_group(self):
         page, _ = self.ask("Graduation rate at women's colleges",
                            reply_request(req("group", measures=[M("DRVGR.GRRTTOT")], groups=["women's colleges"])))
-        self.assertEqual((page["kind"], page["message"]), ("decline", "IPEDS has no flag for this group."))
+        self.assertEqual(page["kind"], "decline")
+        self.assertTrue(page["message"].startswith("IPEDS has no flag for this group."))
 
     def test_data_exists_yes_and_not_set_up(self):
         page, _ = self.ask("Do you have data on admission rates?",
@@ -715,6 +716,176 @@ class ChangeOrder1121(unittest.TestCase):
         self.assertEqual(staff["categories"][0]["column"].upper(), "STAFFCAT")
         text, _ = interpret.render(s, None, None, "q")
         self.assertIn("categories by STAFFCAT (default: Grand Total)", text)
+
+
+def reply_decline(missing, request=None, about=None):
+    return dict(kind="about_decline" if about else "decline", request=request, edit=None, options=[], chosen=[],
+                decline=dict(reason="model's own reason, for the log", wanted="", missing=missing,
+                             closest="model's own suggestion", about=about))
+
+
+DEGREES = [M(f"DRVC.{c}") for c in ("ASCDEG", "BASDEG", "MASDEG", "DOCDEGRS", "DOCDEGPP", "DOCDEGOT")]
+DEGREE_READING = [dict(term="degrees", reading="Degrees by level")]
+
+
+class Stage50(unittest.TestCase):
+    """Part 5.0: misspellings, the four answers, code-written messages, kept declines, questions about them,
+    partial answers."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def ask(self, question, reply, state):
+        return answer.ask(question, state, self.log, call=saved(reply))
+
+    def test_misspelling_rules(self):
+        v = {4: {"tech", "yale"}, 9: {"admission"}, 7: {"college"}}
+        self.assertIn("tech", shortlist.corrected("wsu tehc", v))         # four letters: a swap of neighbours
+        self.assertNotIn("tech", shortlist.corrected("tach", v))          # four letters: no substitution
+        self.assertIn("yale", shortlist.corrected("Yael", v))
+        self.assertIn("college", shortlist.corrected("colege", v))        # six letters: one letter off
+        self.assertNotIn("college", shortlist.corrected("colige", v))     # ... not two
+        self.assertIn("admission", shortlist.corrected("admisisons", v))  # nine letters: up to two
+
+    def test_misspelled_questions_reach_the_right_items(self):
+        s = shortlist.shortlist("what data do you have on admisisons", DB)
+        self.assertIn("DRVADM.DVADM01", [m["id"] for m in s["measures"]])
+        s = shortlist.shortlist("what was the fall enrollment for wsu tehc", DB)
+        ids = [x["id"] for x in s["schools"]]
+        self.assertEqual(ids[0], 156107)                                  # WSU Tech
+        self.assertNotIn(229115, ids)                                     # never Texas Tech
+
+    def test_messages_have_no_internal_words(self):
+        db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        for (text,) in db.execute("SELECT statement FROM dict_terms WHERE term='message'"):
+            self.assertNotRegex(text.lower(), r"shortlist|\btag\b|dictionary|\bm\d+\b")
+        db.close()
+
+    def test_not_in_ipeds_without_an_outside_row_is_not_found(self):
+        state = {}
+        page = self.ask("What is the summer melt rate at Yale?", reply_decline("not in IPEDS", req("schools", schools=[S("Yale", 130794)])), state)
+        self.assertNotIn("IPEDS does not", page["message"])
+        self.assertTrue(page["message"].startswith("I couldn't find data matching that."))
+        self.assertNotIn("model's own", page["message"])                   # the model's words go to the log only
+        row = json.loads((Path(self.dir.name) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertTrue(row["search_miss"])
+        self.assertEqual(row["model_explanation"]["reason"], "model's own reason, for the log")
+
+    def test_data_exists_with_nothing_found_is_not_found(self):
+        page = self.ask("what data do you have on summer melt", reply_request(req("data_exists", topic="summer melt")), {})
+        self.assertNotIn("does not collect", page["message"])
+        self.assertIn("I couldn't find data on summer melt", page["message"])
+
+    def test_decline_is_kept_and_a_follow_up_edits_it(self):
+        state = {}
+        q = "How many degrees did Marian University award over the last ten years?"
+        page = self.ask(q, reply_decline("years", req("schools", measures=DEGREES, schools=[S("Marian University", 151786)],
+                                                      readings=DEGREE_READING, year=dict(stated="last ten years", kind=None))), state)
+        self.assertEqual(page["kind"], "decline")
+        self.assertIn("degrees by level", page["message"])                 # not just "Associate's degree"
+        self.assertNotIn("Associate's degree", page["message"])
+        edit = dict(kind="edit", request=None, options=[], chosen=[], decline=None,
+                    edit=dict(changes=[dict(field="year", action="replace")],
+                              values=dict(rq.empty("schools"), year=dict(stated="2023-24", kind=None))))
+        page = self.ask(q + " show 2023-24", edit, state)
+        self.assertEqual(page["kind"], "answer")
+        self.assertEqual(page["table"]["rows"][0][0], "Marian University")
+
+    def test_why_where_and_instead(self):
+        state = {}
+        page = self.ask("What's the ROI for Yale?", reply_decline("not in IPEDS", req(
+            "data_exists", topic="Earnings after graduation; return on investment; economic mobility")), state)
+        self.assertIn("IPEDS does not collect earnings", page["message"])
+        page = self.ask("What's the ROI for Yale? Where can I find that?", reply_decline("other", about="where"), state)
+        self.assertIn("College Scorecard", page["message"])
+        state = {}
+        self.ask("Graduation rate for Hispanic-serving institutions", reply_request(req(
+            "group", measures=[M("DRVGR.GRRTTOT")], groups=["Hispanic-serving institutions (HSIs)"])), state)
+        page = self.ask("Graduation rate for Hispanic-serving institutions. Why not?", reply_decline("other", about="why"), state)
+        self.assertIn("IPEDS has no flag for this group", page["message"])
+        page = self.ask("Graduation rate for Hispanic-serving institutions. Where can I find that?",
+                        reply_decline("other", about="where"), state)
+        self.assertEqual(page["message"], "I don't have another source to point you to for this.")
+        state = {}
+        q = "Enrollment at Yale in 1990"
+        page = self.ask(q, reply_request(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)],
+                                             year=dict(stated="1990", kind=None))), state)
+        self.assertEqual(page["kind"], "decline")
+        page = self.ask(q + " What can you show me instead?", reply_decline("other", about="instead"), state)
+        self.assertEqual(page["kind"], "answer")                           # the years held, run
+        self.assertTrue(page["message"].startswith("Instead, I can show"))
+
+    def test_part_of_the_years_held_is_answered(self):
+        page = self.ask("Yale admission rate in 2015 and 2024", reply_request(req(
+            "schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)], year=dict(stated="2015 and 2024", kind=None))), {})
+        self.assertEqual(page["kind"], "answer")
+        self.assertIn("2015 is not available", page["interpreted"])
+
+    def test_a_measure_not_set_up_is_left_out_and_named(self):
+        page = self.ask("Yale enrollment and its library physical book count", reply_request(req(
+            "schools", measures=[M("DRVEF.ENRTOT"), M("AL.LPBOOKS")], schools=[S("Yale", 130794)])), {})
+        self.assertEqual(page["kind"], "answer")
+        self.assertIn("isn't set up in this app yet, so it is left out", page["interpreted"])
+
+    def test_an_edit_while_options_are_open_applies_to_every_option(self):
+        base = req("schools", measures=DEGREES, readings=DEGREE_READING, year=dict(stated="last ten years", kind=None))
+        state = {"pending": [dict(label="Marian University, Indianapolis", request=dict(base, schools=[S("Marian University", 151786)])),
+                             dict(label="Marian University, Fond du Lac", request=dict(base, schools=[S("Marian University", 239080)]))]}
+        edit = dict(kind="edit", request=None, options=[], chosen=[], decline=None,
+                    edit=dict(changes=[dict(field="year", action="replace")],
+                              values=dict(rq.empty("schools"), year=dict(stated="2023-24", kind=None))))
+        page = self.ask("How many degrees did Marian University award? show 2023-24", edit, state)
+        self.assertEqual(page["kind"], "clarify")
+        self.assertEqual(page["options"], ["Marian University, Indianapolis (2023-24)", "Marian University, Fond du Lac (2023-24)"])
+        self.assertTrue(all(o["request"]["year"]["stated"] == "2023-24" for o in state["pending"]))
+
+    def test_a_model_decline_of_a_named_group_uses_the_group_entry(self):
+        state = {}
+        page = self.ask("Graduation rate for Hispanic-serving institutions", reply_decline("group", req(
+            "group", measures=[M("DRVGR.GRRTTOT")], groups=["Hispanic-serving institutions (HSIs)"])), state)
+        self.assertTrue(page["message"].startswith("IPEDS has no flag for this group."))
+        page = self.ask("Graduation rate for Hispanic-serving institutions. Why not?", reply_decline("other", about="why"), state)
+        self.assertTrue(page["message"].startswith("IPEDS has no flag for this group."))
+
+    def test_school_vs_group_shows_every_named_school(self):
+        page = self.ask("Graduation rate at WPI and Drexel beside RIT's peers", reply_request(req(
+            "school_vs_group", measures=[M("DRVGR.GBA6RTT")], peers_of=195003,
+            schools=[S("Worcester Polytechnic Institute", 168421), S("Drexel University", 212054)])), {})
+        names = [r[0] for r in page["table"]["rows"]]
+        self.assertIn("Worcester Polytechnic Institute", names)
+        self.assertIn("Drexel University", names)                          # not silently dropped
+
+    def test_option_labels_never_show_tags(self):
+        self.assertEqual(rq.no_tags("Smith College (S4)"), "Smith College")
+        self.assertEqual(rq.no_tags("Admission rate M1 for G2"), "Admission rate for")
+        self.assertEqual(rq.no_tags("Fall 2024 enrollment"), "Fall 2024 enrollment")
+
+    def test_an_edit_while_the_school_picker_is_open_asks_again_with_the_change(self):
+        state = {}
+        q = "How many degrees did Marian University award over the last ten years?"
+        page = self.ask(q, reply_request(req("schools", measures=DEGREES, readings=DEGREE_READING,
+                                             schools=[dict(name="Marian University", id=None)],
+                                             year=dict(stated="last ten years", kind=None))), state)
+        self.assertEqual(page["kind"], "picker")
+        edit = dict(kind="edit", request=None, options=[], chosen=[], decline=None,
+                    edit=dict(changes=[dict(field="year", action="replace")],
+                              values=dict(rq.empty("schools"), year=dict(stated="2023-24", kind=None))))
+        page = self.ask(q + " show 2023-24", edit, state)
+        self.assertEqual(page["kind"], "picker")                           # still which Marian, now for 2023-24
+        page = answer.pick_school(151786, state, self.log)
+        self.assertEqual(page["kind"], "answer")
+        self.assertEqual(page["table"]["rows"][0][0], "Marian University")
+
+    def test_choosing_an_option_clears_the_pending_question(self):
+        state = {"pending": [dict(label="A", request=req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)]))]}
+        answer.choose(0, state, self.log)
+        self.assertIsNone(state["pending"])
 
 
 class Show(unittest.TestCase):
