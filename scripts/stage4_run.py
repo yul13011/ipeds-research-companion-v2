@@ -48,6 +48,11 @@ def conversations():
     cases = eval_set.all_cases() if callable(getattr(eval_set, "all_cases", None)) else eval_set.CASES
     for c in cases:
         yield "eval", c["id"], [(i + 1, t["q"], False) for i, t in enumerate(c["turns"])]
+    owner = {}                                          # the owner's questions for question types 44 to 49
+    for r in csv.DictReader(open(ROOT / "docs" / "owner_questions.csv", encoding="utf-8")):
+        owner.setdefault(r["case"], []).append((int(r["turn"]), r["question"], False))
+    for case, turns in owner.items():
+        yield "owner", case, sorted(turns)
 
 
 def summary(page):

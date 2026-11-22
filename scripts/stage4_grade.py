@@ -20,7 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import config
 
+import os
+
 MODELS = tuple(a for a in sys.argv[1:] if a != "dump") or ("haiku_before", "sonnet")   # run folders under logs/stage4
+STAGES = ["4", "5.0", "5f", "6"]                        # an owner question counts from the stage it is due in
+STAGE = os.environ.get("IPEDS_STAGE", "4")              # the stage being measured; earlier-due questions are counted
 EXP = {(r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(ROOT / "docs" / "stage4" / "expectations.csv", encoding="utf-8"))}
 REVIEW_FILE = ROOT / "docs" / "stage4" / "review.csv"
 REVIEW = {(r["model"], r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(REVIEW_FILE, encoding="utf-8"))} if REVIEW_FILE.exists() else {}
@@ -78,6 +82,8 @@ def grade(model):
         if t["repeat"]:
             continue
         cat = e["category"] if e else "unlisted"
+        if e and e.get("stage") and STAGES.index(e["stage"]) > STAGES.index(STAGE):
+            cat = f"not yet due (stage {e['stage']})"           # reported, not counted in the score
         got = kind_of(t["page"])
         m_ok, s_ok = auto_reading(t, e) if e else (None, None)
         rv = REVIEW.get((model,) + key)
@@ -85,7 +91,7 @@ def grade(model):
             m_ok = {"yes": True, "no": False}.get(rv["measure_right"], m_ok)
             s_ok = {"yes": True, "no": False}.get(rv["schools_right"], s_ok)
         expect = set((e["expect"] if e else "").split("|")) - {""}
-        if cat in ("greeting", "test", "chart", "context", "display"):
+        if cat in ("greeting", "test", "chart", "context", "display") or cat.startswith("not yet due"):
             score = got
         elif got == "clarify":
             score = "clarifying question"
@@ -158,7 +164,7 @@ def report():
                 rd = [r for r in g if r["category"] == "trend"]
                 print("    trend measure read right:", sum(r["measure_right"] is True for r in rd), "of", len(rd),
                       "; schools right:", sum(bool(r["schools_right"]) for r in rd))
-        for cat in ("greeting", "test", "chart", "context", "display"):
+        for cat in ("greeting", "test", "chart", "context", "display") + tuple(sorted({r["category"] for r in g if r["category"].startswith("not yet due")})):
             print(f"  {cat}:", dict(Counter(r["score"] for r in g if r["category"] == cat)))
         print("  unlisted:", [(r["case"], r["turn"]) for r in g if r["category"] == "unlisted"])
         all_t = turns(model)
