@@ -78,22 +78,31 @@ def topic_message(plan):
     ready = [m for m in t["measures"] if m["set_up"] == "yes"]
     if ready:
         return ("Yes. This app has: " + "; ".join(f"{m['name']} ({m['period']})" for m in ready)
-                + ". This first version holds the 2024-25 IPEDS release only.")
+                + ".")
     return "IPEDS collects this, but it is not set up in this app yet: " + "; ".join(m["name"] for m in t["measures"]) + "."
 
 
+def release_label(release):
+    """'IPEDS 2024-25 release (provisional)' from {release, status}."""
+    name = release["release"].rsplit("_", 1)[0].replace("_", " ")
+    return f"{name} release ({release['status']})"
+
+
 def render(plan, result, release):
-    """Everything the page shows for one answer."""
+    """Everything the page shows for one answer. `release` is {year, release, status} for the year shown."""
     warnings = []
-    if "Provisional" in release:
-        warnings.append(f"These figures come from the {release.replace('_', ' ')} release, which is provisional and may change.")
+    if isinstance(release, str):                        # older callers pass the release name only
+        release = dict(year=None, release=release, status="provisional" if "Provisional" in release else "final")
+    if release["status"] == "provisional":
+        warnings.append(f"These figures come from the {release_label(release)}, which is provisional and may change.")
     if result["missing"]:
         warnings.append("Some values are missing. See the data status; missing values are never counted as zero.")
     warnings += result["warnings"] + plan["caveats"]
     page = dict(kind="answer", interpreted=interpreted(plan), warnings=warnings, notes=result["notes"],
                 table=dict(columns=result["columns"], rows=[[fmt(c) for c in row] for row in result["rows"]]),
                 counts=dict(columns=result["counts_columns"], rows=[[fmt(c) for c in row] for row in result["counts"]]),
-                status=result["missing"], definitions=definitions(plan), message=None)
+                status=result["missing"], definitions=definitions(plan), message=None,
+                data_release=f"Figures from the {release_label(release)}.")
     if plan["operation"] in ("define", "data_exists"):
         page["message"] = topic_message(plan)
     return page

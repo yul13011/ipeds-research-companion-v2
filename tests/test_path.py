@@ -12,6 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import config
+from latest import latest_only  # the tests' own expected figures use the latest year only
 from path import answer, interpret, request as rq, shortlist, show
 from path.log import Log
 
@@ -208,7 +209,7 @@ class Path_(unittest.TestCase):
     def setUpClass(cls):
         cls.dir = tempfile.TemporaryDirectory()
         cls.log = Log(cls.dir.name)
-        cls.db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        cls.db = latest_only(sqlite3.connect(f"file:{DB}?mode=ro", uri=True))
 
     @classmethod
     def tearDownClass(cls):
@@ -501,7 +502,7 @@ class RealReplies(unittest.TestCase):
         """Live reply: bachelor's degrees (summary) with the field breakdown; the set's default level must not win."""
         page = self.run_second("f_yale_degrees_field")
         rows = {r[0]: int(r[1].replace(",", "")) for r in page["table"]["rows"]}
-        db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        db = latest_only(sqlite3.connect(f"file:{DB}?mode=ro", uri=True))
         bachelors = db.execute("SELECT CTOTALT FROM C_A WHERE unitid=130794 AND AWLEVEL=5 AND MAJORNUM=1 AND CIPCODE='99'").fetchone()[0]
         db.close()
         self.assertEqual(rows.pop("Total"), bachelors)
@@ -532,7 +533,7 @@ class ChangeOrder1121(unittest.TestCase):
     def setUpClass(cls):
         cls.dir = tempfile.TemporaryDirectory()
         cls.log = Log(cls.dir.name)
-        cls.db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        cls.db = latest_only(sqlite3.connect(f"file:{DB}?mode=ro", uri=True))
         cls.NET = [M("COST2_NETPRICE.NPIST2"), M("COST2_NETPRICE.NPGRN2")]
         cls.READ = [dict(term="net price", reading="Students awarded grant or scholarship aid")]
 
@@ -762,7 +763,7 @@ class Stage50(unittest.TestCase):
         self.assertNotIn(229115, ids)                                     # never Texas Tech
 
     def test_messages_have_no_internal_words(self):
-        db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        db = latest_only(sqlite3.connect(f"file:{DB}?mode=ro", uri=True))
         for (text,) in db.execute("SELECT statement FROM dict_terms WHERE term='message'"):
             self.assertNotRegex(text.lower(), r"shortlist|\btag\b|dictionary|\bm\d+\b")
         db.close()
@@ -895,6 +896,27 @@ class Stage50(unittest.TestCase):
         state = {"pending": [dict(label="A", request=req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)]))]}
         answer.choose(0, state, self.log)
         self.assertIsNone(state["pending"])
+
+
+class ReleaseLabel(unittest.TestCase):
+    """Part 5a: each year's figures are labelled with their release, provisional or final."""
+
+    def test_label_and_warning_follow_the_status(self):
+        db = sqlite3.connect(":memory:")
+        db.execute("CREATE TABLE _releases (year INTEGER, release TEXT, status TEXT, source_file TEXT, loaded_at TEXT, seconds REAL)")
+        db.executemany("INSERT INTO _releases VALUES (?,?,?,?,?,?)", [(2023, "IPEDS_2023-24_Final", "final", "", "", 0),
+                                                                      (2024, "IPEDS_2024-25_Provisional", "provisional", "", "", 0)])
+        self.assertEqual(answer.release(db)["status"], "provisional")             # the latest year by default
+        self.assertEqual(answer.release(db, 2023)["status"], "final")
+        self.assertEqual(show.release_label(answer.release(db)), "IPEDS 2024-25 release (provisional)")
+        self.assertEqual(show.release_label(answer.release(db, 2023)), "IPEDS 2023-24 release (final)")
+
+    def test_an_answer_names_its_release(self):
+        log = Log(tempfile.mkdtemp())
+        page = answer.ask("What was Yale's admission rate?", {}, log, call=saved(reply_request(req(
+            "schools", measures=[M("DRVADM.DVADM01")], schools=[S("Yale", 130794)]))))
+        self.assertEqual(page["data_release"], "Figures from the IPEDS 2024-25 release (provisional).")
+        self.assertTrue(any("provisional and may change" in w for w in page["warnings"]))
 
 
 class Show(unittest.TestCase):

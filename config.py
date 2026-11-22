@@ -14,9 +14,20 @@ DICTIONARY = ROOT / "dictionary"
 # The local database for this slice. Untracked; rebuilt by build/build_data.py.
 LOCAL_DB = Path(os.environ.get("IPEDS_LOCAL_DB", ROOT / "data" / "ipeds_v2.sqlite"))
 
-# Releases loaded into the local database. To stack another year, add a line here
-# and run the build again: (release folder, database file name, year).
+# Releases loaded into the local database, one per year: (release folder, database file name, year).
+# `year` is the release year: 2024 for the 2024-25 release. The folder name says whether a release is
+# provisional or final. To add a new year or replace a provisional release with its final version, change
+# its line here and run: python build/build_data.py --release <folder>   (see UPDATING.md)
 RELEASES = [
+    ("IPEDS_2015-16_Final", "IPEDS201516.sqlite", 2015),
+    ("IPEDS_2016-17_Final", "IPEDS201617.sqlite", 2016),
+    ("IPEDS_2017-18_Final", "IPEDS201718.sqlite", 2017),
+    ("IPEDS_2018-19_Final", "IPEDS201819.sqlite", 2018),
+    ("IPEDS_2019-20_Final", "IPEDS201920.sqlite", 2019),
+    ("IPEDS_2020-21_Final", "IPEDS202021.sqlite", 2020),
+    ("IPEDS_2021-22_Final", "IPEDS202122.sqlite", 2021),
+    ("IPEDS_2022-23_Final", "IPEDS202223.sqlite", 2022),
+    ("IPEDS_2023-24_Final", "IPEDS202324.sqlite", 2023),
     ("IPEDS_2024-25_Provisional", "IPEDS202425.sqlite", 2024),
 ]
 

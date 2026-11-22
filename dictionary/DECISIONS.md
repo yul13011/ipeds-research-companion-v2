@@ -267,3 +267,21 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Short plain names** for first-version measures with long IPEDS titles are drafted for review in `docs/stage4/plain_names_draft.csv` (`scripts/plain_names_draft.py`). Not loaded until approved.
 - **An outside-IPEDS row covers only the part of a question it matches.** When other parts can be answered, they are answered, and the part IPEDS lacks is named beside the answer (message row "not collected partly"). The instructions say to return a request for the part that can be answered, with the outside-IPEDS topic beside it.
 - **Timing.** Reports give the slowest tenth of questions as well as the average time.
+
+## 2026-11-22: plain names
+
+- **No plain names for the 514 measures with long titles.** The official IPEDS titles stay as the names shown in answers and messages, because they match the codebook. The 20 plain names already approved (for the "Grand total" measures) are kept. The draft list, `docs/stage4/plain_names_draft.csv`, is set aside and not loaded. User vocabulary is handled by synonyms, and "what does this mean?" by the glossary in Part 5f.
+
+## 2026-11-22: Stage 5, part 5a (ten releases stacked)
+
+- **Ten releases loaded,** 2015-16 to 2024-25, read in place and cleaned with each year's own codebook. Each year is labelled provisional or final from its release folder name (table `_releases`). Answers show "Figures from the IPEDS 2024-25 release (provisional)", with the provisional warning as before.
+- **The app still answers from the latest year only** until trend questions (part 5c). Every lookup the app makes is filtered by year.
+- **Dictionary checks scoped to the latest year for now.** These run on the 2024 data only; part 5b extends them to every year:
+  - the year_meaning coverage check;
+  - the category-row, summary-to-detailed link and breakdown-set tests;
+  - the groups made from every value of a column;
+  - the group school counts.
+
+  No dictionary row was changed in this part.
+- **Build fix: a group defined by several conditions now narrows year by year.** Before, a school meeting a condition in any year could stay in another year's group. With ten years loaded, this would have changed the national universe for 2024; it is 5,626, as before.
+- **One step to add or replace a release:** `python build/build_data.py --release <folder>`. It removes every row of that year first, so a replaced release leaves nothing behind. The runbook is `UPDATING.md`.

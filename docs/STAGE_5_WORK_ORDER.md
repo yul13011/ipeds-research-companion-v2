@@ -24,6 +24,13 @@ STANDING RULES FOR THIS STAGE
 - No patterns that read the user's wording to decide meaning, in code or in the dictionary.
 - Ask me before installing any package.
 - Keep the default model as Haiku at its current effort setting.
+- Keep version 3 in view (see "Future direction: a research companion" in the plan). Five habits, from now on:
+  1. Each operation is a clean function, with structured input and output and no chat-page code inside it.
+  2. Every result carries its source: table, year, definition and statements.
+  3. The number check in Part 5e is a general component that can check any AI-written text against any result, not only the summary.
+  4. "What data exists" stays a self-contained step that can be called on its own.
+  5. Logs record a conversation identifier with each turn.
+  Do not build version 3 features; just follow these habits, and say in each report where existing code does not yet follow them.
 - Out of scope for Stage 5: moving the Access-to-SQLite converter and the cross-year index into version 2 (a later task), web search, the formula field, category sets, groups from a confirmed list, data extracts, the format-chart panel, downloads, the Explore page, "Need ideas?" and the About page.
 
 PART 5.0. FIXES FROM OWNER TESTING (one year of data, as now)
@@ -90,6 +97,12 @@ PART 5f. EXPLAINING TERMS AND CONCEPTS (question types 44 and 45)
 - Load the official IPEDS glossary, `docs/sources/ipeds_glossary_2025-26.pdf`, into the dictionary as a table: term, definition, and edition. The PDF is a browser printout in two columns, so long terms wrap across lines: parse it carefully, report the number of terms, and list any entries you could not separate cleanly. Do not edit the definitions; this table is NCES's wording.
 - Draft a reviewed concepts table in the dictionary for what the glossary does not cover, plus plain-English versions of key terms where the official wording is heavy. Choose the terms from evidence, and show the reason for each: terms users asked about (question log, decline log, owner questions); words the app itself shows in "Interpreted as", notes and definitions; IR concepts that change how a number should be read (for example retention versus persistence, provisional versus final data, Pell as an income proxy); and how IPEDS works, using `docs/sources/ipeds_overview_2019.pdf` (the universe, Title IV, parent and child reporting, imputation). Show me the draft for review before the app uses it.
 - Check the dictionary's statements against the glossary and list any that contradict it.
+- Keep the glossary and the dictionary from conflicting:
+  - An answer that shows data uses the measure's own description and period. The glossary is used only when the user asks what a word means.
+  - Glossary text is always labelled with its edition (2025-26). For a given year's data, that year's codebook wins; the comparability-break table flags years where a definition changed.
+  - When the word being explained also has an app convention in terms.csv (for example "private"), show the official definition and then the convention ("In this app, 'private' alone is read as private nonprofit; say 'for-profit' to include them").
+  - Glossary entries get their own small section of the shortlist, at most three, so they never crowd out measures, and they are used only for explanation questions. A data question always uses measures.
+  - Tests include data questions whose words match glossary terms ("retention rate at Yale", "net price for Harvard", "graduation rate for public universities in Texas"); they must still return data, not a definition.
 - When a user asks what something means, the app uses these sources in order and says which one it used: (1) the reviewed concepts table; (2) the IPEDS glossary, cited as such; (3) the dictionary, when the term is an IPEDS measure; (4) the model's general knowledge, labelled "general explanation, not from IPEDS documentation", with the question logged for review. An explanation never states on its own whether IPEDS collects something; that part follows the four answers.
 
 PART 5g. MEASURE IT

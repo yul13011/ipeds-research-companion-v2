@@ -423,7 +423,7 @@ Agreed Nov 22, 2026. The owner accepted the recommended answers to the six decis
 | 5c Trend questions | A school, several schools or a group over time; "since 2015", "the last five years", and the change between two years. Missing years are gaps, never zero. A note when a comparability break falls inside the period. |
 | 5d Understanding any phrasing | Meaning search and the AI's own search, as set out in part 2 of "How the app understands a question". For meaning search, Claude Code first compares a light local package (fastembed) with sentence-transformers on the badly written test set: accuracy, time added and install size. Near-duplicate measures are grouped so they do not crowd the shortlist. A new test set of 30 to 50 badly written questions (misspellings, abbreviations such as UConn and Mizzou, informal phrasing, "RTI"). |
 | 5e Written summary | A second AI call writes two or three sentences about the table, given only the table and its notes. Code checks that every number in the summary appears in the table; if not, the summary is dropped. |
-| 5f Explaining terms and concepts | Items 44 and 45. Fuller explanations of IPEDS terms built from the dictionary: definition, period, year rules and caveats. The official IPEDS glossary (2025-26 edition, about 600 terms, in `docs/sources`) is loaded into the dictionary unchanged. A reviewed concepts table covers what the glossary does not, plus plain-English versions of key terms; its terms are chosen from evidence (questions users asked, words the app shows, IR concepts that change how a number is read, how IPEDS works) and drafted for the owner to review. Explanations draw on the concepts table, then the glossary, then the dictionary, then the AI's general knowledge labelled as such and logged for review; the app says which source it used. |
+| 5f Explaining terms and concepts | Items 44 and 45. Fuller explanations of IPEDS terms built from the dictionary: definition, period, year rules and caveats. The official IPEDS glossary (2025-26 edition, about 600 terms, in `docs/sources`) is loaded into the dictionary unchanged. A reviewed concepts table covers what the glossary does not, plus plain-English versions of key terms; its terms are chosen from evidence (questions users asked, words the app shows, IR concepts that change how a number is read, how IPEDS works) and drafted for the owner to review. Explanations draw on the concepts table, then the glossary, then the dictionary, then the AI's general knowledge labelled as such and logged for review; the app says which source it used. Data answers use the measure's own description; the glossary answers only "what does this mean?" questions, labelled with its edition, has a small capped section of the shortlist, and is shown beside any app convention for the same word. |
 | 5g Measure it | NCES trend tables and Yale benchmarks across ten years; the full question set with trend questions scored; the badly written set; version 1 against version 2 on trend questions; time and cost per question. |
 
 **Decisions.**
@@ -500,3 +500,48 @@ The app labels each year as provisional or final.
 **Decision.** All years are kept as they accumulate; there is no rolling window. The database grows by about 300 MB a year.
 
 **What makes this routine.** Adding or replacing a release is one repeatable, tested step, built in stage 5, part 5a, and written up in `UPDATING.md` with the exact commands. The converter and the cross-year index move into version 2 before version 1 is retired (see "Stage 6 and later"). With these in place, most steps are scripts and the owner's work is mainly the review in step 6: expected to take a day or two a year, longer in a year when IPEDS redesigns a survey.
+
+## Future direction: a research companion (version 3)
+
+Recorded Nov 22, 2026. Version 2 is finished first. This section records where the app goes next and why version 2 is built the way it is.
+
+**The aim.** Version 2 is an accurate lookup tool for institutional researchers. Version 3 is a conversation partner for anyone using data to inform education decisions: educational researchers, higher-education professionals, IT staff in education, and graduate students. Users can talk through a research idea, ask what IPEDS can and cannot tell them, explore and follow up, and have results explained. It should feel as conversational as a general AI assistant, with one difference: every statement about data is grounded in IPEDS. If IPEDS has the data, the app gives a sensible answer; if it has part of it, the app says what IPEDS has and what it lacks; if it has none, the app says no.
+
+**Feasibility.**
+
+| Piece | Feasibility | Notes |
+| --- | --- | --- |
+| Natural, flexible conversation | High | What language models do best |
+| Every number grounded in IPEDS | High, if enforced in code | Code checks every number in AI-written text against data results; instructions alone are not enough |
+| Knowing what IPEDS has and lacks | Medium-high | Depends on dictionary coverage across all variables and years, and on the search |
+| Flexible analyses | Medium | Limited by the set of tested operations, which grows from the logs |
+| Explaining and interpreting results | Medium | General knowledge must be labelled; no causal claims from IPEDS data |
+
+**How it is built: the workflow becomes the toolbox.**
+
+1. **A conversational layer.** An AI leads the conversation: it discusses, explains, asks clarifying questions, proposes analyses and interprets results. It likely needs a stronger model than the quick-lookup step.
+2. **Grounded tools, the only way the AI touches data or makes claims about IPEDS.** Data tools: version 2's tested operations, later joined by research operations (groups defined by a change over time, before-and-after comparisons with correct cohort timing, comparison groups, associations across schools). Knowledge tools: what IPEDS has on a topic, the glossary, the outside-IPEDS table, comparability breaks, year and timing rules. Context tools: web search, labelled as not from IPEDS.
+3. **Grounding enforced in code.** Every number in an AI reply must match a number returned by a data tool. Claims that IPEDS has or lacks something must come from the knowledge tools. Every figure carries its source: table, year, definition and "Interpreted as".
+4. **Three kinds of statement, visibly distinct:** IPEDS data (with sources), IPEDS documentation, and general context (labelled).
+5. **Multi-step analyses are shown as a plan** for the user to confirm before they run.
+6. **The fast path stays.** Quick lookups still go straight through the version 2 workflow.
+
+**Risks.** Fluent but wrong answers (the code checks are the main safeguard); descriptive results read as causal (timing checks, comparison groups and plain statements are built in); harder testing (grounding checked automatically, advice quality graded by people on test conversations); and cost and access at scale (usage limits, sign-in or payment to be decided before a wide release).
+
+**Roadmap.**
+
+1. Finish the grounded toolbox: version 2, stages 5 to 7.
+2. The grounding layer: sources on every figure, number checks on all AI-written text, and a "what IPEDS has on this" tool.
+3. The conversational layer, with plans shown before multi-step analyses run.
+4. Research operations, and setting up more of the measures not yet in the app.
+5. Testing with the new audience, with their questions shaping what is added next.
+
+**Built on version 2, not rebuilt.** Version 2's data, dictionary, operations, search, glossary, number check, benchmarks and test sets are what version 3 runs on. Reworking needed: the operations are wrapped as tools the AI can call; results carry their source; the chat page may outgrow Streamlit (decided when version 3 starts); conversation memory, logging, cost limits and sign-in for a public audience. Version 3 lives in the same repository and folder, as a new phase with its own stages and work orders.
+
+**Habits in version 2 that keep version 3 easy.** These are standing rules from stage 5 on:
+
+1. Each operation is a clean function, with structured input and output and no chat-page code inside it.
+2. Every result carries its source: table, year, definition and statements.
+3. The number check is a general component that can check any AI-written text against any result, not only the summary.
+4. "What data exists" stays a self-contained step that can be called on its own.
+5. Logs record a conversation identifier with each turn.

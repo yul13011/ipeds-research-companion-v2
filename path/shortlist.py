@@ -181,7 +181,8 @@ def build_index(db):
     for n, unitid in q("SELECT nickname, unitid FROM dict_school_nicknames WHERE unitid IS NOT NULL"):
         nick.setdefault(int(unitid), []).append(n)
     schools = {u: dict(id=u, name=name, alias=alias, city=city, state=st, text=" ".join([name, alias or ""] + nick.get(u, [])))
-               for u, name, alias, city, st in q("SELECT UNITID, INSTNM, IALIAS, CITY, STABBR FROM directory")}
+               for u, name, alias, city, st in q("SELECT UNITID, INSTNM, IALIAS, CITY, STABBR FROM directory "
+                                                 "WHERE year = (SELECT MAX(year) FROM directory)")}
     groups = {g: dict(name=g, statement=s, status=status, text=" ".join([g, w or "", s or ""]))
               for g, w, s, status in q("SELECT group_name, words, statement, status FROM group_list")}
     rows = {(t, c, code): dict(table=t, column=c, code=code, label=label, text=f"{label} {syn or ''}")

@@ -18,8 +18,17 @@ def connect(db_path):
     return sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
 
 
-def release(db):
-    return db.execute("SELECT release FROM _tables ORDER BY year DESC LIMIT 1").fetchone()[0]
+def release(db, year=None):
+    """The release a year's figures come from, and whether it is provisional or final: {year, release, status}."""
+    try:
+        row = db.execute("SELECT year, release, status FROM _releases WHERE year = COALESCE(?, (SELECT MAX(year) FROM _releases))",
+                         (year,)).fetchone()
+    except sqlite3.OperationalError:                    # a database built before releases were recorded
+        row = None
+    if row is None:
+        name = db.execute("SELECT release FROM _tables ORDER BY year DESC LIMIT 1").fetchone()[0]
+        row = (None, name, "provisional" if "Provisional" in name else "final")
+    return dict(zip(("year", "release", "status"), row))
 
 
 def finish(out, state, db, log, row):

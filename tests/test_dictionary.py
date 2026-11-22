@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import config
+from latest import latest_only  # the tests' own expected figures use the latest year only
 from build import build_dictionary as bd
 
 
@@ -278,7 +279,7 @@ class LoaderLogic(unittest.TestCase):
 class RealDictionary(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.db = sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True)
+        cls.db = latest_only(sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True))
         if not cls.db.execute("SELECT 1 FROM sqlite_master WHERE name='group_list'").fetchone():
             raise unittest.SkipTest("dictionary not loaded; run python build/build_dictionary.py")
 
@@ -300,7 +301,7 @@ class RealDictionary(unittest.TestCase):
             self.assertEqual(self.db.execute(f"SELECT COUNT(*) FROM dict_{name}").fetchone()[0], len(rows), name)
 
     def test_dictionary_fits_the_data(self):
-        db = sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True)
+        db = latest_only(sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True))
         self.assertEqual(bd.check(db), [])
         db.close()
 

@@ -68,7 +68,46 @@ CREATE TABLE IF NOT EXISTS _missing_reasons (  -- FOR DISPLAY ONLY. Why one scho
 CREATE INDEX IF NOT EXISTS ix_missing_reasons ON _missing_reasons (local_table, unitid, column, year);
 CREATE TABLE IF NOT EXISTS _conversion_failures (
     local_table TEXT, source_table TEXT, release TEXT, column TEXT, value TEXT, n_cells INTEGER);
+CREATE TABLE IF NOT EXISTS _releases (       -- one row per year held: which release it came from
+    year INTEGER PRIMARY KEY, release TEXT, status TEXT, source_file TEXT, loaded_at TEXT, seconds REAL);
 """
+
+
+def status_of(release):
+    """'provisional' or 'final', from the release folder name (IPEDS_2024-25_Provisional)."""
+    low = release.lower()
+    if low.endswith("_provisional"):
+        return "provisional"
+    if low.endswith("_final"):
+        return "final"
+    raise ValueError(f"{release}: the folder name must end in _Provisional or _Final")
+
+
+def year_of(release):
+    """2024 for IPEDS_2024-25_Provisional."""
+    m = re.match(r"IPEDS_(\d{4})-\d{2}_", release)
+    if not m:
+        raise ValueError(f"{release}: not a release folder name like IPEDS_2024-25_Final")
+    return int(m.group(1))
+
+
+def remove_year(out, year):
+    """Delete every row of one release year from every stacked table and every record, so a replaced release
+    leaves nothing behind. Tables and columns stay; only that year's rows go."""
+    out.executescript(REGISTRY)
+    old = [r for (r,) in out.execute("SELECT DISTINCT release FROM _tables WHERE year = ?", (year,))]
+    for (t,) in out.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").fetchall():
+        cols = {r[1].lower() for r in out.execute(f'PRAGMA table_info("{t}")')}
+        if t in ("_columns", "_special_codes", "_conversion_failures"):
+            continue                                    # keyed by release name; cleared below
+        if "year" in cols:
+            out.execute(f'DELETE FROM "{t}" WHERE year = ?', (year,))
+    for release in old:
+        for log in ("_columns", "_special_codes", "_conversion_failures", "_tables"):
+            out.execute(f"DELETE FROM {log} WHERE release = ?", (release,))
+    out.execute("DELETE FROM _releases WHERE year = ?", (year,))
+    out.commit()
+    return old
 
 
 def local_name(family):
@@ -278,27 +317,70 @@ def load_release(out, source_path, release, year, families, rules=None):
     return report
 
 
-def build(local_db=None, releases=None, source_data=None, catalog=None):
-    """Build the whole local database from scratch. Returns the registry rows for every release."""
-    local_db = Path(local_db or config.LOCAL_DB)
+def add_release(out, release, filename=None, source_data=None, catalog=None):
+    """Add one release, or replace the release already held for its year (a provisional release by its final
+    version, or a corrected file). Every row of that year is removed first, then the release is loaded.
+    Returns (registry rows, releases removed)."""
+    year = year_of(release)
+    status = status_of(release)
     source_data = Path(source_data or config.SOURCE_DATA)
+    filename = filename or next((f for r, f, _ in config.RELEASES if r == release), None)
+    if filename is None:
+        raise ValueError(f"{release} is not listed in config.RELEASES")
+    path = source_data / "annual" / release / filename
+    if not path.exists():
+        raise FileNotFoundError(path)
+    start = time.time()
+    removed = remove_year(out, year)
+    families = families_from_catalog(catalog or config.CATALOG, release)
+    report = load_release(out, path, release, year, families)
+    out.execute("INSERT OR REPLACE INTO _releases VALUES (?,?,?,?,datetime('now'),?)",
+                (year, release, status, str(path), round(time.time() - start, 1)))
+    out.commit()
+    return report, removed
+
+
+def build(local_db=None, releases=None, source_data=None, catalog=None):
+    """Build the whole local database from scratch, every release in config.RELEASES. Returns the registry rows."""
+    local_db = Path(local_db or config.LOCAL_DB)
     local_db.parent.mkdir(parents=True, exist_ok=True)
     if local_db.exists():
         local_db.unlink()
     out = sqlite3.connect(local_db, uri=True)
     report = []
+    years = [year_of(r) for r, _, _ in (releases or config.RELEASES)]
+    if len(set(years)) != len(years):
+        raise ValueError("config.RELEASES lists more than one release for the same year")
     for release, filename, year in (releases or config.RELEASES):
-        families = families_from_catalog(catalog or config.CATALOG, release)
-        report += load_release(out, source_data / "annual" / release / filename, release, year, families)
+        if year != year_of(release):
+            raise ValueError(f"{release}: the year in config ({year}) does not match the folder name")
+        report += add_release(out, release, filename, source_data, catalog)[0]
     out.execute("ANALYZE")
     out.commit()
     out.close()
     return report
 
 
-if __name__ == "__main__":
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Build the local database, or add or replace one release.")
+    parser.add_argument("--release", help="add or replace this one release (a folder name in config.RELEASES)")
+    args = parser.parse_args()
     start = time.time()
-    rows = build()
+    if args.release:
+        out = sqlite3.connect(config.LOCAL_DB, uri=True)  # uri: the source is attached read-only by address
+        rows, removed = add_release(out, args.release)
+        out.execute("ANALYZE")
+        out.commit()
+        out.close()
+        print(f"{args.release}: {len(rows)} tables loaded" + (f"; replaced {', '.join(removed)}" if removed else ""))
+    else:
+        rows = build()
+    return rows, start
+
+
+if __name__ == "__main__":
+    rows, start = main()
     bad = [r for r in rows if r[6] != r[7]]
     print(f"{'local table':<22}{'source table':<26}{'kind':<10}{'source rows':>12}{'loaded rows':>12}  ok")
     for r in rows:

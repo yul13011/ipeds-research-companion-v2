@@ -1,4 +1,6 @@
-"""Draft short plain names for first-version measures whose IPEDS titles are long. Writes a review file only:
+"""SET ASIDE (owner decision 2026-11-22): official IPEDS titles stay as the names shown; this draft is not loaded.
+
+Draft short plain names for first-version measures whose IPEDS titles are long. Writes a review file only:
 docs/stage4/plain_names_draft.csv (table, variable, IPEDS title, draft, length). Changes no dictionary table.
 
 The drafts apply the same shortenings everywhere, so similar measures read alike. Each shortening is listed in

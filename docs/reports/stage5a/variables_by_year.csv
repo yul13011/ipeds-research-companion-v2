@@ -1,0 +1,933 @@
+local_table,from_year,to_year,change,variable,new_name,title
+ADM,2015,2016,retired,ACTWR25,,ACT Writing 25th percentile score
+ADM,2015,2016,retired,ACTWR75,,ACT Writing 75th percentile score
+ADM,2015,2016,retired,SATWR25,,SAT Writing 25th percentile score
+ADM,2015,2016,retired,SATWR75,,SAT Writing 75th percentile score
+ADM,2021,2022,added,ACTCM50,,ACT Composite 50th percentile score
+ADM,2021,2022,added,ACTEN50,,ACT English 50th percentile score
+ADM,2021,2022,added,ACTMT50,,ACT Math 50th percentile score
+ADM,2021,2022,added,ADMCON10,,Work experience
+ADM,2021,2022,added,ADMCON11,,Personal statement or essay
+ADM,2021,2022,added,ADMCON12,,Legacy status
+ADM,2021,2022,added,ADMSSNAN,,Admissions another gender
+ADM,2021,2022,added,ADMSSNUN,,Admissions gender unknown
+ADM,2021,2022,added,APPLCNAN,,Applicants another gender
+ADM,2021,2022,added,APPLCNUN,,Applicants gender unknown
+ADM,2021,2022,added,ENRLAN,,Enrolled another gender
+ADM,2021,2022,added,ENRLFTAN,,Enrolled full time another gender
+ADM,2021,2022,added,ENRLFTUN,,Enrolled full time gender unknown
+ADM,2021,2022,added,ENRLPTAN,,Enrolled part time another gender
+ADM,2021,2022,added,ENRLPTUN,,Enrolled part time gender unknown
+ADM,2021,2022,added,ENRLUN,,Enrolled gender unknown
+ADM,2021,2022,added,SATMT50,,SAT Math 50th percentile score
+ADM,2021,2022,added,SATVR50,,SAT Evidence-Based Reading and Writing 50th percentile score
+AL,2015,2016,retired,LSUPPVRS,,Does your library support virtual reference services
+AL,2015,2016,added,LESERIA,,Number of electronic serials
+AL,2015,2016,added,LILLDYN,,Does institution have interlibrary loan services ?
+AL,2015,2016,added,LPSERIA,,Number of physical serials
+AL,2018,2019,added,LEXP100K,,"Were annual total library expenses greater than or equal to $100,000"
+AL,2019,2020,added,LILSYN,,Does  institution have Library Staff?
+AL,2019,2020,added,LSLIBRN,,Librarians FTE staff
+AL,2019,2020,added,LSOPAID,,All other paid FTE staff (Except Student Assistants)
+AL,2019,2020,added,LSOPROF,,Other professional FTE staff
+AL,2019,2020,added,LSSTAST,,Student assistants FTE
+AL,2019,2020,added,LSTOTAL,,Total library FTE staff
+CDEP,2019,2020,retired,PCERT1,,Number of less than 1-year certificate programs offered
+CDEP,2019,2020,retired,PCERT1DE,,Number of less than 1-year certificate programs offered via distance education
+CDEP,2019,2020,added,PASSOCDES,,Associate's degree - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PBACHLDES,,Bachelor's degree - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PCERT1A,,Certificates of less than 12 weeks - programs offered
+CDEP,2019,2020,added,PCERT1ADE,,Certificates of less than 12 weeks - all programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PCERT1ADES,,Certificates of less than 12 weeks - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PCERT1B,,"Certificates of at least 12 weeks, but less than 1 year - programs offered"
+CDEP,2019,2020,added,PCERT1BDE,,"Certificates of at least 12 weeks, but less than 1 year - all programs in a CIP code can be completed entirely via distance education"
+CDEP,2019,2020,added,PCERT1BDES,,"Certificates of at least 12 weeks, but less than 1 year - some programs in a CIP code can be completed entirely via distance education"
+CDEP,2019,2020,added,PCERT2DES,,"Certificates of 1 year, but less than 2 years - some programs in a CIP code can be completed entirely via distance education"
+CDEP,2019,2020,added,PCERT4DES,,"Certificates of 2 years, but less than 4 years - some programs in a CIP code can be completed entirely via distance education"
+CDEP,2019,2020,added,PDOCOTDES,,Doctor's degree-other - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PDOCPPDES,,Doctor's degree-professional practice - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PDOCRSDES,,Doctor's degree-research/scholarship - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PMASTRDES,,Master's degree - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PPBACCDES,,Postbaccalaureate certificate - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PPMASTDES,,Post-master's certificate - some programs in a CIP code can be completed entirely via distance education
+CDEP,2019,2020,added,PTOTALDES,,All award levels - number of programs with some programs in a CIP code can be completed entirely via distance education
+CUSTOMCGIDS,2022,2023,added,CYACTIVE,,
+CUSTOMCGIDS,2022,2023,added,MATCH,,
+CUSTOMCGIDS,2022,2023,added,SECTOR,,
+C_B,2021,2022,added,CSGUGAG,,"Graduate another gender
+"
+C_B,2021,2022,added,CSGUGTOT,,"Graduate gender unknown and another gender
+"
+C_B,2021,2022,added,CSGUGUN,,"Graduate gender unknown
+"
+C_B,2021,2022,added,CSGUKN,,"Total gender reported as one of the mutually exclusive binary categories (Men/Women)
+"
+C_B,2021,2022,added,CSGUTOT,,"Total of gender unknown and  another gender
+"
+C_B,2021,2022,added,CSGUTOTAG,,"Total another gender
+"
+C_B,2021,2022,added,CSGUTOTUN,,"Total gender unknown
+"
+C_B,2021,2022,added,CSGUUGAG,,"Undergraduate another gender
+"
+C_B,2021,2022,added,CSGUUGTT,,"Undergraduate gender unknown and another gender
+"
+C_B,2021,2022,added,CSGUUGUN,,"Undergraduate gender unknown
+"
+DRVAL,2015,2016,added,LESERIAP,,Digital/Electronic serials as a percent of the total library collection
+DRVAL,2015,2016,added,LPSERIAP,,Physical serials as a percent of the total library collection
+DRVAL,2019,2020,added,LLIBRFTE,,Librarians FTE staff
+DRVAL,2019,2020,added,LPAIDFTE,,All other paid FTE staff (Except Student Assistants)
+DRVAL,2019,2020,added,LPROFFTE,,Other professional FTE staff
+DRVAL,2019,2020,added,LSTUDFTE,,Student assistants FTE
+DRVAL,2019,2020,added,LTOTLFTE,,Total library FTE staff
+DRVC,2019,2020,retired,SCERT1,,Number of students receiving a certificate of less than 1-year
+DRVC,2019,2020,added,CERT1A,,Certificate of less than 12 weeks
+DRVC,2019,2020,added,CERT1B,,"Certificate of at least 12 weeks, but less than 1 year"
+DRVC,2019,2020,added,SCERT1A,,Number of students receiving certificates of less than 12 weeks
+DRVC,2019,2020,added,SCERT1B,,"Number of students receiving certificates of at least 12 weeks, but less than 1 year"
+DRVEF12,2019,2020,added,E12GRAD,,Graduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UG1SFT,,Full-time first-time degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UG1SPT,,Part-time first-time degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UG1ST,,First-time degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGCNFT,,Full-time continuing degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGCNPT,,Part-time continuing degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGCNT,,Continuing degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGFT,,Full-time undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGNDFT,,Full-time nondegree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGNDG,,Nondegree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGNDPT,,Part-time nondegree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGPT,,Part-time undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGTRFT,,Full-time transfer-in degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGTRN,,Transfer-in degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,E12UGTRPT,,Part-time transfer-in degree/certificate-seeking undergraduate 12-month unduplicated headcount
+DRVEF12,2019,2020,added,PCTE122M,,Percent of 12-month unduplicated headcount that are two or more races
+DRVEF12,2019,2020,added,PCTE12AN,,Percent of 12-month unduplicated headcount that are American Indian or Alaska Native
+DRVEF12,2019,2020,added,PCTE12AS,,Percent of 12-month unduplicated headcount that are Asian
+DRVEF12,2019,2020,added,PCTE12BK,,Percent of 12-month unduplicated headcount that are Black or African American
+DRVEF12,2019,2020,added,PCTE12DEEXC,,Percent of 12-month unduplicated headcount enrolled exclusively in distance education courses
+DRVEF12,2019,2020,added,PCTE12DENON,,Percent of 12-month unduplicated headcount not enrolled in any distance education courses
+DRVEF12,2019,2020,added,PCTE12DESOM,,Percent of 12-month unduplicated headcount enrolled in some but not all distance education courses
+DRVEF12,2019,2020,added,PCTE12GRAD2M,,Percent of graduate 12-month unduplicated headcount that are two or more races
+DRVEF12,2019,2020,added,PCTE12GRADAN,,Percent of graduate 12-month unduplicated headcount that are American Indian or Alaska Native
+DRVEF12,2019,2020,added,PCTE12GRADAS,,Percent of graduate 12-month unduplicated headcount that are Asian
+DRVEF12,2019,2020,added,PCTE12GRADBK,,Percent of graduate 12-month unduplicated headcount that are Black or African American
+DRVEF12,2019,2020,added,PCTE12GRADDEEXC,,Percent of graduate 12-month unduplicated headcount enrolled exclusively in distance education courses
+DRVEF12,2019,2020,added,PCTE12GRADDENON,,Percent of graduate 12-month unduplicated headcount not enrolled in any distance education courses
+DRVEF12,2019,2020,added,PCTE12GRADDESOM,,Percent of graduate 12-month unduplicated headcount enrolled in some but not all distance education courses
+DRVEF12,2019,2020,added,PCTE12GRADHS,,Percent of graduate 12-month unduplicated headcount that are Hispanic/Latino
+DRVEF12,2019,2020,added,PCTE12GRADNH,,Percent of graduate 12-month unduplicated headcount that are Native Hawaiian or Other Pacific Islander
+DRVEF12,2019,2020,added,PCTE12GRADNR,,Percent of graduate 12-month unduplicated headcount that are Nonresident Alien
+DRVEF12,2019,2020,added,PCTE12GRADUN,,Percent of graduate 12-month unduplicated headcount that are race/ethnicity unknown
+DRVEF12,2019,2020,added,PCTE12GRADW,,Percent of graduate 12-month unduplicated headcount that are women
+DRVEF12,2019,2020,added,PCTE12GRADWH,,Percent of graduate 12-month unduplicated headcount that are White
+DRVEF12,2019,2020,added,PCTE12HS,,Percent of 12-month unduplicated headcount that are Hispanic/Latino
+DRVEF12,2019,2020,added,PCTE12NH,,Percent of 12-month unduplicated headcount that are Native Hawaiian or Other Pacific Islander
+DRVEF12,2019,2020,added,PCTE12NR,,Percent of 12-month unduplicated headcount that are Nonresident Alien
+DRVEF12,2019,2020,added,PCTE12UG2M,,Percent of undergraduate 12-month unduplicated headcount that are two or more races
+DRVEF12,2019,2020,added,PCTE12UGAN,,Percent of undergraduate 12-month unduplicated headcount that are American Indian or Alaska Native
+DRVEF12,2019,2020,added,PCTE12UGAS,,Percent of undergraduate 12-month unduplicated headcount that are Asian
+DRVEF12,2019,2020,added,PCTE12UGBK,,Percent of undergraduate 12-month unduplicated headcount that are Black or African American
+DRVEF12,2019,2020,added,PCTE12UGDEEXC,,Percent of undergraduate 12-month unduplicated headcount enrolled exclusively in distance education courses
+DRVEF12,2019,2020,added,PCTE12UGDENON,,Percent of undergraduate 12-month unduplicated headcount not enrolled in any distance education courses
+DRVEF12,2019,2020,added,PCTE12UGDESOM,,Percent of undergraduate 12-month unduplicated headcount enrolled in some but not all distance education courses
+DRVEF12,2019,2020,added,PCTE12UGHS,,Percent of undergraduate 12-month unduplicated headcount that are Hispanic/Latino
+DRVEF12,2019,2020,added,PCTE12UGNH,,Percent of undergraduate 12-month unduplicated headcount that are Native Hawaiian or Other Pacific Islander
+DRVEF12,2019,2020,added,PCTE12UGNR,,Percent of undergraduate 12-month unduplicated headcount that are Nonresident Alien
+DRVEF12,2019,2020,added,PCTE12UGUN,,Percent of undergraduate 12-month unduplicated headcount that are race/ethnicity unknown
+DRVEF12,2019,2020,added,PCTE12UGW,,Percent of undergraduate 12-month unduplicated headcount that are women
+DRVEF12,2019,2020,added,PCTE12UGWH,,Percent of undergraduate 12-month unduplicated headcount that are White
+DRVEF12,2019,2020,added,PCTE12UN,,Percent of 12-month unduplicated headcount that are race/ethnicity unknown
+DRVEF12,2019,2020,added,PCTE12W,,Percent of 12-month unduplicated headcount that are women
+DRVEF12,2019,2020,added,PCTE12WH,,Percent of 12-month unduplicated headcount that are White
+DRVEF12,2021,2022,added,E12FT,,"Full-time 12-month unduplicated headcount
+"
+DRVEF12,2021,2022,added,E12GRADFT,,"Full-time graduate 12-month unduplicated headcount
+"
+DRVEF12,2021,2022,added,E12GRADPT,,"Part-time graduate 12-month unduplicated headcount
+"
+DRVEF12,2021,2022,added,E12PT,,"Part-time 12-month unduplicated headcount
+"
+DRVF,2015,2016,retired,F1ACSPPS,,"Salaries, wages, and benefit expenses for academic support as a percent of total expenses for academic support (GASB)"
+DRVF,2015,2016,retired,F1CREXPS,,"Salaries, wages, and benefit expenses for core expenses as a percent of total core expenses (GASB)"
+DRVF,2015,2016,retired,F1INSTPS,,"Salaries, wages, and benefit expenses for instruction as a percent of total expenses for instruction (GASB)"
+DRVF,2015,2016,retired,F1INSUPS,,"Salaries, wages, and benefit expenses for institutional support as a percent of total expenses for institutional support (GASB)"
+DRVF,2015,2016,retired,F1OTEXPS,,"Salaries, wages, and benefit expenses for other core expense functions  as a percent of total expenses for other core expense functions (GASB)"
+DRVF,2015,2016,retired,F1PBSVPS,,"Salaries, wages, and benefit expenses for public service as a percent of total expenses for public service (GASB)"
+DRVF,2015,2016,retired,F1RSRCPS,,"Salaries, wages, and benefit expenses for research as a percent of total expenses for research (GASB)"
+DRVF,2015,2016,retired,F1STSVPS,,"Salaries, wages, and benefit expenses for student services as a percent of total expenses for student services (GASB)"
+DRVF,2015,2016,retired,F2ACSPPS,,"Salaries, wages, and benefit expenses for academic support as a percent of total expenses for academic support (FASB)"
+DRVF,2015,2016,retired,F2CREXPS,,"Salaries, wages, and benefit expenses for core expenses as a percent of total core expenses (FASB)"
+DRVF,2015,2016,retired,F2INSTPS,,"Salaries, wages, and benefit expenses for instruction as a percent of total expenses for instruction (FASB)"
+DRVF,2015,2016,retired,F2INSUPS,,"Salaries, wages, and benefit expenses for institutional support as a percent of total expenses for institutional support (FASB)"
+DRVF,2015,2016,retired,F2OTEXPS,,"Salaries, wages, and benefit expenses for other core expense functions  as a percent of total expenses for other core expense functions (FASB)"
+DRVF,2015,2016,retired,F2PBSVPS,,"Salaries, wages, and benefit expenses for public service as a percent of total expenses for public service (FASB)"
+DRVF,2015,2016,retired,F2RSRCPS,,"Salaries, wages, and benefit expenses for research as a percent of total expenses for research (FASB)"
+DRVF,2015,2016,retired,F2STSVPS,,"Salaries, wages, and benefit expenses for student services as a percent of total expenses for student services (FASB)"
+DRVF,2015,2016,retired,F3ACSPPS,,"Salaries, wages, and benefit expenses for academic support as a percent of total expenses for academic support (for-profit institutions)"
+DRVF,2015,2016,retired,F3CREXPS,,"Salaries, wages, and benefit expenses for core expenses as a percent of total core expenses (for-profit institutions)"
+DRVF,2015,2016,retired,F3INSTPS,,"Salaries, wages, and benefit expenses for instruction as a percent of total expenses for instruction (for-profit institutions)"
+DRVF,2015,2016,retired,F3INSUPS,,"Salaries, wages, and benefit expenses for institutional support as a percent of total expenses for institutional support (for-profit institutions)"
+DRVF,2015,2016,retired,F3OTEXPS,,"Salaries, wages, and benefit expenses for other core expense functions  as a percent of total expenses for other core expense functions (for-profit)"
+DRVF,2015,2016,retired,F3PBSVPS,,"Salaries, wages, and benefit expenses for public service as a percent of total expenses for public service (for-profit institutions)"
+DRVF,2015,2016,retired,F3RSRCPS,,"Salaries, wages, and benefit expenses for research as a percent of total expenses for research (for-profit institutions)"
+DRVF,2015,2016,retired,F3STSVPS,,"Salaries, wages, and benefit expenses for student services as a percent of total expenses for student services (for-profit institutions)"
+DRVF,2015,2016,added,F1SWACSP,,Salaries and wages for academic support as a percent of total expenses for academic support (GASB)
+DRVF,2015,2016,added,F1SWCREP,,Salaries and wages for core expenses as a percent of total core expenses (GASB)
+DRVF,2015,2016,added,F1SWINSP,,Salaries and wages for instruction as a percent of total expenses for instruction (GASB)
+DRVF,2015,2016,added,F1SWISPP,,Salaries and wages for institutional support as a percent of total expenses for institutional support (GASB)
+DRVF,2015,2016,added,F1SWOTEP,,Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (GASB)
+DRVF,2015,2016,added,F1SWPBSP,,Salaries and wages for public service as a percent of total expenses for public service (GASB)
+DRVF,2015,2016,added,F1SWRSRP,,Salaries and wages for research as a percent of total expenses for research (GASB)
+DRVF,2015,2016,added,F1SWSTSP,,Salaries and wages for student services as a percent of total expenses for student services (GASB)
+DRVF,2015,2016,added,F2SWACSP,,Salaries and wages for academic support as a percent of total expenses for academic support (FASB)
+DRVF,2015,2016,added,F2SWCREP,,Salaries and wages for core expenses as a percent of total core expenses (FASB)
+DRVF,2015,2016,added,F2SWINSP,,Salaries and wages for instruction as a percent of total expenses for instruction (FASB)
+DRVF,2015,2016,added,F2SWISPP,,Salaries and wages for institutional support as a percent of total expenses for institutional support (FASB)
+DRVF,2015,2016,added,F2SWOTEP,,Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (FASB)
+DRVF,2015,2016,added,F2SWPBSP,,Salaries and wages for public service as a percent of total expenses for public service (FASB)
+DRVF,2015,2016,added,F2SWRSRP,,Salaries and wages for research as a percent of total expenses for research (FASB)
+DRVF,2015,2016,added,F2SWSTSP,,Salaries and wages for student services as a percent of total expenses for student services (FASB)
+DRVF,2015,2016,added,F3SWACSP,,Salaries and wages for academic support as a percent of total expenses for academic support (for-profit institutions)
+DRVF,2015,2016,added,F3SWCREP,,Salaries and wages for core expenses as a percent of total core expenses (for-profit institutions)
+DRVF,2015,2016,added,F3SWINSP,,Salaries and wages for instruction as a percent of total expenses for instruction (for-profit institutions)
+DRVF,2015,2016,added,F3SWISPP,,Salaries and wages for institutional support as a percent of total expenses for institutional support (for-profit institutions)
+DRVF,2015,2016,added,F3SWOTEP,,Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (for-profit)
+DRVF,2015,2016,added,F3SWPBSP,,Salaries and wages for public service as a percent of total expenses for public service (for-profit institutions)
+DRVF,2015,2016,added,F3SWRSRP,,Salaries and wages for research as a percent of total expenses for research (for-profit institutions)
+DRVF,2015,2016,added,F3SWSTSP,,Salaries and wages for student services as a percent of total expenses for student services (for-profit institutions)
+DRVGR,2015,2016,added,NRBA6RT,,Did not receive Pell Grants or Subsidized Stafford Loans - Bachelor's degree rate within 6 years
+DRVGR,2015,2016,added,NRGRRTT,,Did not receive Pell Grants or Subsidized Stafford Loans - Overall graduation rate within 150 percent of normal time
+DRVGR,2015,2016,added,PGBA6RT,,Pell Grant recipients - Bachelor's degree rate within 6 years
+DRVGR,2015,2016,added,PGGRRTT,,Pell Grant recipients - Overall graduation rate within 150 percent of normal time
+DRVGR,2015,2016,added,SSBA6RT,,Subsidized Stafford Loan recipients not receiving Pell Grants - Bachelor's degree rate within 6 years
+DRVGR,2015,2016,added,SSGRRTT,,Subsidized Stafford Loan recipients not receiving Pell Grants - Overall graduation rate within 150 percent of normal time
+DRVOM,2016,2017,retired,OM_FTFT_AWD6P,,"Percent of full-time, first-time, degree/certificate-seeking undergraduates receiving an award - 6 years"
+DRVOM,2016,2017,retired,OM_FTFT_AWD8P,,"Percent of full-time, first-time, degree/certificate-seeking undergraduates receiving an award - 8 years"
+DRVOM,2016,2017,retired,OM_FTFT_ENRAP,,"Percent of full-time, first-time, degree/certificate-seeking undergraduates enrolled at another institution"
+DRVOM,2016,2017,retired,OM_FTFT_ENRUP,,"Percent of full-time, first-time, degree/certificate seeking undergraduates enrollment status unknown"
+DRVOM,2016,2017,retired,OM_FTFT_ENRYP,,"Percent of full-time, first-time, degree/certificate-seeking undergraduates still enrolled at same institution"
+DRVOM,2016,2017,retired,OM_FTNFT_AWD6P,,"Percent of full-time, non-first-time, degree/certificate-seeking undergraduates receiving an award - 6 years"
+DRVOM,2016,2017,retired,OM_FTNFT_AWD8P,,"Percent of full-time, non-first-time, degree/certificate-seeking undergraduates receiving an award - 8 years"
+DRVOM,2016,2017,retired,OM_FTNFT_ENRAP,,"Percent of full-time, non-first-time, degree/certificate-seeking undergraduates enrolled at another institution"
+DRVOM,2016,2017,retired,OM_FTNFT_ENRUP,,"Percent of full-time, non-first-time, degree/certificate seeking undergraduates enrollment status unknown"
+DRVOM,2016,2017,retired,OM_FTNFT_ENRYP,,"Percent of full-time, non-first-time, degree/certificate-seeking undergraduates still enrolled at same institution"
+DRVOM,2016,2017,retired,OM_PTFT_AWD6P,,"Percent of part-time, first-time, degree/certificate-seeking undergraduates receiving an award - 6 years"
+DRVOM,2016,2017,retired,OM_PTFT_AWD8P,,"Percent of part-time, first-time, degree/certificate-seeking undergraduates receiving an award - 8 years"
+DRVOM,2016,2017,retired,OM_PTFT_ENRAP,,"Percent of part-time, first-time, degree/certificate-seeking undergraduates enrolled at another institution"
+DRVOM,2016,2017,retired,OM_PTFT_ENRUP,,"Percent of part-time, first-time, degree/certificate seeking undergraduates enrollment status unknown"
+DRVOM,2016,2017,retired,OM_PTFT_ENRYP,,"Percent of part-time, first-time, degree/certificate-seeking undergraduates still enrolled at same institution"
+DRVOM,2016,2017,retired,OM_PTNFT_AWD6P,,"Percent of part-time, non-first-time, degree/certificate-seeking undergraduates receiving an award - 6 years"
+DRVOM,2016,2017,retired,OM_PTNFT_AWD8P,,"Percent of part-time, non-first-time, degree/certificate-seeking undergraduates receiving an award - 8 years"
+DRVOM,2016,2017,retired,OM_PTNFT_ENRAP,,"Percent of part-time, non-first-time, degree/certificate-seeking undergraduates enrolled at another institution"
+DRVOM,2016,2017,retired,OM_PTNFT_ENRUP,,"Percent of part-time, non-first-time, degree/certificate seeking undergraduates enrollment status unknown"
+DRVOM,2016,2017,retired,OM_PTNFT_ENRYP,,"Percent of part-time, non-first-time, degree/certificate-seeking undergraduates still enrolled at same institution"
+DRVOM,2016,2017,added,OM1NPELASCP8,,"Percent full-time first-time, non-Pell recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM1NPELAWDP4,,"Percent full-time first-time, non-Pell recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM1NPELAWDP6,,"Percent full-time first-time, non-Pell recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM1NPELAWDP8,,"Percent full-time first-time, non-Pell recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM1NPELBACP8,,"Percent full-time first-time, non-Pell recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM1NPELCRTP8,,"Percent full-time first-time, non-Pell recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM1NPELENAP8,,"Percent full-time first-time, non-Pell recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM1NPELENUP8,,"Percent full-time first-time, non-Pell recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM1NPELENYP8,,"Percent full-time first-time, non-Pell recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM1PELLASCP8,,"Percent full-time first-time, Pell grant recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM1PELLAWDP4,,"Percent full-time first-time, Pell grant recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM1PELLAWDP6,,"Percent full-time first-time, Pell grant recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM1PELLAWDP8,,"Percent full-time first-time, Pell grant recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM1PELLBACP8,,"Percent full-time first-time, Pell grant recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM1PELLCRTP8,,"Percent full-time first-time, Pell grant recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM1PELLENAP8,,"Percent full-time first-time, Pell grant recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM1PELLENUP8,,"Percent full-time first-time, Pell grant recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM1PELLENYP8,,"Percent full-time first-time, Pell grant recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM1TOTLASCP8,,Percent full-time first-time receiving an associate's - 8 years
+DRVOM,2016,2017,added,OM1TOTLAWDP4,,Percent full-time first-time receiving an award - 4 years
+DRVOM,2016,2017,added,OM1TOTLAWDP6,,Percent full-time first-time receiving an award - 6 years
+DRVOM,2016,2017,added,OM1TOTLAWDP8,,Percent full-time first-time receiving an award - 8 years
+DRVOM,2016,2017,added,OM1TOTLBACP8,,Percent full-time first-time receiving a bachelor's - 8 years
+DRVOM,2016,2017,added,OM1TOTLCRTP8,,Percent full-time first-time receiving a certificate - 8 years
+DRVOM,2016,2017,added,OM1TOTLENAP8,,Percent full-time first-time subsequently enrolled at another institution - 8 years
+DRVOM,2016,2017,added,OM1TOTLENUP8,,Percent full-time first-time enrollment status unknown - 8 years
+DRVOM,2016,2017,added,OM1TOTLENYP8,,Percent full-time first-time still enrolled at same institution - 8 years
+DRVOM,2016,2017,added,OM2NPELASCP8,,"Percent part-time first-time, non-Pell recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM2NPELAWDP4,,"Percent part-time first-time, non-Pell recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM2NPELAWDP6,,"Percent part-time first-time, non-Pell recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM2NPELAWDP8,,"Percent part-time first-time, non-Pell recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM2NPELBACP8,,"Percent part-time first-time, non-Pell recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM2NPELCRTP8,,"Percent part-time first-time, non-Pell recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM2NPELENAP8,,"Percent part-time first-time, non-Pell recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM2NPELENUP8,,"Percent part-time first-time, non-Pell recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM2NPELENYP8,,"Percent part-time first-time, non-Pell recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM2PELLASCP8,,"Percent part-time first-time, Pell grant recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM2PELLAWDP4,,"Percent part-time first-time, Pell grant recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM2PELLAWDP6,,"Percent part-time first-time, Pell grant recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM2PELLAWDP8,,"Percent part-time first-time, Pell grant recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM2PELLBACP8,,"Percent part-time first-time, Pell grant recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM2PELLCRTP8,,"Percent part-time first-time, Pell grant recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM2PELLENAP8,,"Percent part-time first-time, Pell grant recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM2PELLENUP8,,"Percent part-time first-time, Pell grant recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM2PELLENYP8,,"Percent part-time first-time, Pell grant recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM2TOTLASCP8,,Percent part-time first-time receiving an associate's - 8 years
+DRVOM,2016,2017,added,OM2TOTLAWDP4,,Percent part-time first-time receiving an award - 4 years
+DRVOM,2016,2017,added,OM2TOTLAWDP6,,Percent part-time first-time receiving an award - 6 years
+DRVOM,2016,2017,added,OM2TOTLAWDP8,,Percent part-time first-time receiving an award - 8 years
+DRVOM,2016,2017,added,OM2TOTLBACP8,,Percent part-time first-time receiving a bachelor's - 8 years
+DRVOM,2016,2017,added,OM2TOTLCRTP8,,Percent part-time first-time receiving a certificate - 8 years
+DRVOM,2016,2017,added,OM2TOTLENAP8,,Percent part-time first-time subsequently enrolled at another institution - 8 years
+DRVOM,2016,2017,added,OM2TOTLENUP8,,Percent part-time first-time enrollment status unknown - 8 years
+DRVOM,2016,2017,added,OM2TOTLENYP8,,Percent part-time first-time still enrolled at same institution - 8 years
+DRVOM,2016,2017,added,OM3NPELASCP8,,"Percent full-time non-first-time, non-Pell recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM3NPELAWDP4,,"Percent full-time non-first-time, non-Pell recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM3NPELAWDP6,,"Percent full-time non-first-time, non-Pell recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM3NPELAWDP8,,"Percent full-time non-first-time, non-Pell recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM3NPELBACP8,,"Percent full-time non-first-time, non-Pell recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM3NPELCRTP8,,"Percent full-time non-first-time, non-Pell recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM3NPELENAP8,,"Percent full-time non-first-time, non-Pell recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM3NPELENUP8,,"Percent full-time non-first-time, non-Pell recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM3NPELENYP8,,"Percent full-time non-first-time, non-Pell recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM3PELLASCP8,,"Percent full-time non-first-time, Pell grant recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM3PELLAWDP4,,"Percent full-time non-first-time, Pell grant recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM3PELLAWDP6,,"Percent full-time non-first-time, Pell grant recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM3PELLAWDP8,,"Percent full-time non-first-time, Pell grant recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM3PELLBACP8,,"Percent full-time non-first-time, Pell grant recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM3PELLCRTP8,,"Percent full-time non-first-time, Pell grant recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM3PELLENAP8,,"Percent full-time non-first-time, Pell grant recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM3PELLENUP8,,"Percent full-time non-first-time, Pell grant recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM3PELLENYP8,,"Percent full-time non-first-time, Pell grant recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM3TOTLASCP8,,Percent full-time non-first-time receiving an associate's - 8 years
+DRVOM,2016,2017,added,OM3TOTLAWDP4,,Percent full-time non-first-time receiving an award - 4 years
+DRVOM,2016,2017,added,OM3TOTLAWDP6,,Percent full-time non-first-time receiving an award - 6 years
+DRVOM,2016,2017,added,OM3TOTLAWDP8,,Percent full-time non-first-time receiving an award - 8 years
+DRVOM,2016,2017,added,OM3TOTLBACP8,,Percent full-time non-first-time receiving a bachelor's - 8 years
+DRVOM,2016,2017,added,OM3TOTLCRTP8,,Percent full-time non-first-time receiving a certificate - 8 years
+DRVOM,2016,2017,added,OM3TOTLENAP8,,Percent full-time non-first-time subsequently enrolled at another institution - 8 years
+DRVOM,2016,2017,added,OM3TOTLENUP8,,Percent full-time non-first-time enrollment status unknown - 8 years
+DRVOM,2016,2017,added,OM3TOTLENYP8,,Percent full-time non-first-time still enrolled at same institution - 8 years
+DRVOM,2016,2017,added,OM4NPELASCP8,,"Percent part-time non-first-time, non-Pell recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM4NPELAWDP4,,"Percent part-time non-first-time, non-Pell recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM4NPELAWDP6,,"Percent part-time non-first-time, non-Pell recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM4NPELAWDP8,,"Percent part-time non-first-time, non-Pell recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM4NPELBACP8,,"Percent part-time non-first-time, non-Pell recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM4NPELCRTP8,,"Percent part-time non-first-time, non-Pell recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM4NPELENAP8,,"Percent part-time non-first-time, non-Pell recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM4NPELENUP8,,"Percent part-time non-first-time, non-Pell recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM4NPELENYP8,,"Percent part-time non-first-time, non-Pell recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM4PELLASCP8,,"Percent part-time non-first-time, Pell grant recipients receiving an associate's - 8 years"
+DRVOM,2016,2017,added,OM4PELLAWDP4,,"Percent part-time non-first-time, Pell grant recipients receiving an award - 4 years"
+DRVOM,2016,2017,added,OM4PELLAWDP6,,"Percent part-time non-first-time, Pell grant recipients receiving an award - 6 years"
+DRVOM,2016,2017,added,OM4PELLAWDP8,,"Percent part-time non-first-time, Pell grant recipients receiving an award - 8 years"
+DRVOM,2016,2017,added,OM4PELLBACP8,,"Percent part-time non-first-time, Pell grant recipients receiving a bachelor's - 8 years"
+DRVOM,2016,2017,added,OM4PELLCRTP8,,"Percent part-time non-first-time, Pell grant recipients receiving a certificate - 8 years"
+DRVOM,2016,2017,added,OM4PELLENAP8,,"Percent part-time non-first-time, Pell grant recipients subsequently enrolled at another institution - 8 years"
+DRVOM,2016,2017,added,OM4PELLENUP8,,"Percent part-time non-first-time, Pell grant recipients enrollment status unknown - 8 years"
+DRVOM,2016,2017,added,OM4PELLENYP8,,"Percent part-time non-first-time, Pell grant recipients still enrolled at same institution - 8 years"
+DRVOM,2016,2017,added,OM4TOTLASCP8,,Percent part-time non-first-time receiving an associate's - 8 years
+DRVOM,2016,2017,added,OM4TOTLAWDP4,,Percent part-time non-first-time receiving an award - 4 years
+DRVOM,2016,2017,added,OM4TOTLAWDP6,,Percent part-time non-first-time receiving an award - 6 years
+DRVOM,2016,2017,added,OM4TOTLAWDP8,,Percent part-time non-first-time receiving an award - 8 years
+DRVOM,2016,2017,added,OM4TOTLBACP8,,Percent part-time non-first-time receiving a bachelor's - 8 years
+DRVOM,2016,2017,added,OM4TOTLCRTP8,,Percent part-time non-first-time receiving a certificate - 8 years
+DRVOM,2016,2017,added,OM4TOTLENAP8,,Percent part-time non-first-time subsequently enrolled at another institution - 8 years
+DRVOM,2016,2017,added,OM4TOTLENUP8,,Percent part-time non-first-time enrollment status unknown - 8 years
+DRVOM,2016,2017,added,OM4TOTLENYP8,,Percent part-time non-first-time still enrolled at same institution - 8 years
+EFA,2021,2022,added,EFGNDRAN,,Another gender
+EFA,2021,2022,added,EFGNDRKN,,Total gender reported as one of the mutually exclusive binary categories (Men/Women)
+EFA,2021,2022,added,EFGNDRUA,,Total of gender unknown and another gender
+EFA,2021,2022,added,EFGNDRUN,,Gender unknown
+EFD,2015,2016,added,RRFTIN,,Inclusions to the full-time fall 2015 cohort
+EFD,2015,2016,added,RRPTIN,,Inclusions to the part-time fall 2015 cohort
+EFFY,2019,2020,added,EFFYALEV,,Level and degree/certificate-seeking status of student
+EFFY,2021,2022,added,EFYGUAN,,"Another gender
+"
+EFFY,2021,2022,added,EFYGUKN,,"Total gender reported as one of the mutually exclusive binary categories (Men/Women)
+"
+EFFY,2021,2022,added,EFYGUTOT,,"Total of gender unknown and  another gender
+"
+EFFY,2021,2022,added,EFYGUUN,,"Gender unknown
+"
+FLAGS,2015,2016,retired,OMFLG1GR,,"OM flag 1 - inconsistent data with full-time first-time cohort, 2-year institutions"
+FLAGS,2015,2016,retired,OMFLG2GR,,"OM flag 2 - inconsistent data with bachelor's cohort, 4-year institutions"
+FLAGS,2015,2016,retired,OMFLG3GR,,"OM flag 3 - inconsistent data with full-time first-time cohort, 4-year institutions"
+FLAGS,2015,2016,retired,OMFLG4,,OM flag 4 - no completers data reported
+FLAGS,2015,2016,retired,OMFLG5,,OM flag 5 - no transfer-out data  reported
+FLAGS,2015,2016,retired,OMFLG6GR,,"OM flag 6 - inconsistent  first-time, full-time transfer-out data"
+FLAGS,2015,2016,added,PRCHTP_F,,Parent/child system indicator - Finance
+FLAGS,2018,2019,retired,REV_ADM,,
+FLAGS,2018,2019,retired,REV_AL,,
+FLAGS,2018,2019,retired,REV_C,,
+FLAGS,2018,2019,retired,REV_E12,,
+FLAGS,2018,2019,retired,REV_EF,,
+FLAGS,2018,2019,retired,REV_F,,
+FLAGS,2018,2019,retired,REV_GR,,
+FLAGS,2018,2019,retired,REV_GR2,,
+FLAGS,2018,2019,retired,REV_HR,,
+FLAGS,2018,2019,retired,REV_IC,,
+FLAGS,2018,2019,retired,REV_OM,,
+FLAGS,2018,2019,retired,REV_SFA,,
+FLAGS,2018,2019,added,IDX_ADM,,ID number of parent institution - Admissions
+FLAGS,2018,2019,added,PCADM_F,,Parent/child allocation factor - Admissions
+FLAGS,2018,2019,added,PRCH_ADM,,Parent/child indicator for Admissions
+FLAGS,2019,2020,added,F_ATHRV1,,Are intercollegiate athletic revenues included with sales and services of educational activities
+FLAGS,2019,2020,added,F_ATHRV2,,Are intercollegiate athletic revenues included with sales and services of auxiliary enterprises
+FLAGS,2019,2020,added,F_ATHRV3,,Does not have intercollegiate athletics revenues
+FLAGS,2019,2020,added,F_ATHRV9,,Are intercollegiate athletic revenues included with a source other than educational activities or auxiliary enterprises
+FLAGS,2019,2020,added,REV_ADM,,"Revision status - Admissions
+"
+FLAGS,2019,2020,added,REV_AL,,Revision status - Academic Libraries
+FLAGS,2019,2020,added,REV_C,,Revision status - Completions
+FLAGS,2019,2020,added,REV_E12,,Revision status - 12-month enrollment
+FLAGS,2019,2020,added,REV_EF,,Revision status - Fall Enrollment
+FLAGS,2019,2020,added,REV_F,,Revision status - Finance
+FLAGS,2019,2020,added,REV_GR,,Revision status - Graduation Rates
+FLAGS,2019,2020,added,REV_GR2,,Revision status - Graduation Rates 200
+FLAGS,2019,2020,added,REV_HR,,Revision status - Human Resources
+FLAGS,2019,2020,added,REV_IC,,"Revision status - Institutional Characteristics
+"
+FLAGS,2019,2020,added,REV_OM,,Revision status - Outcome Measures
+FLAGS,2019,2020,added,REV_SFA,,Revision status - Student Financial Aid
+FLAGS,2021,2022,retired,F_ATHLTC,,Are intercollegiate athletic expenses accounted for as auxiliary enterprises or treated as student services
+FLAGS,2021,2022,retired,F_ATHRV3,,Does not have intercollegiate athletics revenues
+FLAGS,2021,2022,added,FCOLATHL,,Participates in intercollegiate athletics
+FLAGS,2021,2022,added,F_ATHEX1,,Intercollegiate athletic expenses accounted for as auxiliary enterprises
+FLAGS,2021,2022,added,F_ATHEX2,,Intercollegiate athletic expenses accounted for as student services
+FLAGS,2021,2022,added,F_ATHEX9,,Intercollegiate athletic expenses accounted for as other expense functional classification
+FLAGS,2021,2022,added,F_ATHRV,,Intercollegiate athletic revenues
+FLAGS,2023,2024,retired,REV_ADM,,Revision status - Admissions
+FLAGS,2023,2024,retired,REV_AL,,Revision status - Academic Libraries
+FLAGS,2023,2024,retired,REV_C,,Revision status - Completions
+FLAGS,2023,2024,retired,REV_E12,,Revision status - 12-month enrollment
+FLAGS,2023,2024,retired,REV_EF,,Revision status - Fall Enrollment
+FLAGS,2023,2024,retired,REV_F,,Revision status - Finance
+FLAGS,2023,2024,retired,REV_GR,,Revision status - Graduation Rates
+FLAGS,2023,2024,retired,REV_GR2,,Revision status - Graduation Rates 200
+FLAGS,2023,2024,retired,REV_HR,,Revision status - Human Resources
+FLAGS,2023,2024,retired,REV_IC,,Revision status - Institutional Characteristics
+FLAGS,2023,2024,retired,REV_OM,,Revision status - Outcome Measures
+FLAGS,2023,2024,retired,REV_SFA,,Revision status - Student Financial Aid
+FLAGS,2023,2024,added,ENRHSST,,Enolls high school students in college courses for credit
+FLAGS,2023,2024,added,ENRHSST1,,Enolls high school students in college courses for credit within a dual enrollment program
+FLAGS,2023,2024,added,ENRHSST2,,Enolls high school students in college courses for credit outside a dual enrollment program
+FLAGS,2023,2024,added,IDX_COS,,ID number of parent institution - Cost component
+FLAGS,2023,2024,added,IMP_COS1,,Type of imputation method - Cost component (fall)
+FLAGS,2023,2024,added,IMP_COS2,,Type of imputation method - Cost component (winter)
+FLAGS,2023,2024,added,LOCK_COS1,,Status of cost component (fall) when institution was migrated
+FLAGS,2023,2024,added,LOCK_COS2,,Status of cost component (winter) when institution was migrated
+FLAGS,2023,2024,added,PCCOS_F,,Parent/child allocation factor - Cost component
+FLAGS,2023,2024,added,PRCH_COS,,Parent/child indicator - Cost component
+FLAGS,2023,2024,added,STAT_COS,,Response status - Cost component
+FLAGS,2023,2024,added,STAT_COS1,,Response status - Cost component (fall)
+FLAGS,2023,2024,added,STAT_COS2,,Response status - Cost component (Winter)
+F_F1A,2015,2016,retired,F1C013,,Instruction - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C014,,Instruction - Depreciation
+F_F1A,2015,2016,retired,F1C015,,Instruction - All other
+F_F1A,2015,2016,retired,F1C016,,Instruction - Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C017,,Instruction - Interest
+F_F1A,2015,2016,retired,F1C023,,Research - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C024,,Research - Depreciation
+F_F1A,2015,2016,retired,F1C025,,Research - All other
+F_F1A,2015,2016,retired,F1C026,,Research - Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C027,,Research - Interest
+F_F1A,2015,2016,retired,F1C033,,Public service - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C034,,Public service - Depreciation
+F_F1A,2015,2016,retired,F1C035,,Public service - All other
+F_F1A,2015,2016,retired,F1C036,,Public service - Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C037,,Public service - Interest
+F_F1A,2015,2016,retired,F1C053,,Academic support - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C054,,Academic support - Depreciation
+F_F1A,2015,2016,retired,F1C055,,Academic support - All other
+F_F1A,2015,2016,retired,F1C056,,Academic support - Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C057,,Academic support - Interest
+F_F1A,2015,2016,retired,F1C063,,Student services - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C064,,Student services - Depreciation
+F_F1A,2015,2016,retired,F1C065,,Student services - All other
+F_F1A,2015,2016,retired,F1C066,,Student services - Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C067,,Student services - Interest
+F_F1A,2015,2016,retired,F1C073,,Institutional support - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C074,,Institutional support - Depreciation
+F_F1A,2015,2016,retired,F1C075,,Institutional support - All other
+F_F1A,2015,2016,retired,F1C076,,Institutional support - Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C077,,Institutional support - Interest
+F_F1A,2015,2016,retired,F1C081,,Operation  maintenance of plant - Current year total
+F_F1A,2015,2016,retired,F1C082,,Operation  maintenance of plant - Salaries and wages
+F_F1A,2015,2016,retired,F1C083,,Operation  maintenance of plant - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C084,,Operation  maintenance of plant - Depreciation
+F_F1A,2015,2016,retired,F1C085,,Operation  maintenance of plant - All other
+F_F1A,2015,2016,retired,F1C086,,Operation maintenance of plant - Operation and maintenance of plant
+F_F1A,2015,2016,retired,F1C087,,Operation maintenance of plant - Interest
+F_F1A,2015,2016,retired,F1C105,,Scholarships and fellowships expenses -- All other
+F_F1A,2015,2016,retired,F1C113,,Auxiliary enterprises -- Employee fringe benefits
+F_F1A,2015,2016,retired,F1C114,,Auxiliary enterprises -- Depreciation
+F_F1A,2015,2016,retired,F1C115,,Auxiliary enterprises -- All other
+F_F1A,2015,2016,retired,F1C116,,Auxiliary enterprises -  Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C117,,Auxiliary enterprises - Interest
+F_F1A,2015,2016,retired,F1C123,,Hospital services - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C124,,Hospital services - Depreciation
+F_F1A,2015,2016,retired,F1C125,,Hospital services - All other
+F_F1A,2015,2016,retired,F1C126,,Hospital services -  Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C127,,Hospital services - Interest
+F_F1A,2015,2016,retired,F1C133,,Independent operations - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C134,,Independent operations - Depreciation
+F_F1A,2015,2016,retired,F1C135,,Independent operations - All other
+F_F1A,2015,2016,retired,F1C136,,Independent operations -  Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C137,,Independent operations - Interest
+F_F1A,2015,2016,retired,F1C143,,Other expenses  deductions - Employee fringe benefits
+F_F1A,2015,2016,retired,F1C144,,Other expenses  deductions - Depreciation
+F_F1A,2015,2016,retired,F1C145,,Other expenses  deductions - All other
+F_F1A,2015,2016,retired,F1C146,,Other expenses deductions -  Operations and maintenance of plant
+F_F1A,2015,2016,retired,F1C147,,Other expenses deductions - Interest
+F_F1A,2015,2016,retired,F1C194,,Total expenses  deductions - Depreciation
+F_F1A,2015,2016,retired,F1C195,,Total expenses  deductions - All other
+F_F1A,2015,2016,retired,F1C196,,Total expenses deductions - Operations and maintenance of plant
+F_F1A,2015,2016,renamed,F1C197,F1C19IN,Total expenses deductions - Interest
+F_F1A,2015,2016,added,F1A19,,Deferred outflows of resources
+F_F1A,2015,2016,added,F1A20,,Deferred inflows of resources
+F_F1A,2015,2016,added,F1C19DP,,Total expenses  and deductions - Depreciation
+F_F1A,2015,2016,added,F1C19OM,,Total expenses and deductions - Operations and maintenance of plant
+F_F1A,2015,2016,added,F1C19OT,,Total expenses and deductions - Other Natural Expenses and Deductions
+F_F1A,2018,2019,added,F1M05,,Other postemployment benefit (OPEB) expense
+F_F1A,2018,2019,added,F1M06,,Other postemployment benefit (OPEB) net  liability
+F_F1A,2018,2019,added,F1M07,,Deferred inflows related to other postemployment benefit (OPEB)
+F_F1A,2018,2019,added,F1M08,,Deferred outflows related to other postemployment benefit (OPEB)
+F_F1A,2019,2020,added,F1E12,,"Total discounts and allowances from Pell grants"
+F_F1A,2019,2020,added,F1E121,,"Discounts and allowances from Pell grants applied to tuition and fees"
+F_F1A,2019,2020,added,F1E122,,Discounts and allowances from Pell grants applied to auxiliary enterprises
+F_F1A,2019,2020,added,F1E13,,Total discounts and allowances from other federal grants
+F_F1A,2019,2020,added,F1E131,,Discounts and allowances from other federal grants applied to tuition and fees
+F_F1A,2019,2020,added,F1E132,,Discounts and allowances from other federal grants applied to auxiliary enterprises
+F_F1A,2019,2020,added,F1E14,,Total discounts and allowances from state government grants
+F_F1A,2019,2020,added,F1E141,,Discounts and allowances from state government grants applied to tuition and fees
+F_F1A,2019,2020,added,F1E142,,Discounts and allowances from state government grants applied to auxiliary enterprises
+F_F1A,2019,2020,added,F1E15,,Discounts and allowances from local government grants
+F_F1A,2019,2020,added,F1E151,,Discounts and allowances from local government grants applied to tuition and fees
+F_F1A,2019,2020,added,F1E152,,"Discounts and allowances from local government grants applied to auxiliary
+ enterprises"
+F_F1A,2019,2020,added,F1E16,,Total discounts and allowances from endowments and gifts
+F_F1A,2019,2020,added,F1E161,,Discounts and allowances from endowments and gifts applied to tuition and fees
+F_F1A,2019,2020,added,F1E162,,Discounts and allowances from endowments and gifts applied to auxiliary enterprises
+F_F1A,2019,2020,added,F1E17,,"Total discounts and allowances from other institutional sources"
+F_F1A,2019,2020,added,F1E171,,"Discounts and
+ allowances from other institutional sources applied to tuition and fees"
+F_F1A,2019,2020,added,F1E172,,Discounts and allowances from other institutional sources applied to auxiliary enterprises
+F_F1A,2019,2020,added,F1H03,,Change in value of endowment net assets
+F_F1A,2019,2020,added,F1H03A,,New gifts and additions
+F_F1A,2019,2020,added,F1H03B,,Endowment net investment return
+F_F1A,2019,2020,added,F1H03C,,Spending distribution for current use
+F_F1A,2019,2020,added,F1H03D,,Other changes in value of endowment net assets
+F_F1A,2019,2020,added,F1MHOP,,Postemployment benefits other than pension (OPEB)  reported
+F_F1A,2019,2020,added,F1N01,,Operating income (Loss) + net nonoperating revenues (expenses)
+F_F1A,2019,2020,added,F1N02,,Operating revenues + nonoperating revenues
+F_F1A,2019,2020,added,F1N03,,Change in net position
+F_F1A,2019,2020,added,F1N04,,Net position
+F_F1A,2019,2020,added,F1N05,,Expendable net assets
+F_F1A,2019,2020,added,F1N06,,Plant-related debt
+F_F1A,2019,2020,added,F1N07,,Total expenses
+F_F2,2015,2016,retired,F2E013,,Instruction-Benefits
+F_F2,2015,2016,retired,F2E014,,Instruction-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E015,,Instruction-Depreciation
+F_F2,2015,2016,retired,F2E016,,Instruction-Interest
+F_F2,2015,2016,retired,F2E017,,Instruction-All other
+F_F2,2015,2016,retired,F2E023,,Research-Benefits
+F_F2,2015,2016,retired,F2E024,,Research-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E025,,Research-Depreciation
+F_F2,2015,2016,retired,F2E026,,Research-Interest
+F_F2,2015,2016,retired,F2E027,,Research-All other
+F_F2,2015,2016,retired,F2E033,,Public service-Benefits
+F_F2,2015,2016,retired,F2E034,,Public service-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E035,,Public service-Depreciation
+F_F2,2015,2016,retired,F2E036,,Public service-Interest
+F_F2,2015,2016,retired,F2E037,,Public service-All other
+F_F2,2015,2016,retired,F2E043,,Academic support-Benefits
+F_F2,2015,2016,retired,F2E044,,Academic support-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E045,,Academic support-Depreciation
+F_F2,2015,2016,retired,F2E046,,Academic support-Interest
+F_F2,2015,2016,retired,F2E047,,Academic support-All other
+F_F2,2015,2016,retired,F2E053,,Student service-Benefits
+F_F2,2015,2016,retired,F2E054,,Student service-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E055,,Student service-Depreciation
+F_F2,2015,2016,retired,F2E056,,Student service-Interest
+F_F2,2015,2016,retired,F2E057,,Student service-All other
+F_F2,2015,2016,retired,F2E063,,Institutional support-Benefits
+F_F2,2015,2016,retired,F2E064,,Institutional support-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E065,,Institutional support-Depreciation
+F_F2,2015,2016,retired,F2E066,,Institutional support-Interest
+F_F2,2015,2016,retired,F2E067,,Institutional support-All other
+F_F2,2015,2016,retired,F2E073,,Auxiliary enterprises-Benefits
+F_F2,2015,2016,retired,F2E074,,Auxiliary enterprises-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E075,,Auxiliary enterprises-Depreciation
+F_F2,2015,2016,retired,F2E076,,Auxiliary enterprises-Interest
+F_F2,2015,2016,retired,F2E077,,Auxiliary enterprises-All other
+F_F2,2015,2016,retired,F2E087,,Net grant aid to students-All other
+F_F2,2015,2016,retired,F2E093,,Hospital services-Benefits
+F_F2,2015,2016,retired,F2E094,,Hospital services-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E095,,Hospital services-Depreciation
+F_F2,2015,2016,retired,F2E096,,Hospital services-Interest
+F_F2,2015,2016,retired,F2E097,,Hospital services-All other
+F_F2,2015,2016,retired,F2E103,,Independent operations-Benefits
+F_F2,2015,2016,retired,F2E104,,Independent operations-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E105,,Independent operations-Depreciation
+F_F2,2015,2016,retired,F2E106,,Independent operations-Interest
+F_F2,2015,2016,retired,F2E107,,Independent operations-All other
+F_F2,2015,2016,retired,F2E111,,Operation and maintenance of plant-Total amount
+F_F2,2015,2016,retired,F2E112,,Operation and maintenance of plant-Salaries and wages
+F_F2,2015,2016,retired,F2E113,,Operation and maintenance of plant-Benefits
+F_F2,2015,2016,retired,F2E114,,Operation and maintenance of plant-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E115,,Operation and maintenance of plant-Depreciation
+F_F2,2015,2016,retired,F2E116,,Operation and maintenance of plant-Interest
+F_F2,2015,2016,retired,F2E117,,Operation and maintenance of plant-All other
+F_F2,2015,2016,retired,F2E123,,Other expenses-Benefits
+F_F2,2015,2016,retired,F2E124,,Other expenses-Operation and maintenance of plant
+F_F2,2015,2016,retired,F2E125,,Other expenses-Depreciation
+F_F2,2015,2016,retired,F2E126,,Other expenses-Interest
+F_F2,2015,2016,retired,F2E127,,Other expenses-All other
+F_F2,2015,2016,added,F2C10,,Total discounts and allowances
+F_F2,2019,2020,added,F2C12,,"Total discounts and
+ allowances from Pell grants"
+F_F2,2019,2020,added,F2C121,,"Discounts and allowances from Pell grants applied to tuition and fees"
+F_F2,2019,2020,added,F2C122,,Discounts and allowances from Pell grants applied to auxiliary enterprises
+F_F2,2019,2020,added,F2C13,,Total discounts and allowances from other federal grants
+F_F2,2019,2020,added,F2C131,,Discounts and allowances from other federal grants applied to tuition and fees
+F_F2,2019,2020,added,F2C132,,"Discounts and allowances from other federal grants applied to auxiliary enterprises"
+F_F2,2019,2020,added,F2C14,,"Total discounts and allowances from state government grants"
+F_F2,2019,2020,added,F2C141,,"Discounts and allowances from state government grants applied to tuition and fees"
+F_F2,2019,2020,added,F2C142,,Discounts and allowances from state government grants applied to auxiliary enterprises
+F_F2,2019,2020,added,F2C15,,Discounts and allowances from local government grants
+F_F2,2019,2020,added,F2C151,,Discounts and allowances from local government grants applied to tuition and fees
+F_F2,2019,2020,added,F2C152,,Discounts and allowances from local government grants applied to auxiliary enterprises
+F_F2,2019,2020,added,F2C16,,Total discounts and allowances from endowments and gifts
+F_F2,2019,2020,added,F2C161,,Discounts and allowances from endowments and gifts applied to tuition and fees
+F_F2,2019,2020,added,F2C162,,Discounts and allowances from endowments and gifts applied to auxiliary enterprises
+F_F2,2019,2020,added,F2C17,,Total discounts and allowances from other institutional sources
+F_F2,2019,2020,added,F2C171,,Discounts and allowances from other institutional sources applied to tuition and fees
+F_F2,2019,2020,added,F2C172,,Discounts and allowances from other institutional sources applied to auxiliary enterprises
+F_F2,2019,2020,added,F2H03,,Change in value of endowment net assets
+F_F2,2019,2020,added,F2H03A,,New gifts and additions
+F_F2,2019,2020,added,F2H03B,,Endowment net investment return
+F_F2,2019,2020,added,F2H03C,,Spending distribution for current use
+F_F2,2019,2020,added,F2H03D,,Other changes in value of endowment net assets
+F_F2,2019,2020,added,F2I01,,Change in unrestricted net assets
+F_F2,2019,2020,added,F2I02,,Total unrestricted operating revenues
+F_F2,2019,2020,added,F2I03,,Change in net assets
+F_F2,2019,2020,added,F2I04,,Total net assets
+F_F2,2019,2020,added,F2I05,,Expendable net assets
+F_F2,2019,2020,added,F2I06,,Plant-related debt
+F_F2,2019,2020,added,F2I07,,Total expenses
+F_F3,2015,2016,retired,F3E013,,Instruction-Benefits
+F_F3,2015,2016,retired,F3E014,,Instruction-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E015,,Instruction-Depreciation
+F_F3,2015,2016,retired,F3E016,,Instruction-Interest
+F_F3,2015,2016,retired,F3E017,,Instruction-All other
+F_F3,2015,2016,retired,F3E02A3,,Research-Benefits
+F_F3,2015,2016,retired,F3E02A4,,Research-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E02A5,,Research-Depreciation
+F_F3,2015,2016,retired,F3E02A6,,Research-Interest
+F_F3,2015,2016,retired,F3E02A7,,Research-All other
+F_F3,2015,2016,retired,F3E02B3,,Public service-Benefits
+F_F3,2015,2016,retired,F3E02B4,,Public service-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E02B5,,Public service-Depreciation
+F_F3,2015,2016,retired,F3E02B6,,Public service-Interest
+F_F3,2015,2016,retired,F3E02B7,,Public service-All other
+F_F3,2015,2016,retired,F3E03A3,,Academic support-Benefits
+F_F3,2015,2016,retired,F3E03A4,,Academic support-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E03A5,,Academic support-Depreciation
+F_F3,2015,2016,retired,F3E03A6,,Academic support-Interest
+F_F3,2015,2016,retired,F3E03A7,,Academic support-All other
+F_F3,2015,2016,retired,F3E03B3,,Student service-Benefits
+F_F3,2015,2016,retired,F3E03B4,,Student service-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E03B5,,Student service-Depreciation
+F_F3,2015,2016,retired,F3E03B6,,Student service-Interest
+F_F3,2015,2016,retired,F3E03B7,,Student service-All other
+F_F3,2015,2016,retired,F3E03C3,,Institutional support-Benefits
+F_F3,2015,2016,retired,F3E03C4,,Institutional support-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E03C5,,Institutional support-Depreciation
+F_F3,2015,2016,retired,F3E03C6,,Institutional support-Interest
+F_F3,2015,2016,retired,F3E03C7,,Institutional support-All other
+F_F3,2015,2016,retired,F3E043,,Auxiliary enterprises-Benefits
+F_F3,2015,2016,retired,F3E044,,Auxiliary enterprises-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E045,,Auxiliary enterprises-Depreciation
+F_F3,2015,2016,retired,F3E046,,Auxiliary enterprises-Interest
+F_F3,2015,2016,retired,F3E047,,Auxiliary enterprises-All other
+F_F3,2015,2016,retired,F3E057,,Net grant aid to students-All other
+F_F3,2015,2016,retired,F3E063,,Other expenses-Benefits
+F_F3,2015,2016,retired,F3E064,,Other expenses-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E065,,Other expenses-Depreciation
+F_F3,2015,2016,retired,F3E066,,Other expenses-Interest
+F_F3,2015,2016,retired,F3E067,,Other expenses-All other
+F_F3,2015,2016,retired,F3E103,,Hospital services-Benefits
+F_F3,2015,2016,retired,F3E104,,Hospital services-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E105,,Hospital services-Depreciation
+F_F3,2015,2016,retired,F3E106,,Hospital services-Interest
+F_F3,2015,2016,retired,F3E107,,Hospital services-All other
+F_F3,2015,2016,retired,F3E111,,Operation and maintenance of plant-Total amount
+F_F3,2015,2016,retired,F3E112,,Operation and maintenance of plant-Salaries and wages
+F_F3,2015,2016,retired,F3E113,,Operation and maintenance of plant-Benefits
+F_F3,2015,2016,retired,F3E114,,Operation and maintenance of plant-Operation and maintenance of plant
+F_F3,2015,2016,retired,F3E115,,Operation and maintenance of plant-Depreciation
+F_F3,2015,2016,retired,F3E116,,Operation and maintenance of plant-Interest
+F_F3,2015,2016,retired,F3E117,,Operation and maintenance of plant-All other
+F_F3,2015,2016,added,F3C08,,Total discounts and allowances
+F_F3,2015,2016,added,F3E074,,Total expenses-Operations and maintenance
+F_F3,2019,2020,added,F3C12,,"Total discounts and allowances from Pell grants"
+F_F3,2019,2020,added,F3C121,,Discounts and allowances from Pell grants applied to tuition and fees
+F_F3,2019,2020,added,F3C122,,Discounts and allowances from Pell grants applied to auxiliary enterprises
+F_F3,2019,2020,added,F3C13,,Total discounts and allowances from other federal grants
+F_F3,2019,2020,added,F3C131,,Discounts and allowances from other federal grants applied to tuition and fees
+F_F3,2019,2020,added,F3C132,,Discounts and allowances from other federal grants applied to auxiliary enterprises
+F_F3,2019,2020,added,F3C14,,Total discounts and allowances from state government grants
+F_F3,2019,2020,added,F3C141,,Discounts and allowances from state government grants applied to tuition and fees
+F_F3,2019,2020,added,F3C142,,Discounts and allowances from state government grants applied to auxiliary enterprises
+F_F3,2019,2020,added,F3C15,,Total discounts and allowances from local government grants
+F_F3,2019,2020,added,F3C151,,"Discounts and allowances from local government grants applied to tuition and fees"
+F_F3,2019,2020,added,F3C152,,Discounts and allowances from local government grants applied to auxiliary enterprises
+F_F3,2019,2020,added,F3C16,,"Total discounts and allowances from endowments and gifts"
+F_F3,2019,2020,added,F3C161,,"Discounts and 
+allowances from endowments and gifts applied to tuition and fees"
+F_F3,2019,2020,added,F3C162,,Discounts and allowances from endowments and gifts applied to auxiliary enterprises
+F_F3,2019,2020,added,F3C17,,Total discounts and allowances from other institutional sources
+F_F3,2019,2020,added,F3C171,,"Discounts and allowances from other institutional sources applied to tuition and fees"
+F_F3,2019,2020,added,F3C172,,Discounts and allowances from other institutional sources applied to auxiliary enterprises
+F_F3,2019,2020,added,F3G01,,Pretax income
+F_F3,2019,2020,added,F3G02,,Total revenues
+F_F3,2019,2020,added,F3G03,,Total equity
+F_F3,2019,2020,added,F3G04,,Total assets
+F_F3,2019,2020,added,F3G05,,Adjusted equity
+F_F3,2019,2020,added,F3G06,,Plant-related debt
+F_F3,2019,2020,added,F3G07,,Total expenses
+GR_L2,2015,2016,added,NRLIN10,,Did not receive Pell grant or subsidized Stafford loan - revised cohort
+GR_L2,2015,2016,added,NRLIN11,,Did not receive Pell grant or subsidized Stafford loan -  total number completed an award within 150% of normal time to completion
+GR_L2,2015,2016,added,NRLIN45,,Did not receive Pell grant or subsidized Stafford loan - exclusions
+GR_L2,2015,2016,added,NRLIN50,,Did not receive Pell grant or subsidized Stafford loan - adjusted cohort
+GR_L2,2015,2016,added,PGLIN10,,Pell Grant recipients - revised cohort
+GR_L2,2015,2016,added,PGLIN11,,Pell Grant  recipients - total number that completed an award  within 150% of normal time to completion
+GR_L2,2015,2016,added,PGLIN45,,Pell Grant recipients - exclusions
+GR_L2,2015,2016,added,PGLIN50,,Pell Grant recipients - adjusted  cohort (revised minus exclusions)
+GR_L2,2015,2016,added,SSLIN10,,Subsidized Stafford Loan recipients not receiving Pell Grants - revised cohort
+GR_L2,2015,2016,added,SSLIN11,,Subsidized Stafford Loan recipients not receiving Pell Grants - total number completed an award within 150% of normal time to completion
+GR_L2,2015,2016,added,SSLIN45,,Subsidized Stafford Loan recipients not receiving Pell Grants - exclusions
+GR_L2,2015,2016,added,SSLIN50,,Subsidized Stafford Loan recipients not receiving Pell Grants - adjusted cohort (revised minus exclusions)
+HD,2015,2016,added,DISAURL,,Disability Services Web Address
+HD,2015,2016,added,DUNS,,Dun and Bradstreet numbers
+HD,2017,2018,retired,C15ENPRF,,Carnegie Classification 2015: Enrollment Profile
+HD,2017,2018,retired,C15IPGRD,,Carnegie Classification 2015: Graduate Instructional Program
+HD,2017,2018,retired,C15IPUG,,Carnegie Classification 2015: Undergraduate Instructional Program
+HD,2017,2018,retired,C15SZSET,,Carnegie Classification 2015: Size and Setting
+HD,2017,2018,retired,C15UGPRF,,Carnegie Classification 2015: Undergraduate Profile
+HD,2017,2018,added,C18BASIC,,Carnegie Classification 2018: Basic
+HD,2017,2018,added,C18ENPRF,,Carnegie Classification 2018: Enrollment Profile
+HD,2017,2018,added,C18IPGRD,,Carnegie Classification 2018: Graduate Instructional Program
+HD,2017,2018,added,C18IPUG,,Carnegie Classification 2018: Undergraduate Instructional Program
+HD,2017,2018,added,C18SZSET,,Carnegie Classification 2018: Size and Setting
+HD,2017,2018,added,C18UGPRF,,Carnegie Classification 2018: Undergraduate Profile
+HD,2020,2021,retired,C18ENPRF,,Carnegie Classification 2018: Enrollment Profile
+HD,2020,2021,retired,C18IPGRD,,Carnegie Classification 2018: Graduate Instructional Program
+HD,2020,2021,retired,C18IPUG,,Carnegie Classification 2018: Undergraduate Instructional Program
+HD,2020,2021,retired,C18SZSET,,Carnegie Classification 2018: Size and Setting
+HD,2020,2021,retired,C18UGPRF,,Carnegie Classification 2018: Undergraduate Profile
+HD,2020,2021,added,C21BASIC,,Carnegie Classification 2021: Basic
+HD,2020,2021,added,C21ENPRF,,Carnegie Classification 2021: Enrollment Profile
+HD,2020,2021,added,C21IPGRD,,Carnegie Classification 2021: Graduate Instructional Program
+HD,2020,2021,added,C21IPUG,,Carnegie Classification 2021: Undergraduate Instructional Program
+HD,2020,2021,added,C21SZSET,,Carnegie Classification 2021: Size and Setting
+HD,2020,2021,added,C21UGPRF,,Carnegie Classification 2021: Undergraduate Profile
+HD,2021,2022,retired,DUNS,,Dun and Bradstreet numbers
+HD,2021,2022,retired,NECTA,,New England City and Town Area (NECTA)
+HD,2021,2022,added,UEIS,,Unique Entity Identifier (UEI) Numbers
+HD,2023,2024,retired,C15BASIC,,Carnegie Classification 2015: Basic
+HD,2023,2024,retired,C18BASIC,,Carnegie Classification 2018: Basic
+HD,2023,2024,retired,C21ENPRF,,Carnegie Classification 2021: Enrollment Profile
+HD,2023,2024,retired,C21IPGRD,,Carnegie Classification 2021: Graduate Instructional Program
+HD,2023,2024,retired,C21IPUG,,Carnegie Classification 2021: Undergraduate Instructional Program
+HD,2023,2024,retired,C21SZSET,,Carnegie Classification 2021: Size and Setting
+HD,2023,2024,retired,C21UGPRF,,Carnegie Classification 2021: Undergraduate Profile
+HD,2023,2024,retired,CARNEGIE,,Carnegie Classification 2000
+HD,2023,2024,retired,CCBASIC,,Carnegie Classification 2005/2010: Basic
+HD,2023,2024,added,C00CARNEGIE,,2000 Carnegie Classification (historical - not updated)
+HD,2023,2024,added,CARNEGIEALF,,Carnegie Classification 2025: Award Level Focus
+HD,2023,2024,added,CARNEGIEAPM,,Carnegie Classification 2025: Undergraduate Academic Program Mix
+HD,2023,2024,added,CARNEGIEGPM,,Carnegie Classification 2025: Graduate Academic Program Mix
+HD,2023,2024,added,CARNEGIEIC,,Carnegie Classification 2025: Institutional Classification
+HD,2023,2024,added,CARNEGIERSCH,,Carnegie Classification 2025: Research Activity Designation
+HD,2023,2024,added,CARNEGIESAEC,,Carnegie Classification 2025: Student Access and Earnings
+HD,2023,2024,added,CARNEGIESIZE,,Carnegie Classification 2025: Institutional Size
+IC,2015,2016,retired,LIBFAC,,Library facilities at institution
+IC,2015,2016,added,DISTCRS,,Distance education courses offered
+IC,2015,2016,added,LIBRES1,,Library resources/services: Physical facilities
+IC,2015,2016,added,LIBRES2,,Library resources/services: Organized collection of printed materials
+IC,2015,2016,added,LIBRES3,,Library resources/services: Access to digital/electronic resources
+IC,2015,2016,added,LIBRES4,,Library resources/services: Staff trained to provide and interpret library materials
+IC,2015,2016,added,LIBRES5,,Library resources/services: Established library hours
+IC,2015,2016,added,LIBRES6,,Library resources/services: Access to library collections that are shared with other institutions
+IC,2015,2016,added,LIBRES9,,Library resources/services not provided
+IC,2016,2017,added,DISTPGS,,Distance education programs offered
+IC,2016,2017,added,DSTNGC,,Graduate level distance education courses offered
+IC,2016,2017,added,DSTNGN,,Graduate level distance education not offered
+IC,2016,2017,added,DSTNGP,,Graduate level distance education programs offered
+IC,2016,2017,added,DSTNUGC,,Undergraduate level distance education courses offered
+IC,2016,2017,added,DSTNUGN,,Undergraduate level distance education not offered
+IC,2016,2017,added,DSTNUGP,,Undergraduate level distance education programs offered
+IC,2019,2020,added,LEVEL1A,,Certificate of less than 12 weeks
+IC,2019,2020,added,LEVEL1B,,"Certificate of at least 12 weeks, but less than 1 year"
+IC,2021,2022,retired,STUSRV1,,Remedial services
+IC,2021,2022,added,NONCRDT1,,"Workforce Education
+"
+IC,2021,2022,added,NONCRDT2,,"Contract Training/Customized Training
+"
+IC,2021,2022,added,NONCRDT3,,"Remedial Education
+"
+IC,2021,2022,added,NONCRDT4,,"Recreational/Avocational/Leisure/Personal Enrichment 
+"
+IC,2021,2022,added,NONCRDT5,,"Adult Basic Education
+"
+IC,2021,2022,added,NONCRDT6,,"Adult High School Diploma or Equivalent 
+"
+IC,2021,2022,added,NONCRDT7,,"English as a Second Language 
+"
+IC,2021,2022,added,NONCRDT8,,"Continuing Professional Education
+"
+IC,2021,2022,added,NONCRDT9,,"Institution does not offer noncredit education
+"
+IC,2021,2022,added,PEO7ISTR,,Remedial
+IC,2021,2022,added,PRMPGM,,"Participates in a Promise Program
+"
+IC,2021,2022,added,SLO521,,"ROTC - Navy Marine Corps option
+"
+IC,2021,2022,added,SLOA,,"Undergraduate research (co-curricula)
+"
+IC,2021,2022,added,SLOB,,"Comprehensive transition and postsecondary program for students with intellectual disabilities
+"
+IC,2022,2023,retired,CREDITS1,,Dual enrollment
+IC,2022,2023,added,ENRHSST,,Enolls high school students in college courses for credit
+IC,2022,2023,added,ENRHSST1,,Enolls high school students in college courses for credit within a dual enrollment program
+IC,2022,2023,added,ENRHSST2,,Enolls high school students in college courses for credit outside a dual enrollment program
+IC,2022,2023,added,TUITVRY1,,
+IC,2022,2023,added,TUITVRY2,,
+IC,2022,2023,added,TUITVRY3,,
+IC,2023,2024,retired,ALLONCAM,,"Full-time, first-time degree/certificate-seeking students required to live on campus"
+IC,2023,2024,retired,APPLFEEG,,Graduate application fee
+IC,2023,2024,retired,APPLFEEU,,Undergraduate application fee
+IC,2023,2024,retired,BOARD,,Institution offers food or meal plans
+IC,2023,2024,retired,BOARDAMT,,Typical food charge for academic year
+IC,2023,2024,retired,ENRHSST,,Enolls high school students in college courses for credit
+IC,2023,2024,retired,ENRHSST1,,Enolls high school students in college courses for credit within a dual enrollment program
+IC,2023,2024,retired,ENRHSST2,,Enolls high school students in college courses for credit outside a dual enrollment program
+IC,2023,2024,retired,MEALSWK,,Number of meals per week
+IC,2023,2024,retired,PRMPGM,,Participates in a Promise Program
+IC,2023,2024,retired,RMBRDAMT,,Combined food and housing charge
+IC,2023,2024,retired,ROOM,,Institution provide nstitutionally-controlled housing (on-campus and/or off-campus)
+IC,2023,2024,retired,ROOMAMT,,Typical housing charges for an academic year
+IC,2023,2024,retired,ROOMCAP,,Housing capacity
+IC,2023,2024,retired,TUITPL,,Any alternative tuition plans offered by institution
+IC,2023,2024,retired,TUITPL1,,Tuition guaranteed plan
+IC,2023,2024,retired,TUITPL2,,Prepaid tuition plan
+IC,2023,2024,retired,TUITPL3,,Tuition payment plan
+IC,2023,2024,retired,TUITPL4,,Other alternative tuition plan
+IC,2023,2024,retired,TUITVARY,,"Tuition charge varies for in-district, in-state, out-of-state students"
+IC,2023,2024,retired,TUITVRY1,,
+IC,2023,2024,retired,TUITVRY2,,
+IC,2023,2024,retired,TUITVRY3,,
+IC_PCCAMPUSES,2021,2022,retired,PCDUNS,,Dun and Bradstreet numbers
+IC_PCCAMPUSES,2021,2022,retired,PCNECTA,,New England City and Town Area (NECTA)
+IC_PCCAMPUSES,2021,2022,added,PCUEIS,,Unique Entity Identifier (UEI) Numbers
+OM,2015,2016,retired,OMFLAG,,OM data inconsistency flag
+OM,2015,2016,retired,OMRCHT8,,"Revised 2007 cohort at 8 years (August 31, 2015)"
+OM,2016,2017,retired,OMACHT6,,"Adjusted 2008 cohort at 6 years (August 31, 2014)"
+OM,2016,2017,retired,OMACHT8,,"Adjusted 2008 cohort at 8 years (August 31, 2016)"
+OM,2016,2017,retired,OMEXCL6,,"Exclusions to 2008 cohort at 6 years (August 31, 2014)"
+OM,2016,2017,retired,OMEXCL8,,"Additional exclusions (September 1, 2014 through August 31, 2016)"
+OM,2016,2017,retired,OMRCHT6,,"Revised 2008 cohort at 6 years (August 31, 2014)"
+OM,2016,2017,added,OMACHRT,,Adjusted 2009-10 cohort
+OM,2016,2017,added,OMASSC4,,"Number of adjusted cohort receiving an Associate's degree at 4 years (August 31, 2013)"
+OM,2016,2017,added,OMASSC6,,"Number of adjusted cohort receiving an Associate's degree at 6 years (August 31, 2015)"
+OM,2016,2017,added,OMASSC8,,"Number of adjusted cohort receiving an Associate's degree at 8 years (August 31, 2017)"
+OM,2016,2017,added,OMAWDN4,,"Number of adjusted cohort receiving an award at 4 years (August 31, 2013)"
+OM,2016,2017,added,OMAWDP4,,"Percent of adjusted cohort receiving an award at 4 years (August 31, 2013)"
+OM,2016,2017,added,OMBACH4,,"Number of adjusted cohort receiving a Bachelor's degree at 4 years (August 31, 2013)"
+OM,2016,2017,added,OMBACH6,,"Number of adjusted cohort receiving a Bachelor's degree at 6 years (August 31, 2015)"
+OM,2016,2017,added,OMBACH8,,"Number of adjusted cohort receiving a Bachelor's degree at 8 years (August 31, 2017)"
+OM,2016,2017,added,OMCERT4,,"Number of adjusted cohort receiving a certifcate at 4 years (August 31, 2013)"
+OM,2016,2017,added,OMCERT6,,"Number of adjusted cohort receiving a certifcate at 6 years (August 31, 2015)"
+OM,2016,2017,added,OMCERT8,,"Number of adjusted cohort receiving a certifcate at 8 years (August 31, 2017)"
+OM,2016,2017,added,OMENRUP,,"Percent of adjusted cohort  enrollment status unknown at 8 years (August 31, 2017)"
+OM,2016,2017,added,OMEXCLS,,Exclusions to 2009-10 cohort
+OM,2016,2017,added,OMRCHRT,,2009-10 cohort
+SAL_IS,2015,2016,added,SA09MAM,,Average salary for instructional staff on 9-month contract-men
+SAL_IS,2015,2016,added,SA09MAT,,Average salary for instructional staff on 9-month contract-total
+SAL_IS,2015,2016,added,SA09MAW,,Average salary for instructional staff on 9-month contract-women
+SAL_IS,2015,2016,added,SA09MOM,,Salary outlays for instructional staff on 9-month contract-men
+SAL_IS,2015,2016,added,SA09MOT,,Salary outlays for instructional staff on 9-month contract-total
+SAL_IS,2015,2016,added,SA09MOW,,Salary outlays for instructional staff on 9-month contract-women
+SAL_IS,2015,2016,added,SA10MAM,,Average salary for instructional staff on 10-month contract-men
+SAL_IS,2015,2016,added,SA10MAT,,Average salary for instructional staff on 10-month contract-total
+SAL_IS,2015,2016,added,SA10MAW,,Average salary for instructional staff on 10-month contract-women
+SAL_IS,2015,2016,added,SA10MOM,,Salary outlays for instructional staff on 10-month contract-men
+SAL_IS,2015,2016,added,SA10MOT,,Salary outlays for instructional staff on 10-month contract-total
+SAL_IS,2015,2016,added,SA10MOW,,Salary outlays for instructional staff on 10-month contract-women
+SAL_IS,2015,2016,added,SA11MAM,,Average salary for instructional staff on 11-month contract-men
+SAL_IS,2015,2016,added,SA11MAT,,Average salary for instructional staff on 11-month contract-total
+SAL_IS,2015,2016,added,SA11MAW,,Average salary for instructional staff on 11-month contract-women
+SAL_IS,2015,2016,added,SA11MOM,,Salary outlays for instructional staff on 11-month contract-men
+SAL_IS,2015,2016,added,SA11MOT,,Salary outlays for instructional staff on 11-month contract-total
+SAL_IS,2015,2016,added,SA11MOW,,Salary outlays for instructional staff on 11-month contract-women
+SAL_IS,2015,2016,added,SA12MAM,,Average salary for instructional staff on 12-month contract-men
+SAL_IS,2015,2016,added,SA12MAT,,Average salary for instructional staff on 12-month contract-total
+SAL_IS,2015,2016,added,SA12MAW,,Average salary for instructional staff on 12-month contract-women
+SAL_IS,2015,2016,added,SA12MOM,,Salary outlays for instructional staff on 12-month contract-men
+SAL_IS,2015,2016,added,SA12MOT,,Salary outlays for instructional staff on 12-month contract-total
+SAL_IS,2015,2016,added,SA12MOW,,Salary outlays for instructional staff on 12-month contract-women
+SAL_IS,2015,2016,added,SAEQ9AM,,Average salary for instructional staff equated to a 9-month contract-men
+SAL_IS,2015,2016,added,SAEQ9AT,,Average salary for instructional staff equated to a 9-month contract-total
+SAL_IS,2015,2016,added,SAEQ9AW,,Average salary for instructional staff equated to a 9-month contract-women
+SAL_IS,2015,2016,added,SAEQ9OM,,Salary outlays for instructional staff equated to a 9-month contract-men
+SAL_IS,2015,2016,added,SAEQ9OT,,Salary outlays for instructional staff equated to a 9-month contract-total
+SAL_IS,2015,2016,added,SAEQ9OW,,Salary outlays for instructional staff equated to a 9-month contract-women
+SAL_IS,2015,2016,added,SAINSTM,,Instructional staff - men
+SAL_IS,2015,2016,added,SAINSTT,,Instructional staff - total
+SAL_IS,2015,2016,added,SAINSTW,,Instructional staff - women
+SAL_IS,2015,2016,added,SA_9MCM,,Instructional staff on less than 9-month contract-men
+SAL_IS,2015,2016,added,SA_9MCT,,Instructional staff on less than 9-month contract-total
+SAL_IS,2015,2016,added,SA_9MCW,,Instructional staff on less than 9-month contract-women
+SAL_IS,2016,2017,retired,SAAVMNM,,Average weighted monthly salary  - men
+SAL_IS,2016,2017,retired,SAAVMNT,,Average weighted monthly salary  - total
+SAL_IS,2016,2017,retired,SAAVMNW,,Average weighted monthly salary  - women
+SAL_IS,2016,2017,retired,SAMNTHM,,Number of months covered for salary outlays - men
+SAL_IS,2016,2017,retired,SAMNTHT,,Number months covered for salary outlays - total
+SAL_IS,2016,2017,retired,SAMNTHW,,Number of months covered for salary outlays - women
+SFAV,2023,2024,added,DOD,,Participates in U.S. Department of Defense Military Tuition Assistance
+SFAV,2023,2024,added,PARTVT,,Participates in the U.S. Department of Veterans Affairs Post-9/11 GI Bill or U.S. Department of Defense Military Tuition Assistance benefit programs
+SFAV,2023,2024,added,PO9,,Participates in U.S. Department of Veterans Affairs Post-9/11 GI Bill
+SFA_P1,2018,2019,retired,SCFY11N,,Number of students in full-year cohort who are paying in-district tuition rates
+SFA_P1,2018,2019,retired,SCFY11P,,Percentage of students in full-year cohort who are paying in-district tuition rates
+SFA_P1,2018,2019,retired,SCFY12N,,Number of students in full-year cohort who are paying in-state tuition rates
+SFA_P1,2018,2019,retired,SCFY12P,,Percentage of students in full-year cohort who are paying in-state tuition rates
+SFA_P1,2018,2019,retired,SCFY13N,,Number of students in full-year cohort who are paying out-of-state tuition rates
+SFA_P1,2018,2019,retired,SCFY13P,,Percentage of students in full-year cohort who are paying out-of-state tuition rates
+SFA_P1,2018,2019,retired,SCFY14N,,Number of students in full-year cohort whose residence/tuition rate is unknown
+SFA_P1,2018,2019,retired,SCFY14P,,Percentage of students in full-year cohort whose residence/tuition rate  is unknown
+SFA_P1,2021,2022,added,SCFA2DG,,Total number of degree/certificate-seeking undergraduates - fall cohort
+SFA_P1,2021,2022,added,SCFY2DG,,Total number of degree/certificate-seeking undergraduates - full-year cohort
+SFA_P1,2021,2022,added,SCFY2ND,,Total number of non-degee/non-certificate seeking undergraduates - full-year cohort
+SFA_P1,2021,2022,added,SCUGDGSK,,Total number of degree/certificate-seeking undergraduate students
+SFA_P1,2021,2022,added,SCUGNDGS,,Total number of non-degee/non-certificate seeking undergraduate students
+SFA_P1,2021,2022,added,UDGAGRNTA,,"Average amount of federal, state, local, institutional or other sources of grant aid awarded to degree/certificate-seeking undergraduate students"
+SFA_P1,2021,2022,added,UDGAGRNTN,,"Number of degree/certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid"
+SFA_P1,2021,2022,added,UDGAGRNTP,,"Percent of degree/certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid"
+SFA_P1,2021,2022,added,UDGAGRNTT,,"Total amount of federal, state, local, institutional or other sources of grant aid awarded to degree/certificate-seeking undergraduate students"
+SFA_P1,2021,2022,added,UDGFLOANP,,Percent of degree/certificate-seeking undergraduate students awarded federal student loans
+SFA_P1,2021,2022,added,UDGPGRNTP,,Percent of degree/certificate-seeking undergraduate students awarded Federal Pell Grants
+SFA_P1,2021,2022,added,UNDAGRNTA,,"Average amount of federal, state, local, institutional or other sources of grant aid awarded to non-degree/non-certificate-seeking undergraduates"
+SFA_P1,2021,2022,added,UNDAGRNTN,,"Number of non-degree/non-certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid"
+SFA_P1,2021,2022,added,UNDAGRNTP,,"Percent of non-degree/non-certificate-seeking undergraduate students awarded federal, state, local, institutional or other sources of grant aid"
+SFA_P1,2021,2022,added,UNDAGRNTT,,"Total amount of federal, state, local, institutional or other sources of grant aid awarded to non-degree/non-certificate-seeking undergraduates"
+SFA_P1,2022,2023,added,UDGFLOANA,,
+SFA_P1,2022,2023,added,UDGFLOANN,,
+SFA_P1,2022,2023,added,UDGFLOANT,,
+SFA_P1,2022,2023,added,UDGPGRNTA,,
+SFA_P1,2022,2023,added,UDGPGRNTN,,
+SFA_P1,2022,2023,added,UDGPGRNTT,,
+SFA_P1,2022,2023,added,UNDFLOANA,,
+SFA_P1,2022,2023,added,UNDFLOANN,,
+SFA_P1,2022,2023,added,UNDFLOANP,,
+SFA_P1,2022,2023,added,UNDFLOANT,,
+SFA_P1,2022,2023,added,UNDPGRNTA,,
+SFA_P1,2022,2023,added,UNDPGRNTN,,
+SFA_P1,2022,2023,added,UNDPGRNTP,,
+SFA_P1,2022,2023,added,UNDPGRNTT,,

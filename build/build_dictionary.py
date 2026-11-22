@@ -136,8 +136,9 @@ def check(db):
         if total != ADDITIVE:
             exists(f"{table}.{total}", f"measures.csv breakdown set '{name}'")
     covered = {t for (t,) in db.execute('SELECT "table" FROM dict_year_meaning')}
-    for (t,) in db.execute("SELECT DISTINCT local_table FROM _tables WHERE kind = 'data'"):
-        if t not in covered:
+    for (t,) in db.execute("SELECT DISTINCT local_table FROM _tables WHERE kind = 'data' "
+                           "AND year = (SELECT MAX(year) FROM _tables)"):   # the year the app answers from; the
+        if t not in covered:                                                # earlier years' tables are part 5b
             problems.append(f"year_meaning.csv: no row for data table {t}")
     return problems
 
@@ -198,7 +199,9 @@ def build_groups(db):
                     labels.setdefault(code, label)
             values = set()
             for col in split(column):
-                values |= {str(v) for (v,) in db.execute(f'SELECT DISTINCT "{col}" FROM directory WHERE "{col}" IS NOT NULL')}
+                values |= {str(v) for (v,) in db.execute(        # values seen in the year the app answers from;
+                    f'SELECT DISTINCT "{col}" FROM directory WHERE "{col}" IS NOT NULL '   # groups for each year are 5b
+                    "AND year = (SELECT MAX(year) FROM directory)")}
             for value in sorted(values):
                 label = labels.get(value, value)
                 child = f"{name}: {label}"
@@ -212,8 +215,8 @@ def build_groups(db):
         if kind in FILTER_KINDS:
             where = condition(column, split(codes))
             if name in seen:                                # a second row of the same group narrows it (all rows must hold)
-                db.execute(f"DELETE FROM group_membership WHERE group_name = ? AND unitid NOT IN "
-                           f"(SELECT UNITID FROM directory WHERE {where})", (name,))
+                db.execute(f"DELETE FROM group_membership WHERE group_name = ? AND NOT EXISTS (SELECT 1 FROM directory "
+                           f"WHERE UNITID = group_membership.unitid AND year = group_membership.year AND {where})", (name,))
             else:
                 db.execute(f"INSERT INTO group_membership SELECT ?, year, UNITID FROM directory WHERE {where}", (name,))
         elif kind == "has value":                           # schools with a value in the named column
@@ -228,7 +231,8 @@ def build_groups(db):
         seen[name] = kind
     db.execute("CREATE INDEX ix_group_membership ON group_membership (group_name, year, unitid)")
     db.execute("CREATE INDEX ix_group_membership_school ON group_membership (unitid, year)")
-    db.execute("UPDATE group_list SET n_schools = (SELECT COUNT(*) FROM group_membership m WHERE m.group_name = group_list.group_name)")
+    db.execute("UPDATE group_list SET n_schools = (SELECT COUNT(*) FROM group_membership m WHERE m.group_name = "
+               "group_list.group_name AND m.year = (SELECT MAX(year) FROM directory))")   # schools in the latest year
     db.execute('UPDATE group_list SET word_note = (SELECT MAX(word_note) FROM dict_school_groups g WHERE g."group" = group_list.group_name)')
 
 
@@ -419,6 +423,18 @@ def build_detail_links(db):
     return problems
 
 
+def latest_year_only(db, on=True):
+    """While the tests of category rows, summary-to-detailed links and breakdown sets run, each stacked table is
+    seen at the year the app answers from only (temporary views of the same names, which SQLite reads before the
+    stored tables). Part 5a stacks ten years without changing what the app answers; testing these in every year
+    is part 5b."""
+    tables = [t for (t,) in db.execute("SELECT DISTINCT local_table FROM _tables")]
+    for t in tables:
+        db.execute(f'DROP VIEW IF EXISTS temp."{t}"')
+        if on:
+            db.execute(f'CREATE TEMP VIEW "{t}" AS SELECT * FROM main."{t}" WHERE year = (SELECT MAX(year) FROM main._tables)')
+
+
 def build(local_db=None, folder=None):
     """Load, check, then build. Stops with a list of problems if the dictionary does not fit the data."""
     db = sqlite3.connect(local_db or config.LOCAL_DB)
@@ -431,12 +447,14 @@ def build(local_db=None, folder=None):
         build_value_labels(db)
         build_directory(db)
         build_groups(db)
+        latest_year_only(db)
         problems = build_row_keys(db)
         problems += build_detail_links(db) if not problems else []
         if problems:
             db.rollback()
             raise ValueError("The dictionary does not fit the data:\n  " + "\n  ".join(problems))
         build_breakdown_sets(db)
+        latest_year_only(db, on=False)
         db.commit()
         return {name: db.execute(f"SELECT COUNT(*) FROM dict_{name}").fetchone()[0] for name in TABLES}
     finally:
@@ -447,7 +465,9 @@ if __name__ == "__main__":
     for name, n in build().items():
         print(f"dict_{name:<18}{n:>7,} rows")
     con = sqlite3.connect(config.LOCAL_DB)
-    print("directory: %d schools, %d columns" % (con.execute("SELECT COUNT(*) FROM directory").fetchone()[0],
+    print("directory: %d schools in the latest year, %d school-years, %d columns" % (
+        con.execute("SELECT COUNT(*) FROM directory WHERE year = (SELECT MAX(year) FROM directory)").fetchone()[0],
+        con.execute("SELECT COUNT(*) FROM directory").fetchone()[0],
                                                  len(con.execute("PRAGMA table_info(directory)").fetchall())))
     print("groups: %d, memberships: %d" % (con.execute("SELECT COUNT(*) FROM group_list").fetchone()[0],
                                            con.execute("SELECT COUNT(*) FROM group_membership").fetchone()[0]))

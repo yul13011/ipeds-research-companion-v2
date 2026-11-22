@@ -25,7 +25,8 @@ class Data:
         return dict(self.q(f'SELECT UNITID, "{column}" FROM "{table}" WHERE {" AND ".join(where)}', *args))
 
     def label(self, table, column, code):
-        row = self.q('SELECT label FROM value_labels WHERE local_table=? AND "column"=? AND code=?', table, column.upper(), str(code))
+        row = self.q('SELECT label FROM value_labels WHERE local_table=? AND "column"=? AND code=? ORDER BY year = ? DESC, year DESC',
+                     table, column.upper(), str(code), self.year)
         return row[0][0] if row else code
 
     def reason(self, table, column, unitid):
@@ -34,7 +35,8 @@ class Data:
         return row[0][0] if row else "No value reported"
 
     def names(self, ids):
-        return {u: (n, s) for u, n, s in self.q(f"SELECT UNITID, INSTNM, STABBR FROM directory WHERE UNITID IN ({','.join('?' * len(ids))})", *ids)} if ids else {}
+        return {u: (n, s) for u, n, s in self.q(f"SELECT UNITID, INSTNM, STABBR FROM directory WHERE year = ? AND "
+                                                  f"UNITID IN ({','.join('?' * len(ids))})", self.year, *ids)} if ids else {}
 
 
 def cell(value, unit):
@@ -133,14 +135,15 @@ def campus_notes(plan, data, result, shown):
     templates = plan.get("campus_notes") or {}
     for flag_column, parent_column in {tuple(m["parent_child"]) for m in plan["measures"] if m.get("parent_child")}:
         for u in shown:
-            row = data.q(f'SELECT "{flag_column}", "{parent_column}" FROM FLAGS WHERE UNITID=?', u)
+            row = data.q(f'SELECT "{flag_column}", "{parent_column}" FROM FLAGS WHERE UNITID=? AND year=?', u, data.year)
             if not row or row[0][0] not in (1, 2):
                 continue
             flag, parent = row[0]
             if flag == 2:
                 campuses = data.names([parent]).get(parent, (str(parent),))[0]
             else:
-                children = [c for (c,) in data.q(f'SELECT UNITID FROM FLAGS WHERE "{parent_column}"=? AND "{flag_column}"=2', u)]
+                children = [c for (c,) in data.q(f'SELECT UNITID FROM FLAGS WHERE "{parent_column}"=? AND "{flag_column}"=2 '
+                                                 'AND year=?', u, data.year)]
                 campuses = ", ".join(sorted(n for n, _ in data.names(children).values()))
             note = templates.get(str(flag), "").format(school=data.names([u]).get(u, (str(u),))[0], campuses=campuses)
             if note and note not in result["warnings"]:

@@ -16,6 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import config
+from latest import latest_only  # the tests' own expected figures use the latest year only
 from build import build_data
 
 RULES = ({("-1", "Not reported"): ("missing", "Not reported"), ("-2", "Not applicable"): ("missing", "Not applicable"),
@@ -182,13 +183,96 @@ class BuildLogic(unittest.TestCase):
 
 
 @unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built; run python build/build_data.py")
+class ReleaseSteps(unittest.TestCase):
+    """Adding a release, and replacing a provisional release with its final version, on made-up releases."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        root = Path(self.dir.name)
+        self.catalog = root / "catalog.sqlite"
+        cat = sqlite3.connect(self.catalog)
+        cat.execute("CREATE TABLE tables (release_id TEXT, table_name TEXT, family TEXT, kind TEXT)")
+        self.releases = {}
+        for release, year, drop_gr in [("IPEDS_2024-25_Final", 2024, False), ("IPEDS_2025-26_Provisional", 2025, False),
+                                       ("IPEDS_2025-26_Final", 2025, True)]:
+            folder = root / "annual" / release
+            folder.mkdir(parents=True)
+            fams = make_source(folder / "data.sqlite", year)
+            if drop_gr:                                 # the final release has one table fewer and one row fewer
+                src = sqlite3.connect(folder / "data.sqlite")
+                src.execute(f"DROP TABLE GR{year}")
+                src.execute(f"DELETE FROM ADM{year} WHERE UNITID = 3")
+                src.commit()
+                src.close()
+                fams.pop(f"GR{year}")
+            cat.executemany("INSERT INTO tables VALUES (?,?,?,?)",
+                            [(release, t, f, "source_metadata" if k == "codebook" else "data") for t, (f, k) in fams.items()])
+        cat.commit()
+        cat.close()
+        self.root = root
+        self.out = sqlite3.connect(root / "local.sqlite", uri=True)
+
+    def tearDown(self):
+        self.out.close()
+        self.dir.cleanup()
+
+    def add(self, release):
+        return build_data.add_release(self.out, release, "data.sqlite", self.root, self.catalog)
+
+    def count(self, table, year):
+        return self.out.execute(f'SELECT COUNT(*) FROM "{table}" WHERE year = ?', (year,)).fetchone()[0]
+
+    def test_year_and_status_come_from_the_folder_name(self):
+        self.assertEqual((build_data.year_of("IPEDS_2024-25_Provisional"), build_data.status_of("IPEDS_2024-25_Provisional")),
+                         (2024, "provisional"))
+        self.assertEqual(build_data.status_of("IPEDS_2015-16_Final"), "final")
+        with self.assertRaises(ValueError):
+            build_data.status_of("IPEDS_2015-16")
+
+    def test_adding_a_new_year_keeps_the_others(self):
+        self.add("IPEDS_2024-25_Final")
+        before = self.count("ADM", 2024), self.count("GR", 2024)
+        _, removed = self.add("IPEDS_2025-26_Provisional")
+        self.assertEqual(removed, [])
+        self.assertEqual((self.count("ADM", 2024), self.count("GR", 2024)), before)
+        self.assertEqual(self.count("ADM", 2025), 3)
+        self.assertEqual(self.out.execute("SELECT status FROM _releases WHERE year = 2025").fetchone()[0], "provisional")
+
+    def test_replacing_a_provisional_release_leaves_no_rows_behind(self):
+        self.add("IPEDS_2024-25_Final")
+        self.add("IPEDS_2025-26_Provisional")
+        self.assertEqual(self.count("GR", 2025), 4)
+        _, removed = self.add("IPEDS_2025-26_Final")
+        self.assertEqual(removed, ["IPEDS_2025-26_Provisional"])
+        self.assertEqual(self.count("ADM", 2025), 2)                     # the final file's rows only
+        self.assertEqual(self.count("GR", 2025), 0)                      # a table the final release lacks: nothing left
+        self.assertEqual(self.count("GR", 2024), 4)                      # other years untouched
+        self.assertEqual(self.count("_missing_reasons", 2025),
+                         self.out.execute("SELECT COUNT(*) FROM _missing_reasons WHERE year = 2025").fetchone()[0])
+        for log in ("_tables", "_columns", "_special_codes"):
+            n = self.out.execute(f"SELECT COUNT(*) FROM {log} WHERE release = 'IPEDS_2025-26_Provisional'").fetchone()[0]
+            self.assertEqual(n, 0, log)
+        self.assertEqual(self.out.execute("SELECT release, status FROM _releases WHERE year = 2025").fetchone(),
+                         ("IPEDS_2025-26_Final", "final"))
+
+    def test_replacing_the_same_release_twice_gives_the_same_rows(self):
+        self.add("IPEDS_2024-25_Final")
+        first = self.count("ADM", 2024), self.count("GR", 2024)
+        self.add("IPEDS_2024-25_Final")
+        self.assertEqual((self.count("ADM", 2024), self.count("GR", 2024)), first)
+
+    def test_a_release_not_on_disk_is_an_error(self):
+        with self.assertRaises(FileNotFoundError):
+            build_data.add_release(self.out, "IPEDS_2030-31_Final", "data.sqlite", self.root, self.catalog)
+
+
 class RealDatabase(unittest.TestCase):
     RELEASE, FILENAME, YEAR = config.RELEASES[-1]
 
     @classmethod
     def setUpClass(cls):
         cls.source_dir = config.SOURCE_DATA / "annual" / cls.RELEASE
-        cls.db = sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True)
+        cls.db = latest_only(sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True))
         cls.db.execute("ATTACH DATABASE ? AS src", (f"file:{(cls.source_dir / cls.FILENAME).as_posix()}?mode=ro",))
         cls.registry = cls.db.execute(
             "SELECT local_table, source_table, kind, source_rows, loaded_rows, n_columns FROM _tables WHERE release=?",
@@ -242,8 +326,9 @@ class RealDatabase(unittest.TestCase):
         for local, source, _, _, _, n_columns in self.registry:
             cols = self.columns[source]
             self.assertEqual(len(cols), n_columns)
-            self.assertEqual([r[1] for r in self.db.execute(f'PRAGMA table_info("{local}")')],
-                             ["year"] + [c for c, _, _ in cols], source)
+            stacked = [r[1] for r in self.db.execute(f'PRAGMA main.table_info("{local}")')]   # every year's columns
+            self.assertEqual(stacked[0], "year")
+            self.assertLessEqual({c.upper() for c, _, _ in cols}, {c.upper() for c in stacked}, source)   # names ignore case
             for i in range(0, len(cols), 150):
                 chunk = cols[i:i + 150]
                 numeric = [(c, st) for c, st, conv in chunk if st in ("INTEGER", "REAL") or conv]
@@ -267,7 +352,8 @@ class RealDatabase(unittest.TestCase):
         """The 42 codebook-numeric columns stored as text in the source: every value is now a number,
         with the same non-missing count and total as the source (where no special code was removed)."""
         converted = self.db.execute(
-            "SELECT local_table, source_table, column, n_special FROM _columns WHERE text_to_number=1").fetchall()
+            "SELECT local_table, source_table, column, n_special FROM _columns WHERE text_to_number=1 AND release=?",
+            (self.RELEASE,)).fetchall()
         self.assertEqual(len(converted), 42)
         for local, source, col, n_special in converted:
             kinds = {r[0] for r in self.db.execute(f'SELECT DISTINCT typeof("{col}") FROM "{local}"')}
@@ -306,12 +392,20 @@ class RealDatabase(unittest.TestCase):
     def test_a_reason_is_kept_for_every_special_code_cell(self):
         """Display-only side table: one row per cell that a special code made missing."""
         self.assertEqual(self.db.execute("SELECT COUNT(*) FROM _missing_reasons").fetchone()[0],
-                         self.db.execute("SELECT SUM(n_special) FROM _columns").fetchone()[0])
+                         self.db.execute("SELECT SUM(n_special) FROM _columns WHERE release=?", (self.RELEASE,)).fetchone()[0])
         self.assertEqual(self.db.execute("SELECT COUNT(*) FROM _missing_reasons WHERE reason IS NULL OR reason = ''").fetchone()[0], 0)
         # A school that is not in a system: the name is missing and the reason says why.
         self.assertEqual(self.db.execute("SELECT COUNT(*) FROM HD WHERE F1SYSNAM IN ('-1', '-2')").fetchone()[0], 0)
         self.assertEqual(self.db.execute("SELECT COUNT(*) FROM HD WHERE F1SYSNAM IS NULL").fetchone()[0],
                          self.db.execute("SELECT COUNT(*) FROM _missing_reasons WHERE local_table='HD' AND column='F1SYSNAM'").fetchone()[0])
+
+    def test_every_release_is_held_once_with_its_status_and_every_row(self):
+        held = self.db.execute("SELECT year, release, status FROM _releases ORDER BY year").fetchall()
+        self.assertEqual([(y, r) for y, r, _ in held], [(y, r) for r, _, y in config.RELEASES])
+        for year, release, status in held:
+            self.assertEqual(status, build_data.status_of(release))
+            bad = self.db.execute("SELECT COUNT(*) FROM _tables WHERE year=? AND source_rows <> loaded_rows", (year,)).fetchone()[0]
+            self.assertEqual(bad, 0, release)
 
     def test_known_values_from_the_plan(self):
         """Three figures from the test table in V2_PLAN.md, straight from the stacked tables."""

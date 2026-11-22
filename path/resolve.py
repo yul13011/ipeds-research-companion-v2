@@ -44,7 +44,7 @@ class Dictionary:
         return {u for (u,) in self.q("SELECT unitid FROM group_membership WHERE group_name=? AND year=?", group, self.year)}
 
     def name(self, unitid):
-        row = self.one("SELECT INSTNM FROM directory WHERE UNITID=?", unitid)
+        row = self.one("SELECT INSTNM FROM directory WHERE UNITID=? AND year=?", unitid, self.year)
         return row[0] if row else str(unitid)
 
 
@@ -372,7 +372,8 @@ def state_or_school(request, d):
     found = []
     for pattern in (p.strip() for p in (condition or "").split(";") if p.strip()):
         name = pattern.format(state=state)
-        for u, n in d.q("SELECT UNITID, INSTNM FROM directory WHERE INSTNM = ? OR INSTNM LIKE ? ORDER BY INSTNM", name, name + "-%"):
+        for u, n in d.q("SELECT UNITID, INSTNM FROM directory WHERE year = ? AND (INSTNM = ? OR INSTNM LIKE ?) ORDER BY INSTNM",
+                        d.year, name, name + "-%"):
             if u not in {f["id"] for f in found}:
                 found.append(dict(id=u, name=n))
     found = found[:SCHOOL_OPTIONS]
@@ -677,8 +678,8 @@ def peers(request, d, plan):
         plan["scope"] = f"{d.name(school)}'s own IPEDS comparison group ({len(plan['members'])} schools)"
         plan["statements"].append(pick[3])
     elif pick[1] == "same state and sector":
-        state, sector = d.one("SELECT STABBR, SECTOR FROM directory WHERE UNITID=?", school)
-        plan["members"] = {u for (u,) in d.q("SELECT UNITID FROM directory WHERE STABBR=? AND SECTOR=? AND UNITID<>?",
+        state, sector = d.one("SELECT STABBR, SECTOR FROM directory WHERE UNITID=? AND year=?", school, d.year)
+        plan["members"] = {u for (u,) in d.q("SELECT UNITID FROM directory WHERE year=? AND STABBR=? AND SECTOR=? AND UNITID<>?", d.year,
                                               state, sector, school)}
         plan["scope"] = f"schools in the same state and sector as {d.name(school)}"
     else:

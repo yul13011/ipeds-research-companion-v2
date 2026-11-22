@@ -18,7 +18,8 @@ log = Log()
 
 with st.sidebar:
     st.header("IPEDS Research Companion")
-    st.caption("Version 2, first slice: the 2024-25 IPEDS release only.")
+    st.caption("Version 2. Ten IPEDS releases are loaded (2015-16 to 2024-25); answers use the latest year until "
+               "trend questions are added.")
     names = list(config.MODELS)
     default = next((n for n, m in config.MODELS.items() if m == config.INTERPRET_MODEL), names[0])
     s.model = config.MODELS[st.selectbox("Model for reading questions", names, index=names.index(default))]
@@ -41,6 +42,8 @@ def show_answer(page, key):
     table(page["table"])
     for n in page["notes"]:
         st.caption(n)
+    if page.get("data_release"):
+        st.caption(page["data_release"])
     if (page["counts"]["rows"] or page["status"]) and st.checkbox("Show underlying counts and data status", key=f"c{key}"):
         table(page["counts"])
         for line in page["status"]:
