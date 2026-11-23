@@ -69,6 +69,23 @@ Start with a gap list and wait for my answers before loading anything, as in Sta
 - The school directory over time: names, closures and mergers, the national universe for each year, comparison groups for each year, and parent and child flags for each year.
 - Rates tested in every year against the NCES trend benchmark files where they have figures.
 
+PART 5b2. SET UP EVERY MEASURE
+
+The released app must answer everything IPEDS has. Today 762 measures are set up; set up all the rest.
+- Every measure in measures.csv, including: detailed cost and aid (net price by income band, charges by student type and others); yes/no and coded institutional facts (programs offered, services, policies); staff, enrollment and completions detail; Outcome Measures subgroups; the detailed lines of the three finance forms; and the survey response flags.
+- Draft what each needs in bulk, from rules, not by hand: the unit from the codebook's data type and format; the period from the table's year rule; years available from the data; value labels for coded measures from the codebook; and, for multi-row tables, the default row and tested breakdowns as now.
+- Finance lines follow the existing rule: a group figure for a group that mixes reporting forms is split by form, with the statement. A comparison of individual schools on different forms carries the same note.
+- Averages and percentages with no counts to combine stay "reported for each school only" for group figures, as now.
+- Build checks confirm every newly set-up measure in every year it exists.
+- Give me a review list only for measures the checks flag or the drafting could not decide (for example a unit that is unclear, or a coded measure without labels). Do not ask me to review the rest.
+- Retired variables (owner decision, Nov 22): the measures table covers every variable from all ten releases, not only 2024-25.
+  - Add the variables that exist only in earlier releases (about 326) to measures.csv, with the title and description from the last year each appeared and their years available, and set them up like the rest.
+  - Where a retired variable has a successor (same meaning under a new name or table, as in the finance and Outcome Measures redesigns), link it in measure_history.csv so a trend can continue, with a comparability break where the definition changed. Match by name, title and the NEWVARIABLES lists; mark uncertain matches for my review rather than guessing.
+  - A message for retired data: "IPEDS collected {what} from {first} to {last}", followed by "It was replaced by {successor}." or "It is no longer collected." The app never says "not found" for a variable that existed.
+  - Retired variables must not crowd current measures off the shortlist: they rank below current measures and are used mainly when nothing current fits or for "what data exists" questions.
+  - Show me the successor list in the report.
+- Then rerun the full question set on Haiku and report the change. Some decline in shortlist quality is expected now that many more measures compete; Part 5d is where the search is improved for the full list, so do not tune the search in this part.
+
 PART 5c. TREND QUESTIONS
 
 - A school, several schools or a group over time; "since 2015", "the last five years", a range of years, and the change between two years.
