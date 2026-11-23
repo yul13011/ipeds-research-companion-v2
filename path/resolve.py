@@ -104,7 +104,7 @@ def retired(d, measure_id):
     if not years or years[-1] >= d.year:
         return None
     then = lambda y: f"{y}-{(y + 1) % 100:02d}"
-    successor = d.one("SELECT COALESCE(m.plain_name, m.title), h.status FROM dict_measure_history h JOIN dict_measures m "
+    successor = d.one("SELECT m.shown_name, h.status FROM dict_measure_history h JOIN dict_measures m "
                       "ON m.\"table\" || '.' || m.variable = h.measure WHERE "
                       "UPPER(h.earlier_table || '.' || h.earlier_variable) = UPPER(?) AND h.status <> 'rejected' "
                       "ORDER BY h.status = 'in use' DESC", measure_id)   # a rejected match is no successor
@@ -344,7 +344,17 @@ def resolve_request(request, d, short, new_question=False):
         got = measure({"id": c["measure"], "row": []}, d, None)
         if got["kind"] != "ready":
             return dict(got, request=request)
-        plan["conditions"].append(dict(measure=got["measure"], comparison=c["comparison"], value=c["value"]))
+        condition, row = paired(got["measure"], d, request["year"])   # one measure per kind of school, as for figures
+        if row is not None:
+            pair_statements(plan, d, condition)
+        for part in condition.get("parts") or [condition]:          # each measure's own statements (the pension note)
+            for said in part.get("row_statements", []):
+                if said not in plan["statements"]:
+                    plan["statements"].append(said)
+        same = [x for x in plan["conditions"] if x["measure"]["id"] == condition["id"] and x["comparison"] == c["comparison"]
+                and x["value"] == c["value"]]
+        if not same:                                    # one condition per form, paired into one, is one condition
+            plan["conditions"].append(dict(measure=condition, comparison=c["comparison"], value=c["value"]))
     covered = plan["members"] if plan["members"] is not None else {s["id"] for s in plan["schools"]}
     for m in plan["measures"] + [c["measure"] for c in plan["conditions"]]:
         m["period"] = cohort_period(m, covered, d) or m["period"]
@@ -427,36 +437,53 @@ def state_or_school(request, d):
     return outcome("clarify", question=question.format(state=state), options=options)
 
 
-def pair_measures(plan, d, year):
-    """A term reading that names one measure per kind of school (terms.csv applies_to, such as net price) becomes one
-    measure: each school takes the measure that applies to it, and a group with more than one kind is shown
-    separately for each."""
-    out, done = [], set()
+def paired(m, d, year):
+    """The measure, or (when a term reading names one measure per kind of school, terms.csv applies_to) one measure
+    made of those parts, each school taking the part that applies to it. Returns (measure, the reading or None)."""
+    row = d.one("SELECT term, reading FROM dict_terms WHERE measure=? AND COALESCE(applies_to, '') <> '' "
+                "AND status='in use' ORDER BY rowid", m["id"])
+    if not row:
+        return m, None
+    parts = []
+    for mid, applies, shown in d.q("SELECT measure, applies_to, shown_as FROM dict_terms WHERE term=? AND reading=? "
+                                   "AND COALESCE(applies_to, '') <> '' AND status='in use' ORDER BY rowid", *row):
+        got = dict(kind="ready", measure=m) if mid == m["id"] else measure({"id": mid, "row": []}, d, year)
+        if got["kind"] == "ready":
+            parts.append(dict(got["measure"], applies_to=applies, members=d.members(applies), shown_as=shown))
+    if len(parts) < 2:
+        return m, None
+    return dict(parts[0], name=parts[0]["shown_as"] or parts[0]["name"], parts=parts,
+                rates=[r for p in parts for r in p["rates"]]), row
+
+
+def pair_statements(plan, d, m):
+    """The statements for a measure made of parts: the kinds of school it covers, and, when the parts are lines of
+    different finance forms, the reporting-forms statement (the measures are not strictly comparable)."""
     covered = plan["members"] if plan["members"] is not None else {s["id"] for s in plan["schools"]}
+    kinds = [p["applies_to"] for p in m["parts"] if p["members"] & covered]
+    said = [d.setting("kind of school", "Measure by kind of school")[1]] if len(kinds) > 1 else []
+    said = [s.format(kinds=", ".join(p["applies_to"] for p in m["parts"])) for s in said if s]
+    if len({p.get("form") for p in m["parts"] if p.get("form")}) > 1:
+        said.append(d.setting("different reporting forms")[1])
+    for s in said:
+        if s not in plan["statements"]:
+            plan["statements"].append(s)
+
+
+def pair_measures(plan, d, year):
+    """Each measure that a term reading pairs by kind of school becomes one measure of parts (see paired); a group
+    with more than one kind is shown separately for each."""
+    out, done = [], set()
     for m in plan["measures"]:
-        row = d.one("SELECT term, reading FROM dict_terms WHERE measure=? AND COALESCE(applies_to, '') <> '' "
-                    "AND status='in use' ORDER BY rowid", m["id"])
-        if not row:
+        new, row = paired(m, d, year)
+        if row is None:
             out.append(m)
             continue
         if row in done:
             continue
         done.add(row)
-        parts = []
-        for mid, applies, shown in d.q("SELECT measure, applies_to, shown_as FROM dict_terms WHERE term=? AND reading=? "
-                                       "AND COALESCE(applies_to, '') <> '' AND status='in use' ORDER BY rowid", *row):
-            got = dict(kind="ready", measure=m) if mid == m["id"] else measure({"id": mid, "row": []}, d, year)
-            if got["kind"] == "ready":
-                parts.append(dict(got["measure"], applies_to=applies, members=d.members(applies), shown_as=shown))
-        if len(parts) < 2:
-            out.append(m)
-            continue
-        out.append(dict(parts[0], name=parts[0]["shown_as"] or parts[0]["name"], parts=parts,
-                        rates=[r for p in parts for r in p["rates"]]))
-        kinds = [p["applies_to"] for p in parts if p["members"] & covered]
-        statement = d.setting("kind of school", "Measure by kind of school")[1]
-        if len(kinds) > 1 and statement:
-            plan["statements"].append(statement.format(kinds=", ".join(p["applies_to"] for p in parts)))
+        out.append(new)
+        pair_statements(plan, d, new)
     plan["measures"] = out
 
 
@@ -508,7 +535,7 @@ def switch_to_detail(request, d, plan):
         labels = [label for k, v in rows.items() for (label,) in
                   d.q('SELECT label FROM dict_category_codes WHERE in_latest = \'yes\' AND "table"=? AND UPPER("column")=UPPER(?) AND code=? AND '
                       '"default" IS NULL', table, k, str(v))]
-        names = dict(d.q('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures '
+        names = dict(d.q('SELECT "table" || \'.\' || variable, shown_name FROM dict_measures '
                          'WHERE "table" || \'.\' || variable IN (?, ?)', m["id"], detailed))
         plan["statements"].append(d.setting("detailed measure")[1].format(
             summary=names.get(m["id"], m["id"]), detailed=", ".join([names.get(detailed, detailed)] + labels)))
@@ -523,7 +550,7 @@ def topic_plan(plan, request, d, short=None):
     """define and data_exists: which of the three answers applies is decided by the dictionary."""
     found = []
     for m in request["measures"]:
-        row = d.one('SELECT m."table", m.variable, COALESCE(m.plain_name, m.title), m.long_description, m.in_first_version, '
+        row = d.one('SELECT m."table", m.variable, m.shown_name, m.long_description, m.in_first_version, '
                     'm.unit, COALESCE(m.period, y.period) FROM dict_measures m JOIN dict_year_meaning y ON y."table" = m."table" '
                     'WHERE m."table" || \'.\' || m.variable = ?', m["id"])
         if row:
@@ -742,7 +769,7 @@ def measure(m, d, year):
         info = dict(id=m["id"], name=name, table=None, column=None, rows={}, unit=unit or "computed from counts",
                     definition=name, source=None, own_period=None, form=None, period_table=numerator.partition(".")[0])
     else:
-        row = d.one('SELECT "table", variable, COALESCE(plain_name, title), unit, reporting_form, in_first_version, '
+        row = d.one('SELECT "table", variable, shown_name, unit, reporting_form, in_first_version, '
                     'period, long_description, statement FROM dict_measures WHERE "table" || \'.\' || variable = ?', m["id"])
         if row is None:
             return decline(d, "not found")
@@ -750,15 +777,17 @@ def measure(m, d, year):
         if d.one('SELECT 1 FROM dict_category_codes WHERE "table" = ? AND UPPER("column") = UPPER(?) AND in_latest = \'yes\'',
                  table, column):                        # a category column picks rows; it is never the figure shown
             summable = [u.strip() for u in (d.setting("summable units")[0] or "").split(",")]
-            figures = d.q('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures WHERE "table" = ? '
+            figures = d.q('SELECT "table" || \'.\' || variable, shown_name FROM dict_measures WHERE "table" = ? '
                           f"AND in_first_version = 'yes' AND unit IN ({', '.join('?' * len(summable))}) ORDER BY rowid LIMIT 4",
                           table, *summable)
             return outcome("row_choice", id=m["id"], name=name, table=table, figures=figures)
+        if not d.one("SELECT 1 FROM measure_years WHERE measure = ? AND n_values > 0", m["id"]):
+            return decline(d, "no values", what=name)   # in no year has any school a value: never "not found" or zero
         gone = retired(d, m["id"])
         if gone:                                        # IPEDS collected it once: say when, and what replaced it
             return outcome("retired", id=m["id"], name=name, **gone)
         if set_up != "yes":                             # the nearest set-up measure of the same table, as an alternative
-            near = d.one('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures '
+            near = d.one('SELECT "table" || \'.\' || variable, shown_name FROM dict_measures '
                          'WHERE "table"=? AND in_first_version=\'yes\' ORDER BY rowid LIMIT 1', table)
             return outcome("not_set_up", id=m["id"], name=name,
                            closest=dict(text=near[1], request=None, measure=near[0]) if near else None)

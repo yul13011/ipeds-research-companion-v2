@@ -349,3 +349,44 @@ haiku_5b2_fix_first,eval,probe_cost_roomboard_mh,1,no,yes,wrong reading,model,,p
 haiku_5b2_fix_second,eval,probe_cost_roomboard_mh,1,no,yes,wrong reading,model,,picked the program-year food and housing column; Mount Holyoke (academic calendar) has no value there
 haiku_5b2_fix_first,owner,o51_negative_net_worth,1,no,yes,wrong reading,path,,"listed schools by net position only (the public form); the private nonprofit and for-profit forms' measures are not used, so the answer is not by form"
 haiku_5b2_fix_second,owner,o51_negative_net_worth,1,no,yes,wrong reading,path,,"listed schools by net position only (the public form); the private nonprofit and for-profit forms' measures are not used, so the answer is not by form"
+haiku_5b2_names,log,3,2,yes,yes,correct answer,,,undergraduates by race from 12-month enrollment (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,13,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,15,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,24,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,24,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,24,4,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,24,5,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,41,1,yes,yes,correct answer,,,"applicants and admission rate for the national universe, with the no-group statement (same reading as haiku_5b2_fix_first)"
+haiku_5b2_names,log,58,3,yes,yes,correct answer,,,RIT beside its comparison group (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,63,1,yes,yes,correct answer,,,"WSU Tech found from ""wsu tehc""; not Texas Tech (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)"
+haiku_5b2_names,log,63,2,yes,yes,correct answer,,,WSU Tech (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_resort,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_resort,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_rechart,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_go_back,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_go_back,3,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,fu_change_measure,2,yes,yes,correct answer,,,bachelor's degrees (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,faq_cost_harvard,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,trap_medical_scope,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,salaries in the 2024-25 release are for 2024-25 (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,probe_sal_cmp,1,yes,yes,correct decline,,,as above (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,eval,probe_cost_tuit_smith,1,yes,yes,correct answer,,,"the academic-year tuition, 2023-24 ($61,568), through the calendar pairing (decision 2): fixed (same reading as haiku_5b2_fix_first)"
+haiku_5b2_names,eval,probe_cost_netprice_we,1,yes,yes,correct answer,,,"the private-school net price, 2022-23, through the kind-of-school pairing (decision 2): fixed (same reading as haiku_5b2_fix_first)"
+haiku_5b2_names,owner,o47_low_income,1,yes,yes,correct answer,,,partial: defines the Pell share only (same reading as haiku_5b2_second) (same reading as haiku_5b2_fix_first)
+haiku_5b2_names,log,11,1,yes,yes,correct answer,,,cost of attendance (Title IV aid recipients) for 2021-22 to 2023-24 from the 2024-25 release's own earlier-year columns (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_second)
+haiku_5b2_names,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_names,log,7,1,yes,yes,correct answer,,,"full-time (2,995) and part-time (805) instructional staff, as counts: fixed by decision 1"
+haiku_5b2_names,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,"full-time and part-time instructional staff, as counts: fixed by decision 1"
+haiku_5b2_names,log,24,6,no,yes,wrong reading,model,,"listed the dual-enrollment schools alphabetically; asked for rank order, largest first"
+haiku_5b2_names,log,55,2,yes,yes,correct answer,,,public two-year colleges ranked by graduation rate
+haiku_5b2_names,log,58,6,no,no,wrong reading,model,,picked unrelated schools for 'the example set' (recurs: also in the second run of the last change order)
+haiku_5b2_names,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,"grant-aided net price, 2023-24"
+haiku_5b2_names,eval,fu_go_back,2,yes,yes,correct answer,,,net price for Yale and Harvard
+haiku_5b2_names,eval,faq_ma_distance,1,yes,yes,correct answer,,,Massachusetts schools offering undergraduate distance education
+haiku_5b2_names,eval,trap_netprice_lag,1,yes,yes,correct answer,,,"net price, 2023-24, with the lag stated"
+haiku_5b2_names,eval,probe_cost_roomboard_mh,1,yes,yes,correct answer,,,"on-campus food and housing, 2023-24 ($18,838), through the calendar pairing: fixed by decision 1"
+haiku_5b2_names,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,the test-score consideration with score ranges
+haiku_5b2_names,owner,o47_cc_success,1,yes,yes,correct answer,,,partial: Outcome Measures items and award totals

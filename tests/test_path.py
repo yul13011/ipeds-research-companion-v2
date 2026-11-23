@@ -460,8 +460,8 @@ class Path_(unittest.TestCase):
         statements = [s for (s,) in self.db.execute("SELECT DISTINCT statement FROM dict_terms WHERE statement IS NOT NULL")]
         self.assertFalse([s for s in statements if s.startswith("State ")])          # no instructions to the app left
         shown = {}                                                              # every name shown for two or more
-        for t, v, title, plain in self.db.execute('SELECT "table", variable, title, plain_name FROM dict_measures'):
-            shown.setdefault(" ".join((plain or title or "").lower().split()), []).append(f"{t}.{v}")   # measures is flagged
+        for t, v, name in self.db.execute('SELECT "table", variable, shown_name FROM dict_measures'):   # measures, after
+            shown.setdefault(" ".join((name or "").lower().split()), []).append(f"{t}.{v}")   # the subjects, is listed
         clashing = {n for n, ms in shown.items() if len(ms) > 1}
         self.assertEqual(clashing, {n for (n,) in self.db.execute("SELECT name FROM main.name_clashes")})
 
@@ -1010,6 +1010,44 @@ class Retired(unittest.TestCase):
         page = self.run_request(req("schools", measures=[M("COST1.chg1py2")], schools=[S("Smith College", 167835)]))
         self.assertEqual(page["kind"], "answer")
         self.assertNotEqual(page["table"]["rows"][0][-1], "no value")          # the academic-year tuition, 2023-24
+
+    def test_other_charges_take_the_measure_for_each_calendar(self):
+        """Decision of 2026-11-23 (item 1), from the Mount Holyoke room-and-board question: the model picked the
+        program-year food and housing column, which an academic-calendar school leaves empty."""
+        page = self.run_request(req("schools", measures=[M("COST1.chg5py2")], schools=[S("Mount Holyoke College", 166939)]))
+        self.assertEqual(page["kind"], "answer")
+        self.assertNotEqual(page["table"]["rows"][0][-1], "no value")          # the academic-year charge, 2023-24
+
+    def test_a_condition_uses_each_schools_own_finance_form(self):
+        """Decision of 2026-11-23 (item 2), from "How many schools have negative net worth and which are they?": each
+        school is tested on its own form's measure, and the list is grouped by form."""
+        page = self.run_request(req("list", conditions=[dict(measure="F_F1A.F1A18", comparison="<", value=0)]))
+        self.assertEqual(page["kind"], "answer")
+        table = page["table"]
+        self.assertEqual(table["columns"][:2], ["Kind of school", "Measure"])
+        forms = [r[0] for r in table["rows"]]
+        self.assertEqual(forms, sorted(forms, key=["Reports on the GASB finance form", "Reports on the FASB finance form",
+                                                  "Reports on the for-profit finance form"].index))   # grouped by form
+        self.assertEqual({r[1].split(": ")[-1] for r in table["rows"]}, {"Net position", "Total net assets", "Total equity"})
+        self.assertTrue(all(r[-1].startswith("$-") for r in table["rows"]))     # each below zero on its own measure
+        text = page["interpreted"]
+        self.assertIn("Fiscal year 2024", text)
+        self.assertIn("different accounting standards", text)                  # not strictly comparable
+        self.assertIn("pension", text)                                          # the note on net position (dictionary)
+        self.assertIn("excluding administrative offices", text)                 # system offices left out, and said
+
+    def test_codes_without_labels_and_measures_without_values(self):
+        """Decisions of 2026-11-23: a code the codebook does not label is shown as the code, with the note "IPEDS gives
+        no label for this code"; a measure with no value in any year is "IPEDS has no values for this measure"."""
+        from path import fetch
+        data = fetch.Data(sqlite3.connect(f"file:{DB}?mode=ro", uri=True))
+        self.assertEqual(data.label("HD", "SECTOR", 1.0), data.label("HD", "SECTOR", 1))   # 1.0 is code 1
+        self.assertFalse(getattr(data, "unlabelled", False))
+        self.assertEqual(data.label("HD", "SECTOR", 987), 987)                            # no label: the code itself
+        self.assertTrue(data.unlabelled)
+        page = self.run_request(req("schools", measures=[M("COST1.CHG10AY0")], schools=[S("Yale", 130794)]))
+        self.assertEqual(page["kind"], "decline")
+        self.assertTrue(page["message"].startswith("IPEDS has no values for this measure"))
 
     def test_a_breakdown_with_no_school_and_no_group_takes_the_default_group(self):
         """Part 5b2 Haiku run, conversation 62: a breakdown naming no school and no group stopped with an error."""

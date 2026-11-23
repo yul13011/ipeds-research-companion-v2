@@ -31,8 +31,10 @@ for run in new_runs:
             continue
         old = before.get(key)
         text = lambda turn: ((turn.get("page") or {}).get("kind"), (turn.get("page") or {}).get("message"))
-        same = old is not None and (text(old) == text(t) and text(t)[1] or
-                                    (g.ids(old) == g.ids(t) and text(old)[0] == text(t)[0] and t.get("requests")))
+        figures = lambda turn: ((turn.get("page") or {}).get("table") or {}).get("rows")
+        same = old is not None and (text(old) == text(t) and text(t)[1] or      # the same reading and the same figures
+                                    (g.ids(old) == g.ids(t) and text(old)[0] == text(t)[0] and t.get("requests")
+                                     and figures(old) == figures(t)))
         if key in review and same:
             pass
         elif not e["measures"].startswith("*") or not t.get("requests"):

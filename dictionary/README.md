@@ -136,7 +136,7 @@ What the year means for each table. Every result must state this period.
 - `title`: the IPEDS table title.
 - `parent_child_flag`: the two `FLAGS` columns that say whether a school reports this survey together with a related campus, written `FLAGS.PRCH_EF; FLAGS.IDX_EF`. The first holds 1 (parent record, includes data from child campuses) or 2 (child record, data reported with the parent); the second holds the parent's ID. A summary-to-detailed link may differ only at such schools, and any answer that shows such a school says which campus it reports with (the "related campus" setting).
 - `caveat`: a warning shown whenever figures from this table are given for a group of schools, such as optional-year reporting.
-- `subject`: a short name for the table, drafted from IPEDS's own table title ("Fall enrollment", "12-month headcount"). Wherever two or more measures share a name, the name shown becomes "subject: title". Drafted for the owner's review (2026-11-23); not applied until approved.
+- `subject`: a short name for the table, drafted from IPEDS's own table title ("Fall enrollment", "12-month headcount"). Wherever two or more measures share a name, the name shown becomes "subject: title". Approved and applied (2026-11-23). The build writes the name an answer shows into `shown_name`: the official IPEDS title (or one of the plain names kept for the "Grand total" measures), with the subject added only where the name is shared. Names still shared after that are listed by the build (`name_clashes`).
 
 ## measure_history.csv
 

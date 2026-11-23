@@ -492,6 +492,26 @@ class FasterBuild(unittest.TestCase):
         steps = self.write(category_codes=codes) or self.same_as_full()
         self.assertTrue(any(s.startswith("retested ENR in 1 year") for s in steps), steps)   # only 2024 rows changed
 
+    def test_change_to_one_table_leaves_the_other_tables_sets_alone(self):
+        """A table-scoped retest (here DRVADM's parent-and-child rule) must pass over the breakdown sets of other
+        tables (ENR) without touching them. It stopped with an error before (found on the real database)."""
+        meaning = [dict(r, parent_child_flag="FLAGS.PRCH_ADM; FLAGS.IDX_ADM") if r["table"] == "DRVADM" else dict(r)
+                   for r in self.start["year_meaning"]]
+        steps = self.write(year_meaning=meaning) or self.same_as_full()
+        self.assertTrue(any(s.startswith("retested DRVADM") for s in steps), steps)
+
+    def test_a_run_that_stops_part_way_makes_the_next_run_a_full_rebuild(self):
+        """A run that loads a table and then stops (here on a category row naming a column that does not exist) must
+        not leave the next run comparing the new rows with themselves."""
+        bad = self.start["category_codes"] + [dict(table="ENR", column="NOPE", code="1", label="x", role="part")]
+        self.write(category_codes=bad)
+        with self.assertRaises(ValueError):
+            bd.build(self.db_path, self.tmp)
+        codes = [dict(r, breakdown_set="", set_total="", set_fixed="") if r["code"] == "5" else dict(r)
+                 for r in self.start["category_codes"]]
+        steps = self.write(category_codes=codes) or self.same_as_full()
+        self.assertEqual(steps, [])                     # the faster path was not used: the run was a full rebuild
+
     def test_measure_change_rechecks_only_that_measure(self):
         measures = [dict(r, format="Disc") if r["variable"] == "AID" else dict(r) for r in self.start["measures"]]
         steps = self.write(measures=measures) or self.same_as_full()

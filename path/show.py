@@ -36,7 +36,8 @@ def interpreted(plan):
         set=" ".join([(plan["breakdown"] or {}).get("set", "").lower()] +
                      [f"({x})" for x in (plan["breakdown"] or {}).get("fixed_labels", [])]), split=plan["split"] or "",
         school=", ".join(s["name"] for s in plan["schools"]), topic=(plan["topic"] or {}).get("asked") or "the topic")
-    periods = list(dict.fromkeys(m["period"] for m in plan["measures"] if m.get("period")))
+    periods = list(dict.fromkeys(m["period"] for m in plan["measures"] + [c["measure"] for c in plan["conditions"]]
+                                 if m.get("period")))                   # a measure used only in a condition too
     if periods:
         text += f" ({'; '.join(periods)})"
     for c in plan["conditions"]:

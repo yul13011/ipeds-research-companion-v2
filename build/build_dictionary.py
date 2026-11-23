@@ -143,11 +143,29 @@ def load_tables(db, folder, names=None):
         db.executemany(f"INSERT INTO dict_{name} VALUES ({', '.join('?' * len(header))})",
                        [[(c.strip() or None) for c in r] for r in body])
     db.create_function("in_years", 2, in_years)
+    name_measures(db)
     if names is not None and "category_codes" not in names:
         return
     db.execute("ALTER TABLE dict_category_codes ADD COLUMN in_latest TEXT")
     db.execute("UPDATE dict_category_codes SET in_latest = CASE WHEN in_years(years, (SELECT MAX(year) FROM _tables)) "
                "THEN 'yes' ELSE 'no' END")
+
+
+def name_measures(db):
+    """dict_measures.shown_name: the name an answer shows. The official IPEDS title (or one of the plain names kept
+    for the "Grand total" measures); where two or more measures share that name, "subject: title", the subject being
+    the table's short name in year_meaning.csv (owner naming rule, 2026-11-23)."""
+    if "shown_name" not in {r[1] for r in db.execute("PRAGMA table_info(dict_measures)")}:
+        db.execute("ALTER TABLE dict_measures ADD COLUMN shown_name TEXT")
+    subject = dict(db.execute('SELECT "table", subject FROM dict_year_meaning'))
+    rows = db.execute('SELECT rowid, "table", COALESCE(plain_name, title) FROM dict_measures').fetchall()
+    shared = {}
+    for _, _, name in rows:
+        key = " ".join((name or "").lower().split())
+        shared[key] = shared.get(key, 0) + 1
+    db.executemany("UPDATE dict_measures SET shown_name = ? WHERE rowid = ?",
+                   [((f"{subject[t]}: {name}" if shared[" ".join((name or "").lower().split())] > 1 and subject.get(t)
+                      else name), rid) for rid, t, name in rows])
 
 
 def check(db, wording_only=False):
@@ -438,7 +456,7 @@ def build_breakdown_sets(db, scope=Scope()):
         counts = [m for (m,) in db.execute("SELECT variable FROM dict_measures WHERE \"table\"=? AND format='Cont' "
                                            "AND data_type='N'", (table,))]
         if not scope.has_table(table):                  # only the count columns of the measures in scope; a measure
-            mine = [m.partition(".")[2] for m in scope.measures if m.partition(".")[0] == table.upper()]  # that is no
+            mine = [m.partition(".")[2] for m in (scope.measures or ()) if m.partition(".")[0] == table.upper()]  # that is no
             for t in ("breakdown_sets", "breakdown_slices"):                                     # longer a count loses
                 db.executemany(f'DELETE FROM {t} WHERE set_name=? AND "table"=? AND UPPER(measure)=?',  # its results
                                [(name, table, m) for m in mine])
@@ -864,9 +882,11 @@ def build_measure_checks(db, only=None, tables=None, years=None):
             for y, t, v, n in mine:
                 if not n:
                     continue
-                missing = db.execute(f'SELECT COUNT(DISTINCT CAST("{v}" AS TEXT)) FROM main."{t}" WHERE year = ? AND "{v}" IS '
-                                     f'NOT NULL AND CAST("{v}" AS TEXT) NOT IN (SELECT code FROM value_labels WHERE '
-                                     'local_table = ? AND "column" = ? AND year = ?)', (y, t, v.upper(), y)).fetchone()[0]
+                code = (f'CASE WHEN typeof("{v}") = \'real\' AND "{v}" = CAST("{v}" AS INTEGER) '   # 1.0 is code 1
+                        f'THEN CAST(CAST("{v}" AS INTEGER) AS TEXT) ELSE CAST("{v}" AS TEXT) END')
+                missing = db.execute(f'SELECT COUNT(DISTINCT {code}) FROM main."{t}" WHERE year = ? AND "{v}" IS NOT NULL AND '
+                                     f'{code} NOT IN (SELECT code FROM value_labels WHERE local_table = ? AND "column" = ? '
+                                     'AND year = ?)', (y, t, v.upper(), y)).fetchone()[0]
                 if missing:
                     out.append((m, "codes without labels", f"{y}: {missing} code(s) the codebook does not label"))
         if (per_school or "").startswith("many"):
@@ -879,13 +899,13 @@ def build_measure_checks(db, only=None, tables=None, years=None):
 
 
 def build_name_clashes(db):
-    """name_clashes: names shown for more than one measure (the plain name, or else the IPEDS title, compared without
-    case or extra spaces). Each is flagged for a plain name; the build does not stop for it."""
+    """name_clashes: names still shown for more than one measure after the table subjects are added (compared
+    without case or extra spaces). Each is listed for the owner's review; the build does not stop for it."""
     db.executescript("""DROP TABLE IF EXISTS name_clashes;
         CREATE TABLE name_clashes (name TEXT, n INTEGER, measures TEXT);""")
     names = {}
-    for t, v, title, plain in db.execute('SELECT "table", variable, title, plain_name FROM dict_measures ORDER BY rowid'):
-        names.setdefault(" ".join((plain or title or "").lower().split()), []).append(f"{t}.{v}")
+    for t, v, shown in db.execute('SELECT "table", variable, shown_name FROM dict_measures ORDER BY rowid'):
+        names.setdefault(" ".join((shown or "").lower().split()), []).append(f"{t}.{v}")
     db.executemany("INSERT INTO name_clashes VALUES (?,?,?)",
                    [(n, len(ms), "; ".join(ms)) for n, ms in names.items() if len(ms) > 1])
 
@@ -923,9 +943,10 @@ def build(local_db=None, folder=None, verbose=False, full=False, table=None):
     try:
         db.create_function("in_years", 2, in_years)
         fresh = changes.fingerprints(db, folder, sys.modules[__name__])
-        steps = None if full or not changes.usable(db) else             changes.update(db, folder, sys.modules[__name__], only=table, verbose=verbose)
-        changes.mark(db, "in progress")
-        if steps is None:
+        usable = not full and changes.usable(db)
+        changes.mark(db, "in progress")                 # before anything changes: a run that stops part way leaves
+        steps = changes.update(db, folder, sys.modules[__name__], only=table, verbose=verbose) if usable else None
+        if steps is None:                               # "in progress", so the next run is a full rebuild
             full_build(db, folder, verbose)
             steps = ["full rebuild"]
         changes.mark(db, "finished", fresh, only=table)

@@ -72,4 +72,5 @@ Details of each stage, the slice scope, and what is not in the slice are in `doc
 - Run the tests: `python -m unittest discover -s tests -v`
 - Run the chat page: `streamlit run app.py` (needs `ANTHROPIC_API_KEY` set; the model is `IPEDS_MODEL`, default Sonnet)
 - Live smoke test, only with the owner's approval (it costs money): `python scripts/smoke_test.py --yes`
+- Cadence (owner decision, 2026-11-23): use the fast build path for routine changes; run a full rebuild (`--full`) only before a push to GitHub, at the end of each stage, and for yearly updates (its result must match the fast path, as tested). Run the question set on Haiku once per change order (`python scripts/stage4_run.py --yes --model haiku`), and twice only at the end of a part, when the scorecard is judged.
 - The question path is in `path/`, one module per step: request, shortlist, interpret, resolve, fetch, show, log, answer.

@@ -159,15 +159,16 @@ def build_index(db):
     except sqlite3.OperationalError:            # a database built before measure_years existed
         spans = {}
     category = {(t, c.upper()) for t, c in q("SELECT DISTINCT \"table\", \"column\" FROM dict_category_codes WHERE in_latest = 'yes'")}
-    for t, v, title, desc, plain, syn, first, unit, period, per_school in q(
-            'SELECT "table", variable, title, long_description, plain_name, synonyms, in_first_version, unit, period, '
-            "rows_per_school FROM dict_measures"):
+    for t, v, title, desc, plain, shown, syn, first, unit, period, per_school in q(
+            'SELECT "table", variable, title, long_description, plain_name, shown_name, synonyms, in_first_version, unit, '
+            "period, rows_per_school FROM dict_measures"):
         if (t, v.upper()) in category:          # a category column picks rows (shown with its table's measures),
             continue                            # never a figure, so it is not a measure on the shortlist
-        name = plain or title
+        name = shown or plain or title          # shown to the model: "subject: title" where titles are shared; the
+        own = plain or title                    # search reads the measure's own name, so the subject adds no words
         measures[f"{t}.{v}"] = dict(id=f"{t}.{v}", name=name, table=t, unit=unit, period=fill_years(period, latest) or periods.get(t),
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),
-                                    main=f"{name} {syn or ''}", context=f"{titles.get(t, '')} {(desc or '')[:300]}")
+                                    main=f"{own} {syn or ''}", context=f"{titles.get(t, '')} {(desc or '')[:300]}")
         measures[f"{t}.{v}"]["text"] = measures[f"{t}.{v}"]["main"] + " " + measures[f"{t}.{v}"]["context"]
         if f"{t}.{v}" in spans:                 # set up or not, a variable IPEDS no longer collects
             a, b = spans[f"{t}.{v}"]

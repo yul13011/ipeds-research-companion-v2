@@ -25,8 +25,13 @@ class Data:
         return dict(self.q(f'SELECT UNITID, "{column}" FROM "{table}" WHERE {" AND ".join(where)}', *args))
 
     def label(self, table, column, code):
+        """A code's IPEDS label; where the codebook gives none, the code itself (and the answer says so)."""
+        if isinstance(code, float) and code.is_integer():   # stored as 1.0, labelled as 1
+            code = int(code)
         row = self.q('SELECT label FROM value_labels WHERE local_table=? AND "column"=? AND code=? ORDER BY year = ? DESC, year DESC',
                      table, column.upper(), str(code), self.year)
+        if not row:
+            self.unlabelled = True
         return row[0][0] if row else code
 
     def reason(self, table, column, unitid):
@@ -166,6 +171,10 @@ def fetch(plan, db):
     result = dict(columns=[], rows=[], counts_columns=[], counts=[], notes=[], missing=[], warnings=[])
     run(plan, data, result)
     campus_notes(plan, data, result, shown_schools(plan, result))
+    if getattr(data, "unlabelled", False):              # a coded answer the codebook gives no label for
+        said = data.q("SELECT statement FROM dict_terms WHERE term = 'message' AND reading = 'no label'")
+        if said:
+            result["notes"].append(said[0][0])
     return result
 
 
@@ -254,14 +263,25 @@ def filtered(plan, data):
 
 def listing(plan, data, result):
     members = filtered(plan, data)
-    shown_measures = [c["measure"] for c in plan["conditions"]] + plan["measures"]
+    shown_measures = list({m["id"]: m for m in [c["measure"] for c in plan["conditions"]] + plan["measures"]}.values())
     values = [school_values(m, data) for m in shown_measures]
     names = data.names(sorted(members))
     result["listed"] = sorted(members)
-    result["columns"] = ["School", "State"] + [m["name"] for m in shown_measures]
-    for u in sorted(members, key=lambda u: names[u][0]):
-        result["rows"].append([names[u][0], names[u][1]] + [shown(m, v.get(u), data) for m, v in zip(shown_measures, values)])
+    by_kind = next((m for m in shown_measures if m.get("parts")), None)   # one measure per kind of school: group by it
+    part_of = {}
+    if by_kind:
+        for i, p in enumerate(by_kind["parts"]):
+            part_of.update({u: (i, p) for u in members if u in p["members"] and u not in part_of})
+    result["columns"] = (["Kind of school", "Measure"] if by_kind else []) + ["School", "State"] + [m["name"] for m in shown_measures]
+    order = lambda u: (part_of.get(u, (len(part_of) + 1, None))[0], names[u][0])
+    for u in sorted(members, key=order):
+        kind = [part_of[u][1]["applies_to"], part_of[u][1]["name"]] if u in part_of else ["", ""] if by_kind else []
+        result["rows"].append(kind + [names[u][0], names[u][1]] + [shown(m, v.get(u), data) for m, v in zip(shown_measures, values)])
     result["notes"].append(f"{len(members):,} of {len(plan['members']):,} schools meet the conditions.")
+    if by_kind:
+        for i, p in enumerate(by_kind["parts"]):
+            n = sum(1 for u in members if part_of.get(u, (None,))[0] == i)
+            result["notes"].append(f"{p['applies_to']}: {n:,} ({p['name']}).")
 
 
 def count_schools(plan, data, result):
