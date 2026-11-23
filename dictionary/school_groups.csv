@@ -164,3 +164,5 @@ Has an IPEDS comparison group,has rows,,CUSTOMCGIDS,,,Schools that submitted the
 Reports on the GASB finance form,has value,,DRVF,F1COREXP,,Schools that report finance on the GASB form (public institutions),,,,in use,2,
 Reports on the FASB finance form,has value,,DRVF,F2COREXP,,Schools that report finance on the FASB form (private nonprofit institutions and 18 public institutions),,,,in use,2,
 Reports on the for-profit finance form,has value,,DRVF,F3COREXP,,Schools that report finance on the for-profit form (private for-profit institutions),,,,in use,2,
+Charges by academic year,column,,IC,CALSYS,"1, 2, 3, 4, 5","Schools on an academic calendar (semester, quarter, trimester, 4-1-4 or other academic year), which report tuition and fees for the academic year",,,,in use,3,Owner decision 2026-11-23 (item 2): the kind-of-school pairing for program-year tuition
+Charges by program,column,,IC,CALSYS,"6, 7","Schools whose calendar differs by program or is continuous, which report tuition and fees for the largest program",,,,in use,3,Owner decision 2026-11-23 (item 2): the kind-of-school pairing for program-year tuition

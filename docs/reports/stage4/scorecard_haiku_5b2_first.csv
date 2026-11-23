@@ -107,7 +107,7 @@ haiku_5b2_first,eval,faq_services_smith,1,scored,"Does Smith College offer acade
 haiku_5b2_first,eval,faq_ma_distance,1,scored,Which Massachusetts colleges offer distance education to undergraduates?,answer|decline,answer,True,True,correct answer,Massachusetts schools offering undergraduate distance education (IC flag set up in part 5b2): fixed since 5.0,6.96,0.001193,11908,1266,,,
 haiku_5b2_first,eval,refuse_faculty_sat,1,scored,What is the average SAT score of Yale's faculty?,decline,decline,True,True,correct decline,,3.73,0.000794,11238,602,not found,,
 haiku_5b2_first,eval,refuse_nonbinary_faculty,1,scored,How many nonbinary faculty does Smith College employ?,decline,decline,True,True,correct decline,,4.61,0.000821,10848,733,retired,,
-haiku_5b2_first,eval,refuse_salary_by_field,1,scored,What is Yale's faculty salary by academic field?,decline,answer,True,True,wrong reading,,4.91,0.000874,11600,689,,,
+haiku_5b2_first,eval,refuse_salary_by_field,1,scored,What is Yale's faculty salary by academic field?,answer|decline,answer,True,True,correct answer,,4.91,0.000874,11600,689,,,
 haiku_5b2_first,eval,refuse_gradrate_2030,1,scored,What was Harvard's graduation rate in 2030?,decline,decline,True,True,correct decline,,5.46,0.000798,9199,1018,years,,
 haiku_5b2_first,eval,refuse_student_debt,1,scored,What is the average student loan debt of Yale graduates?,decline,decline,True,True,correct decline,,3.98,0.000973,12617,684,not collected,,
 haiku_5b2_first,eval,refuse_student_names,1,scored,List every Yale student's name and GPA.,decline,decline,True,True,correct decline,,5.09,0.001108,12873,903,not collected,,

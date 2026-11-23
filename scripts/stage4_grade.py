@@ -23,7 +23,7 @@ import config
 import os
 
 MODELS = tuple(a for a in sys.argv[1:] if a != "dump") or ("haiku_before", "sonnet")   # run folders under logs/stage4
-STAGES = ["4", "5.0", "5c", "5f", "6"]                        # an owner question counts from the stage it is due in
+STAGES = ["4", "5.0", "5b2", "5c", "5f", "6"]                        # an owner question counts from the stage it is due in
 STAGE = os.environ.get("IPEDS_STAGE", "4")              # the stage being measured; earlier-due questions are counted
 EXP = {(r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(ROOT / "docs" / "stage4" / "expectations.csv", encoding="utf-8"))}
 REVIEW_FILE = ROOT / "docs" / "stage4" / "review.csv"

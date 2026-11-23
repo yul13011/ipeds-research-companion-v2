@@ -158,9 +158,12 @@ def build_index(db):
                                            "GROUP BY measure") if b < latest}
     except sqlite3.OperationalError:            # a database built before measure_years existed
         spans = {}
+    category = {(t, c.upper()) for t, c in q("SELECT DISTINCT \"table\", \"column\" FROM dict_category_codes WHERE in_latest = 'yes'")}
     for t, v, title, desc, plain, syn, first, unit, period, per_school in q(
             'SELECT "table", variable, title, long_description, plain_name, synonyms, in_first_version, unit, period, '
             "rows_per_school FROM dict_measures"):
+        if (t, v.upper()) in category:          # a category column picks rows (shown with its table's measures),
+            continue                            # never a figure, so it is not a measure on the shortlist
         name = plain or title
         measures[f"{t}.{v}"] = dict(id=f"{t}.{v}", name=name, table=t, unit=unit, period=fill_years(period, latest) or periods.get(t),
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),

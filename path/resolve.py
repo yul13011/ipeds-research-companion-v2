@@ -297,6 +297,10 @@ def resolve_request(request, d, short, new_question=False):
         if got["kind"] == "retired":
             gone.append(got)
             continue
+        if got["kind"] == "row_choice":                 # a category column named as the figure
+            if any(x["id"] != m["id"] and x["id"].partition(".")[0] == got["table"] for x in request["measures"]):
+                continue                                # a figure of the same table is named too: it is the answer
+            return figure_question(request, m, got, d)
         if got["kind"] != "ready":
             return dict(got, request=request)
         if got["measure"]["years"]["held"] is False:
@@ -743,6 +747,13 @@ def measure(m, d, year):
         if row is None:
             return decline(d, "not found")
         table, column, name, unit, form, set_up, own_period, definition, said = row
+        if d.one('SELECT 1 FROM dict_category_codes WHERE "table" = ? AND UPPER("column") = UPPER(?) AND in_latest = \'yes\'',
+                 table, column):                        # a category column picks rows; it is never the figure shown
+            summable = [u.strip() for u in (d.setting("summable units")[0] or "").split(",")]
+            figures = d.q('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures WHERE "table" = ? '
+                          f"AND in_first_version = 'yes' AND unit IN ({', '.join('?' * len(summable))}) ORDER BY rowid LIMIT 4",
+                          table, *summable)
+            return outcome("row_choice", id=m["id"], name=name, table=table, figures=figures)
         gone = retired(d, m["id"])
         if gone:                                        # IPEDS collected it once: say when, and what replaced it
             return outcome("retired", id=m["id"], name=name, **gone)
@@ -787,6 +798,18 @@ def measure(m, d, year):
         elif not stated <= shown:
             info["years"] = dict(held=True, missing=sorted(stated - shown))
     return outcome("ready", measure=info)
+
+
+def figure_question(request, m, got, d):
+    """A category column was named as the figure: ask which figure of its table, keeping the rows asked for."""
+    options = []
+    for figure, label in got["figures"]:
+        r = copy.deepcopy(request)
+        for x in r["measures"]:                         # every use of the column, each with its own rows
+            if x["id"] == m["id"]:
+                x["id"] = figure
+        options.append(dict(label=label, request=r))
+    return outcome("clarify", question=say(d, "row choice", what=got["name"]), options=options)
 
 
 def row_question(request, m, got):

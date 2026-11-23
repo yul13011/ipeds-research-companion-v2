@@ -1,0 +1,60 @@
+table,subject (draft),IPEDS table title,measures with a shared name
+ADM,Admissions,"Admission considerations, applicants, admissions, and test scores",0
+AL,Academic libraries,"Academic Libraries, Fiscal year 2024",5
+CDEP,Programs offered,"Number of programs offered and number of programs offered via distance education, by award level: July 1, 2023 to June 30, 2024",0
+C_A,Awards by program,"Awards/degrees conferred by program (6-digit CIP code), award level, race/ethnicity, and gender: July 1, 2023 to June 30, 2024",30
+C_B,Award recipients,"Number of students receiving awards/degrees, by race/ethnicity and gender: July 1, 2023 to June 30, 2024",31
+C_C,Award recipients by level,"Number of students receiving awards/degrees, by award level and by gender, race/ethnicity and age categories: July 1, 2023 to June 30, 2024",12
+COST1,Published charges,"Application fees, tuition and required fees, food and housing for undergraduate and graduate students",99
+COST2_FINANCIALAID,"Financial aid, first-time students","Financial aid for full-time, first-time degree/certificate-seeking undergraduate students, 2021-22 to 2024-25",211
+COST2_NETPRICE,Net price,"Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2021-22 to 2024-25",36
+CUSTOMCGIDS,Custom comparison groups,Custom comparison groups,0
+DRVADM,Admissions (derived),Frequently used derived variables for admissions. Selectivity and admissions yield,0
+DRVAL,Library indicators,Frequently used/derived variables Academic library indicators: Fiscal year 2024,5
+DRVC,Completions (derived),"Frequently used derived variables (C): Completions, July 1, 2023 to June 30, 2024",8
+DRVCOST,Cost of attendance (derived),Frequently used derived variables (Cost): Total cost of attendance,0
+DRVEF12,12-month enrollment (derived),"Frequently used derived variables (E12): 12-month enrollment, 2023-24",0
+DRVEF,Fall enrollment (derived),Frequently used derived variables (EF): Fall enrollment 2024,0
+DRVF,Finance (derived),Frequently used/derived variables Finance (F): Fiscal year 2024,0
+DRVGR,Graduation rates (derived),Frequently used derived variables (GR) 150% of normal time to complete - cohort year 2017 (4-year) and cohort year 2020 (2-year) institutions,0
+DRVHR,Human resources (derived),Frequently used/derived variables Human resources (HR): Fall 2024,0
+DRVOM,Outcome Measures (derived),"Frequently used derived variables (OM) Award and enrollment rates of degree/certificate-seeking undergraduates, 2015-16 cohort",0
+EAP,Staff by occupation and tenure,"Number of staff by occupational category, faculty and tenure status:  Fall 2024",2
+EF,Fall enrollment by gender and level,"Gender, attendance status, and level of student: Fall 2024",9
+EFA,Fall enrollment,"Race/ethnicity, gender, attendance status, and level of student: Fall 2024",37
+EFA_DIST,Fall enrollment by distance education,Distance education status and level of student: Fall 2024,4
+EFB,Fall enrollment by age,"Age category, gender, attendance status, and level of student: Fall 2024",9
+EFC,Residence of first-time students,Residence and migration of first-time freshman: Fall 2024 (optional),0
+EFCP,Fall enrollment by major,"Major field of study, race/ethnicity, gender, attendance status, and level of student: Fall 2024",32
+EFD,Entering class and retention,"Total entering class, retention rates, and student-to-faculty ratio: Fall 2024",0
+EFFY,12-month headcount,12-month unduplicated headcount: 2023-24,33
+EFFY_DIST,12-month headcount by distance education,12-month unduplicated headcount by distance education status and level of student: 2023-24,4
+EFFY_HS,"12-month headcount, dual enrollment",12-month unduplicated headcount of dual enrolled students by race/ethnicity and gender: 2023-24,29
+EFIA,Instructional activity,12-month instructional activity: 2023-24,0
+F_F1A,"Finance, public (GASB)",Public institutions - GASB 34/35: Fiscal year 2024,42
+F_F2,"Finance, private nonprofit (FASB)",Private not-for-profit institutions or Public institutions using FASB: Fiscal year 2024,125
+F_F3,"Finance, for-profit",Private for-profit institutions: Fiscal year 2024,122
+FLAGS,Response status,Response status for all survey components,3
+GR200,Graduation rates (200%),"Graduation rate data, 200% of normal time to complete - cohort year 2015  (4-year) and cohort year 2019 (less-than-4-year)  institutions",2
+GR,Graduation rates (150%),"Graduation rate data, 150% of normal time to complete - cohort year 2017 (4-year) and cohort year 2020 (2-year) institutions",29
+GR_L2,"Graduation rates, less-than-2-year schools","Graduation rate data, 150% of normal time to complete - cohort year 2020 (less-than-2-year institutions)",9
+GR_PELL_SSL,"Graduation rates, Pell and Stafford recipients","Graduation rate data for Pell Grant and Subsidized Stafford loan recipients, 150% of normal time to complete - cohort year 2017 (4-year) and cohort year 2020 (2-year) institutions",9
+HD,Directory,Directory information,48
+IC,Institutional characteristics,"Educational offerings, organization, admissions, services and athletic associations",21
+ICMISSION,Mission statement,Mission statement,0
+OM,Outcome Measures,"Award and enrollment data at four, six and eight years for  entering undergraduate cohorts from 2015-16 degree granting institutions",0
+S_IS,Full-time instructional staff,"Full-time instructional staff, by faculty and tenure status, academic rank, race/ethnicity, and gender (Degree-granting institutions): Fall 2024",31
+S_NH,New hires,"New hires by occupational category, race/ethnicity, and gender (Degree-granting institutions):  Fall 2024",31
+S_OC,Staff by occupation,"Full- and part-time staff by occupational category, race/ethnicity, and gender:  Fall 2024",29
+S_SIS,Instructional staff by rank,"Full-time instructional staff, by academic rank, faculty and tenure status  (Degree-granting institutions): Fall 2024",1
+SAL_IS,"Salaries, instructional staff","Number and salary outlays for full-time nonmedical instructional staff, by  gender, and academic rank:  Academic year 2024-25",1
+SAL_NIS,"Salaries, non-instructional staff",Number and salary outlays for full-time nonmedical  noninstructional staff by occupation: Academic year 2024-25,0
+SFA,Student financial aid,Student financial aid: 2023-24,1
+SFAV,Veterans' benefits,"Military Servicemembers and Veteran's Benefits, 2023-24",0
+DRVIC,Cost of attendance (earlier releases),Frequently used derived variables (IC): Total cost of attendance,0
+IC_AY,"Charges, academic year (earlier releases)",Student charges for academic year programs,0
+IC_PY,Charges by program (earlier releases),Student charges by program (vocational programs),0
+IC_PCCAMPUSES,Branch campuses,Branch campus locations listed on College Navigator,154
+SFA_P1,Student financial aid (earlier releases),Student financial aid: {Y-1}-{Y:yy},0
+SFA_P2,Net price (earlier releases),Student financial aid and net price: {Y-1}-{Y:yy},0
+GR_GENDER,"Graduation cohorts, gender unknown",Gender unknown reported in revised cohorts,5

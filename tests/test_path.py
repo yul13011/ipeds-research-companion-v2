@@ -635,8 +635,6 @@ class ChangeOrder1121(unittest.TestCase):
         page = self.ask("How many colleges are in Michigan?", reply_request(req("count_schools", groups=["State: Michigan"])))
         self.assertEqual(page["kind"], "answer")                            # counting schools: only the state makes sense
 
-    @unittest.expectedFailure   # part 5b2: with every measure set up, this measure no longer reaches the shortlist;
-                                # the search is improved for the full list in part 5d (owner's work order)
     def test_one_measure_at_two_category_rows_keeps_both_columns(self):
         page = self.ask("How many full-time and part-time instructional staff did Yale have in Fall 2024?", reply_request(req(
             "schools", schools=[S("Yale", 130794)],
@@ -650,8 +648,6 @@ class ChangeOrder1121(unittest.TestCase):
             "school_vs_group", measures=[M("DRVGR.GBA6RTT")], groups=["IPEDS comparison group"], peers_of=195003)))
         self.assertEqual(len(page["table"]["rows"]), 2)                     # RIT, and its comparison group
 
-    @unittest.expectedFailure   # part 5b2: with every measure set up, this measure no longer reaches the shortlist;
-                                # the search is improved for the full list in part 5d (owner's work order)
     def test_staff_total_says_it_excludes_graduate_assistants_and_offers_them(self):
         page = self.ask("How many staff did Yale employ in fall 2024?",
                         reply_request(req("schools", measures=[M("S_OC.HRTOTLT")], schools=[S("Yale", 130794)])))
@@ -737,8 +733,6 @@ class ChangeOrder1121(unittest.TestCase):
         s = shortlist.shortlist("What share of students are URM at Yale?", DB)
         self.assertIn("Underrepresented minority (URM) students", [o["topic"] for o in s["outside"]])
 
-    @unittest.expectedFailure   # part 5b2: with every measure set up, this measure no longer reaches the shortlist;
-                                # the search is improved for the full list in part 5d (owner's work order)
     def test_shortlist_shows_category_columns(self):
         s = shortlist.shortlist("How many full-time and part-time instructional staff did Yale have in Fall 2024?", DB)
         staff = next(m for m in s["measures"] if m["id"] == "S_OC.HRTOTLT")
@@ -987,6 +981,35 @@ class Retired(unittest.TestCase):
         page = self.run_request(req("schools", measures=[M("DRVADM.DVADM01"), M("IC.ENRHSST")], schools=[S("Yale", 130794)]))
         self.assertEqual(page["kind"], "answer")
         self.assertIn("IPEDS collected", page["interpreted"])                # named in "Interpreted as"
+
+    def test_a_category_column_is_a_row_choice_never_the_figure(self):
+        """Part 5b2 decision 1, from the instructional-staff question: the model named the coded full-/part-time column
+        (S_OC.FTPT) as the figure, once for each staff row, and the answer showed the words Full-time, Part-time."""
+        logged = req("schools", schools=[S("Yale University", 130794)], year=dict(stated="Fall 2024", kind="fall"),
+                     measures=[M("S_OC.FTPT", [("STAFFCAT", "3210")]), M("S_OC.FTPT", [("STAFFCAT", "2210")])])
+        page = self.run_request(logged)
+        self.assertEqual(page["kind"], "clarify")                            # which figure, never the codes
+        self.assertIn("is not a figure", page["message"])
+        self.assertIn("Staff headcount, from the occupation table", page["options"])   # the table's total, by its plain name
+        state = {"pending": None}
+        answer.run_direct(logged, state, self.log, DB, "[test]")
+        chosen = answer.choose(page["options"].index("Staff headcount, from the occupation table"), state, self.log, DB)
+        self.assertEqual(chosen["kind"], "answer")
+        values = [v for row in chosen["table"]["rows"] for v in row[1:]]
+        self.assertEqual(len(values), 2)                                       # part-time and full-time staff ...
+        self.assertTrue(all(v.replace(",", "").isdigit() for v in values))   # ... as counts, not the words
+        short = shortlist.shortlist("How many full-time and part-time instructional staff did Yale have in Fall 2024?", DB)
+        self.assertNotIn("S_OC.FTPT", [m["id"] for m in short["measures"]])  # never offered as a measure
+
+    def test_earlier_net_price_and_tuition_take_the_measure_for_each_kind_of_school(self):
+        """Part 5b2 decision 2, from the Haiku runs: the model picked the in-state net price for Wellesley (private) and
+        the program-year tuition for Smith (academic calendar); both showed no value."""
+        page = self.run_request(req("schools", measures=[M("COST2_NETPRICE.NPIST1")], schools=[S("Wellesley College", 168218)]))
+        self.assertEqual(page["kind"], "answer")
+        self.assertNotEqual(page["table"]["rows"][0][-1], "no value")          # the private-school net price, 2022-23
+        page = self.run_request(req("schools", measures=[M("COST1.chg1py2")], schools=[S("Smith College", 167835)]))
+        self.assertEqual(page["kind"], "answer")
+        self.assertNotEqual(page["table"]["rows"][0][-1], "no value")          # the academic-year tuition, 2023-24
 
     def test_a_breakdown_with_no_school_and_no_group_takes_the_default_group(self):
         """Part 5b2 Haiku run, conversation 62: a breakdown naming no school and no group stopped with an error."""

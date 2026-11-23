@@ -350,3 +350,19 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Status line and number tile:** confirmed for part 5e (recorded above, 2026-11-22).
 - **Unique names:** a build check that no two measures are shown with the same name; a clash is flagged for a plain name, as with the 20 "Grand total" measures.
 - **Work order:** the owner's Part 5b2 (set up every measure) is committed. Do Part 5b2 and stop with its report, including the review list of measures the checks flag.
+
+## 2026-11-23: Part 5b2 approved; decisions on the Part 5b2 report
+
+- **Part 5b2 is approved.**
+- **1. Category columns are row choices, never figures.** A coded category column (such as full-time or part-time status) selects rows and is never shown as the answer. A general rule, with a test from the instructional-staff question. Before Part 5c.
+- **2. Kind-of-school pairing (`applies_to`)** for the earlier-year net prices and for program-year tuition, as for the current net price. Dictionary rows only. Before Part 5c.
+- **3. Shared names.** A short subject for each table, drafted from IPEDS's own table titles (for example "Fall enrollment", "12-month headcount"), applied automatically wherever two or more measures share a name, so the shown name becomes "subject: title". The list of table subjects goes to the owner for review, not the individual names.
+- **4. Review list:**
+  - programs by field (CDEP): category rows, using the field-of-study codes as completions does;
+  - custom comparison groups: per school only;
+  - codes the codebook doesn't label: the raw code is shown with the note "IPEDS gives no label for this code";
+  - measures that never have a value: the answer is "IPEDS has no values for this measure", never "not found" or zero;
+  - the 6 undecided units: listed with a suggestion for each, for the owner's review.
+- **5. Partial answers** (for example faculty salary by field) count as expected, in line with the Part 5.0 decision. The expectations are updated.
+- **New test question, due at stage 5b2:** "How many schools have negative net worth and which are they?" Expected: an answer listing the schools that meet the condition, using each form's own measure: net position for public schools (F1A18), total net assets for private nonprofit schools (F2A06), total equity for for-profit schools (F3A03). The answer groups the schools by reporting form and names each form's measure, with the statement that the three are not strictly comparable; leaves out system offices by default (outside the national universe) and says so; notes on the public rows that net position often includes the school's share of state pension and retiree-health liabilities, so a negative figure does not by itself mean financial distress; and states the fiscal year. The pension note lives in the dictionary, not in code.
+- **Push Parts 5b and 5b2 to GitHub.** Part 5c starts only on the owner's go.
