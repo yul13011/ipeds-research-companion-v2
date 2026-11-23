@@ -106,8 +106,8 @@ def retired(d, measure_id):
     then = lambda y: f"{y}-{(y + 1) % 100:02d}"
     successor = d.one("SELECT COALESCE(m.plain_name, m.title), h.status FROM dict_measure_history h JOIN dict_measures m "
                       "ON m.\"table\" || '.' || m.variable = h.measure WHERE "
-                      "UPPER(h.earlier_table || '.' || h.earlier_variable) = UPPER(?) ORDER BY h.status = 'in use' DESC",
-                      measure_id)
+                      "UPPER(h.earlier_table || '.' || h.earlier_variable) = UPPER(?) AND h.status <> 'rejected' "
+                      "ORDER BY h.status = 'in use' DESC", measure_id)   # a rejected match is no successor
     if successor and successor[1] != "in use":          # a successor waiting for the owner's review: say neither
         after = ""
     else:
@@ -362,6 +362,11 @@ def resolve_request(request, d, short, new_question=False):
         stop = group_method(plan, d)
         if stop:
             return stop
+    elif op in ("schools", "rank", "list") and any(m.get("form") for m in plan["measures"]) and \
+            (op != "schools" or len(plan["schools"]) > 1):   # schools compared on finance lines: the forms differ
+        said = d.setting("different reporting forms")[1]
+        if said not in plan["statements"]:
+            plan["statements"].append(said)
     if op == "split":
         reading = request["split_by"] or d.one("SELECT reading FROM dict_terms WHERE term='split by' AND is_default='yes'")[0]
         column, statement = d.setting("split by", reading)
@@ -520,7 +525,7 @@ def topic_plan(plan, request, d, short=None):
         if row:
             found.append(dict(zip(("table", "variable", "name", "definition", "set_up", "unit", "period"), row)))
             found[-1]["period"] = fill_years(found[-1]["period"], d.year)
-            gone = retired(d, m["id"]) if found[-1]["set_up"] != "yes" else None
+            gone = retired(d, m["id"])
             if gone:                                    # data that existed is never "not found"
                 found[-1]["retired"] = say(d, "retired" + gone["one"], what=found[-1]["name"], **gone)
     outside = d.one("SELECT topic, what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"] or "")
@@ -657,8 +662,10 @@ def scope(request, d, plan):
         stop = peers(request, d, plan)
         if stop:
             return stop
-    if not names and plan["members"] is None and request["operation"] in ("schools", "breakdown"):
-        return None                                     # named schools only: no group figure
+    if not names and plan["members"] is None and (request["operation"] == "schools" or
+                                                  (request["operation"] == "breakdown" and request["schools"])):
+        return None                                     # named schools only: no group figure; a breakdown with no
+                                                        # school and no group takes the default group, as any group figure
     chosen = next((r["reading"] for r in request["readings"] if r["term"] == "national universe"), None)
     universe, universe_statement = d.setting("national universe", chosen) if chosen else d.setting("national universe")
     if not names and plan["members"] is None:
@@ -736,7 +743,7 @@ def measure(m, d, year):
         if row is None:
             return decline(d, "not found")
         table, column, name, unit, form, set_up, own_period, definition, said = row
-        gone = retired(d, m["id"]) if set_up != "yes" else None
+        gone = retired(d, m["id"])
         if gone:                                        # IPEDS collected it once: say when, and what replaced it
             return outcome("retired", id=m["id"], name=name, **gone)
         if set_up != "yes":                             # the nearest set-up measure of the same table, as an alternative

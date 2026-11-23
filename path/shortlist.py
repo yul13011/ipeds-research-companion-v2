@@ -166,7 +166,7 @@ def build_index(db):
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),
                                     main=f"{name} {syn or ''}", context=f"{titles.get(t, '')} {(desc or '')[:300]}")
         measures[f"{t}.{v}"]["text"] = measures[f"{t}.{v}"]["main"] + " " + measures[f"{t}.{v}"]["context"]
-        if f"{t}.{v}" in spans and first != "yes":
+        if f"{t}.{v}" in spans:                 # set up or not, a variable IPEDS no longer collects
             a, b = spans[f"{t}.{v}"]
             measures[f"{t}.{v}"].update(retired=f"{then(a)} to {then(b)}", period=None)
     for rate, syn in q("SELECT rate, MAX(synonyms) FROM dict_rates WHERE rate_measure IS NULL GROUP BY rate"):
@@ -246,11 +246,19 @@ def build_index(db):
 
 
 def get_index(db_path):
-    if db_path not in _INDEX:
-        db = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        _INDEX[db_path] = build_index(db)
+    """The search index, built once and rebuilt when the dictionary changes (a new synonym, say): the build records a
+    fingerprint of the dictionary files, and a different fingerprint means a new index."""
+    db = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    try:
+        try:
+            stamp = tuple(db.execute("SELECT item, fingerprint FROM _dictionary_state ORDER BY item"))
+        except sqlite3.OperationalError:                # a database built before the fingerprints were kept
+            stamp = ()
+        if _INDEX.get(db_path, (None,))[0] != stamp:
+            _INDEX[db_path] = (stamp, build_index(db))
+    finally:
         db.close()
-    return _INDEX[db_path]
+    return _INDEX[db_path][1]
 
 
 def public(entry):
@@ -274,8 +282,9 @@ def shortlist(question, db_path, carried=()):
     ranked = list(found["measures"])
     score = index["measures"][0].scores(question)
     per_table, set_up, held_back = Counter(), [], []
-    for k in (k for k in ranked if entries[k]["set_up"]):    # the best set-up measures, at most PER_TABLE per table,
-        table = entries[k]["table"] or "rate"               # unless a held-back one clearly outscores the next one
+    for k in (k for k in ranked if entries[k]["set_up"] and not entries[k].get("retired")):   # the best set-up measures,
+        table = entries[k]["table"] or "rate"               # at most PER_TABLE per table, unless a held-back one clearly
+                                                            # outscores the next one
         if per_table[table] >= PER_TABLE:
             held_back.append(k)
             continue

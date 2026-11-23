@@ -3,7 +3,7 @@
 This folder is the only home for conventions: what a word means, which counts sit behind a rate, which schools are in a group. No convention lives in code, in prompts or in any other file.
 
 - Each table is a CSV you can open in Excel. One row is one fact.
-- After any change, the build must be rerun. `python build/build_dictionary.py` reloads the tables (about a minute and a half) and stops with a list of problems if a row does not fit the data. A change to `special_codes.csv` needs the full build, `python build/build_data.py`.
+- After any change, the build must be rerun. `python build/build_dictionary.py` reruns only what the change affects and stops with a list of problems if a row does not fit the data: a wording change takes seconds, a measure or a table's category rows a few minutes. `python build/build_dictionary.py --table terms` reloads one table on its own; `python build/build_dictionary.py --full` reruns everything (about 30 minutes; required before each part's final report and for every yearly update). A change to `special_codes.csv` needs the full data build, `python build/build_data.py`.
 - Every owner decision gets one dated line in `DECISIONS.md`.
 - Table names are the local names without the year (`HD`, not `HD2024`). A measure is written `TABLE.VARIABLE`, for example `DRVGR.GBA6RTT`.
 - Two columns hold short lists in one cell: `words` (separated by semicolons) and `codes` (separated by commas).
@@ -121,6 +121,7 @@ Every code in the category columns of the multi-row tables.
 - `set_fixed`: in tables keyed by several category columns, the default values the other columns are held at, such as `CIPCODE = 99; MAJORNUM = 1`. The same on every row of the set. A request may ask for another value (bachelor's degrees only, undergraduates only); the build tests the set at every value and allows only those that add up.
 - `years`: the release years the row applies to, such as `2015-2019` or `2020-2024`. Blank means every year. A code that IPEDS changed has one row for each span (award levels before and after 2020-21; 12-month enrollment levels, keyed by `EFFYLEV` before 2020-21). Each year's tests use only the rows for that year, and the app answers from the rows for the latest year.
 - `same_as`: for a row of an earlier year that holds the same information under another column or code, the latest year's row it stands for, written `COLUMN = code` (12-month enrollment `EFFYLEV 4`, Graduate, is `EFFYALEV = 12`). A summary-to-detailed link or a request that names the latest year's row is read through it in that year. Where both columns are filled in the same year, the build checks that they pick the same rows. A year with no such row does not hold the information, and its breakdown is not offered for that year.
+- `sum_of`: for a row standing for a total that IPEDS did not report as a row in those years, the codes it adds up, such as `1, 2, 3, 4` (the Outcome Measures total entering cohort in 2015-16 and 2016-17, the sum of the four cohorts). Those codes must have rows for the same years.
 
 The build tests each set: at every school, do the parts add up to the total? A set is loaded only for the count columns where it does. The breakdown operation uses only loaded sets.
 
@@ -144,7 +145,7 @@ Where a 2024-25 measure was stored before the 2024-25 reorganisation of the cost
 - `earlier_table`, `earlier_variable`: where the same figure is stored in earlier releases (same name and title once the years are taken out).
 - `years`: the releases that hold it there.
 - `how`: how the match was made.
-- `status`: `in use`, or `to review` (a possible successor waiting for the owner's decision; not used).
+- `status`: `in use`, `to review` (a possible successor waiting for the owner's decision; not used), or `rejected` (the owner decided it is not a successor; the retired variable's message says it is no longer collected).
 
 The same file links a retired variable to its successor: a 2024-25 measure that first appears in the release after the retired variable last appeared, with the same meaning under a new name or table. The full list, with uncertain matches, is `docs/reports/stage5b/successors.csv`.
 
@@ -155,13 +156,23 @@ Measures with no row have no earlier years. The years each measure has values ar
 Years in which IPEDS changed a definition, or that need a note in a trend. Shown when a trend's period crosses `first_release` (or falls within `first_release` to `last_release`). The data is never hidden.
 
 - `kind`: `definition change` or `context` (a note where no definition changed).
-- `tables`: the tables the row applies to.
+- `tables`: the tables the row applies to. Blank means every table (used with a period).
 - `applies_to`: what the note is about, in plain words.
 - `first_release`, `last_release`: the release years, such as `2020-21`. `last_release` is blank for a lasting change.
+- `period_from`, `period_to`: instead of releases, the months a figure's period must overlap for the note to show (`2020-03` to `2022-06` for the pandemic note). A row needs releases or a period.
 - `what_changed`: the change, for review.
 - `note_shown`: the sentence shown with the trend.
 - `source`: where the change is documented.
 - `status`: `draft` (not shown) or `approved`.
+
+## breakdown_exceptions.csv
+
+Schools whose parts do not add up to their total in one year, which the owner has approved as exceptions so the breakdown can still be offered. The set is tested without them; for these schools only the total is shown, with a note.
+
+- `breakdown_set`, `table`: the breakdown.
+- `year`: the release year.
+- `unitid`, `name`: the school.
+- `note`: why, and the owner's decision.
 
 ## outside_ipeds.csv
 

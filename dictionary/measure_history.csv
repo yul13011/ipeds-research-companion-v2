@@ -559,51 +559,51 @@ DRVCOST.TUFEYR0,DRVIC,TUFEYR0,2015-2023,"same name and title, years aside",in us
 DRVCOST.TUFEYR1,DRVIC,TUFEYR1,2015-2023,"same name and title, years aside",in use
 DRVCOST.TUFEYR2,DRVIC,TUFEYR2,2015-2023,"same name and title, years aside",in use
 DRVCOST.TUFEYR3,DRVIC,TUFEYR3,2015-2023,"same name and title, years aside",in use
-DRVC.SCERT1A,DRVC,SCERT1,2015-2019,similar title (62% of words shared),to review
-DRVF.F1SWACSP,DRVF,F1ACSPPS,2015,similar title (90% of words shared),to review
-DRVF.F1SWCREP,DRVF,F1CREXPS,2015,similar title (89% of words shared),to review
-DRVF.F1SWINSP,DRVF,F1INSTPS,2015,similar title (89% of words shared),to review
-DRVF.F1SWISPP,DRVF,F1INSUPS,2015,similar title (90% of words shared),to review
-DRVF.F1SWOTEP,DRVF,F1OTEXPS,2015,similar title (92% of words shared),to review
-DRVF.F1SWPBSP,DRVF,F1PBSVPS,2015,similar title (90% of words shared),to review
-DRVF.F1SWRSRP,DRVF,F1RSRCPS,2015,similar title (89% of words shared),to review
-DRVF.F1SWSTSP,DRVF,F1STSVPS,2015,similar title (90% of words shared),to review
-DRVF.F2SWACSP,DRVF,F2ACSPPS,2015,similar title (90% of words shared),to review
-DRVF.F2SWCREP,DRVF,F2CREXPS,2015,similar title (89% of words shared),to review
-DRVF.F2SWINSP,DRVF,F2INSTPS,2015,similar title (89% of words shared),to review
-DRVF.F2SWISPP,DRVF,F2INSUPS,2015,similar title (90% of words shared),to review
-DRVF.F2SWOTEP,DRVF,F2OTEXPS,2015,similar title (92% of words shared),to review
-DRVF.F2SWPBSP,DRVF,F2PBSVPS,2015,similar title (90% of words shared),to review
-DRVF.F2SWRSRP,DRVF,F2RSRCPS,2015,similar title (89% of words shared),to review
-DRVF.F2SWSTSP,DRVF,F2STSVPS,2015,similar title (90% of words shared),to review
-DRVF.F3SWACSP,DRVF,F3ACSPPS,2015,similar title (91% of words shared),to review
-DRVF.F3SWCREP,DRVF,F3CREXPS,2015,similar title (90% of words shared),to review
-DRVF.F3SWINSP,DRVF,F3INSTPS,2015,similar title (90% of words shared),to review
-DRVF.F3SWISPP,DRVF,F3INSUPS,2015,similar title (91% of words shared),to review
-DRVF.F3SWOTEP,DRVF,F3OTEXPS,2015,similar title (92% of words shared),to review
-DRVF.F3SWPBSP,DRVF,F3PBSVPS,2015,similar title (91% of words shared),to review
-DRVF.F3SWRSRP,DRVF,F3RSRCPS,2015,similar title (90% of words shared),to review
-DRVF.F3SWSTSP,DRVF,F3STSVPS,2015,similar title (91% of words shared),to review
-DRVOM.OM1TotlEnYp8,DRVOM,OM_FTFT_ENRYP,2016,similar title (64% of words shared),to review
-DRVOM.OM3TotlEnAp8,DRVOM,OM_FTNFT_ENRAP,2016,similar title (60% of words shared),to review
-DRVOM.OM3TotlEnUp8,DRVOM,OM_FTNFT_ENRUP,2016,similar title (62% of words shared),to review
-DRVOM.OM3TotlEnYp8,DRVOM,OM_FTNFT_ENRYP,2016,similar title (67% of words shared),to review
-DRVOM.OM2TotlEnYp8,DRVOM,OM_PTFT_ENRYP,2016,similar title (64% of words shared),to review
-DRVOM.OM4TotlEnAp8,DRVOM,OM_PTNFT_ENRAP,2016,similar title (60% of words shared),to review
-DRVOM.OM4TotlEnUp8,DRVOM,OM_PTNFT_ENRUP,2016,similar title (62% of words shared),to review
-DRVOM.OM4TotlEnYp8,DRVOM,OM_PTNFT_ENRYP,2016,similar title (67% of words shared),to review
-F_F1A.F1C19DP,F_F1A,F1C144,2015,similar title (60% of words shared); claimed by more than one retired variable,to review
-F_F1A.F1C19OM,F_F1A,F1C146,2015,similar title (71% of words shared); claimed by more than one retired variable,to review
-F_F1A.F1C19IN,F_F1A,F1C147,2015,similar title (60% of words shared); claimed by more than one retired variable,to review
-F_F1A.F1C19DP,F_F1A,F1C194,2015,similar title (100% of words shared); claimed by more than one retired variable,to review
-F_F1A.F1C19OT,F_F1A,F1C195,2015,similar title (67% of words shared),to review
-F_F1A.F1C19OM,F_F1A,F1C196,2015,similar title (100% of words shared); claimed by more than one retired variable,to review
-F_F1A.F1C19IN,F_F1A,F1C197,2015,"same title, other name; claimed by more than one retired variable",to review
-HD.CARNEGIESIZE,HD,C21SZSET,2021-2023,similar title (60% of words shared),to review
-HD.CARNEGIEIC,HD,CARNEGIE,2015-2023,similar title (67% of words shared),to review
-COST1.APPLFEEG,IC,APPLFEEG,2015-2023,"same name, other title",to review
-COST1.APPLFEEU,IC,APPLFEEU,2015-2023,"same name, other title",to review
+DRVC.SCERT1A,DRVC,SCERT1,2015-2019,similar title (62% of words shared),rejected
+DRVF.F1SWACSP,DRVF,F1ACSPPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWCREP,DRVF,F1CREXPS,2015,similar title (89% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWINSP,DRVF,F1INSTPS,2015,similar title (89% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWISPP,DRVF,F1INSUPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWOTEP,DRVF,F1OTEXPS,2015,similar title (92% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWPBSP,DRVF,F1PBSVPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWRSRP,DRVF,F1RSRCPS,2015,similar title (89% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F1SWSTSP,DRVF,F1STSVPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWACSP,DRVF,F2ACSPPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWCREP,DRVF,F2CREXPS,2015,similar title (89% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWINSP,DRVF,F2INSTPS,2015,similar title (89% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWISPP,DRVF,F2INSUPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWOTEP,DRVF,F2OTEXPS,2015,similar title (92% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWPBSP,DRVF,F2PBSVPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWRSRP,DRVF,F2RSRCPS,2015,similar title (89% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F2SWSTSP,DRVF,F2STSVPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWACSP,DRVF,F3ACSPPS,2015,similar title (91% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWCREP,DRVF,F3CREXPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWINSP,DRVF,F3INSTPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWISPP,DRVF,F3INSUPS,2015,similar title (91% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWOTEP,DRVF,F3OTEXPS,2015,similar title (92% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWPBSP,DRVF,F3PBSVPS,2015,similar title (91% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWRSRP,DRVF,F3RSRCPS,2015,similar title (90% of words shared); approved by the owner (2026-11-22),in use
+DRVF.F3SWSTSP,DRVF,F3STSVPS,2015,similar title (91% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM1TotlEnYp8,DRVOM,OM_FTFT_ENRYP,2016,similar title (64% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM3TotlEnAp8,DRVOM,OM_FTNFT_ENRAP,2016,similar title (60% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM3TotlEnUp8,DRVOM,OM_FTNFT_ENRUP,2016,similar title (62% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM3TotlEnYp8,DRVOM,OM_FTNFT_ENRYP,2016,similar title (67% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM2TotlEnYp8,DRVOM,OM_PTFT_ENRYP,2016,similar title (64% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM4TotlEnAp8,DRVOM,OM_PTNFT_ENRAP,2016,similar title (60% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM4TotlEnUp8,DRVOM,OM_PTNFT_ENRUP,2016,similar title (62% of words shared); approved by the owner (2026-11-22),in use
+DRVOM.OM4TotlEnYp8,DRVOM,OM_PTNFT_ENRYP,2016,similar title (67% of words shared); approved by the owner (2026-11-22),in use
+F_F1A.F1C19DP,F_F1A,F1C144,2015,similar title (60% of words shared); claimed by more than one retired variable,rejected
+F_F1A.F1C19OM,F_F1A,F1C146,2015,similar title (71% of words shared); claimed by more than one retired variable,rejected
+F_F1A.F1C19IN,F_F1A,F1C147,2015,similar title (60% of words shared); claimed by more than one retired variable,rejected
+F_F1A.F1C19DP,F_F1A,F1C194,2015,similar title (100% of words shared); approved by the owner (2026-11-22),in use
+F_F1A.F1C19OT,F_F1A,F1C195,2015,similar title (67% of words shared); approved by the owner (2026-11-22),in use
+F_F1A.F1C19OM,F_F1A,F1C196,2015,similar title (100% of words shared); approved by the owner (2026-11-22),in use
+F_F1A.F1C19IN,F_F1A,F1C197,2015,"same title, other name; approved by the owner (2026-11-22)",in use
+HD.CARNEGIESIZE,HD,C21SZSET,2021-2023,similar title (60% of words shared),rejected
+HD.CARNEGIEIC,HD,CARNEGIE,2015-2023,similar title (67% of words shared),rejected
+COST1.APPLFEEG,IC,APPLFEEG,2015-2023,"same name, other title; approved by the owner (2026-11-22)",in use
+COST1.APPLFEEU,IC,APPLFEEU,2015-2023,"same name, other title; approved by the owner (2026-11-22)",in use
 FLAGS.ENRHSST,IC,ENRHSST,2023,"same name and title, years aside",in use
 FLAGS.ENRHSST1,IC,ENRHSST1,2023,"same name and title, years aside",in use
 FLAGS.ENRHSST2,IC,ENRHSST2,2023,"same name and title, years aside",in use
-COST1.ROOM,IC,ROOM,2015-2023,"same name, other title",to review
+COST1.ROOM,IC,ROOM,2015-2023,"same name, other title; approved by the owner (2026-11-22)",in use

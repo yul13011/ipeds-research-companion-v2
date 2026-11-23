@@ -103,11 +103,13 @@ It writes to `docs/reports/stage5a/`:
 - tables present only in some years;
 - variables added, retired or renamed.
 
-You decide what to set up, leave aside, or record as a comparability break. Each change goes into the dictionary folder with a dated line in `dictionary/DECISIONS.md`. When a new release is added, also give it a place in the year rules: `year_meaning.csv` must cover the new year for every table (the build says which do not), and any code IPEDS changed needs `years` (and, where the same information moved, `same_as`) in `category_codes.csv`. Then reload the dictionary (about 30 minutes):
+You decide what to set up, leave aside, or record as a comparability break. Each change goes into the dictionary folder with a dated line in `dictionary/DECISIONS.md`. When a new release is added, also give it a place in the year rules: `year_meaning.csv` must cover the new year for every table (the build says which do not), and any code IPEDS changed needs `years` (and, where the same information moved, `same_as`) in `category_codes.csv`. Then reload the dictionary. For the yearly update, run the full rebuild (about 30 minutes):
 
 ```bash
-python build/build_dictionary.py
+python build/build_dictionary.py --full
 ```
+
+For a small change between updates, `python build/build_dictionary.py` reruns only what the change affects.
 
 ### 7. Tests, benchmarks and the question set
 

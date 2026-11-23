@@ -186,3 +186,85 @@ haiku,eval,trap_netprice_lag,1,yes,yes,correct answer,,,
 haiku,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,
 haiku,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,
 haiku,owner,o48_marian,2,,,wrong reading,path,,"after the school picker, ""show 2023-24"" had no previous request to edit (the picker's request was not kept); fixed after the run"
+haiku_5b2_first,log,13,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,15,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,24,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,24,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,24,4,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,24,5,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,24,6,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,55,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,63,1,yes,yes,correct answer,,,"WSU Tech found from ""wsu tehc""; not Texas Tech (same reading as haiku_5_0_third)"
+haiku_5b2_first,log,63,2,yes,yes,correct answer,,,WSU Tech (same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_resort,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_resort,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_rechart,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_go_back,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_go_back,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,fu_go_back,3,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,faq_cost_harvard,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,trap_netprice_lag,1,yes,yes,correct answer,,,2023-24 with the lag stated: fixed since Stage 4 (same reading as haiku_5_0_third)
+haiku_5b2_first,eval,trap_medical_scope,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,13,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,15,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,24,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,24,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,24,4,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,24,5,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,24,6,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,55,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,log,63,1,yes,yes,correct answer,,,"WSU Tech found from ""wsu tehc""; not Texas Tech (same reading as haiku_5_0_third)"
+haiku_5b2_second,log,63,2,yes,yes,correct answer,,,WSU Tech (same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_resort,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_resort,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_rechart,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_go_back,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_go_back,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,fu_go_back,3,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,faq_cost_harvard,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,trap_netprice_lag,1,yes,yes,correct answer,,,2023-24 with the lag stated: fixed since Stage 4 (same reading as haiku_5_0_third)
+haiku_5b2_second,eval,trap_medical_scope,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_second,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third)
+haiku_5b2_first,log,3,2,yes,yes,correct answer,,,"undergraduates by race from 12-month enrollment (EFFY), figures right; the label names the coded level column"
+haiku_5b2_first,log,7,1,no,yes,wrong reading,model,,"picked the coded full-/part-time column as the figure: shows the words Full-time, Part-time, not counts (part 5b2: coded columns now set up)"
+haiku_5b2_second,log,7,1,no,yes,wrong reading,model,,"picked the coded full-/part-time column as the figure: shows the words Full-time, Part-time, not counts (part 5b2: coded columns now set up)"
+haiku_5b2_first,eval,faq_instr_staff_yale,1,no,yes,wrong reading,model,,"picked the coded full-/part-time column as the figure: shows the words, not counts (part 5b2)"
+haiku_5b2_second,eval,faq_instr_staff_yale,1,no,yes,wrong reading,model,,"picked the coded full-/part-time column as the figure: shows the words, not counts (part 5b2)"
+haiku_5b2_first,log,11,1,yes,yes,correct answer,,,cost of attendance (Title IV aid recipients) for 2021-22 to 2023-24 from the 2024-25 release's own earlier-year columns
+haiku_5b2_second,log,11,1,yes,yes,correct answer,,,cost of attendance (Title IV aid recipients) for 2021-22 to 2023-24 from the 2024-25 release's own earlier-year columns
+haiku_5b2_second,log,16,1,yes,yes,correct answer,,,"bachelor's and master's programs offered (CDEP), set up in part 5b2"
+haiku_5b2_first,log,58,3,yes,yes,correct answer,,,RIT beside its comparison group
+haiku_5b2_second,log,58,3,yes,yes,correct answer,,,RIT beside its comparison group
+haiku_5b2_first,log,58,5,yes,yes,correct answer,,,the five named schools
+haiku_5b2_second,log,58,5,yes,yes,correct answer,,,the five named schools
+haiku_5b2_first,eval,fu_change_measure,2,yes,yes,correct answer,,,bachelor's degrees
+haiku_5b2_second,eval,fu_change_measure,2,yes,yes,correct answer,,,bachelor's degrees
+haiku_5b2_first,eval,faq_ma_distance,1,yes,yes,correct answer,,,Massachusetts schools offering undergraduate distance education (IC flag set up in part 5b2): fixed since 5.0
+haiku_5b2_first,eval,probe_c_cmp_bach,1,yes,yes,correct answer,,,"bachelor's degrees, Yale and Princeton, 2023-24"
+haiku_5b2_second,eval,probe_c_cmp_bach,1,yes,yes,correct answer,,,"bachelor's degrees, Yale and Princeton, 2023-24"
+haiku_5b2_first,eval,probe_cost_tuit_smith,1,no,yes,wrong reading,model,,picked the program-year tuition column (vocational schools); Smith has no value there
+haiku_5b2_second,eval,probe_cost_tuit_smith,1,no,yes,wrong reading,model,,picked the program-year tuition column (vocational schools); Smith has no value there
+haiku_5b2_first,eval,probe_cost_netprice_we,1,no,yes,wrong reading,model,,"picked the in-state net price, which is for public schools; Wellesley (private) has no value"
+haiku_5b2_second,eval,probe_cost_netprice_we,1,no,yes,wrong reading,model,,"picked the in-state net price, which is for public schools; Wellesley (private) has no value"
+haiku_5b2_first,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,test-score consideration (test optional) with score ranges
+haiku_5b2_second,eval,probe_adm_req_yale,1,no,yes,wrong reading,model,,score ranges only; not the test policy (requirements)
+haiku_5b2_first,eval,probe_cat_housing_smith,1,yes,yes,correct answer,,,provides institutionally controlled housing (set up in part 5b2)
+haiku_5b2_second,eval,probe_cat_housing_smith,1,yes,yes,correct answer,,,provides institutionally controlled housing (set up in part 5b2)
+haiku_5b2_first,owner,o47_cc_success,1,yes,yes,correct answer,,,"partial: lists Outcome Measures items (and award totals), not the 150% graduation rate or retention"
+haiku_5b2_first,owner,o47_selectivity,1,yes,yes,correct answer,,,partial: defines the admission rate only
+haiku_5b2_second,owner,o47_selectivity,1,yes,yes,correct answer,,,partial: defines the admission rate only
+haiku_5b2_second,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,"master's degrees, 2023-24"
+haiku_5b2_second,eval,probe_trend_effy_yale,1,yes,yes,correct answer,,,"the year held, with the missing years named (acceptable until trends)"
+haiku_5b2_second,owner,o47_low_income,1,yes,yes,correct answer,,,partial: defines the Pell share only
+haiku_5b2_first,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,salaries in the 2024-25 release are for 2024-25 (same reading as haiku_5_0_third)
+haiku_5b2_first,eval,probe_sal_cmp,1,yes,yes,correct decline,,,as above (same reading as haiku_5_0_third)
+haiku_5b2_second,eval,probe_sal_prof_smith,1,yes,yes,correct decline,,,salaries in the 2024-25 release are for 2024-25 (same reading as haiku_5_0_third)
+haiku_5b2_second,eval,probe_sal_cmp,1,yes,yes,correct decline,,,as above (same reading as haiku_5_0_third)

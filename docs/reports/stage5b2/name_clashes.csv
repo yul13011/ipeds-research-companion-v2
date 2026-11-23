@@ -1,0 +1,475 @@
+name shown,measures,which
+american indian or alaska native total,11,C_B.CSAIANT; EFFY_HS.EFYAIANT; C_A.CAIANT; C_C.CSAIANT; EFA.EFAIANT; EFCP.EFAIANT; EFFY.EFYAIANT; GR.GRAIANT; S_IS.HRAIANT; S_NH.HRAIANT; S_OC.HRAIANT
+asian total,11,C_B.CSASIAT; EFFY_HS.EFYASIAT; C_A.CASIAT; C_C.CSASIAT; EFA.EFASIAT; EFCP.EFASIAT; EFFY.EFYASIAT; GR.GRASIAT; S_IS.HRASIAT; S_NH.HRASIAT; S_OC.HRASIAT
+black or african american total,11,C_B.CSBKAAT; EFFY_HS.EFYBKAAT; C_A.CBKAAT; C_C.CSBKAAT; EFA.EFBKAAT; EFCP.EFBKAAT; EFFY.EFYBKAAT; GR.GRBKAAT; S_IS.HRBKAAT; S_NH.HRBKAAT; S_OC.HRBKAAT
+native hawaiian or other pacific islander total,11,C_B.CSNHPIT; EFFY_HS.EFYNHPIT; C_A.CNHPIT; C_C.CSNHPIT; EFA.EFNHPIT; EFCP.EFNHPIT; EFFY.EFYNHPIT; GR.GRNHPIT; S_IS.HRNHPIT; S_NH.HRNHPIT; S_OC.HRNHPIT
+race/ethnicity unknown total,11,C_B.CSUNKNT; EFFY_HS.EFYUNKNT; C_A.CUNKNT; C_C.CSUNKNT; EFA.EFUNKNT; EFCP.EFUNKNT; EFFY.EFYUNKNT; GR.GRUNKNT; S_IS.HRUNKNT; S_NH.HRUNKNT; S_OC.HRUNKNT
+two or more races total,11,C_B.CS2MORT; EFFY_HS.EFY2MORT; C_A.C2MORT; C_C.CS2MORT; EFA.EF2MORT; EFCP.EF2MORT; EFFY.EFY2MORT; GR.GR2MORT; S_IS.HR2MORT; S_NH.HR2MORT; S_OC.HR2MORT
+u.s. nonresident total,11,C_B.CSNRALT; EFFY_HS.EFYNRALT; C_A.CNRALT; C_C.CSNRALT; EFA.EFNRALT; EFCP.EFNRALT; EFFY.EFYNRALT; GR.GRNRALT; S_IS.HRNRALT; S_NH.HRNRALT; S_OC.HRNRALT
+white total,11,C_B.CSWHITT; EFFY_HS.EFYWHITT; C_A.CWHITT; C_C.CSWHITT; EFA.EFWHITT; EFCP.EFWHITT; EFFY.EFYWHITT; GR.GRWHITT; S_IS.HRWHITT; S_NH.HRWHITT; S_OC.HRWHITT
+american indian or alaska native men,10,C_B.CSAIANM; EFFY_HS.EFYAIANM; C_A.CAIANM; EFA.EFAIANM; EFCP.EFAIANM; EFFY.EFYAIANM; GR.GRAIANM; S_IS.HRAIANM; S_NH.HRAIANM; S_OC.HRAIANM
+american indian or alaska native women,10,C_B.CSAIANW; EFFY_HS.EFYAIANW; C_A.CAIANW; EFA.EFAIANW; EFCP.EFAIANW; EFFY.EFYAIANW; GR.GRAIANW; S_IS.HRAIANW; S_NH.HRAIANW; S_OC.HRAIANW
+asian men,10,C_B.CSASIAM; EFFY_HS.EFYASIAM; C_A.CASIAM; EFA.EFASIAM; EFCP.EFASIAM; EFFY.EFYASIAM; GR.GRASIAM; S_IS.HRASIAM; S_NH.HRASIAM; S_OC.HRASIAM
+asian women,10,C_B.CSASIAW; EFFY_HS.EFYASIAW; C_A.CASIAW; EFA.EFASIAW; EFCP.EFASIAW; EFFY.EFYASIAW; GR.GRASIAW; S_IS.HRASIAW; S_NH.HRASIAW; S_OC.HRASIAW
+black or african american men,10,C_B.CSBKAAM; EFFY_HS.EFYBKAAM; C_A.CBKAAM; EFA.EFBKAAM; EFCP.EFBKAAM; EFFY.EFYBKAAM; GR.GRBKAAM; S_IS.HRBKAAM; S_NH.HRBKAAM; S_OC.HRBKAAM
+black or african american women,10,C_B.CSBKAAW; EFFY_HS.EFYBKAAW; C_A.CBKAAW; EFA.EFBKAAW; EFCP.EFBKAAW; EFFY.EFYBKAAW; GR.GRBKAAW; S_IS.HRBKAAW; S_NH.HRBKAAW; S_OC.HRBKAAW
+native hawaiian or other pacific islander men,10,C_B.CSNHPIM; EFFY_HS.EFYNHPIM; C_A.CNHPIM; EFA.EFNHPIM; EFCP.EFNHPIM; EFFY.EFYNHPIM; GR.GRNHPIM; S_IS.HRNHPIM; S_NH.HRNHPIM; S_OC.HRNHPIM
+native hawaiian or other pacific islander women,10,C_B.CSNHPIW; EFFY_HS.EFYNHPIW; C_A.CNHPIW; EFA.EFNHPIW; EFCP.EFNHPIW; EFFY.EFYNHPIW; GR.GRNHPIW; S_IS.HRNHPIW; S_NH.HRNHPIW; S_OC.HRNHPIW
+race/ethnicity unknown men,10,C_B.CSUNKNM; EFFY_HS.EFYUNKNM; C_A.CUNKNM; EFA.EFUNKNM; EFCP.EFUNKNM; EFFY.EFYUNKNM; GR.GRUNKNM; S_IS.HRUNKNM; S_NH.HRUNKNM; S_OC.HRUNKNM
+race/ethnicity unknown women,10,C_B.CSUNKNW; EFFY_HS.EFYUNKNW; C_A.CUNKNW; EFA.EFUNKNW; EFCP.EFUNKNW; EFFY.EFYUNKNW; GR.GRUNKNW; S_IS.HRUNKNW; S_NH.HRUNKNW; S_OC.HRUNKNW
+two or more races men,10,C_B.CS2MORM; EFFY_HS.EFY2MORM; C_A.C2MORM; EFA.EF2MORM; EFCP.EF2MORM; EFFY.EFY2MORM; GR.GR2MORM; S_IS.HR2MORM; S_NH.HR2MORM; S_OC.HR2MORM
+two or more races women,10,C_B.CS2MORW; EFFY_HS.EFY2MORW; C_A.C2MORW; EFA.EF2MORW; EFCP.EF2MORW; EFFY.EFY2MORW; GR.GR2MORW; S_IS.HR2MORW; S_NH.HR2MORW; S_OC.HR2MORW
+u.s. nonresident men,10,C_B.CSNRALM; EFFY_HS.EFYNRALM; C_A.CNRALM; EFA.EFNRALM; EFCP.EFNRALM; EFFY.EFYNRALM; GR.GRNRALM; S_IS.HRNRALM; S_NH.HRNRALM; S_OC.HRNRALM
+u.s. nonresident women,10,C_B.CSNRALW; EFFY_HS.EFYNRALW; C_A.CNRALW; EFA.EFNRALW; EFCP.EFNRALW; EFFY.EFYNRALW; GR.GRNRALW; S_IS.HRNRALW; S_NH.HRNRALW; S_OC.HRNRALW
+white men,10,C_B.CSWHITM; EFFY_HS.EFYWHITM; C_A.CWHITM; EFA.EFWHITM; EFCP.EFWHITM; EFFY.EFYWHITM; GR.GRWHITM; S_IS.HRWHITM; S_NH.HRWHITM; S_OC.HRWHITM
+white women,10,C_B.CSWHITW; EFFY_HS.EFYWHITW; C_A.CWHITW; EFA.EFWHITW; EFCP.EFWHITW; EFFY.EFYWHITW; GR.GRWHITW; S_IS.HRWHITW; S_NH.HRWHITW; S_OC.HRWHITW
+grand total men,9,C_B.CSTOTLM; EFFY_HS.EFYTOTLM; C_A.CTOTALM; C_C.CSTOTLM; EFA.EFTOTLM; EFFY.EFYTOTLM; S_IS.HRTOTLM; S_NH.HRTOTLM; S_OC.HRTOTLM
+grand total women,9,C_B.CSTOTLW; EFFY_HS.EFYTOTLW; C_A.CTOTALW; C_C.CSTOTLW; EFA.EFTOTLW; EFFY.EFYTOTLW; S_IS.HRTOTLW; S_NH.HRTOTLW; S_OC.HRTOTLW
+hispanic or latino total,8,C_B.CSHISPT; EFFY_HS.EFYHISPT; C_A.CHISPT; C_C.CSHISPT; EFFY.EFYHISPT; S_IS.HRHISPT; S_NH.HRHISPT; S_OC.HRHISPT
+hispanic or latino men,7,C_B.CSHISPM; EFFY_HS.EFYHISPM; C_A.CHISPM; EFFY.EFYHISPM; S_IS.HRHISPM; S_NH.HRHISPM; S_OC.HRHISPM
+hispanic or latino women,7,C_B.CSHISPW; EFFY_HS.EFYHISPW; C_A.CHISPW; EFFY.EFYHISPW; S_IS.HRHISPW; S_NH.HRHISPW; S_OC.HRHISPW
+level of student,7,EF.EFLEVEL; EFA.EFALEVEL; EFA.LSTUDY; EFA_DIST.EFDELEV; EFB.LSTUDY; EFCP.LSTUDY; EFFY_DIST.EFFYDLEV
+total expenses,5,F_F1A.F1N07; F_F2.F2B02; F_F2.F2I07; F_F3.F3B02; F_F3.F3G07
+books and supplies 2021-22,4,COST1.chg4ay0; COST1.chg4py0; IC_PCCAMPUSES.PCCHG4AY1; IC_PCCAMPUSES.PCCHG4PY1
+books and supplies 2022-23,4,COST1.chg4ay1; COST1.chg4py1; IC_PCCAMPUSES.PCCHG4AY2; IC_PCCAMPUSES.PCCHG4PY2
+books and supplies 2023-24,4,COST1.chg4ay2; COST1.chg4py2; IC_PCCAMPUSES.PCCHG4AY3; IC_PCCAMPUSES.PCCHG4PY3
+faculty and tenure status,4,EAP.FACSTAT; S_IS.FACSTAT; S_NH.FACSTAT; S_SIS.FACSTAT
+"off campus (not with family), other expenses 2021-22",4,COST1.chg8ay0; COST1.chg8py0; IC_PCCAMPUSES.PCCHG8AY1; IC_PCCAMPUSES.PCCHG8PY1
+"off campus (not with family), other expenses 2022-23",4,COST1.chg8ay1; COST1.chg8py1; IC_PCCAMPUSES.PCCHG8AY2; IC_PCCAMPUSES.PCCHG8PY2
+"off campus (not with family), other expenses 2023-24",4,COST1.chg8ay2; COST1.chg8py2; IC_PCCAMPUSES.PCCHG8AY3; IC_PCCAMPUSES.PCCHG8PY3
+"off campus (with family), other expenses 2021-22",4,COST1.chg9ay0; COST1.chg9py0; IC_PCCAMPUSES.PCCHG9AY1; IC_PCCAMPUSES.PCCHG9PY1
+"off campus (with family), other expenses 2022-23",4,COST1.chg9ay1; COST1.chg9py1; IC_PCCAMPUSES.PCCHG9AY2; IC_PCCAMPUSES.PCCHG9PY2
+"off campus (with family), other expenses 2023-24",4,COST1.chg9ay2; COST1.chg9py2; IC_PCCAMPUSES.PCCHG9AY3; IC_PCCAMPUSES.PCCHG9PY3
+"on campus, other expenses 2021-22",4,COST1.chg6ay0; COST1.chg6py0; IC_PCCAMPUSES.PCCHG6AY1; IC_PCCAMPUSES.PCCHG6PY1
+"on campus, other expenses 2022-23",4,COST1.chg6ay1; COST1.chg6py1; IC_PCCAMPUSES.PCCHG6AY2; IC_PCCAMPUSES.PCCHG6PY2
+"on campus, other expenses 2023-24",4,COST1.chg6ay2; COST1.chg6py2; IC_PCCAMPUSES.PCCHG6AY3; IC_PCCAMPUSES.PCCHG6PY3
+total assets,4,F_F1A.F1A06; F_F2.F2A02; F_F3.F3A01; F_F3.F3G04
+total gender reported as one of the mutually exclusive binary categories (men/women),4,C_B.CSGUKN; EFA.EFGNDRKN; EFFY.EFYGUKN; GR_GENDER.GRGNDRKN
+total men,4,EF.EFMEN; EFB.EFAGE07; EFCP.EFTOTLM; GR.GRTOTLM
+total of gender unknown and another gender,4,C_B.CSGUTOT; EFA.EFGNDRUA; EFFY.EFYGUTOT; GR_GENDER.GRGNDRUA
+total women,4,EF.EFWOM; EFB.EFAGE08; EFCP.EFTOTLW; GR.GRTOTLW
+,3,IC.TUITVRY1; IC.TUITVRY2; IC.TUITVRY3
+another gender,3,EFA.EFGNDRAN; EFFY.EFYGUAN; GR_GENDER.GRGNDRAN
+associate's degree,3,DRVC.ASCDEG; IC.LEVEL3; IC_PCCAMPUSES.PCLEVEL3
+bachelor's degree,3,DRVC.BASDEG; IC.LEVEL5; IC_PCCAMPUSES.PCLEVEL5
+"certificate of at least 12 weeks, but less than 1 year",3,DRVC.CERT1B; IC.LEVEL1B; IC_PCCAMPUSES.PCLEVEL1B
+certificate of less than 12 weeks,3,DRVC.CERT1A; IC.LEVEL1A; IC_PCCAMPUSES.PCLEVEL1A
+discounts and allowances from endowments and gifts applied to auxiliary enterprises,3,F_F1A.F1E162; F_F2.F2C162; F_F3.F3C162
+discounts and allowances from endowments and gifts applied to tuition and fees,3,F_F1A.F1E161; F_F2.F2C161; F_F3.F3C161
+discounts and allowances from local government grants applied to auxiliary enterprises,3,F_F1A.F1E152; F_F2.F2C152; F_F3.F3C152
+discounts and allowances from local government grants applied to tuition and fees,3,F_F1A.F1E151; F_F2.F2C151; F_F3.F3C151
+discounts and allowances from other federal grants applied to auxiliary enterprises,3,F_F1A.F1E132; F_F2.F2C132; F_F3.F3C132
+discounts and allowances from other federal grants applied to tuition and fees,3,F_F1A.F1E131; F_F2.F2C131; F_F3.F3C131
+discounts and allowances from other institutional sources applied to auxiliary enterprises,3,F_F1A.F1E172; F_F2.F2C172; F_F3.F3C172
+discounts and allowances from other institutional sources applied to tuition and fees,3,F_F1A.F1E171; F_F2.F2C171; F_F3.F3C171
+discounts and allowances from pell grants applied to auxiliary enterprises,3,F_F1A.F1E122; F_F2.F2C122; F_F3.F3C122
+discounts and allowances from pell grants applied to tuition and fees,3,F_F1A.F1E121; F_F2.F2C121; F_F3.F3C121
+discounts and allowances from state government grants applied to auxiliary enterprises,3,F_F1A.F1E142; F_F2.F2C142; F_F3.F3C142
+discounts and allowances from state government grants applied to tuition and fees,3,F_F1A.F1E141; F_F2.F2C141; F_F3.F3C141
+doctor's degree - other,3,DRVC.DOCDEGOT; IC.LEVEL19; IC_PCCAMPUSES.PCLEVEL19
+doctor's degree - professional practice,3,DRVC.DOCDEGPP; IC.LEVEL18; IC_PCCAMPUSES.PCLEVEL18
+doctor's degree - research/scholarship,3,DRVC.DOCDEGRS; IC.LEVEL17; IC_PCCAMPUSES.PCLEVEL17
+gender unknown,3,EFA.EFGNDRUN; EFFY.EFYGUUN; GR_GENDER.GRGNDRUN
+hispanic men,3,EFA.EFHISPM; EFCP.EFHISPM; GR.GRHISPM
+hispanic total,3,EFA.EFHISPT; EFCP.EFHISPT; GR.GRHISPT
+hispanic women,3,EFA.EFHISPW; EFCP.EFHISPW; GR.GRHISPW
+master's degree,3,DRVC.MASDEG; IC.LEVEL7; IC_PCCAMPUSES.PCLEVEL7
+other federal grants,3,F_F1A.F1E02; F_F2.F2C02; F_F3.F3C02
+plant-related debt,3,F_F1A.F1N06; F_F2.F2I06; F_F3.F3G06
+still enrolled,3,GR200.BASTEND; GR200.L4STEND; GR_L2.LINE_51
+total discounts and allowances,3,F_F1A.F1E10; F_F2.F2C10; F_F3.F3C08
+total discounts and allowances from endowments and gifts,3,F_F1A.F1E16; F_F2.F2C16; F_F3.F3C16
+total discounts and allowances from other federal grants,3,F_F1A.F1E13; F_F2.F2C13; F_F3.F3C13
+total discounts and allowances from other institutional sources,3,F_F1A.F1E17; F_F2.F2C17; F_F3.F3C17
+total discounts and allowances from pell grants,3,F_F1A.F1E12; F_F2.F2C12; F_F3.F3C12
+total discounts and allowances from state government grants,3,F_F1A.F1E14; F_F2.F2C14; F_F3.F3C14
+total liabilities,3,F_F1A.F1A13; F_F2.F2A03; F_F3.F3A02
+total revenues and investment return,3,F_F2.F2B01; F_F3.F3B01; F_F3.F3D09
+academic rank,2,S_IS.ARANK; SAL_IS.ARANK
+academic support-all other,2,F_F2.F2E047; F_F3.F3E03A7
+academic support-benefits,2,F_F2.F2E043; F_F3.F3E03A3
+academic support-depreciation,2,F_F2.F2E045; F_F3.F3E03A5
+academic support-interest,2,F_F2.F2E046; F_F3.F3E03A6
+academic support-operation and maintenance of plant,2,F_F2.F2E044; F_F3.F3E03A4
+academic support-salaries and wages,2,F_F2.F2E042; F_F3.F3E03A2
+academic support-total amount,2,F_F2.F2E041; F_F3.F3E03A1
+accumulated depreciation,2,F_F2.F2A18; F_F3.F3A11
+admissions office web address,2,HD.ADMINURL; IC_PCCAMPUSES.PCADMINURL
+all other paid fte staff (except student assistants),2,DRVAL.LPAIDFTE; AL.LSOPAID
+all students enrolled,2,EFA_DIST.EFDETOT; EFFY_DIST.EFYDETOT
+attendance status of student,2,EFA.SECTION; EFCP.SECTION
+auxiliary enterprises-all other,2,F_F2.F2E077; F_F3.F3E047
+auxiliary enterprises-benefits,2,F_F2.F2E073; F_F3.F3E043
+auxiliary enterprises-depreciation,2,F_F2.F2E075; F_F3.F3E045
+auxiliary enterprises-interest,2,F_F2.F2E076; F_F3.F3E046
+auxiliary enterprises-operation and maintenance of plant,2,F_F2.F2E074; F_F3.F3E044
+auxiliary enterprises-salaries and wages,2,F_F2.F2E072; F_F3.F3E042
+auxiliary enterprises-total amount,2,F_F2.F2E071; F_F3.F3E041
+"average amount of grant and scholarship aid awarded, 2021-22",2,COST2_FINANCIALAID.GISTA0; COST2_FINANCIALAID.GRNTA0
+"average amount of grant and scholarship aid awarded, 2022-23",2,COST2_FINANCIALAID.GISTA1; COST2_FINANCIALAID.GRNTA1
+"average amount of grant and scholarship aid awarded, 2023-24",2,COST2_FINANCIALAID.GISTA2; COST2_FINANCIALAID.GRNTA2
+"average amount of grant and scholarship aid awarded, all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4A0; COST2_FINANCIALAID.GRN4A0
+"average amount of grant and scholarship aid awarded, all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4A1; COST2_FINANCIALAID.GRN4A1
+"average amount of grant and scholarship aid awarded, all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4A2; COST2_FINANCIALAID.GRN4A2
+"average amount of grant and scholarship aid awarded, income level (0-30,000), 2021-22",2,COST2_FINANCIALAID.GIS4A10; COST2_FINANCIALAID.GRN4A10
+"average amount of grant and scholarship aid awarded, income level (0-30,000), 2022-23",2,COST2_FINANCIALAID.GIS4A11; COST2_FINANCIALAID.GRN4A11
+"average amount of grant and scholarship aid awarded, income level (0-30,000), 2023-24",2,COST2_FINANCIALAID.GIS4A12; COST2_FINANCIALAID.GRN4A12
+"average amount of grant and scholarship aid awarded, income level (110,001 or more), 2021-22",2,COST2_FINANCIALAID.GIS4A50; COST2_FINANCIALAID.GRN4A50
+"average amount of grant and scholarship aid awarded, income level (110,001 or more), 2022-23",2,COST2_FINANCIALAID.GIS4A51; COST2_FINANCIALAID.GRN4A51
+"average amount of grant and scholarship aid awarded, income level (110,001 or more), 2023-24",2,COST2_FINANCIALAID.GIS4A52; COST2_FINANCIALAID.GRN4A52
+"average amount of grant and scholarship aid awarded, income level (30,001-48,000), 2021-22",2,COST2_FINANCIALAID.GIS4A20; COST2_FINANCIALAID.GRN4A20
+"average amount of grant and scholarship aid awarded, income level (30,001-48,000), 2022-23",2,COST2_FINANCIALAID.GIS4A21; COST2_FINANCIALAID.GRN4A21
+"average amount of grant and scholarship aid awarded, income level (30,001-48,000), 2023-24",2,COST2_FINANCIALAID.GIS4A22; COST2_FINANCIALAID.GRN4A22
+"average amount of grant and scholarship aid awarded, income level (48,001-75,000), 2021-22",2,COST2_FINANCIALAID.GIS4A30; COST2_FINANCIALAID.GRN4A30
+"average amount of grant and scholarship aid awarded, income level (48,001-75,000), 2022-23",2,COST2_FINANCIALAID.GIS4A31; COST2_FINANCIALAID.GRN4A31
+"average amount of grant and scholarship aid awarded, income level (48,001-75,000), 2023-24",2,COST2_FINANCIALAID.GIS4A32; COST2_FINANCIALAID.GRN4A32
+"average amount of grant and scholarship aid awarded, income level (75,001-110,000), 2021-22",2,COST2_FINANCIALAID.GIS4A40; COST2_FINANCIALAID.GRN4A40
+"average amount of grant and scholarship aid awarded, income level (75,001-110,000), 2022-23",2,COST2_FINANCIALAID.GIS4A41; COST2_FINANCIALAID.GRN4A41
+"average amount of grant and scholarship aid awarded, income level (75,001-110,000), 2023-24",2,COST2_FINANCIALAID.GIS4A42; COST2_FINANCIALAID.GRN4A42
+"average net price (income 0-30,000)-students awarded title iv federal financial aid, 2021-22",2,COST2_NETPRICE.NPIS410; COST2_NETPRICE.NPT410
+"average net price (income 0-30,000)-students awarded title iv federal financial aid, 2022-23",2,COST2_NETPRICE.NPIS411; COST2_NETPRICE.NPT411
+"average net price (income 0-30,000)-students awarded title iv federal financial aid, 2023-24",2,COST2_NETPRICE.NPIS412; COST2_NETPRICE.NPT412
+"average net price (income 30,001-48,000)-students awarded title iv federal financial aid, 2021-22",2,COST2_NETPRICE.NPIS420; COST2_NETPRICE.NPT420
+"average net price (income 30,001-48,000)-students awarded title iv federal financial aid, 2022-23",2,COST2_NETPRICE.NPIS421; COST2_NETPRICE.NPT421
+"average net price (income 30,001-48,000)-students awarded title iv federal financial aid, 2023-24",2,COST2_NETPRICE.NPIS422; COST2_NETPRICE.NPT422
+"average net price (income 48,001-75,000)-students awarded title iv federal financial aid, 2021-22",2,COST2_NETPRICE.NPIS430; COST2_NETPRICE.NPT430
+"average net price (income 48,001-75,000)-students awarded title iv federal financial aid, 2022-23",2,COST2_NETPRICE.NPIS431; COST2_NETPRICE.NPT431
+"average net price (income 48,001-75,000)-students awarded title iv federal financial aid, 2023-24",2,COST2_NETPRICE.NPIS432; COST2_NETPRICE.NPT432
+"average net price (income 75,001-110,000)-students awarded title iv federal financial aid, 2021-22",2,COST2_NETPRICE.NPIS440; COST2_NETPRICE.NPT440
+"average net price (income 75,001-110,000)-students awarded title iv federal financial aid, 2022-23",2,COST2_NETPRICE.NPIS441; COST2_NETPRICE.NPT441
+"average net price (income 75,001-110,000)-students awarded title iv federal financial aid, 2023-24",2,COST2_NETPRICE.NPIS442; COST2_NETPRICE.NPT442
+"average net price (income over 110,000)-students awarded title iv federal financial aid, 2021-22",2,COST2_NETPRICE.NPIS450; COST2_NETPRICE.NPT450
+"average net price (income over 110,000)-students awarded title iv federal financial aid, 2022-23",2,COST2_NETPRICE.NPIS451; COST2_NETPRICE.NPT451
+"average net price (income over 110,000)-students awarded title iv federal financial aid, 2023-24",2,COST2_NETPRICE.NPIS452; COST2_NETPRICE.NPT452
+"average net price-students awarded grant or scholarship aid, 2021-22",2,COST2_NETPRICE.NPIST0; COST2_NETPRICE.NPGRN0
+"average net price-students awarded grant or scholarship aid, 2022-23",2,COST2_NETPRICE.NPIST1; COST2_NETPRICE.NPGRN1
+"average net price-students awarded grant or scholarship aid, 2023-24",2,COST2_NETPRICE.NPIST2; COST2_NETPRICE.NPGRN2
+average number of months to complete largest program,2,COST1.MTHCMP1; IC_PCCAMPUSES.PCMTHCMP1
+award level code,2,C_A.AWLEVEL; C_C.AWLEVELC
+books and supplies 2020-21,2,IC_PCCAMPUSES.PCCHG4AY0; IC_PCCAMPUSES.PCCHG4PY0
+books and supplies 2024-25,2,COST1.chg4ay3; COST1.chg4py3
+bureau of economic analysis (bea) regions,2,HD.OBEREG; IC_PCCAMPUSES.PCOBEREG
+cbsa type metropolitan or micropolitan,2,HD.CBSATYPE; IC_PCCAMPUSES.PCCBSATYPE
+"certificate of at least 2 years, but less than 4 years",2,IC.LEVEL4; IC_PCCAMPUSES.PCLEVEL4
+certificate of less than 1 year,2,IC.LEVEL1; IC_PCCAMPUSES.PCLEVEL1
+"certifiicate of at least 1 year, but less than 2 years",2,IC.LEVEL2; IC_PCCAMPUSES.PCLEVEL2
+change in value of endowment net assets,2,F_F1A.F1H03; F_F2.F2H03
+cip code of largest program,2,COST1.CIPCODE1; IC_PCCAMPUSES.PCCIPCODE1
+city location of institution,2,HD.CITY; IC_PCCAMPUSES.PCCITY
+cohort type,2,GR_PELL_SSL.PSGRTYPE; GR_GENDER.GRCHRTYR
+combined statistical area (csa),2,HD.CSA; IC_PCCAMPUSES.PCCSA
+construction in progress,2,F_F2.F2A15; F_F3.F3A08
+control of institution,2,HD.CONTROL; IC_PCCAMPUSES.PCCONTROL
+core based statistical area (cbsa),2,HD.CBSA; IC_PCCAMPUSES.PCCBSA
+county name,2,HD.COUNTYNM; IC_PCCAMPUSES.PCCOUNTYNM
+"debt related to property, plant, and equipment",2,F_F2.F2A03A; F_F3.F3A02A
+degree of urbanization (urban-centric locale),2,HD.LOCALE; IC_PCCAMPUSES.PCLOCALE
+degree-granting status,2,HD.DEGGRANT; IC_PCCAMPUSES.PCDEGGRANT
+did not receive pell grant or direct subsidized loan - exclusions,2,GR_L2.NRLIN45; GR_PELL_SSL.NREXCLU
+did not receive pell grant or direct subsidized loan - revised cohort,2,GR_L2.NRLIN10; GR_PELL_SSL.NRREVCT
+direct subsidized loan recipients not receiving pell grants - adjusted cohort (revised minus exclusions),2,GR_L2.SSLIN50; GR_PELL_SSL.SSADJCT
+direct subsidized loan recipients not receiving pell grants - exclusions,2,GR_L2.SSLIN45; GR_PELL_SSL.SSEXCLU
+direct subsidized loan recipients not receiving pell grants - revised cohort,2,GR_L2.SSLIN10; GR_PELL_SSL.SSREVCT
+disability services web address,2,HD.DISAURL; IC_PCCAMPUSES.PCDISAURL
+discounts and allowances applied to tuition and fees,2,F_F1A.F1E08; F_F3.F3C06
+discounts and allowances from local government grants,2,F_F1A.F1E15; F_F2.F2C15
+does this institution or any of its foundations or other affiliated organizations own endowment assets ?,2,F_F1A.F1FHA; F_F2.F2FHA
+dun and bradstreet numbers,2,HD.DUNS; IC_PCCAMPUSES.PCDUNS
+employer identification number,2,HD.EIN; IC_PCCAMPUSES.PCEIN
+endowment net investment return,2,F_F1A.F1H03B; F_F2.F2H03B
+enolls high school students in college courses for credit,2,FLAGS.ENRHSST; IC.ENRHSST
+enolls high school students in college courses for credit outside a dual enrollment program,2,FLAGS.ENRHSST2; IC.ENRHSST2
+enolls high school students in college courses for credit within a dual enrollment program,2,FLAGS.ENRHSST1; IC.ENRHSST1
+expendable net assets,2,F_F1A.F1N05; F_F2.F2I05
+federal appropriations,2,F_F1A.F1B10; F_F3.F3D02A
+financial aid office web address,2,HD.FAIDURL; IC_PCCAMPUSES.PCFAIDURL
+fips county code,2,HD.COUNTYCD; IC_PCCAMPUSES.PCCOUNTYCD
+fips state code,2,HD.FIPS; IC_PCCAMPUSES.PCFIPS
+full time first-time degree/certificate-seeking undergraduate students enrolled,2,IC.FT_FTUG; IC_PCCAMPUSES.PCFT_FTUG
+full time men,2,EF.EFFTMEN; EFB.EFAGE01
+full time total,2,EF.EFFT; EFB.EFAGE05
+full time women,2,EF.EFFTWOM; EFB.EFAGE02
+"full-time, first-time degree/certificate-seeking students required to live on campus",2,COST1.ALLONCAM; IC_PCCAMPUSES.PCALLONCAM
+general information telephone number,2,HD.GENTELE; IC_PCCAMPUSES.PCGENTELE
+graduate offering,2,HD.GROFFER; IC_PCCAMPUSES.PCGROFFER
+highest degree offered,2,HD.HDEGOFR1; IC_PCCAMPUSES.PCHDEGOFR1
+highest level of offering,2,HD.HLOFFER; IC_PCCAMPUSES.PCHLOFFER
+historically black college or university,2,HD.HBCU; IC_PCCAMPUSES.PCHBCU
+hospital services-all other,2,F_F2.F2E097; F_F3.F3E107
+hospital services-benefits,2,F_F2.F2E093; F_F3.F3E103
+hospital services-depreciation,2,F_F2.F2E095; F_F3.F3E105
+hospital services-interest,2,F_F2.F2E096; F_F3.F3E106
+hospital services-operation and maintenance of plant,2,F_F2.F2E094; F_F3.F3E104
+hospital services-salaries and wages,2,F_F2.F2E092; F_F3.F3E102
+hospital services-total amount,2,F_F2.F2E091; F_F3.F3E101
+institution is active in current year,2,HD.CYACTIVE; IC_PCCAMPUSES.PCCYACTIVE
+institution open to the general public,2,HD.OPENPUBL; IC_PCCAMPUSES.PCOPENPUBL
+institution's internet website address,2,HD.WEBADDR; IC_PCCAMPUSES.PCWEBADDR
+institutional support-all other,2,F_F2.F2E067; F_F3.F3E03C7
+institutional support-benefits,2,F_F2.F2E063; F_F3.F3E03C3
+institutional support-depreciation,2,F_F2.F2E065; F_F3.F3E03C5
+institutional support-interest,2,F_F2.F2E066; F_F3.F3E03C6
+institutional support-operation and maintenance of plant,2,F_F2.F2E064; F_F3.F3E03C4
+institutional support-salaries and wages,2,F_F2.F2E062; F_F3.F3E03C2
+institutional support-total amount,2,F_F2.F2E061; F_F3.F3E03C1
+instruction-all other,2,F_F2.F2E017; F_F3.F3E017
+instruction-benefits,2,F_F2.F2E013; F_F3.F3E013
+instruction-depreciation,2,F_F2.F2E015; F_F3.F3E015
+instruction-interest,2,F_F2.F2E016; F_F3.F3E016
+instruction-operation and maintenance of plant,2,F_F2.F2E014; F_F3.F3E014
+instruction-salaries and wages,2,F_F2.F2E012; F_F3.F3E012
+instruction-total amount,2,F_F2.F2E011; F_F3.F3E011
+"intangible assets, net of accumulated amortization",2,F_F2.F2A20; F_F3.F3A01C
+largest program measured in credit or clock hours,2,COST1.PRGMSR1; IC_PCCAMPUSES.PCPRGMSR1
+latitude location of institution,2,HD.LATITUDE; IC_PCCAMPUSES.PCLATITUDE
+level of institution,2,HD.ICLEVEL; IC_PCCAMPUSES.PCICLEVEL
+level of student (original line number on survey form),2,EFA.LINE; EFCP.LINE
+librarians fte staff,2,DRVAL.LLIBRFTE; AL.LSLIBRN
+long-term investments,2,F_F2.F2A01; F_F3.F3A01A
+longitude location of institution,2,HD.LONGITUD; IC_PCCAMPUSES.PCLONGITUD
+name of chief administrator,2,HD.CHFNM; IC_PCCAMPUSES.PCCHFNM
+net grant aid to students-all other,2,F_F2.F2E087; F_F3.F3E057
+net grant aid to students-total amount,2,F_F2.F2E081; F_F3.F3E051
+net position,2,F_F1A.F1A18; F_F1A.F1N04
+net price calculator web address,2,HD.NPRICURL; IC_PCCAMPUSES.PCNPRICURL
+new england city and town area (necta),2,HD.NECTA; IC_PCCAMPUSES.PCNECTA
+new gifts and additions,2,F_F1A.F1H03A; F_F2.F2H03A
+"number awarded grant and scholarship aid, all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4G0; COST2_FINANCIALAID.GRN4G0
+"number awarded grant and scholarship aid, all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4G1; COST2_FINANCIALAID.GRN4G1
+"number awarded grant and scholarship aid, all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4G2; COST2_FINANCIALAID.GRN4G2
+"number awarded grant and scholarship aid, income level (0-30,000), 2021-22",2,COST2_FINANCIALAID.GIS4G10; COST2_FINANCIALAID.GRN4G10
+"number awarded grant and scholarship aid, income level (0-30,000), 2022-23",2,COST2_FINANCIALAID.GIS4G11; COST2_FINANCIALAID.GRN4G11
+"number awarded grant and scholarship aid, income level (0-30,000), 2023-24",2,COST2_FINANCIALAID.GIS4G12; COST2_FINANCIALAID.GRN4G12
+"number awarded grant and scholarship aid, income level (110,001 or more), 2021-22",2,COST2_FINANCIALAID.GIS4G50; COST2_FINANCIALAID.GRN4G50
+"number awarded grant and scholarship aid, income level (110,001 or more), 2022-23",2,COST2_FINANCIALAID.GIS4G51; COST2_FINANCIALAID.GRN4G51
+"number awarded grant and scholarship aid, income level (110,001 or more), 2023-24",2,COST2_FINANCIALAID.GIS4G52; COST2_FINANCIALAID.GRN4G52
+"number awarded grant and scholarship aid, income level (30,001-48,000), 2021-22",2,COST2_FINANCIALAID.GIS4G20; COST2_FINANCIALAID.GRN4G20
+"number awarded grant and scholarship aid, income level (30,001-48,000), 2022-23",2,COST2_FINANCIALAID.GIS4G21; COST2_FINANCIALAID.GRN4G21
+"number awarded grant and scholarship aid, income level (30,001-48,000), 2023-24",2,COST2_FINANCIALAID.GIS4G22; COST2_FINANCIALAID.GRN4G22
+"number awarded grant and scholarship aid, income level (48,001-75,000), 2021-22",2,COST2_FINANCIALAID.GIS4G30; COST2_FINANCIALAID.GRN4G30
+"number awarded grant and scholarship aid, income level (48,001-75,000), 2022-23",2,COST2_FINANCIALAID.GIS4G31; COST2_FINANCIALAID.GRN4G31
+"number awarded grant and scholarship aid, income level (48,001-75,000), 2023-24",2,COST2_FINANCIALAID.GIS4G32; COST2_FINANCIALAID.GRN4G32
+"number awarded grant and scholarship aid, income level (75,001-110,000), 2021-22",2,COST2_FINANCIALAID.GIS4G40; COST2_FINANCIALAID.GRN4G40
+"number awarded grant and scholarship aid, income level (75,001-110,000), 2022-23",2,COST2_FINANCIALAID.GIS4G41; COST2_FINANCIALAID.GRN4G41
+"number awarded grant and scholarship aid, income level (75,001-110,000), 2023-24",2,COST2_FINANCIALAID.GIS4G42; COST2_FINANCIALAID.GRN4G42
+"number in income level (0-30,000), 2021-22",2,COST2_FINANCIALAID.GIS4N10; COST2_FINANCIALAID.GRN4N10
+"number in income level (0-30,000), 2022-23",2,COST2_FINANCIALAID.GIS4N11; COST2_FINANCIALAID.GRN4N11
+"number in income level (0-30,000), 2023-24",2,COST2_FINANCIALAID.GIS4N12; COST2_FINANCIALAID.GRN4N12
+"number in income level (110,001 or more), 2021-22",2,COST2_FINANCIALAID.GIS4N50; COST2_FINANCIALAID.GRN4N50
+"number in income level (110,001 or more), 2022-23",2,COST2_FINANCIALAID.GIS4N51; COST2_FINANCIALAID.GRN4N51
+"number in income level (110,001 or more), 2023-24",2,COST2_FINANCIALAID.GIS4N52; COST2_FINANCIALAID.GRN4N52
+"number in income level (30,001-48,000), 2021-22",2,COST2_FINANCIALAID.GIS4N20; COST2_FINANCIALAID.GRN4N20
+"number in income level (30,001-48,000), 2022-23",2,COST2_FINANCIALAID.GIS4N21; COST2_FINANCIALAID.GRN4N21
+"number in income level (30,001-48,000), 2023-24",2,COST2_FINANCIALAID.GIS4N22; COST2_FINANCIALAID.GRN4N22
+"number in income level (48,001-75,000), 2021-22",2,COST2_FINANCIALAID.GIS4N30; COST2_FINANCIALAID.GRN4N30
+"number in income level (48,001-75,000), 2022-23",2,COST2_FINANCIALAID.GIS4N31; COST2_FINANCIALAID.GRN4N31
+"number in income level (48,001-75,000), 2023-24",2,COST2_FINANCIALAID.GIS4N32; COST2_FINANCIALAID.GRN4N32
+"number in income level (75,001-110,000), 2021-22",2,COST2_FINANCIALAID.GIS4N40; COST2_FINANCIALAID.GRN4N40
+"number in income level (75,001-110,000), 2022-23",2,COST2_FINANCIALAID.GIS4N41; COST2_FINANCIALAID.GRN4N41
+"number in income level (75,001-110,000), 2023-24",2,COST2_FINANCIALAID.GIS4N42; COST2_FINANCIALAID.GRN4N42
+"number living arrangement unknown in all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4UN0; COST2_FINANCIALAID.GRN4UN0
+"number living arrangement unknown in all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4UN1; COST2_FINANCIALAID.GRN4UN1
+"number living arrangement unknown in all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4UN2; COST2_FINANCIALAID.GRN4UN2
+"number living arrangement unknown, 2021-22",2,COST2_FINANCIALAID.GISTUN0; COST2_FINANCIALAID.GRNTUN0
+"number living arrangement unknown, 2022-23",2,COST2_FINANCIALAID.GISTUN1; COST2_FINANCIALAID.GRNTUN1
+"number living arrangement unknown, 2023-24",2,COST2_FINANCIALAID.GISTUN2; COST2_FINANCIALAID.GRNTUN2
+"number living off-campus not with family in all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4OF0; COST2_FINANCIALAID.GRN4OF0
+"number living off-campus not with family in all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4OF1; COST2_FINANCIALAID.GRN4OF1
+"number living off-campus not with family in all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4OF2; COST2_FINANCIALAID.GRN4OF2
+"number living off-campus not with family, 2021-22",2,COST2_FINANCIALAID.GISTOF0; COST2_FINANCIALAID.GRNTOF0
+"number living off-campus not with family, 2022-23",2,COST2_FINANCIALAID.GISTOF1; COST2_FINANCIALAID.GRNTOF1
+"number living off-campus not with family, 2023-24",2,COST2_FINANCIALAID.GISTOF2; COST2_FINANCIALAID.GRNTOF2
+"number living off-campus with family in all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4WF0; COST2_FINANCIALAID.GRN4WF0
+"number living off-campus with family in all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4WF1; COST2_FINANCIALAID.GRN4WF1
+"number living off-campus with family in all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4WF2; COST2_FINANCIALAID.GRN4WF2
+"number living off-campus with family, 2021-22",2,COST2_FINANCIALAID.GISTWF0; COST2_FINANCIALAID.GRNTWF0
+"number living off-campus with family, 2022-23",2,COST2_FINANCIALAID.GISTWF1; COST2_FINANCIALAID.GRNTWF1
+"number living off-campus with family, 2023-24",2,COST2_FINANCIALAID.GISTWF2; COST2_FINANCIALAID.GRNTWF2
+"number living on-campus in all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4ON0; COST2_FINANCIALAID.GRN4ON0
+"number living on-campus in all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4ON1; COST2_FINANCIALAID.GRN4ON1
+"number living on-campus in all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4ON2; COST2_FINANCIALAID.GRN4ON2
+"number living on-campus, 2021-22",2,COST2_FINANCIALAID.GISTON0; COST2_FINANCIALAID.GRNTON0
+"number living on-campus, 2022-23",2,COST2_FINANCIALAID.GISTON1; COST2_FINANCIALAID.GRNTON1
+"number living on-campus, 2023-24",2,COST2_FINANCIALAID.GISTON2; COST2_FINANCIALAID.GRNTON2
+number of students in fall cohort,2,SFA.SCFA1N; COST2_FINANCIALAID.CSCFA1N
+occupation,2,EAP.OCCUPCAT; S_NH.OCCUPCAT
+"off campus (not with family), food and housing 2021-22",2,COST1.chg7ay0; COST1.chg7py0
+"off campus (not with family), food and housing 2022-23",2,COST1.chg7ay1; COST1.chg7py1
+"off campus (not with family), food and housing 2023-24",2,COST1.chg7ay2; COST1.chg7py2
+"off campus (not with family), food and housing 2024-25",2,COST1.chg7ay3; COST1.chg7py3
+"off campus (not with family), other expenses 2020-21",2,IC_PCCAMPUSES.PCCHG8AY0; IC_PCCAMPUSES.PCCHG8PY0
+"off campus (not with family), other expenses 2024-25",2,COST1.chg8ay3; COST1.chg8py3
+"off campus (not with family), room and board 2020-21",2,IC_PCCAMPUSES.PCCHG7AY0; IC_PCCAMPUSES.PCCHG7PY0
+"off campus (not with family), room and board 2021-22",2,IC_PCCAMPUSES.PCCHG7AY1; IC_PCCAMPUSES.PCCHG7PY1
+"off campus (not with family), room and board 2022-23",2,IC_PCCAMPUSES.PCCHG7AY2; IC_PCCAMPUSES.PCCHG7PY2
+"off campus (not with family), room and board 2023-24",2,IC_PCCAMPUSES.PCCHG7AY3; IC_PCCAMPUSES.PCCHG7PY3
+"off campus (with family), food and housing 2021-22",2,COST1.CHG10AY0; COST1.CHG10PY0
+"off campus (with family), food and housing 2022-23",2,COST1.CHG10AY1; COST1.CHG10PY1
+"off campus (with family), food and housing 2023-24",2,COST1.CHG10AY2; COST1.CHG10PY2
+"off campus (with family), food and housing 2024-25",2,COST1.CHG10AY3; COST1.CHG10PY3
+"off campus (with family), other expenses 2020-21",2,IC_PCCAMPUSES.PCCHG9AY0; IC_PCCAMPUSES.PCCHG9PY0
+"off campus (with family), other expenses 2024-25",2,COST1.chg9ay3; COST1.chg9py3
+office of postsecondary education (ope) id number,2,HD.OPEID; IC_PCCAMPUSES.PCOPEID
+"on campus, food and housing 2021-22",2,COST1.chg5ay0; COST1.chg5py0
+"on campus, food and housing 2022-23",2,COST1.chg5ay1; COST1.chg5py1
+"on campus, food and housing 2023-24",2,COST1.chg5ay2; COST1.chg5py2
+"on campus, food and housing 2024-25",2,COST1.chg5ay3; COST1.chg5py3
+"on campus, other expenses 2020-21",2,IC_PCCAMPUSES.PCCHG6AY0; IC_PCCAMPUSES.PCCHG6PY0
+"on campus, other expenses 2024-25",2,COST1.chg6ay3; COST1.chg6py3
+"on campus, room and board 2020-21",2,IC_PCCAMPUSES.PCCHG5AY0; IC_PCCAMPUSES.PCCHG5PY0
+"on campus, room and board 2021-22",2,IC_PCCAMPUSES.PCCHG5AY1; IC_PCCAMPUSES.PCCHG5PY1
+"on campus, room and board 2022-23",2,IC_PCCAMPUSES.PCCHG5AY2; IC_PCCAMPUSES.PCCHG5PY2
+"on campus, room and board 2023-24",2,IC_PCCAMPUSES.PCCHG5AY3; IC_PCCAMPUSES.PCCHG5PY3
+online application web address,2,HD.APPLURL; IC_PCCAMPUSES.PCAPPLURL
+ope title iv eligibility indicator code,2,HD.OPEFLAG; IC_PCCAMPUSES.PCOPEFLAG
+operation and maintenance of plant-all other,2,F_F2.F2E117; F_F3.F3E117
+operation and maintenance of plant-benefits,2,F_F2.F2E113; F_F3.F3E113
+operation and maintenance of plant-depreciation,2,F_F2.F2E115; F_F3.F3E115
+operation and maintenance of plant-interest,2,F_F2.F2E116; F_F3.F3E116
+operation and maintenance of plant-operation and maintenance of plant,2,F_F2.F2E114; F_F3.F3E114
+operation and maintenance of plant-salaries and wages,2,F_F2.F2E112; F_F3.F3E112
+operation and maintenance of plant-total amount,2,F_F2.F2E111; F_F3.F3E111
+other changes in value of endowment net assets,2,F_F1A.F1H03D; F_F2.F2H03D
+other expenses-all other,2,F_F2.F2E127; F_F3.F3E067
+other expenses-benefits,2,F_F2.F2E123; F_F3.F3E063
+other expenses-depreciation,2,F_F2.F2E125; F_F3.F3E065
+other expenses-interest,2,F_F2.F2E126; F_F3.F3E066
+other expenses-operation and maintenance of plant,2,F_F2.F2E124; F_F3.F3E064
+other expenses-salaries and wages,2,F_F2.F2E122; F_F3.F3E062
+other expenses-total amount,2,F_F2.F2E121; F_F3.F3E061
+"other plant, property and equipment",2,F_F2.F2A16; F_F3.F3A09
+other professional fte staff,2,DRVAL.LPROFFTE; AL.LSOPROF
+part time men,2,EF.EFPTMEN; EFB.EFAGE03
+part time total,2,EF.EFPT; EFB.EFAGE06
+part time women,2,EF.EFPTWOM; EFB.EFAGE04
+pell grant recipients - adjusted cohort (revised minus exclusions),2,GR_L2.PGLIN50; GR_PELL_SSL.PGADJCT
+pell grant recipients - exclusions,2,GR_L2.PGLIN45; GR_PELL_SSL.PGEXCLU
+pell grant recipients - revised cohort,2,GR_L2.PGLIN10; GR_PELL_SSL.PGREVCT
+pell grants,2,F_F2.F2C01; F_F3.F3C01
+post-master's certificate,2,IC.LEVEL8; IC_PCCAMPUSES.PCLEVEL8
+postbaccalaureate certificate,2,IC.LEVEL6; IC_PCCAMPUSES.PCLEVEL6
+postsecondary and title iv institution indicator,2,HD.PSET4FLG; IC_PCCAMPUSES.PCPSET4FLG
+postsecondary institution indicator,2,HD.PSEFLAG; IC_PCCAMPUSES.PCPSEFLAG
+primarily postsecondary indicator,2,HD.POSTSEC; IC_PCCAMPUSES.PCPOSTSEC
+"property, plant, and equipment, net of accumulated depreciation",2,F_F2.F2A19; F_F3.F3A01B
+public service-all other,2,F_F2.F2E037; F_F3.F3E02B7
+public service-benefits,2,F_F2.F2E033; F_F3.F3E02B3
+public service-depreciation,2,F_F2.F2E035; F_F3.F3E02B5
+public service-interest,2,F_F2.F2E036; F_F3.F3E02B6
+public service-operation and maintenance of plant,2,F_F2.F2E034; F_F3.F3E02B4
+public service-salaries and wages,2,F_F2.F2E032; F_F3.F3E02B2
+public service-total amount,2,F_F2.F2E031; F_F3.F3E02B1
+published in-district fees 2021-22,2,COST1.chg1af0; IC_PCCAMPUSES.PCCHG1AF1
+published in-district fees 2022-23,2,COST1.chg1af1; IC_PCCAMPUSES.PCCHG1AF2
+published in-district fees 2023-24,2,COST1.chg1af2; IC_PCCAMPUSES.PCCHG1AF3
+published in-district fees 2023-24 guaranteed percent increase (if applicable),2,COST1.CHG1FGTD; IC_PCCAMPUSES.PCCHG1FGTD
+published in-district tuition 2021-22,2,COST1.chg1at0; IC_PCCAMPUSES.PCCHG1AT1
+published in-district tuition 2022-23,2,COST1.chg1at1; IC_PCCAMPUSES.PCCHG1AT2
+published in-district tuition 2023-24,2,COST1.chg1at2; IC_PCCAMPUSES.PCCHG1AT3
+published in-district tuition 2023-24 guaranteed percent increase (if applicable),2,COST1.CHG1TGTD; IC_PCCAMPUSES.PCCHG1TGTD
+published in-district tuition and fees 2021-22,2,COST1.chg1ay0; IC_PCCAMPUSES.PCCHG1AY1
+published in-district tuition and fees 2022-23,2,COST1.chg1ay1; IC_PCCAMPUSES.PCCHG1AY2
+published in-district tuition and fees 2023-24,2,COST1.chg1ay2; IC_PCCAMPUSES.PCCHG1AY3
+published in-state fees 2021-22,2,COST1.chg2af0; IC_PCCAMPUSES.PCCHG2AF1
+published in-state fees 2022-23,2,COST1.chg2af1; IC_PCCAMPUSES.PCCHG2AF2
+published in-state fees 2023-24,2,COST1.chg2af2; IC_PCCAMPUSES.PCCHG2AF3
+published in-state fees 2023-24 guaranteed percent increase (if applicable),2,COST1.CHG2FGTD; IC_PCCAMPUSES.PCCHG2FGTD
+published in-state tuition 2021-22,2,COST1.chg2at0; IC_PCCAMPUSES.PCCHG2AT1
+published in-state tuition 2022-23,2,COST1.chg2at1; IC_PCCAMPUSES.PCCHG2AT2
+published in-state tuition 2023-24,2,COST1.chg2at2; IC_PCCAMPUSES.PCCHG2AT3
+published in-state tuition 2023-24 guaranteed percent increase (if applicable),2,COST1.CHG2TGTD; IC_PCCAMPUSES.PCCHG2TGTD
+published in-state tuition and fees 2021-22,2,COST1.chg2ay0; IC_PCCAMPUSES.PCCHG2AY1
+published in-state tuition and fees 2022-23,2,COST1.chg2ay1; IC_PCCAMPUSES.PCCHG2AY2
+published in-state tuition and fees 2023-24,2,COST1.chg2ay2; IC_PCCAMPUSES.PCCHG2AY3
+published out-of-state fees 2021-22,2,COST1.chg3af0; IC_PCCAMPUSES.PCCHG3AF1
+published out-of-state fees 2022-23,2,COST1.chg3af1; IC_PCCAMPUSES.PCCHG3AF2
+published out-of-state fees 2023-24,2,COST1.chg3af2; IC_PCCAMPUSES.PCCHG3AF3
+published out-of-state fees 2023-24 guaranteed percent increase (if applicable),2,COST1.chg3fgtd; IC_PCCAMPUSES.PCCHG3FGTD
+published out-of-state tuition 2021-22,2,COST1.chg3at0; IC_PCCAMPUSES.PCCHG3AT1
+published out-of-state tuition 2023-24,2,COST1.chg3at2; IC_PCCAMPUSES.PCCHG3AT3
+published out-of-state tuition 2023-24 guaranteed percent increase (if applicable),2,COST1.CHG3TGTD; IC_PCCAMPUSES.PCCHG3TGTD
+published out-of-state tuition and fees 2021-22,2,COST1.chg3ay0; IC_PCCAMPUSES.PCCHG3AY1
+published out-of-state tuition and fees 2022-23,2,COST1.chg3ay1; IC_PCCAMPUSES.PCCHG3AY2
+published out-of-state tuition and fees 2023-24,2,COST1.chg3ay2; IC_PCCAMPUSES.PCCHG3AY3
+published tuition and fees 2021-22,2,COST1.chg1py0; IC_PCCAMPUSES.PCCHG1PY1
+published tuition and fees 2022-23,2,COST1.chg1py1; IC_PCCAMPUSES.PCCHG1PY2
+published tuition and fees 2023-24,2,COST1.chg1py2; IC_PCCAMPUSES.PCCHG1PY3
+research-all other,2,F_F2.F2E027; F_F3.F3E02A7
+research-benefits,2,F_F2.F2E023; F_F3.F3E02A3
+research-depreciation,2,F_F2.F2E025; F_F3.F3E02A5
+research-interest,2,F_F2.F2E026; F_F3.F3E02A6
+research-operation and maintenance of plant,2,F_F2.F2E024; F_F3.F3E02A4
+research-salaries and wages,2,F_F2.F2E022; F_F3.F3E02A2
+research-total amount,2,F_F2.F2E021; F_F3.F3E02A1
+sales and services of auxiliary enterprises,2,F_F1A.F1B05; F_F3.F3D07
+sales and services of educational activities,2,F_F1A.F1B26; F_F3.F3D06
+sector of institution,2,HD.SECTOR; IC_PCCAMPUSES.PCSECTOR
+spending distribution for current use,2,F_F1A.F1H03C; F_F2.F2H03C
+state abbreviation,2,HD.STABBR; IC_PCCAMPUSES.PCSTABBR
+state and 118th congressional district id,2,HD.CNGDSTCD; IC_PCCAMPUSES.PCCNGDSTCD
+state appropriations,2,F_F1A.F1B11; F_F3.F3D03A
+state grants,2,F_F2.F2C03; F_F3.F3C03A
+status of institution,2,HD.ACT; IC_PCCAMPUSES.PCACT
+street address or post office box,2,HD.ADDR; IC_PCCAMPUSES.PCADDR
+student assistants fte,2,DRVAL.LSTUDFTE; AL.LSSTAST
+student service-all other,2,F_F2.F2E057; F_F3.F3E03B7
+student service-benefits,2,F_F2.F2E053; F_F3.F3E03B3
+student service-depreciation,2,F_F2.F2E055; F_F3.F3E03B5
+student service-interest,2,F_F2.F2E056; F_F3.F3E03B6
+student service-operation and maintenance of plant,2,F_F2.F2E054; F_F3.F3E03B4
+student service-salaries and wages,2,F_F2.F2E052; F_F3.F3E03B2
+student service-total amount,2,F_F2.F2E051; F_F3.F3E03B1
+student-right-to-know student athlete graduation rate web address,2,HD.ATHURL; IC_PCCAMPUSES.PCATHURL
+students enrolled exclusively in distance education courses,2,EFA_DIST.EFDEEXC; EFFY_DIST.EFYDEEXC
+students enrolled in some but not all distance education courses,2,EFA_DIST.EFDESOM; EFFY_DIST.EFYDESOM
+title of chief administrator,2,HD.CHFTITLE; IC_PCCAMPUSES.PCCHFTITLE
+"total amount of grant and scholarship aid awarded, 2021-22",2,COST2_FINANCIALAID.GISTT0; COST2_FINANCIALAID.GRNTT0
+"total amount of grant and scholarship aid awarded, 2022-23",2,COST2_FINANCIALAID.GISTT1; COST2_FINANCIALAID.GRNTT1
+"total amount of grant and scholarship aid awarded, 2023-24",2,COST2_FINANCIALAID.GISTT2; COST2_FINANCIALAID.GRNTT2
+"total amount of grant and scholarship aid awarded, all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4T0; COST2_FINANCIALAID.GRN4T0
+"total amount of grant and scholarship aid awarded, all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4T1; COST2_FINANCIALAID.GRN4T1
+"total amount of grant and scholarship aid awarded, all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4T2; COST2_FINANCIALAID.GRN4T2
+"total amount of grant and scholarship aid awarded, income level (0-30,000), 2021-22",2,COST2_FINANCIALAID.GIS4T10; COST2_FINANCIALAID.GRN4T10
+"total amount of grant and scholarship aid awarded, income level (0-30,000), 2022-23",2,COST2_FINANCIALAID.GIS4T11; COST2_FINANCIALAID.GRN4T11
+"total amount of grant and scholarship aid awarded, income level (0-30,000), 2023-24",2,COST2_FINANCIALAID.GIS4T12; COST2_FINANCIALAID.GRN4T12
+"total amount of grant and scholarship aid awarded, income level (110,001 or more), 2021-22",2,COST2_FINANCIALAID.GIS4T50; COST2_FINANCIALAID.GRN4T50
+"total amount of grant and scholarship aid awarded, income level (110,001 or more), 2022-23",2,COST2_FINANCIALAID.GIS4T51; COST2_FINANCIALAID.GRN4T51
+"total amount of grant and scholarship aid awarded, income level (110,001 or more), 2023-24",2,COST2_FINANCIALAID.GIS4T52; COST2_FINANCIALAID.GRN4T52
+"total amount of grant and scholarship aid awarded, income level (30,001-48,000), 2021-22",2,COST2_FINANCIALAID.GIS4T20; COST2_FINANCIALAID.GRN4T20
+"total amount of grant and scholarship aid awarded, income level (30,001-48,000), 2022-23",2,COST2_FINANCIALAID.GIS4T21; COST2_FINANCIALAID.GRN4T21
+"total amount of grant and scholarship aid awarded, income level (30,001-48,000), 2023-24",2,COST2_FINANCIALAID.GIS4T22; COST2_FINANCIALAID.GRN4T22
+"total amount of grant and scholarship aid awarded, income level (48,001-75,000), 2021-22",2,COST2_FINANCIALAID.GIS4T30; COST2_FINANCIALAID.GRN4T30
+"total amount of grant and scholarship aid awarded, income level (48,001-75,000), 2022-23",2,COST2_FINANCIALAID.GIS4T31; COST2_FINANCIALAID.GRN4T31
+"total amount of grant and scholarship aid awarded, income level (48,001-75,000), 2023-24",2,COST2_FINANCIALAID.GIS4T32; COST2_FINANCIALAID.GRN4T32
+"total amount of grant and scholarship aid awarded, income level (75,001-110,000), 2021-22",2,COST2_FINANCIALAID.GIS4T40; COST2_FINANCIALAID.GRN4T40
+"total amount of grant and scholarship aid awarded, income level (75,001-110,000), 2022-23",2,COST2_FINANCIALAID.GIS4T41; COST2_FINANCIALAID.GRN4T41
+"total amount of grant and scholarship aid awarded, income level (75,001-110,000), 2023-24",2,COST2_FINANCIALAID.GIS4T42; COST2_FINANCIALAID.GRN4T42
+total equity,2,F_F3.F3A03; F_F3.F3G03
+total expenses deductions - interest,2,F_F1A.F1C19IN; F_F1A.F1C197
+total expenses-benefits,2,F_F2.F2E133; F_F3.F3E073
+total expenses-depreciation,2,F_F2.F2E135; F_F3.F3E075
+total expenses-interest,2,F_F2.F2E136; F_F3.F3E076
+total expenses-salaries and wages,2,F_F2.F2E132; F_F3.F3E072
+total expenses-total amount,2,F_F2.F2E131; F_F3.F3E071
+total length of academic year (as used to calculate your pell budget) in clock or credit hours,2,COST1.LNAYHR1; IC_PCCAMPUSES.PCLNAYHR1
+total length of academic year (as used to calculate your pell budget) in weeks,2,COST1.LNAYWK1; IC_PCCAMPUSES.PCLNAYWK1
+total length of largest program,2,COST1.CIPLGTH1; IC_PCCAMPUSES.PCCIPLGTH1
+"total length of program in weeks, as completed by a student attending full-time",2,COST1.WKCMP1; IC_PCCAMPUSES.PCWKCMP1
+total library fte staff,2,DRVAL.LTOTLFTE; AL.LSTOTAL
+total net assets,2,F_F2.F2A06; F_F2.F2I04
+"total number in all income levels, 2021-22",2,COST2_FINANCIALAID.GIS4N0; COST2_FINANCIALAID.GRN4N0
+"total number in all income levels, 2022-23",2,COST2_FINANCIALAID.GIS4N1; COST2_FINANCIALAID.GRN4N1
+"total number in all income levels, 2023-24",2,COST2_FINANCIALAID.GIS4N2; COST2_FINANCIALAID.GRN4N2
+"total number, 2021-22",2,COST2_FINANCIALAID.GISTN0; COST2_FINANCIALAID.GRNTN0
+"total number, 2022-23",2,COST2_FINANCIALAID.GISTN1; COST2_FINANCIALAID.GRNTN1
+"total number, 2023-24",2,COST2_FINANCIALAID.GISTN2; COST2_FINANCIALAID.GRNTN2
+"total plant, property, and equipment",2,F_F2.F2A17; F_F3.F3A10
+total student grants,2,F_F2.F2C07; F_F3.F3C05
+tribal college,2,HD.TRIBAL; IC_PCCAMPUSES.PCTRIBAL
+undergraduate application fee,2,IC.APPLFEEU; IC_PCCAMPUSES.PCAPPLFEEU
+undergraduate offering,2,HD.UGOFFER; IC_PCCAMPUSES.PCUGOFFER
+unique entity identifier (uei) numbers,2,HD.UEIS; IC_PCCAMPUSES.PCUEIS
+value of endowment assets at the beginning of the fiscal year,2,F_F1A.F1H01; F_F2.F2H01
+value of endowment assets at the end of the fiscal year,2,F_F1A.F1H02; F_F2.F2H02
+veterans and military servicemembers tuition policies web address,2,HD.VETURL; IC_PCCAMPUSES.PCVETURL
+zip code,2,HD.ZIP; IC_PCCAMPUSES.PCZIP

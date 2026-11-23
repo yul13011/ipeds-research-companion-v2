@@ -7,6 +7,7 @@ Two groups:
 Run:  python -m unittest discover -s tests -v
 """
 import csv
+import re
 import sqlite3
 import sys
 import tempfile
@@ -15,6 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import config
+ROOT = Path(__file__).resolve().parents[1]
 from latest import latest_only  # the tests' own expected figures use the latest year only
 from build import build_dictionary as bd
 
@@ -67,7 +69,7 @@ GOOD = {
         dict(table="ENR", column="LEVEL", code="5", label="Part-time", role="part", breakdown_set="By attendance", set_total="1", set_fixed="STUDY = 1"),
         dict(table="ENR", column="LEVEL", code="6", label="Online", role="part", breakdown_set="By mode", set_total="sum of parts"),
         dict(table="ENR", column="LEVEL", code="7", label="In person", role="part", breakdown_set="By mode", set_total="sum of parts")],
-    "outside_ipeds": [], "special_codes": [], "measure_history": [], "comparability_breaks": [],
+    "outside_ipeds": [], "special_codes": [], "measure_history": [], "comparability_breaks": [], "breakdown_exceptions": [],
     "year_meaning": [dict(table=t, years="2024", kind="fall", period="Fall {Y}") for t in ("HD", "IC", "DRVADM", "ENR")],
 }
 
@@ -118,7 +120,7 @@ class LoaderLogic(unittest.TestCase):
                 w = csv.DictWriter(f, fieldnames=self.heads[name], restval="")
                 w.writeheader()
                 w.writerows(tables[name])
-        bd.build(self.db_path, self.tmp)
+        bd.build(self.db_path, self.tmp, full=True)
         return sqlite3.connect(self.db_path)
 
     def members(self, db, group):
@@ -393,6 +395,131 @@ class LoaderLogic(unittest.TestCase):
         codes = [dict(r, years="from 2020") if r["code"] == "2" else dict(r) for r in GOOD["category_codes"]]
         self.assertProblem("years 'from 2020' is not a year", category_codes=codes)
 
+    def test_set_up_measures_are_checked_and_flagged_for_review(self):
+        con = sqlite3.connect(self.db_path)
+        con.executescript("""ALTER TABLE HD ADD COLUMN LOCALE INTEGER; UPDATE HD SET LOCALE = 11 WHERE UNITID = 1;
+            UPDATE HD SET LOCALE = 99 WHERE UNITID = 2;
+            INSERT INTO VALUESETS VALUES (2024, 'HD2024', 'LOCALE', '11', 'City: large');""")
+        con.commit()
+        con.close()
+        measures = GOOD["measures"] + [
+            dict(table="DRVADM", variable="ADMSSN", title="Admissions", format="Cont", data_type="N", unit="count",
+                 in_first_version="yes"),                                    # no school has a value
+            dict(table="HD", variable="LOCALE", title="Locale", format="Disc", data_type="N", unit="coded",
+                 in_first_version="yes"),                                    # code 99 has no label
+            dict(table="ENR", variable="CNT", title="Students", format="Cont", data_type="N", unit="count",
+                 rows_per_school="many rows per school", in_first_version="yes")]   # ENR has category rows: fine
+        db = self.build(measures=[m for m in measures if not (m["table"] == "ENR" and m["variable"] == "CNT"
+                                                               and "unit" not in m)])
+        checks = {(m, c) for m, c, _ in db.execute("SELECT * FROM measure_checks")}
+        self.assertIn(("DRVADM.ADMSSN", "never a value"), checks)
+        self.assertIn(("HD.LOCALE", "codes without labels"), checks)
+        self.assertNotIn(("ENR.CNT", "no way to pick one row"), checks)
+        db.close()
+
+
+RESULTS = ["row_keys", "detail_links", "detail_link_exceptions", "breakdown_sets", "breakdown_parts", "breakdown_slices",
+           "year_checks", "measure_years", "rate_years", "year_titles", "group_list", "group_membership", "directory",
+           "name_clashes", "value_labels", "measure_checks"]
+
+
+class FasterBuild(unittest.TestCase):
+    """Part 5b decision: a build that reruns only what changed must leave the database exactly as a full build from
+    the same dictionary would. Each test starts from a full build of a two-year made-up database, makes one kind of
+    change, runs the faster build, and compares every dictionary and result table with a full build."""
+    build, add_2023 = LoaderLogic.build, LoaderLogic.add_2023
+    old_column_setup, old_column_dictionary = LoaderLogic.old_column_setup, LoaderLogic.old_column_dictionary
+
+    def setUp(self):
+        LoaderLogic.setUp(self)
+        self.addCleanup(self.dir.cleanup)
+        self.old_column_setup()                         # two years, the level under another column in 2023
+        con = sqlite3.connect(self.db_path)
+        con.executescript("""CREATE TABLE _releases (year INTEGER, release TEXT, status TEXT, source_file TEXT,
+                                                     loaded_at TEXT, seconds REAL);
+            INSERT INTO _releases VALUES (2023, 'R2023', 'final', '', 't1', 0), (2024, 'R2024', 'provisional', '', 't1', 0);""")
+        con.commit()
+        con.close()
+        self.pristine = self.tmp / "pristine.sqlite"   # the data before any build, for the full build to compare with
+        Path(self.pristine).write_bytes(Path(self.db_path).read_bytes())
+        self.start = self.old_column_dictionary()
+        self.build(**self.start).close()
+
+    def write(self, **tables):
+        tables = {**GOOD, **self.start, **tables}
+        for name in bd.TABLES:
+            with open(self.tmp / f"{name}.csv", "w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=self.heads[name], restval="")
+                w.writeheader()
+                w.writerows(tables[name])
+
+    def snapshot(self, path):
+        con = sqlite3.connect(path)
+        out = {}
+        for t in [f"dict_{n}" for n in bd.TABLES] + RESULTS:
+            out[t] = sorted(tuple("" if v is None else str(v) for v in r) for r in con.execute(f'SELECT * FROM "{t}"'))
+        con.close()
+        return out
+
+    def same_as_full(self, edit_data=None):
+        """Run the faster build on the database, a full build on a fresh copy, and compare."""
+        steps = []
+        from build import changes
+        real = changes.update
+        changes.update = lambda *a, **k: steps.extend(real(*a, **k) or ["full rebuild"]) or steps
+        try:
+            bd.build(self.db_path, self.tmp)
+        finally:
+            changes.update = real
+        if edit_data:
+            edit_data(self.pristine)
+        bd.build(self.pristine, self.tmp, full=True)
+        fast, full = self.snapshot(self.db_path), self.snapshot(self.pristine)
+        for t in full:
+            self.assertEqual(fast[t], full[t], f"{t} differs after: {'; '.join(steps)}")
+        return steps
+
+    def test_wording_change_reloads_in_seconds_with_no_data_checks(self):
+        terms = [dict(r, statement="Admission rate is admits divided by applicants.") for r in GOOD["terms"]]
+        measures = [dict(r, synonyms="acceptance rate") if r["variable"] == "DVADM01" else dict(r) for r in self.start["measures"]]
+        steps = self.write(terms=terms, measures=measures) or self.same_as_full()
+        self.assertIn("wording only: no data checks", steps)
+        self.assertFalse([s for s in steps if s.startswith(("retested", "rechecked", "full"))], steps)
+
+    def test_category_change_retests_only_that_table(self):
+        codes = [dict(r, breakdown_set="", set_total="", set_fixed="") if r["code"] == "5" else dict(r)
+                 for r in self.start["category_codes"]]
+        steps = self.write(category_codes=codes) or self.same_as_full()
+        self.assertTrue(any(s.startswith("retested ENR in 1 year") for s in steps), steps)   # only 2024 rows changed
+
+    def test_measure_change_rechecks_only_that_measure(self):
+        measures = [dict(r, format="Disc") if r["variable"] == "AID" else dict(r) for r in self.start["measures"]]
+        steps = self.write(measures=measures) or self.same_as_full()
+        self.assertIn("rechecked 1 measure(s)", steps)
+
+    def test_replaced_release_runs_that_years_checks(self):
+        def edit(path):
+            con = sqlite3.connect(path)
+            con.execute("UPDATE ENR SET CNT = 101 WHERE year = 2023 AND UNITID = 1 AND OLDLEV = 101")
+            con.execute("UPDATE _releases SET loaded_at = 't2' WHERE year = 2023")
+            con.commit()
+            con.close()
+        edit(self.db_path)
+        self.write()
+        steps = self.same_as_full(edit_data=edit)
+        self.assertIn("full checks for 2023", steps)
+
+    def test_one_table_reloaded_on_its_own(self):
+        terms = [dict(r, statement="Changed.") for r in GOOD["terms"]]
+        codes = [dict(r, label=r["label"] + " (changed)") for r in self.start["category_codes"]]
+        self.write(terms=terms, category_codes=codes)
+        bd.build(self.db_path, self.tmp, table="terms")             # only terms: the category change waits
+        con = sqlite3.connect(self.db_path)
+        self.assertEqual(con.execute("SELECT statement FROM dict_terms").fetchone()[0], "Changed.")
+        self.assertNotIn("(changed)", con.execute("SELECT group_concat(label) FROM dict_category_codes").fetchone()[0])
+        con.close()
+        self.same_as_full()                                          # the next run applies the rest
+
 
 @unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built; run python build/build_data.py")
 class RealDictionary(unittest.TestCase):
@@ -551,7 +678,7 @@ class RealDictionary(unittest.TestCase):
         for measure, cell, set_up in rows:
             years = [y for (y,) in self.db.execute("SELECT year FROM main.measure_years WHERE measure = ? ORDER BY year",
                                                    (measure,))]
-            self.assertEqual((cell, set_up), (spans(years), "no"), measure)
+            self.assertEqual((cell, set_up), (spans(years), "yes"), measure)   # set up like the rest (part 5b2)
             self.assertNotIn(2024, years, measure)
 
     def test_breakdown_sets_stored_as_columns(self):
@@ -603,8 +730,16 @@ class RealDictionary(unittest.TestCase):
         self.assertEqual(unit[("DRVF", "F1ENDMFT")], "average")          # per FTE
         self.assertEqual(unit[("HD", "SECTOR")], "coded")
         self.assertIsNone(unit[("ADM", "SATVR25")])                       # percentile score: not summable
-        # Only quantities can be blank by mistake; every continuous measure outside the directory and test scores has a unit.
-        missing = [(t, v) for t, v, f, u in rows if f == "Cont" and u is None and t != "HD" and not v.startswith(("SAT", "ACT"))]
+        # A number is blank only when the rules say it is not a quantity (an ID number, a test-score percentile, a map
+        # coordinate) or it is on the owner's review list of units the rules could not decide.
+        review = {r["measure"] for r in csv.DictReader(open(ROOT / "docs" / "reports" / "stage5b2" / "unit_review.csv",
+                                                            encoding="utf-8"))}
+        titles = dict(((t, v), f"{ti} {(d or '')[:400]}") for t, v, ti, d in self.db.execute(   # text fields have no unit
+            "SELECT \"table\", variable, title, long_description FROM dict_measures WHERE data_type <> 'A'"))
+        quantity = re.compile(r"percentile|latitude|longitude|unitid|identif|id number|institution id|ipedsid|fips|zip", re.I)
+        missing = [(t, v) for t, v, f, u in rows if f == "Cont" and u is None and (t, v) in titles
+                   and not quantity.search(titles[(t, v)] or "")
+                   and f"{t}.{v}" not in review and t != "HD"]
         self.assertEqual(missing, [])
         summable = self.db.execute("SELECT condition FROM dict_terms WHERE term='summable units'").fetchone()[0]
         self.assertEqual(summable, "count, dollars")

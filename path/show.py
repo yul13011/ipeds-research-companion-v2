@@ -75,7 +75,7 @@ def topic_message(plan):
         return t.get("not_found") or ""
     if plan["operation"] == "define":
         return "\n\n".join(f"**{m['name']}** ({m['period']}): {m['definition']}" for m in t["measures"])
-    ready = [m for m in t["measures"] if m["set_up"] == "yes"]
+    ready = [m for m in t["measures"] if m["set_up"] == "yes" and not m.get("retired")]
     if ready:
         return ("Yes. This app has: " + "; ".join(f"{m['name']} ({m['period']})" for m in ready)
                 + ".")

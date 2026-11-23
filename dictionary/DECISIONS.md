@@ -331,3 +331,22 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Successors.** Where a retired variable has a successor (the same meaning under a new name or table, as in the finance and Outcome Measures redesigns), it is linked in `measure_history.csv` so a trend can continue, with a comparability break where the definition changed. Matches are made by name, title and the codebooks' lists of new variables; uncertain matches are marked for the owner's review, not guessed.
 - **A message for retired data:** "IPEDS collected {what} from {first} to {last}." followed by "It was replaced by {successor}." or "It is no longer collected." The app never says "not found" for a variable that existed.
 - **Retired variables do not crowd current measures off the shortlist:** they rank below current measures, and are used mainly when nothing current fits, or for "what data exists" questions.
+
+## 2026-11-22: Part 5b approved; decisions on the Part 5b report
+
+- **Part 5b is approved.**
+- **Comparability breaks:** the drafted rows are approved, with these changes.
+  - New hires: attached from 2016-17, with the note "IPEDS changed the hiring window for new hires; its documentation gives different first years, from 2016-17 to 2020-21."
+  - Enrollment by major (EFCP): its field codes are compared in the releases before and after 2020-21; the CIP 2020 break is added to EFCP only if the codes changed.
+  - Finance, fiscal 2020: the F1A scholarships row is approved. Check whether F2 and F3 changed the same year, and whether pandemic relief revenue appears as a new revenue line in fiscal 2020 or 2021; if so, add a context note for revenue trends.
+  - Pandemic note: attached by the period a figure covers, not by release: any figure whose period overlaps March 2020 to June 2022 (fall 2020 and fall 2021; academic and fiscal years 2019-20, 2020-21 and 2021-22). Wording: "Figures covering 2020 to 2022 reflect the COVID-19 pandemic period."
+  - Row 13 (finance salaries without benefits): approved, since its successors are approved.
+- **Outcome Measures:** for 2015-16 and 2016-17, the total cohort is the sum of the four cohorts. The early cohorts stay mapped to the later ones, with the 2017-18 break note.
+- **Completions by race, 2021-22:** the breakdown is offered, with the 4 schools whose parts don't add up treated as exceptions (their total shown, with a note), as with the parent and child campuses.
+- **Successors approved:** the 24 DRVF salary percentages (...PS → ...SW..., with break row 13); F_F1A.F1C194 → F1C19DP, F1C196 → F1C19OM, F1C197 → F1C19IN; F_F1A.F1C195 → F1C19OT, with a note that the 2016-17 finance changes may have shifted what is counted as other expenses; IC.APPLFEEG → COST1.APPLFEEG, IC.APPLFEEU → COST1.APPLFEEU, IC.ROOM → COST1.ROOM.
+- **Successors approved only if confirmed:** the eight DRVOM percents for 2015-16 and 2016-17, if the old codebook descriptions show the measures were taken at 8 years (then with break row 1); otherwise rejected and named in the report.
+- **Successors rejected:** F_F1A.F1C144, F1C146, F1C147 (the "Other expenses" lines); DRVC.SCERT1 → SCERT1A (the old category was split in two); HD.CARNEGIE → CARNEGIEIC and HD.C21SZSET → CARNEGIESIZE (different classification schemes). Rejected retired variables have no successor, so their message says "It is no longer collected."
+- **Build speed:** the dictionary build reruns only what a change affects. Wording-only tables (messages and term wording, statements, outside-IPEDS rows, nicknames) reload in seconds with no data checks; a synonym change also rebuilds the search index; a change to a measure rechecks only that measure; a change to category codes or breakdowns retests only that table, in the affected years; new or replaced data runs that year's full checks. There is an option to reload a single dictionary table. A full rebuild is still required before each part's final report and for every yearly update, and it must give the same results as the faster path, with a test. The next full rebuild must confirm that the 92 relabelled breakdown results come out the same.
+- **Status line and number tile:** confirmed for part 5e (recorded above, 2026-11-22).
+- **Unique names:** a build check that no two measures are shown with the same name; a clash is flagged for a plain name, as with the 20 "Grand total" measures.
+- **Work order:** the owner's Part 5b2 (set up every measure) is committed. Do Part 5b2 and stop with its report, including the review list of measures the checks flag.
