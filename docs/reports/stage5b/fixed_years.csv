@@ -1,0 +1,114 @@
+file,key,column,value
+year_meaning.csv,ADM,period,Academic year Fall 2024
+year_meaning.csv,AL,period,Fiscal year 2024
+year_meaning.csv,CDEP,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,C_A,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,C_B,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,C_C,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,COST1,period,Academic year 2024-25
+year_meaning.csv,COST2_FINANCIALAID,period,Academic year 2024-25
+year_meaning.csv,COST2_NETPRICE,period,Academic year 2024-25
+year_meaning.csv,CUSTOMCGIDS,period,Academic year 2024-25
+year_meaning.csv,DRVADM,period,Academic year Fall 2024
+year_meaning.csv,DRVAL,period,Fiscal year 2024
+year_meaning.csv,DRVC,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,DRVCOST,period,Academic year 2024-25
+year_meaning.csv,DRVEF12,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,DRVEF,period,Fall 2024
+year_meaning.csv,DRVF,period,Fiscal year 2024
+year_meaning.csv,DRVGR,period,"Status of student as of August 31, 2024"
+year_meaning.csv,DRVHR,period,Fall 2024
+year_meaning.csv,DRVOM,period,"Status of student as of August 31, 2024"
+year_meaning.csv,EAP,period,Fall 2024
+year_meaning.csv,EF,period,Fall 2024
+year_meaning.csv,EFA,period,Fall 2024
+year_meaning.csv,EFA_DIST,period,Fall 2024
+year_meaning.csv,EFB,period,Fall 2024
+year_meaning.csv,EFB,caveat,"Enrollment by age is optional for schools to report in even-numbered years. For fall 2024, 2,576 of 5,842 schools reported it, so a figure for a group covers only the schools that reported."
+year_meaning.csv,EFC,period,Fall 2024
+year_meaning.csv,EFCP,period,Fall 2024
+year_meaning.csv,EFD,period,Fall 2024
+year_meaning.csv,EFFY,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,EFFY_DIST,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,EFFY_HS,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,EFIA,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,F_F1A,period,Fiscal year 2024
+year_meaning.csv,F_F2,period,Fiscal year 2024
+year_meaning.csv,F_F3,period,Fiscal year 2024
+year_meaning.csv,FLAGS,period,Academic year 2024-25
+year_meaning.csv,GR200,period,"Status of student as of August 31, 2024"
+year_meaning.csv,GR,period,"Status of student as of August 31, 2024"
+year_meaning.csv,GR_L2,period,"Status of student as of August 31, 2024"
+year_meaning.csv,GR_PELL_SSL,period,"Status of student as of August 31, 2024"
+year_meaning.csv,HD,period,Academic year 2024-25
+year_meaning.csv,IC,period,Academic year 2024-25
+year_meaning.csv,ICMISSION,period,Academic year 2024-25
+year_meaning.csv,OM,period,"Status of student as of August 31, 2024"
+year_meaning.csv,S_IS,period,Fall 2024
+year_meaning.csv,S_NH,period,Fall 2024
+year_meaning.csv,S_OC,period,Fall 2024
+year_meaning.csv,S_SIS,period,Fall 2024
+year_meaning.csv,SAL_IS,period,Academic year 2024-25
+year_meaning.csv,SAL_NIS,period,Academic year 2024-25
+year_meaning.csv,SFA,period,"July 1, 2023 - June 30, 2024"
+year_meaning.csv,SFAV,period,"July 1, 2023 - June 30, 2024"
+measures.csv,COST2_NETPRICE.NPIST2,period,2023-24
+measures.csv,COST2_NETPRICE.NPIST2,title,"Average net price-students awarded grant or scholarship aid, 2023-24"
+measures.csv,COST2_NETPRICE.NPGRN2,period,2023-24
+measures.csv,COST2_NETPRICE.NPGRN2,title,"Average net price-students awarded grant or scholarship aid, 2023-24"
+measures.csv,DRVCOST.TUFEYR0,period,2021-22
+measures.csv,DRVCOST.TUFEYR0,title,"Tuition and fees, 2021-22"
+measures.csv,DRVCOST.TUFEYR1,period,2022-23
+measures.csv,DRVCOST.TUFEYR1,title,"Tuition and fees, 2022-23"
+measures.csv,DRVCOST.TUFEYR2,period,2023-24
+measures.csv,DRVCOST.TUFEYR2,title,"Tuition and fees, 2023-24"
+measures.csv,DRVCOST.TUFEYR3,period,2024-25
+measures.csv,DRVCOST.TUFEYR3,title,"Tuition and fees, 2024-25"
+measures.csv,DRVCOST.CINDON,period,2024-25
+measures.csv,DRVCOST.CINDON,title,Total price for in-district students living on campus  2024-25
+measures.csv,DRVCOST.CINSON,period,2024-25
+measures.csv,DRVCOST.CINSON,title,Total price for in-state students living on campus 2024-25
+measures.csv,DRVCOST.COTSON,period,2024-25
+measures.csv,DRVCOST.COTSON,title,Total price for out-of-state students living on campus 2024-25
+measures.csv,DRVCOST.CINDOFF,period,2024-25
+measures.csv,DRVCOST.CINDOFF,title,Total price for in-district students living off campus (not with family)  2024-25
+measures.csv,DRVCOST.CINSOFF,period,2024-25
+measures.csv,DRVCOST.CINSOFF,title,Total price for in-state students living off campus (not with family)  2024-25
+measures.csv,DRVCOST.COTSOFF,period,2024-25
+measures.csv,DRVCOST.COTSOFF,title,Total price for out-of-state students living off campus (not with family)  2024-25
+measures.csv,DRVCOST.CINDFAM,period,2024-25
+measures.csv,DRVCOST.CINDFAM,title,Total price for in-district students living off campus (with family)  2024-25
+measures.csv,DRVCOST.CINSFAM,period,2024-25
+measures.csv,DRVCOST.CINSFAM,title,Total price for in-state students living off campus (with family)  2024-25
+measures.csv,DRVCOST.COTSFAM,period,2024-25
+measures.csv,DRVCOST.COTSFAM,title,Total price for out-of-state students living off campus (with family)  2024-25
+measures.csv,EFD.UGENTERN,title,"Total entering students at the undergraduate level, fall 2024"
+measures.csv,EFD.RRFTCT,title,Full-time fall 2023 cohort
+measures.csv,EFD.RRFTEX,title,Exclusions from full-time fall 2023 cohort
+measures.csv,EFD.RRFTIN,title,Inclusions to the full-time fall 2023 cohort
+measures.csv,EFD.RRFTCTA,title,Full-time adjusted fall 2023 cohort
+measures.csv,EFD.RET_NMF,title,Students from the full-time adjusted fall 2023 cohort enrolled in fall 2024
+measures.csv,EFD.RET_PCF,title,"Full-time retention rate, 2024"
+measures.csv,EFD.RRPTCT,title,Part-time fall 2023 cohort
+measures.csv,EFD.RRPTEX,title,Exclusions from part-time fall 2023 cohort
+measures.csv,EFD.RRPTIN,title,Inclusions to the part-time fall 2023 cohort
+measures.csv,EFD.RRPTCTA,title,Part-time adjusted fall 2023 cohort
+measures.csv,EFD.RET_NMP,title,Students from the part-time adjusted fall 2023 cohort enrolled in fall 2024
+measures.csv,EFD.RET_PCP,title,"Part-time retention rate, 2024"
+measures.csv,HD.C00CARNEGIE,title,2000 Carnegie Classification (historical - not updated)
+measures.csv,HD.C21BASIC,title,Carnegie Classification 2021: Basic
+measures.csv,HD.CARNEGIEIC,title,Carnegie Classification 2025: Institutional Classification
+measures.csv,HD.CARNEGIESAEC,title,Carnegie Classification 2025: Student Access and Earnings
+measures.csv,HD.CARNEGIERSCH,title,Carnegie Classification 2025: Research Activity Designation
+measures.csv,HD.CARNEGIESIZE,title,Carnegie Classification 2025: Institutional Size
+measures.csv,HD.CARNEGIEALF,title,Carnegie Classification 2025: Award Level Focus
+measures.csv,HD.CARNEGIEAPM,title,Carnegie Classification 2025: Undergraduate Academic Program Mix
+measures.csv,HD.CARNEGIEGPM,title,Carnegie Classification 2025: Graduate Academic Program Mix
+measures.csv,COST1.chg3ay3,period,2024-25
+measures.csv,COST1.chg3ay3,title,Published out-of-state tuition and fees 2024-25
+measures.csv,COST2_NETPRICE.NPIS42,period,2023-24
+measures.csv,COST2_NETPRICE.NPIS42,title,"Average net price - all students awarded Title IV federal financial aid, 2023-24"
+measures.csv,COST2_NETPRICE.NPT42,period,2023-24
+measures.csv,COST2_NETPRICE.NPT42,title,"Average net price -all students awarded Title IV federal financial aid, 2023-24"
+measures.csv,OM.OMACHRT,title,Adjusted 2016-17 cohort
+measures.csv,OM.OMAWDN8,title,"Number of adjusted cohort receiving an award at 8 years (August 31, 2024)"
