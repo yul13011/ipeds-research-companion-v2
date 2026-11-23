@@ -14,6 +14,7 @@ from collections import Counter
 from path.request import TAG_RANGES, fill_years
 
 SET_UP, NOT_SET_UP = 15, 5         # measures: the best set-up ones, then a few IPEDS collects but the app has not set up
+RETIRED = 2                         # ... then, listed last, at most this many that IPEDS no longer collects
 PER_TABLE = 5                       # at most this many of the set-up measures from one table, unless ...
 SOFT_CAP = 2                        # ... a further one scores at least this many times the next measure from another table
 NAME_WEIGHT = 3                     # a match in a measure's name or synonyms counts this many times one in its table title
@@ -151,6 +152,12 @@ def build_index(db):
     index = {}
 
     measures = {}
+    then = lambda y: f"{y}-{(y + 1) % 100:02d}"
+    try:                                        # variables IPEDS no longer collects: the releases that had them
+        spans = {m: (a, b) for m, a, b in q("SELECT measure, MIN(year), MAX(year) FROM measure_years "
+                                           "GROUP BY measure") if b < latest}
+    except sqlite3.OperationalError:            # a database built before measure_years existed
+        spans = {}
     for t, v, title, desc, plain, syn, first, unit, period, per_school in q(
             'SELECT "table", variable, title, long_description, plain_name, synonyms, in_first_version, unit, period, '
             "rows_per_school FROM dict_measures"):
@@ -159,6 +166,9 @@ def build_index(db):
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),
                                     main=f"{name} {syn or ''}", context=f"{titles.get(t, '')} {(desc or '')[:300]}")
         measures[f"{t}.{v}"]["text"] = measures[f"{t}.{v}"]["main"] + " " + measures[f"{t}.{v}"]["context"]
+        if f"{t}.{v}" in spans and first != "yes":
+            a, b = spans[f"{t}.{v}"]
+            measures[f"{t}.{v}"].update(retired=f"{then(a)} to {then(b)}", period=None)
     for rate, syn in q("SELECT rate, MAX(synonyms) FROM dict_rates WHERE rate_measure IS NULL GROUP BY rate"):
         measures[f"rate:{rate}"] = dict(id=f"rate:{rate}", name=rate, table=None, unit="computed from counts",
                                         period=None, set_up=True, many_rows=False, main=f"{rate} {syn or ''}", context="",
@@ -275,7 +285,9 @@ def shortlist(question, db_path, carried=()):
             per_table[table] += 1
             set_up.append(k)
     set_up += held_back[:SET_UP - len(set_up)]
-    keep = set_up + [k for k in ranked if not entries[k]["set_up"]][:NOT_SET_UP]
+    current = [k for k in ranked if not entries[k]["set_up"] and not entries[k].get("retired")][:NOT_SET_UP]
+    gone = [k for k in ranked if entries[k].get("retired")][:RETIRED]
+    keep = set_up + current + gone              # retired variables rank below every current measure
     measures = {k: entries[k] for k in keep}
     for t in found["terms"].values():           # a matched term brings the measures of its readings
         for r in t["readings"]:
@@ -319,7 +331,7 @@ def shortlist(question, db_path, carried=()):
     for key, s in index["sets"][1].items():     # every loaded set for a shortlisted table
         if s["table"] in tables:
             found["sets"].setdefault(key, s)
-    found["measures"] = measures
+    found["measures"] = dict(sorted(measures.items(), key=lambda kv: bool(kv[1].get("retired"))))  # retired last
     return tag({kind: [public(e) for e in found[kind].values()] for kind in LIMITS}, index)
 
 

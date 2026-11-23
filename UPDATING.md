@@ -75,7 +75,7 @@ Each command does the following:
 
 Each command takes about 30 to 35 minutes, most of it the dictionary step, which tests every year. It prints, for example, `IPEDS_2024-25_Final: 56 tables loaded; replaced IPEDS_2024-25_Provisional`.
 
-To rebuild everything from scratch instead (all releases in `config.py`; about 30 minutes for ten years, plus 25 for the dictionary):
+To rebuild everything from scratch instead (all releases in `config.py`; about 30 minutes for ten years, plus 30 for the dictionary):
 
 ```bash
 python build/build_data.py
@@ -103,7 +103,7 @@ It writes to `docs/reports/stage5a/`:
 - tables present only in some years;
 - variables added, retired or renamed.
 
-You decide what to set up, leave aside, or record as a comparability break. Each change goes into the dictionary folder with a dated line in `dictionary/DECISIONS.md`. When a new release is added, also give it a place in the year rules: `year_meaning.csv` must cover the new year for every table (the build says which do not), and any code IPEDS changed needs `years` (and, where the same information moved, `same_as`) in `category_codes.csv`. Then reload the dictionary (about 25 minutes):
+You decide what to set up, leave aside, or record as a comparability break. Each change goes into the dictionary folder with a dated line in `dictionary/DECISIONS.md`. When a new release is added, also give it a place in the year rules: `year_meaning.csv` must cover the new year for every table (the build says which do not), and any code IPEDS changed needs `years` (and, where the same information moved, `same_as`) in `category_codes.csv`. Then reload the dictionary (about 30 minutes):
 
 ```bash
 python build/build_dictionary.py

@@ -97,6 +97,25 @@ def decline(d, key, request=None, wanted="", closest=None, pointer=None, log=Non
                    pointer=pointer, reason=message, log=log)
 
 
+def retired(d, measure_id):
+    """For a variable IPEDS no longer collects: {first, last, after} for the "retired" messages (release years, and the
+    successor sentence), from measure_years and the approved rows of measure_history.csv. None if it is still collected."""
+    years = [y for (y,) in d.q("SELECT year FROM measure_years WHERE measure = ? ORDER BY year", measure_id)]
+    if not years or years[-1] >= d.year:
+        return None
+    then = lambda y: f"{y}-{(y + 1) % 100:02d}"
+    successor = d.one("SELECT COALESCE(m.plain_name, m.title), h.status FROM dict_measure_history h JOIN dict_measures m "
+                      "ON m.\"table\" || '.' || m.variable = h.measure WHERE "
+                      "UPPER(h.earlier_table || '.' || h.earlier_variable) = UPPER(?) ORDER BY h.status = 'in use' DESC",
+                      measure_id)
+    if successor and successor[1] != "in use":          # a successor waiting for the owner's review: say neither
+        after = ""
+    else:
+        after = say(d, "retired replaced", successor=successor[0]) if successor else say(d, "retired gone")
+    one = " one year" if years[0] == years[-1] else ""   # the message for a single release
+    return dict(first=then(years[0]), last=then(years[-1]), after=after, one=one)
+
+
 def label_of(request, d, names):
     """How a request's measures are named in a message: the reading the user chose, or the measures themselves."""
     for r in request.get("readings") or []:
@@ -267,13 +286,16 @@ def resolve_request(request, d, short, new_question=False):
         stop = step(request, d, plan)
         if stop:
             return stop
-    not_set_up, no_years = [], []
+    not_set_up, no_years, gone = [], [], []
     for m in request["measures"]:
         got = measure(m, d, request["year"])
         if got["kind"] == "need_row":
             return row_question(request, m, got)
         if got["kind"] == "not_set_up":
             not_set_up.append(got)
+            continue
+        if got["kind"] == "retired":
+            gone.append(got)
             continue
         if got["kind"] != "ready":
             return dict(got, request=request)
@@ -290,6 +312,13 @@ def resolve_request(request, d, short, new_question=False):
         return decline(d, "years", request, wanted=request["year"]["stated"], what=names, held=held,
                        asked=request["year"]["stated"],
                        closest=dict(text=f"{names} for {held}", request=without(request, year=dict(stated=None, kind="latest"))))
+    if not plan["measures"] and gone and not not_set_up:
+        first = gone[0]
+        return decline(d, "retired" + first["one"], request, wanted=first["id"], what=first["name"], first=first["first"],
+                       last=first["last"], after=first["after"])
+    for got in gone:                                    # answer the rest, and say what is left out
+        plan["statements"].append(say(d, "retired partly" + got["one"], what=got["name"], first=got["first"],
+                                      last=got["last"], after=got["after"]))
     if not plan["measures"] and not_set_up:
         first = not_set_up[0]
         near = first.get("closest")
@@ -491,6 +520,9 @@ def topic_plan(plan, request, d, short=None):
         if row:
             found.append(dict(zip(("table", "variable", "name", "definition", "set_up", "unit", "period"), row)))
             found[-1]["period"] = fill_years(found[-1]["period"], d.year)
+            gone = retired(d, m["id"]) if found[-1]["set_up"] != "yes" else None
+            if gone:                                    # data that existed is never "not found"
+                found[-1]["retired"] = say(d, "retired" + gone["one"], what=found[-1]["name"], **gone)
     outside = d.one("SELECT topic, what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"] or "")
     plan["topic"] = dict(asked=request["topic"], measures=found,
                          outside=dict(zip(("topic", "say", "pointer"), outside)) if outside else None)
@@ -704,6 +736,9 @@ def measure(m, d, year):
         if row is None:
             return decline(d, "not found")
         table, column, name, unit, form, set_up, own_period, definition, said = row
+        gone = retired(d, m["id"]) if set_up != "yes" else None
+        if gone:                                        # IPEDS collected it once: say when, and what replaced it
+            return outcome("retired", id=m["id"], name=name, **gone)
         if set_up != "yes":                             # the nearest set-up measure of the same table, as an alternative
             near = d.one('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures '
                          'WHERE "table"=? AND in_first_version=\'yes\' ORDER BY rowid LIMIT 1', table)

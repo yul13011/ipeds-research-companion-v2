@@ -1,561 +1,609 @@
-measure,earlier_table,earlier_variable,years,how
-COST1.ALLONCAM,IC,ALLONCAM,2015-2023,"same name and title, years aside"
-COST1.BOARD,IC,BOARD,2015-2023,"same name and title, years aside"
-COST1.BOARDAMT,IC,BOARDAMT,2015-2023,"same name and title, years aside"
-COST1.CHG1AF0,IC_AY,CHG1AF0,2015-2023,"same name and title, years aside"
-COST1.CHG1AF1,IC_AY,CHG1AF1,2015-2023,"same name and title, years aside"
-COST1.CHG1AF2,IC_AY,CHG1AF2,2015-2023,"same name and title, years aside"
-COST1.CHG1AF3,IC_AY,CHG1AF3,2015-2023,"same name and title, years aside"
-COST1.CHG1AT0,IC_AY,CHG1AT0,2015-2023,"same name and title, years aside"
-COST1.CHG1AT1,IC_AY,CHG1AT1,2015-2023,"same name and title, years aside"
-COST1.CHG1AT2,IC_AY,CHG1AT2,2015-2023,"same name and title, years aside"
-COST1.CHG1AT3,IC_AY,CHG1AT3,2015-2023,"same name and title, years aside"
-COST1.CHG1AY0,IC_AY,CHG1AY0,2015-2023,"same name and title, years aside"
-COST1.CHG1AY1,IC_AY,CHG1AY1,2015-2023,"same name and title, years aside"
-COST1.CHG1AY2,IC_AY,CHG1AY2,2015-2023,"same name and title, years aside"
-COST1.CHG1AY3,IC_AY,CHG1AY3,2015-2023,"same name and title, years aside"
-COST1.CHG1FGTD,IC_AY,CHG1FGTD,2015-2023,"same name and title, years aside"
-COST1.CHG1PY0,IC_PY,CHG1PY0,2015-2023,"same name and title, years aside"
-COST1.CHG1PY1,IC_PY,CHG1PY1,2015-2023,"same name and title, years aside"
-COST1.CHG1PY2,IC_PY,CHG1PY2,2015-2023,"same name and title, years aside"
-COST1.CHG1PY3,IC_PY,CHG1PY3,2015-2023,"same name and title, years aside"
-COST1.CHG1TGTD,IC_AY,CHG1TGTD,2015-2023,"same name and title, years aside"
-COST1.CHG2AF0,IC_AY,CHG2AF0,2015-2023,"same name and title, years aside"
-COST1.CHG2AF1,IC_AY,CHG2AF1,2015-2023,"same name and title, years aside"
-COST1.CHG2AF2,IC_AY,CHG2AF2,2015-2023,"same name and title, years aside"
-COST1.CHG2AF3,IC_AY,CHG2AF3,2015-2023,"same name and title, years aside"
-COST1.CHG2AT0,IC_AY,CHG2AT0,2015-2023,"same name and title, years aside"
-COST1.CHG2AT1,IC_AY,CHG2AT1,2015-2023,"same name and title, years aside"
-COST1.CHG2AT2,IC_AY,CHG2AT2,2015-2023,"same name and title, years aside"
-COST1.CHG2AT3,IC_AY,CHG2AT3,2015-2023,"same name and title, years aside"
-COST1.CHG2AY0,IC_AY,CHG2AY0,2015-2023,"same name and title, years aside"
-COST1.CHG2AY1,IC_AY,CHG2AY1,2015-2023,"same name and title, years aside"
-COST1.CHG2AY2,IC_AY,CHG2AY2,2015-2023,"same name and title, years aside"
-COST1.CHG2AY3,IC_AY,CHG2AY3,2015-2023,"same name and title, years aside"
-COST1.CHG2FGTD,IC_AY,CHG2FGTD,2015-2023,"same name and title, years aside"
-COST1.CHG2TGTD,IC_AY,CHG2TGTD,2015-2023,"same name and title, years aside"
-COST1.CHG3AF0,IC_AY,CHG3AF0,2015-2023,"same name and title, years aside"
-COST1.CHG3AF1,IC_AY,CHG3AF1,2015-2023,"same name and title, years aside"
-COST1.CHG3AF2,IC_AY,CHG3AF2,2015-2023,"same name and title, years aside"
-COST1.CHG3AF3,IC_AY,CHG3AF3,2015-2023,"same name and title, years aside"
-COST1.CHG3AT0,IC_AY,CHG3AT0,2015-2023,"same name and title, years aside"
-COST1.CHG3AT1,IC_AY,CHG3AT1,2015-2023,"same name and title, years aside"
-COST1.CHG3AT2,IC_AY,CHG3AT2,2015-2023,"same name and title, years aside"
-COST1.CHG3AT3,IC_AY,CHG3AT3,2015-2023,"same name and title, years aside"
-COST1.CHG3AY0,IC_AY,CHG3AY0,2015-2023,"same name and title, years aside"
-COST1.CHG3AY1,IC_AY,CHG3AY1,2015-2023,"same name and title, years aside"
-COST1.CHG3AY2,IC_AY,CHG3AY2,2015-2023,"same name and title, years aside"
-COST1.CHG3AY3,IC_AY,CHG3AY3,2015-2023,"same name and title, years aside"
-COST1.CHG3FGTD,IC_AY,CHG3FGTD,2015-2023,"same name and title, years aside"
-COST1.CHG3TGTD,IC_AY,CHG3TGTD,2015-2023,"same name and title, years aside"
-COST1.CHG4AY0,IC_AY,CHG4AY0,2015-2023,"same name and title, years aside"
-COST1.CHG4AY1,IC_AY,CHG4AY1,2015-2023,"same name and title, years aside"
-COST1.CHG4AY2,IC_AY,CHG4AY2,2015-2023,"same name and title, years aside"
-COST1.CHG4AY3,IC_AY,CHG4AY3,2015-2023,"same name and title, years aside"
-COST1.CHG4PY0,IC_PY,CHG4PY0,2015-2023,"same name and title, years aside"
-COST1.CHG4PY1,IC_PY,CHG4PY1,2015-2023,"same name and title, years aside"
-COST1.CHG4PY2,IC_PY,CHG4PY2,2015-2023,"same name and title, years aside"
-COST1.CHG4PY3,IC_PY,CHG4PY3,2015-2023,"same name and title, years aside"
-COST1.CHG5AY0,IC_AY,CHG5AY0,2015-2023,"same name and title, years aside"
-COST1.CHG5AY1,IC_AY,CHG5AY1,2015-2023,"same name and title, years aside"
-COST1.CHG5AY2,IC_AY,CHG5AY2,2015-2023,"same name and title, years aside"
-COST1.CHG5AY3,IC_AY,CHG5AY3,2015-2023,"same name and title, years aside"
-COST1.CHG5PY0,IC_PY,CHG5PY0,2015-2023,"same name and title, years aside"
-COST1.CHG5PY1,IC_PY,CHG5PY1,2015-2023,"same name and title, years aside"
-COST1.CHG5PY2,IC_PY,CHG5PY2,2015-2023,"same name and title, years aside"
-COST1.CHG5PY3,IC_PY,CHG5PY3,2015-2023,"same name and title, years aside"
-COST1.CHG6AY0,IC_AY,CHG6AY0,2015-2023,"same name and title, years aside"
-COST1.CHG6AY1,IC_AY,CHG6AY1,2015-2023,"same name and title, years aside"
-COST1.CHG6AY2,IC_AY,CHG6AY2,2015-2023,"same name and title, years aside"
-COST1.CHG6AY3,IC_AY,CHG6AY3,2015-2023,"same name and title, years aside"
-COST1.CHG6PY0,IC_PY,CHG6PY0,2015-2023,"same name and title, years aside"
-COST1.CHG6PY1,IC_PY,CHG6PY1,2015-2023,"same name and title, years aside"
-COST1.CHG6PY2,IC_PY,CHG6PY2,2015-2023,"same name and title, years aside"
-COST1.CHG6PY3,IC_PY,CHG6PY3,2015-2023,"same name and title, years aside"
-COST1.CHG7AY0,IC_AY,CHG7AY0,2015-2023,"same name and title, years aside"
-COST1.CHG7AY1,IC_AY,CHG7AY1,2015-2023,"same name and title, years aside"
-COST1.CHG7AY2,IC_AY,CHG7AY2,2015-2023,"same name and title, years aside"
-COST1.CHG7AY3,IC_AY,CHG7AY3,2015-2023,"same name and title, years aside"
-COST1.CHG7PY0,IC_PY,CHG7PY0,2015-2023,"same name and title, years aside"
-COST1.CHG7PY1,IC_PY,CHG7PY1,2015-2023,"same name and title, years aside"
-COST1.CHG7PY2,IC_PY,CHG7PY2,2015-2023,"same name and title, years aside"
-COST1.CHG7PY3,IC_PY,CHG7PY3,2015-2023,"same name and title, years aside"
-COST1.CHG8AY0,IC_AY,CHG8AY0,2015-2023,"same name and title, years aside"
-COST1.CHG8AY1,IC_AY,CHG8AY1,2015-2023,"same name and title, years aside"
-COST1.CHG8AY2,IC_AY,CHG8AY2,2015-2023,"same name and title, years aside"
-COST1.CHG8AY3,IC_AY,CHG8AY3,2015-2023,"same name and title, years aside"
-COST1.CHG8PY0,IC_PY,CHG8PY0,2015-2023,"same name and title, years aside"
-COST1.CHG8PY1,IC_PY,CHG8PY1,2015-2023,"same name and title, years aside"
-COST1.CHG8PY2,IC_PY,CHG8PY2,2015-2023,"same name and title, years aside"
-COST1.CHG8PY3,IC_PY,CHG8PY3,2015-2023,"same name and title, years aside"
-COST1.CHG9AY0,IC_AY,CHG9AY0,2015-2023,"same name and title, years aside"
-COST1.CHG9AY1,IC_AY,CHG9AY1,2015-2023,"same name and title, years aside"
-COST1.CHG9AY2,IC_AY,CHG9AY2,2015-2023,"same name and title, years aside"
-COST1.CHG9AY3,IC_AY,CHG9AY3,2015-2023,"same name and title, years aside"
-COST1.CHG9PY0,IC_PY,CHG9PY0,2015-2023,"same name and title, years aside"
-COST1.CHG9PY1,IC_PY,CHG9PY1,2015-2023,"same name and title, years aside"
-COST1.CHG9PY2,IC_PY,CHG9PY2,2015-2023,"same name and title, years aside"
-COST1.CHG9PY3,IC_PY,CHG9PY3,2015-2023,"same name and title, years aside"
-COST1.CIPCODE1,IC_PY,CIPCODE1,2015-2023,"same name and title, years aside"
-COST1.CIPCODE2,IC_PY,CIPCODE2,2015-2023,"same name and title, years aside"
-COST1.CIPCODE3,IC_PY,CIPCODE3,2015-2023,"same name and title, years aside"
-COST1.CIPCODE4,IC_PY,CIPCODE4,2015-2023,"same name and title, years aside"
-COST1.CIPCODE5,IC_PY,CIPCODE5,2015-2023,"same name and title, years aside"
-COST1.CIPCODE6,IC_PY,CIPCODE6,2015-2023,"same name and title, years aside"
-COST1.CIPLGTH1,IC_PY,CIPLGTH1,2015-2023,"same name and title, years aside"
-COST1.CIPLGTH2,IC_PY,CIPLGTH2,2015-2023,"same name and title, years aside"
-COST1.CIPLGTH3,IC_PY,CIPLGTH3,2015-2023,"same name and title, years aside"
-COST1.CIPLGTH4,IC_PY,CIPLGTH4,2015-2023,"same name and title, years aside"
-COST1.CIPLGTH5,IC_PY,CIPLGTH5,2015-2023,"same name and title, years aside"
-COST1.CIPLGTH6,IC_PY,CIPLGTH6,2015-2023,"same name and title, years aside"
-COST1.CIPSUPP1,IC_PY,CIPSUPP1,2015-2023,"same name and title, years aside"
-COST1.CIPSUPP2,IC_PY,CIPSUPP2,2015-2023,"same name and title, years aside"
-COST1.CIPSUPP3,IC_PY,CIPSUPP3,2015-2023,"same name and title, years aside"
-COST1.CIPSUPP4,IC_PY,CIPSUPP4,2015-2023,"same name and title, years aside"
-COST1.CIPSUPP5,IC_PY,CIPSUPP5,2015-2023,"same name and title, years aside"
-COST1.CIPSUPP6,IC_PY,CIPSUPP6,2015-2023,"same name and title, years aside"
-COST1.CIPTUIT1,IC_PY,CIPTUIT1,2015-2023,"same name and title, years aside"
-COST1.CIPTUIT2,IC_PY,CIPTUIT2,2015-2023,"same name and title, years aside"
-COST1.CIPTUIT3,IC_PY,CIPTUIT3,2015-2023,"same name and title, years aside"
-COST1.CIPTUIT4,IC_PY,CIPTUIT4,2015-2023,"same name and title, years aside"
-COST1.CIPTUIT5,IC_PY,CIPTUIT5,2015-2023,"same name and title, years aside"
-COST1.CIPTUIT6,IC_PY,CIPTUIT6,2015-2023,"same name and title, years aside"
-COST1.FEE1,IC_AY,FEE1,2015-2023,"same name and title, years aside"
-COST1.FEE2,IC_AY,FEE2,2015-2023,"same name and title, years aside"
-COST1.FEE3,IC_AY,FEE3,2015-2023,"same name and title, years aside"
-COST1.FEE5,IC_AY,FEE5,2015-2023,"same name and title, years aside"
-COST1.FEE6,IC_AY,FEE6,2015-2023,"same name and title, years aside"
-COST1.FEE7,IC_AY,FEE7,2015-2023,"same name and title, years aside"
-COST1.HRCHG1,IC_AY,HRCHG1,2015-2023,"same name and title, years aside"
-COST1.HRCHG2,IC_AY,HRCHG2,2015-2023,"same name and title, years aside"
-COST1.HRCHG3,IC_AY,HRCHG3,2015-2023,"same name and title, years aside"
-COST1.HRCHG5,IC_AY,HRCHG5,2015-2023,"same name and title, years aside"
-COST1.HRCHG6,IC_AY,HRCHG6,2015-2023,"same name and title, years aside"
-COST1.HRCHG7,IC_AY,HRCHG7,2015-2023,"same name and title, years aside"
-COST1.ISPFEE1,IC_AY,ISPFEE1,2015-2023,"same name and title, years aside"
-COST1.ISPFEE2,IC_AY,ISPFEE2,2015-2023,"same name and title, years aside"
-COST1.ISPFEE3,IC_AY,ISPFEE3,2015-2023,"same name and title, years aside"
-COST1.ISPFEE4,IC_AY,ISPFEE4,2015-2023,"same name and title, years aside"
-COST1.ISPFEE5,IC_AY,ISPFEE5,2015-2023,"same name and title, years aside"
-COST1.ISPFEE6,IC_AY,ISPFEE6,2015-2023,"same name and title, years aside"
-COST1.ISPFEE7,IC_AY,ISPFEE7,2015-2023,"same name and title, years aside"
-COST1.ISPFEE8,IC_AY,ISPFEE8,2015-2023,"same name and title, years aside"
-COST1.ISPFEE9,IC_AY,ISPFEE9,2015-2023,"same name and title, years aside"
-COST1.ISPROF1,IC_AY,ISPROF1,2015-2023,"same name and title, years aside"
-COST1.ISPROF2,IC_AY,ISPROF2,2015-2023,"same name and title, years aside"
-COST1.ISPROF3,IC_AY,ISPROF3,2015-2023,"same name and title, years aside"
-COST1.ISPROF4,IC_AY,ISPROF4,2015-2023,"same name and title, years aside"
-COST1.ISPROF5,IC_AY,ISPROF5,2015-2023,"same name and title, years aside"
-COST1.ISPROF6,IC_AY,ISPROF6,2015-2023,"same name and title, years aside"
-COST1.ISPROF7,IC_AY,ISPROF7,2015-2023,"same name and title, years aside"
-COST1.ISPROF8,IC_AY,ISPROF8,2015-2023,"same name and title, years aside"
-COST1.ISPROF9,IC_AY,ISPROF9,2015-2023,"same name and title, years aside"
-COST1.LNAYHR1,IC_PY,LNAYHR1,2015-2023,"same name and title, years aside"
-COST1.LNAYWK1,IC_PY,LNAYWK1,2015-2023,"same name and title, years aside"
-COST1.MEALSWK,IC,MEALSWK,2015-2023,"same name and title, years aside"
-COST1.MTHCMP1,IC_PY,MTHCMP1,2015-2023,"same name and title, years aside"
-COST1.MTHCMP2,IC_PY,MTHCMP2,2015-2023,"same name and title, years aside"
-COST1.MTHCMP3,IC_PY,MTHCMP3,2015-2023,"same name and title, years aside"
-COST1.MTHCMP4,IC_PY,MTHCMP4,2015-2023,"same name and title, years aside"
-COST1.MTHCMP5,IC_PY,MTHCMP5,2015-2023,"same name and title, years aside"
-COST1.MTHCMP6,IC_PY,MTHCMP6,2015-2023,"same name and title, years aside"
-COST1.OSPFEE1,IC_AY,OSPFEE1,2015-2023,"same name and title, years aside"
-COST1.OSPFEE2,IC_AY,OSPFEE2,2015-2023,"same name and title, years aside"
-COST1.OSPFEE3,IC_AY,OSPFEE3,2015-2023,"same name and title, years aside"
-COST1.OSPFEE4,IC_AY,OSPFEE4,2015-2023,"same name and title, years aside"
-COST1.OSPFEE5,IC_AY,OSPFEE5,2015-2023,"same name and title, years aside"
-COST1.OSPFEE6,IC_AY,OSPFEE6,2015-2023,"same name and title, years aside"
-COST1.OSPFEE7,IC_AY,OSPFEE7,2015-2023,"same name and title, years aside"
-COST1.OSPFEE8,IC_AY,OSPFEE8,2015-2023,"same name and title, years aside"
-COST1.OSPFEE9,IC_AY,OSPFEE9,2015-2023,"same name and title, years aside"
-COST1.OSPROF1,IC_AY,OSPROF1,2015-2023,"same name and title, years aside"
-COST1.OSPROF2,IC_AY,OSPROF2,2015-2023,"same name and title, years aside"
-COST1.OSPROF3,IC_AY,OSPROF3,2015-2023,"same name and title, years aside"
-COST1.OSPROF4,IC_AY,OSPROF4,2015-2023,"same name and title, years aside"
-COST1.OSPROF5,IC_AY,OSPROF5,2015-2023,"same name and title, years aside"
-COST1.OSPROF6,IC_AY,OSPROF6,2015-2023,"same name and title, years aside"
-COST1.OSPROF7,IC_AY,OSPROF7,2015-2023,"same name and title, years aside"
-COST1.OSPROF8,IC_AY,OSPROF8,2015-2023,"same name and title, years aside"
-COST1.OSPROF9,IC_AY,OSPROF9,2015-2023,"same name and title, years aside"
-COST1.PRGMOFR,IC_PY,PRGMOFR,2015-2023,"same name and title, years aside"
-COST1.PRGMSR1,IC_PY,PRGMSR1,2015-2023,"same name and title, years aside"
-COST1.PRGMSR2,IC_PY,PRGMSR2,2015-2023,"same name and title, years aside"
-COST1.PRGMSR3,IC_PY,PRGMSR3,2015-2023,"same name and title, years aside"
-COST1.PRGMSR4,IC_PY,PRGMSR4,2015-2023,"same name and title, years aside"
-COST1.PRGMSR5,IC_PY,PRGMSR5,2015-2023,"same name and title, years aside"
-COST1.PRGMSR6,IC_PY,PRGMSR6,2015-2023,"same name and title, years aside"
-COST1.PRMPGM,IC,PRMPGM,2022-2023,"same name and title, years aside"
-COST1.RMBRDAMT,IC,RMBRDAMT,2015-2023,"same name and title, years aside"
-COST1.ROOMAMT,IC,ROOMAMT,2015-2023,"same name and title, years aside"
-COST1.ROOMCAP,IC,ROOMCAP,2015-2023,"same name and title, years aside"
-COST1.TUITION1,IC_AY,TUITION1,2015-2023,"same name and title, years aside"
-COST1.TUITION2,IC_AY,TUITION2,2015-2023,"same name and title, years aside"
-COST1.TUITION3,IC_AY,TUITION3,2015-2023,"same name and title, years aside"
-COST1.TUITION5,IC_AY,TUITION5,2015-2023,"same name and title, years aside"
-COST1.TUITION6,IC_AY,TUITION6,2015-2023,"same name and title, years aside"
-COST1.TUITION7,IC_AY,TUITION7,2015-2023,"same name and title, years aside"
-COST1.TUITPL,IC,TUITPL,2015-2023,"same name and title, years aside"
-COST1.TUITPL1,IC,TUITPL1,2015-2023,"same name and title, years aside"
-COST1.TUITPL2,IC,TUITPL2,2015-2023,"same name and title, years aside"
-COST1.TUITPL3,IC,TUITPL3,2015-2023,"same name and title, years aside"
-COST1.TUITPL4,IC,TUITPL4,2015-2023,"same name and title, years aside"
-COST1.TUITVARY,IC,TUITVARY,2015-2023,"same name and title, years aside"
-COST1.WKCMP1,IC_PY,WKCMP1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.CSCFA1N,SFA_P1,SCFA1N,2015-2023,"same title, different name"
-COST2_FINANCIALAID.GIS4A0,SFA_P2,GIS4A0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A1,SFA_P2,GIS4A1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A10,SFA_P2,GIS4A10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A11,SFA_P2,GIS4A11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A12,SFA_P2,GIS4A12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A2,SFA_P2,GIS4A2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A20,SFA_P2,GIS4A20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A21,SFA_P2,GIS4A21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A22,SFA_P2,GIS4A22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A30,SFA_P2,GIS4A30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A31,SFA_P2,GIS4A31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A32,SFA_P2,GIS4A32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A40,SFA_P2,GIS4A40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A41,SFA_P2,GIS4A41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A42,SFA_P2,GIS4A42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A50,SFA_P2,GIS4A50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A51,SFA_P2,GIS4A51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4A52,SFA_P2,GIS4A52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G0,SFA_P2,GIS4G0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G1,SFA_P2,GIS4G1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G10,SFA_P2,GIS4G10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G11,SFA_P2,GIS4G11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G12,SFA_P2,GIS4G12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G2,SFA_P2,GIS4G2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G20,SFA_P2,GIS4G20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G21,SFA_P2,GIS4G21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G22,SFA_P2,GIS4G22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G30,SFA_P2,GIS4G30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G31,SFA_P2,GIS4G31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G32,SFA_P2,GIS4G32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G40,SFA_P2,GIS4G40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G41,SFA_P2,GIS4G41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G42,SFA_P2,GIS4G42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G50,SFA_P2,GIS4G50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G51,SFA_P2,GIS4G51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4G52,SFA_P2,GIS4G52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N0,SFA_P2,GIS4N0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N1,SFA_P2,GIS4N1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N10,SFA_P2,GIS4N10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N11,SFA_P2,GIS4N11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N12,SFA_P2,GIS4N12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N2,SFA_P2,GIS4N2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N20,SFA_P2,GIS4N20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N21,SFA_P2,GIS4N21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N22,SFA_P2,GIS4N22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N30,SFA_P2,GIS4N30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N31,SFA_P2,GIS4N31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N32,SFA_P2,GIS4N32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N40,SFA_P2,GIS4N40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N41,SFA_P2,GIS4N41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N42,SFA_P2,GIS4N42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N50,SFA_P2,GIS4N50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N51,SFA_P2,GIS4N51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4N52,SFA_P2,GIS4N52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4OF0,SFA_P2,GIS4OF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4OF1,SFA_P2,GIS4OF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4OF2,SFA_P2,GIS4OF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4ON0,SFA_P2,GIS4ON0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4ON1,SFA_P2,GIS4ON1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4ON2,SFA_P2,GIS4ON2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T0,SFA_P2,GIS4T0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T1,SFA_P2,GIS4T1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T10,SFA_P2,GIS4T10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T11,SFA_P2,GIS4T11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T12,SFA_P2,GIS4T12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T2,SFA_P2,GIS4T2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T20,SFA_P2,GIS4T20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T21,SFA_P2,GIS4T21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T22,SFA_P2,GIS4T22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T30,SFA_P2,GIS4T30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T31,SFA_P2,GIS4T31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T32,SFA_P2,GIS4T32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T40,SFA_P2,GIS4T40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T41,SFA_P2,GIS4T41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T42,SFA_P2,GIS4T42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T50,SFA_P2,GIS4T50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T51,SFA_P2,GIS4T51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4T52,SFA_P2,GIS4T52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4UN0,SFA_P2,GIS4UN0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4UN1,SFA_P2,GIS4UN1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4UN2,SFA_P2,GIS4UN2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4WF0,SFA_P2,GIS4WF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4WF1,SFA_P2,GIS4WF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GIS4WF2,SFA_P2,GIS4WF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTA0,SFA_P2,GISTA0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTA1,SFA_P2,GISTA1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTA2,SFA_P2,GISTA2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTN0,SFA_P2,GISTN0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTN1,SFA_P2,GISTN1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTN2,SFA_P2,GISTN2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTOF0,SFA_P2,GISTOF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTOF1,SFA_P2,GISTOF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTOF2,SFA_P2,GISTOF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTON0,SFA_P2,GISTON0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTON1,SFA_P2,GISTON1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTON2,SFA_P2,GISTON2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTT0,SFA_P2,GISTT0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTT1,SFA_P2,GISTT1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTT2,SFA_P2,GISTT2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTUN0,SFA_P2,GISTUN0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTUN1,SFA_P2,GISTUN1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTUN2,SFA_P2,GISTUN2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTWF0,SFA_P2,GISTWF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTWF1,SFA_P2,GISTWF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GISTWF2,SFA_P2,GISTWF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A0,SFA_P2,GRN4A0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A1,SFA_P2,GRN4A1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A10,SFA_P2,GRN4A10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A11,SFA_P2,GRN4A11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A12,SFA_P2,GRN4A12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A2,SFA_P2,GRN4A2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A20,SFA_P2,GRN4A20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A21,SFA_P2,GRN4A21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A22,SFA_P2,GRN4A22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A30,SFA_P2,GRN4A30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A31,SFA_P2,GRN4A31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A32,SFA_P2,GRN4A32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A40,SFA_P2,GRN4A40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A41,SFA_P2,GRN4A41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A42,SFA_P2,GRN4A42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A50,SFA_P2,GRN4A50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A51,SFA_P2,GRN4A51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4A52,SFA_P2,GRN4A52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G0,SFA_P2,GRN4G0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G1,SFA_P2,GRN4G1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G10,SFA_P2,GRN4G10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G11,SFA_P2,GRN4G11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G12,SFA_P2,GRN4G12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G2,SFA_P2,GRN4G2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G20,SFA_P2,GRN4G20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G21,SFA_P2,GRN4G21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G22,SFA_P2,GRN4G22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G30,SFA_P2,GRN4G30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G31,SFA_P2,GRN4G31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G32,SFA_P2,GRN4G32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G40,SFA_P2,GRN4G40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G41,SFA_P2,GRN4G41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G42,SFA_P2,GRN4G42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G50,SFA_P2,GRN4G50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G51,SFA_P2,GRN4G51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4G52,SFA_P2,GRN4G52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N0,SFA_P2,GRN4N0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N1,SFA_P2,GRN4N1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N10,SFA_P2,GRN4N10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N11,SFA_P2,GRN4N11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N12,SFA_P2,GRN4N12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N2,SFA_P2,GRN4N2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N20,SFA_P2,GRN4N20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N21,SFA_P2,GRN4N21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N22,SFA_P2,GRN4N22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N30,SFA_P2,GRN4N30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N31,SFA_P2,GRN4N31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N32,SFA_P2,GRN4N32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N40,SFA_P2,GRN4N40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N41,SFA_P2,GRN4N41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N42,SFA_P2,GRN4N42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N50,SFA_P2,GRN4N50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N51,SFA_P2,GRN4N51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4N52,SFA_P2,GRN4N52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4OF0,SFA_P2,GRN4OF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4OF1,SFA_P2,GRN4OF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4OF2,SFA_P2,GRN4OF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4ON0,SFA_P2,GRN4ON0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4ON1,SFA_P2,GRN4ON1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4ON2,SFA_P2,GRN4ON2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T0,SFA_P2,GRN4T0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T1,SFA_P2,GRN4T1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T10,SFA_P2,GRN4T10,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T11,SFA_P2,GRN4T11,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T12,SFA_P2,GRN4T12,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T2,SFA_P2,GRN4T2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T20,SFA_P2,GRN4T20,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T21,SFA_P2,GRN4T21,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T22,SFA_P2,GRN4T22,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T30,SFA_P2,GRN4T30,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T31,SFA_P2,GRN4T31,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T32,SFA_P2,GRN4T32,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T40,SFA_P2,GRN4T40,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T41,SFA_P2,GRN4T41,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T42,SFA_P2,GRN4T42,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T50,SFA_P2,GRN4T50,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T51,SFA_P2,GRN4T51,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4T52,SFA_P2,GRN4T52,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4UN0,SFA_P2,GRN4UN0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4UN1,SFA_P2,GRN4UN1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4UN2,SFA_P2,GRN4UN2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4WF0,SFA_P2,GRN4WF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4WF1,SFA_P2,GRN4WF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRN4WF2,SFA_P2,GRN4WF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTA0,SFA_P2,GRNTA0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTA1,SFA_P2,GRNTA1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTA2,SFA_P2,GRNTA2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTN0,SFA_P2,GRNTN0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTN1,SFA_P2,GRNTN1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTN2,SFA_P2,GRNTN2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTOF0,SFA_P2,GRNTOF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTOF1,SFA_P2,GRNTOF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTOF2,SFA_P2,GRNTOF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTON0,SFA_P2,GRNTON0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTON1,SFA_P2,GRNTON1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTON2,SFA_P2,GRNTON2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTT0,SFA_P2,GRNTT0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTT1,SFA_P2,GRNTT1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTT2,SFA_P2,GRNTT2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTUN0,SFA_P2,GRNTUN0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTUN1,SFA_P2,GRNTUN1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTUN2,SFA_P2,GRNTUN2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTWF0,SFA_P2,GRNTWF0,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTWF1,SFA_P2,GRNTWF1,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.GRNTWF2,SFA_P2,GRNTWF2,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA11N,SFA_P1,SCFA11N,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA11P,SFA_P1,SCFA11P,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA12N,SFA_P1,SCFA12N,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA12P,SFA_P1,SCFA12P,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA13N,SFA_P1,SCFA13N,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA13P,SFA_P1,SCFA13P,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA14N,SFA_P1,SCFA14N,2015-2023,"same name and title, years aside"
-COST2_FINANCIALAID.SCFA14P,SFA_P1,SCFA14P,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPGRN0,SFA_P2,NPGRN0,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPGRN1,SFA_P2,NPGRN1,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPGRN2,SFA_P2,NPGRN2,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS410,SFA_P2,NPIS410,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS411,SFA_P2,NPIS411,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS412,SFA_P2,NPIS412,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS420,SFA_P2,NPIS420,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS421,SFA_P2,NPIS421,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS422,SFA_P2,NPIS422,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS430,SFA_P2,NPIS430,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS431,SFA_P2,NPIS431,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS432,SFA_P2,NPIS432,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS440,SFA_P2,NPIS440,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS441,SFA_P2,NPIS441,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS442,SFA_P2,NPIS442,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS450,SFA_P2,NPIS450,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS451,SFA_P2,NPIS451,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIS452,SFA_P2,NPIS452,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIST0,SFA_P2,NPIST0,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIST1,SFA_P2,NPIST1,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPIST2,SFA_P2,NPIST2,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT410,SFA_P2,NPT410,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT411,SFA_P2,NPT411,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT412,SFA_P2,NPT412,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT420,SFA_P2,NPT420,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT421,SFA_P2,NPT421,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT422,SFA_P2,NPT422,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT430,SFA_P2,NPT430,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT431,SFA_P2,NPT431,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT432,SFA_P2,NPT432,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT440,SFA_P2,NPT440,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT441,SFA_P2,NPT441,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT442,SFA_P2,NPT442,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT450,SFA_P2,NPT450,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT451,SFA_P2,NPT451,2015-2023,"same name and title, years aside"
-COST2_NETPRICE.NPT452,SFA_P2,NPT452,2015-2023,"same name and title, years aside"
-SFA.AGRNT_A,SFA_P1,AGRNT_A,2015-2023,"same name and title, years aside"
-SFA.AGRNT_N,SFA_P1,AGRNT_N,2015-2023,"same name and title, years aside"
-SFA.AGRNT_P,SFA_P1,AGRNT_P,2015-2023,"same name and title, years aside"
-SFA.AGRNT_T,SFA_P1,AGRNT_T,2015-2023,"same name and title, years aside"
-SFA.AIDFSIN,SFA_P1,AIDFSIN,2015-2023,"same name and title, years aside"
-SFA.AIDFSIP,SFA_P1,AIDFSIP,2015-2023,"same name and title, years aside"
-SFA.ANYAIDN,SFA_P1,ANYAIDN,2015-2023,"same name and title, years aside"
-SFA.ANYAIDP,SFA_P1,ANYAIDP,2015-2023,"same name and title, years aside"
-SFA.FGRNT_A,SFA_P1,FGRNT_A,2015-2023,"same name and title, years aside"
-SFA.FGRNT_N,SFA_P1,FGRNT_N,2015-2023,"same name and title, years aside"
-SFA.FGRNT_P,SFA_P1,FGRNT_P,2015-2023,"same name and title, years aside"
-SFA.FGRNT_T,SFA_P1,FGRNT_T,2015-2023,"same name and title, years aside"
-SFA.FLOAN_A,SFA_P1,FLOAN_A,2015-2023,"same name and title, years aside"
-SFA.FLOAN_N,SFA_P1,FLOAN_N,2015-2023,"same name and title, years aside"
-SFA.FLOAN_P,SFA_P1,FLOAN_P,2015-2023,"same name and title, years aside"
-SFA.FLOAN_T,SFA_P1,FLOAN_T,2015-2023,"same name and title, years aside"
-SFA.IGRNT_A,SFA_P1,IGRNT_A,2015-2023,"same name and title, years aside"
-SFA.IGRNT_N,SFA_P1,IGRNT_N,2015-2023,"same name and title, years aside"
-SFA.IGRNT_P,SFA_P1,IGRNT_P,2015-2023,"same name and title, years aside"
-SFA.IGRNT_T,SFA_P1,IGRNT_T,2015-2023,"same name and title, years aside"
-SFA.LOAN_A,SFA_P1,LOAN_A,2015-2023,"same name and title, years aside"
-SFA.LOAN_N,SFA_P1,LOAN_N,2015-2023,"same name and title, years aside"
-SFA.LOAN_P,SFA_P1,LOAN_P,2015-2023,"same name and title, years aside"
-SFA.LOAN_T,SFA_P1,LOAN_T,2015-2023,"same name and title, years aside"
-SFA.OFGRT_A,SFA_P1,OFGRT_A,2015-2023,"same name and title, years aside"
-SFA.OFGRT_N,SFA_P1,OFGRT_N,2015-2023,"same name and title, years aside"
-SFA.OFGRT_P,SFA_P1,OFGRT_P,2015-2023,"same name and title, years aside"
-SFA.OFGRT_T,SFA_P1,OFGRT_T,2015-2023,"same name and title, years aside"
-SFA.OLOAN_A,SFA_P1,OLOAN_A,2015-2023,"same name and title, years aside"
-SFA.OLOAN_N,SFA_P1,OLOAN_N,2015-2023,"same name and title, years aside"
-SFA.OLOAN_P,SFA_P1,OLOAN_P,2015-2023,"same name and title, years aside"
-SFA.OLOAN_T,SFA_P1,OLOAN_T,2015-2023,"same name and title, years aside"
-SFA.PGRNT_A,SFA_P1,PGRNT_A,2015-2023,"same name and title, years aside"
-SFA.PGRNT_N,SFA_P1,PGRNT_N,2015-2023,"same name and title, years aside"
-SFA.PGRNT_P,SFA_P1,PGRNT_P,2015-2023,"same name and title, years aside"
-SFA.PGRNT_T,SFA_P1,PGRNT_T,2015-2023,"same name and title, years aside"
-SFA.SCFA1N,SFA_P1,SCFA1N,2015-2023,"same name and title, years aside"
-SFA.SCFA1P,SFA_P1,SCFA1P,2015-2023,"same name and title, years aside"
-SFA.SCFA2,SFA_P1,SCFA2,2015-2023,"same name and title, years aside"
-SFA.SCFA2DG,SFA_P1,SCFA2DG,2022-2023,"same name and title, years aside"
-SFA.SCFY1N,SFA_P1,SCFY1N,2015-2023,"same name and title, years aside"
-SFA.SCFY1P,SFA_P1,SCFY1P,2015-2023,"same name and title, years aside"
-SFA.SCFY2,SFA_P1,SCFY2,2015-2023,"same name and title, years aside"
-SFA.SCFY2DG,SFA_P1,SCFY2DG,2022-2023,"same name and title, years aside"
-SFA.SCFY2ND,SFA_P1,SCFY2ND,2022-2023,"same name and title, years aside"
-SFA.SCUGDGSK,SFA_P1,SCUGDGSK,2022-2023,"same name and title, years aside"
-SFA.SCUGFFN,SFA_P1,SCUGFFN,2015-2023,"same name and title, years aside"
-SFA.SCUGFFP,SFA_P2,SCUGFFP,2015-2023,"same name and title, years aside"
-SFA.SCUGNDGS,SFA_P1,SCUGNDGS,2022-2023,"same name and title, years aside"
-SFA.SCUGRAD,SFA_P1,SCUGRAD,2015-2023,"same name and title, years aside"
-SFA.SGRNT_A,SFA_P1,SGRNT_A,2015-2023,"same name and title, years aside"
-SFA.SGRNT_N,SFA_P1,SGRNT_N,2015-2023,"same name and title, years aside"
-SFA.SGRNT_P,SFA_P1,SGRNT_P,2015-2023,"same name and title, years aside"
-SFA.SGRNT_T,SFA_P1,SGRNT_T,2015-2023,"same name and title, years aside"
-SFA.UAGRNTA,SFA_P1,UAGRNTA,2015-2023,"same name and title, years aside"
-SFA.UAGRNTN,SFA_P1,UAGRNTN,2015-2023,"same name and title, years aside"
-SFA.UAGRNTP,SFA_P1,UAGRNTP,2015-2023,"same name and title, years aside"
-SFA.UAGRNTT,SFA_P1,UAGRNTT,2015-2023,"same name and title, years aside"
-SFA.UDGAGRNTA,SFA_P1,UDGAGRNTA,2022-2023,"same name and title, years aside"
-SFA.UDGAGRNTN,SFA_P1,UDGAGRNTN,2022-2023,"same name and title, years aside"
-SFA.UDGAGRNTP,SFA_P1,UDGAGRNTP,2022-2023,"same name and title, years aside"
-SFA.UDGAGRNTT,SFA_P1,UDGAGRNTT,2022-2023,"same name and title, years aside"
-SFA.UDGFLOANA,SFA_P1,UDGFLOANA,2023,"same name and title, years aside"
-SFA.UDGFLOANN,SFA_P1,UDGFLOANN,2023,"same name and title, years aside"
-SFA.UDGFLOANP,SFA_P1,UDGFLOANP,2022-2023,"same name and title, years aside"
-SFA.UDGFLOANT,SFA_P1,UDGFLOANT,2023,"same name and title, years aside"
-SFA.UDGPGRNTA,SFA_P1,UDGPGRNTA,2023,"same name and title, years aside"
-SFA.UDGPGRNTN,SFA_P1,UDGPGRNTN,2023,"same name and title, years aside"
-SFA.UDGPGRNTP,SFA_P1,UDGPGRNTP,2022-2023,"same name and title, years aside"
-SFA.UDGPGRNTT,SFA_P1,UDGPGRNTT,2023,"same name and title, years aside"
-SFA.UFLOANA,SFA_P1,UFLOANA,2015-2023,"same name and title, years aside"
-SFA.UFLOANN,SFA_P1,UFLOANN,2015-2023,"same name and title, years aside"
-SFA.UFLOANP,SFA_P1,UFLOANP,2015-2023,"same name and title, years aside"
-SFA.UFLOANT,SFA_P1,UFLOANT,2015-2023,"same name and title, years aside"
-SFA.UNDAGRNTA,SFA_P1,UNDAGRNTA,2022-2023,"same name and title, years aside"
-SFA.UNDAGRNTN,SFA_P1,UNDAGRNTN,2022-2023,"same name and title, years aside"
-SFA.UNDAGRNTP,SFA_P1,UNDAGRNTP,2022-2023,"same name and title, years aside"
-SFA.UNDAGRNTT,SFA_P1,UNDAGRNTT,2022-2023,"same name and title, years aside"
-SFA.UNDFLOANA,SFA_P1,UNDFLOANA,2023,"same name and title, years aside"
-SFA.UNDFLOANN,SFA_P1,UNDFLOANN,2023,"same name and title, years aside"
-SFA.UNDFLOANP,SFA_P1,UNDFLOANP,2023,"same name and title, years aside"
-SFA.UNDFLOANT,SFA_P1,UNDFLOANT,2023,"same name and title, years aside"
-SFA.UNDPGRNTA,SFA_P1,UNDPGRNTA,2023,"same name and title, years aside"
-SFA.UNDPGRNTN,SFA_P1,UNDPGRNTN,2023,"same name and title, years aside"
-SFA.UNDPGRNTP,SFA_P1,UNDPGRNTP,2023,"same name and title, years aside"
-SFA.UNDPGRNTT,SFA_P1,UNDPGRNTT,2023,"same name and title, years aside"
-SFA.UPGRNTA,SFA_P1,UPGRNTA,2015-2023,"same name and title, years aside"
-SFA.UPGRNTN,SFA_P1,UPGRNTN,2015-2023,"same name and title, years aside"
-SFA.UPGRNTP,SFA_P1,UPGRNTP,2015-2023,"same name and title, years aside"
-SFA.UPGRNTT,SFA_P1,UPGRNTT,2015-2023,"same name and title, years aside"
-DRVCOST.CINDFAM,DRVIC,CINDFAM,2015-2023,"same name and title, years aside"
-DRVCOST.CINDOFF,DRVIC,CINDOFF,2015-2023,"same name and title, years aside"
-DRVCOST.CINDON,DRVIC,CINDON,2015-2023,"same name and title, years aside"
-DRVCOST.CINSFAM,DRVIC,CINSFAM,2015-2023,"same name and title, years aside"
-DRVCOST.CINSOFF,DRVIC,CINSOFF,2015-2023,"same name and title, years aside"
-DRVCOST.CINSON,DRVIC,CINSON,2015-2023,"same name and title, years aside"
-DRVCOST.COTSFAM,DRVIC,COTSFAM,2015-2023,"same name and title, years aside"
-DRVCOST.COTSOFF,DRVIC,COTSOFF,2015-2023,"same name and title, years aside"
-DRVCOST.COTSON,DRVIC,COTSON,2015-2023,"same name and title, years aside"
-DRVCOST.TUFEYR0,DRVIC,TUFEYR0,2015-2023,"same name and title, years aside"
-DRVCOST.TUFEYR1,DRVIC,TUFEYR1,2015-2023,"same name and title, years aside"
-DRVCOST.TUFEYR2,DRVIC,TUFEYR2,2015-2023,"same name and title, years aside"
-DRVCOST.TUFEYR3,DRVIC,TUFEYR3,2015-2023,"same name and title, years aside"
+measure,earlier_table,earlier_variable,years,how,status
+COST1.ALLONCAM,IC,ALLONCAM,2015-2023,"same name and title, years aside",in use
+COST1.BOARD,IC,BOARD,2015-2023,"same name and title, years aside",in use
+COST1.BOARDAMT,IC,BOARDAMT,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AF0,IC_AY,CHG1AF0,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AF1,IC_AY,CHG1AF1,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AF2,IC_AY,CHG1AF2,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AF3,IC_AY,CHG1AF3,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AT0,IC_AY,CHG1AT0,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AT1,IC_AY,CHG1AT1,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AT2,IC_AY,CHG1AT2,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AT3,IC_AY,CHG1AT3,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AY0,IC_AY,CHG1AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AY1,IC_AY,CHG1AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AY2,IC_AY,CHG1AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG1AY3,IC_AY,CHG1AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG1FGTD,IC_AY,CHG1FGTD,2015-2023,"same name and title, years aside",in use
+COST1.CHG1PY0,IC_PY,CHG1PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG1PY1,IC_PY,CHG1PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG1PY2,IC_PY,CHG1PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG1PY3,IC_PY,CHG1PY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG1TGTD,IC_AY,CHG1TGTD,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AF0,IC_AY,CHG2AF0,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AF1,IC_AY,CHG2AF1,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AF2,IC_AY,CHG2AF2,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AF3,IC_AY,CHG2AF3,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AT0,IC_AY,CHG2AT0,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AT1,IC_AY,CHG2AT1,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AT2,IC_AY,CHG2AT2,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AT3,IC_AY,CHG2AT3,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AY0,IC_AY,CHG2AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AY1,IC_AY,CHG2AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AY2,IC_AY,CHG2AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG2AY3,IC_AY,CHG2AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG2FGTD,IC_AY,CHG2FGTD,2015-2023,"same name and title, years aside",in use
+COST1.CHG2TGTD,IC_AY,CHG2TGTD,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AF0,IC_AY,CHG3AF0,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AF1,IC_AY,CHG3AF1,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AF2,IC_AY,CHG3AF2,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AF3,IC_AY,CHG3AF3,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AT0,IC_AY,CHG3AT0,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AT1,IC_AY,CHG3AT1,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AT2,IC_AY,CHG3AT2,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AT3,IC_AY,CHG3AT3,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AY0,IC_AY,CHG3AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AY1,IC_AY,CHG3AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AY2,IC_AY,CHG3AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG3AY3,IC_AY,CHG3AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG3FGTD,IC_AY,CHG3FGTD,2015-2023,"same name and title, years aside",in use
+COST1.CHG3TGTD,IC_AY,CHG3TGTD,2015-2023,"same name and title, years aside",in use
+COST1.CHG4AY0,IC_AY,CHG4AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG4AY1,IC_AY,CHG4AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG4AY2,IC_AY,CHG4AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG4AY3,IC_AY,CHG4AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG4PY0,IC_PY,CHG4PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG4PY1,IC_PY,CHG4PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG4PY2,IC_PY,CHG4PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG4PY3,IC_PY,CHG4PY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG5AY0,IC_AY,CHG5AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG5AY1,IC_AY,CHG5AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG5AY2,IC_AY,CHG5AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG5AY3,IC_AY,CHG5AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG5PY0,IC_PY,CHG5PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG5PY1,IC_PY,CHG5PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG5PY2,IC_PY,CHG5PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG5PY3,IC_PY,CHG5PY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG6AY0,IC_AY,CHG6AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG6AY1,IC_AY,CHG6AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG6AY2,IC_AY,CHG6AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG6AY3,IC_AY,CHG6AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG6PY0,IC_PY,CHG6PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG6PY1,IC_PY,CHG6PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG6PY2,IC_PY,CHG6PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG6PY3,IC_PY,CHG6PY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG7AY0,IC_AY,CHG7AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG7AY1,IC_AY,CHG7AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG7AY2,IC_AY,CHG7AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG7AY3,IC_AY,CHG7AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG7PY0,IC_PY,CHG7PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG7PY1,IC_PY,CHG7PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG7PY2,IC_PY,CHG7PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG7PY3,IC_PY,CHG7PY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG8AY0,IC_AY,CHG8AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG8AY1,IC_AY,CHG8AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG8AY2,IC_AY,CHG8AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG8AY3,IC_AY,CHG8AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG8PY0,IC_PY,CHG8PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG8PY1,IC_PY,CHG8PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG8PY2,IC_PY,CHG8PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG8PY3,IC_PY,CHG8PY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG9AY0,IC_AY,CHG9AY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG9AY1,IC_AY,CHG9AY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG9AY2,IC_AY,CHG9AY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG9AY3,IC_AY,CHG9AY3,2015-2023,"same name and title, years aside",in use
+COST1.CHG9PY0,IC_PY,CHG9PY0,2015-2023,"same name and title, years aside",in use
+COST1.CHG9PY1,IC_PY,CHG9PY1,2015-2023,"same name and title, years aside",in use
+COST1.CHG9PY2,IC_PY,CHG9PY2,2015-2023,"same name and title, years aside",in use
+COST1.CHG9PY3,IC_PY,CHG9PY3,2015-2023,"same name and title, years aside",in use
+COST1.CIPCODE1,IC_PY,CIPCODE1,2015-2023,"same name and title, years aside",in use
+COST1.CIPCODE2,IC_PY,CIPCODE2,2015-2023,"same name and title, years aside",in use
+COST1.CIPCODE3,IC_PY,CIPCODE3,2015-2023,"same name and title, years aside",in use
+COST1.CIPCODE4,IC_PY,CIPCODE4,2015-2023,"same name and title, years aside",in use
+COST1.CIPCODE5,IC_PY,CIPCODE5,2015-2023,"same name and title, years aside",in use
+COST1.CIPCODE6,IC_PY,CIPCODE6,2015-2023,"same name and title, years aside",in use
+COST1.CIPLGTH1,IC_PY,CIPLGTH1,2015-2023,"same name and title, years aside",in use
+COST1.CIPLGTH2,IC_PY,CIPLGTH2,2015-2023,"same name and title, years aside",in use
+COST1.CIPLGTH3,IC_PY,CIPLGTH3,2015-2023,"same name and title, years aside",in use
+COST1.CIPLGTH4,IC_PY,CIPLGTH4,2015-2023,"same name and title, years aside",in use
+COST1.CIPLGTH5,IC_PY,CIPLGTH5,2015-2023,"same name and title, years aside",in use
+COST1.CIPLGTH6,IC_PY,CIPLGTH6,2015-2023,"same name and title, years aside",in use
+COST1.CIPSUPP1,IC_PY,CIPSUPP1,2015-2023,"same name and title, years aside",in use
+COST1.CIPSUPP2,IC_PY,CIPSUPP2,2015-2023,"same name and title, years aside",in use
+COST1.CIPSUPP3,IC_PY,CIPSUPP3,2015-2023,"same name and title, years aside",in use
+COST1.CIPSUPP4,IC_PY,CIPSUPP4,2015-2023,"same name and title, years aside",in use
+COST1.CIPSUPP5,IC_PY,CIPSUPP5,2015-2023,"same name and title, years aside",in use
+COST1.CIPSUPP6,IC_PY,CIPSUPP6,2015-2023,"same name and title, years aside",in use
+COST1.CIPTUIT1,IC_PY,CIPTUIT1,2015-2023,"same name and title, years aside",in use
+COST1.CIPTUIT2,IC_PY,CIPTUIT2,2015-2023,"same name and title, years aside",in use
+COST1.CIPTUIT3,IC_PY,CIPTUIT3,2015-2023,"same name and title, years aside",in use
+COST1.CIPTUIT4,IC_PY,CIPTUIT4,2015-2023,"same name and title, years aside",in use
+COST1.CIPTUIT5,IC_PY,CIPTUIT5,2015-2023,"same name and title, years aside",in use
+COST1.CIPTUIT6,IC_PY,CIPTUIT6,2015-2023,"same name and title, years aside",in use
+COST1.FEE1,IC_AY,FEE1,2015-2023,"same name and title, years aside",in use
+COST1.FEE2,IC_AY,FEE2,2015-2023,"same name and title, years aside",in use
+COST1.FEE3,IC_AY,FEE3,2015-2023,"same name and title, years aside",in use
+COST1.FEE5,IC_AY,FEE5,2015-2023,"same name and title, years aside",in use
+COST1.FEE6,IC_AY,FEE6,2015-2023,"same name and title, years aside",in use
+COST1.FEE7,IC_AY,FEE7,2015-2023,"same name and title, years aside",in use
+COST1.HRCHG1,IC_AY,HRCHG1,2015-2023,"same name and title, years aside",in use
+COST1.HRCHG2,IC_AY,HRCHG2,2015-2023,"same name and title, years aside",in use
+COST1.HRCHG3,IC_AY,HRCHG3,2015-2023,"same name and title, years aside",in use
+COST1.HRCHG5,IC_AY,HRCHG5,2015-2023,"same name and title, years aside",in use
+COST1.HRCHG6,IC_AY,HRCHG6,2015-2023,"same name and title, years aside",in use
+COST1.HRCHG7,IC_AY,HRCHG7,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE1,IC_AY,ISPFEE1,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE2,IC_AY,ISPFEE2,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE3,IC_AY,ISPFEE3,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE4,IC_AY,ISPFEE4,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE5,IC_AY,ISPFEE5,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE6,IC_AY,ISPFEE6,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE7,IC_AY,ISPFEE7,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE8,IC_AY,ISPFEE8,2015-2023,"same name and title, years aside",in use
+COST1.ISPFEE9,IC_AY,ISPFEE9,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF1,IC_AY,ISPROF1,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF2,IC_AY,ISPROF2,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF3,IC_AY,ISPROF3,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF4,IC_AY,ISPROF4,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF5,IC_AY,ISPROF5,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF6,IC_AY,ISPROF6,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF7,IC_AY,ISPROF7,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF8,IC_AY,ISPROF8,2015-2023,"same name and title, years aside",in use
+COST1.ISPROF9,IC_AY,ISPROF9,2015-2023,"same name and title, years aside",in use
+COST1.LNAYHR1,IC_PY,LNAYHR1,2015-2023,"same name and title, years aside",in use
+COST1.LNAYWK1,IC_PY,LNAYWK1,2015-2023,"same name and title, years aside",in use
+COST1.MEALSWK,IC,MEALSWK,2015-2023,"same name and title, years aside",in use
+COST1.MTHCMP1,IC_PY,MTHCMP1,2015-2023,"same name and title, years aside",in use
+COST1.MTHCMP2,IC_PY,MTHCMP2,2015-2023,"same name and title, years aside",in use
+COST1.MTHCMP3,IC_PY,MTHCMP3,2015-2023,"same name and title, years aside",in use
+COST1.MTHCMP4,IC_PY,MTHCMP4,2015-2023,"same name and title, years aside",in use
+COST1.MTHCMP5,IC_PY,MTHCMP5,2015-2023,"same name and title, years aside",in use
+COST1.MTHCMP6,IC_PY,MTHCMP6,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE1,IC_AY,OSPFEE1,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE2,IC_AY,OSPFEE2,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE3,IC_AY,OSPFEE3,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE4,IC_AY,OSPFEE4,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE5,IC_AY,OSPFEE5,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE6,IC_AY,OSPFEE6,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE7,IC_AY,OSPFEE7,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE8,IC_AY,OSPFEE8,2015-2023,"same name and title, years aside",in use
+COST1.OSPFEE9,IC_AY,OSPFEE9,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF1,IC_AY,OSPROF1,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF2,IC_AY,OSPROF2,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF3,IC_AY,OSPROF3,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF4,IC_AY,OSPROF4,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF5,IC_AY,OSPROF5,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF6,IC_AY,OSPROF6,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF7,IC_AY,OSPROF7,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF8,IC_AY,OSPROF8,2015-2023,"same name and title, years aside",in use
+COST1.OSPROF9,IC_AY,OSPROF9,2015-2023,"same name and title, years aside",in use
+COST1.PRGMOFR,IC_PY,PRGMOFR,2015-2023,"same name and title, years aside",in use
+COST1.PRGMSR1,IC_PY,PRGMSR1,2015-2023,"same name and title, years aside",in use
+COST1.PRGMSR2,IC_PY,PRGMSR2,2015-2023,"same name and title, years aside",in use
+COST1.PRGMSR3,IC_PY,PRGMSR3,2015-2023,"same name and title, years aside",in use
+COST1.PRGMSR4,IC_PY,PRGMSR4,2015-2023,"same name and title, years aside",in use
+COST1.PRGMSR5,IC_PY,PRGMSR5,2015-2023,"same name and title, years aside",in use
+COST1.PRGMSR6,IC_PY,PRGMSR6,2015-2023,"same name and title, years aside",in use
+COST1.PRMPGM,IC,PRMPGM,2022-2023,"same name and title, years aside",in use
+COST1.RMBRDAMT,IC,RMBRDAMT,2015-2023,"same name and title, years aside",in use
+COST1.ROOMAMT,IC,ROOMAMT,2015-2023,"same name and title, years aside",in use
+COST1.ROOMCAP,IC,ROOMCAP,2015-2023,"same name and title, years aside",in use
+COST1.TUITION1,IC_AY,TUITION1,2015-2023,"same name and title, years aside",in use
+COST1.TUITION2,IC_AY,TUITION2,2015-2023,"same name and title, years aside",in use
+COST1.TUITION3,IC_AY,TUITION3,2015-2023,"same name and title, years aside",in use
+COST1.TUITION5,IC_AY,TUITION5,2015-2023,"same name and title, years aside",in use
+COST1.TUITION6,IC_AY,TUITION6,2015-2023,"same name and title, years aside",in use
+COST1.TUITION7,IC_AY,TUITION7,2015-2023,"same name and title, years aside",in use
+COST1.TUITPL,IC,TUITPL,2015-2023,"same name and title, years aside",in use
+COST1.TUITPL1,IC,TUITPL1,2015-2023,"same name and title, years aside",in use
+COST1.TUITPL2,IC,TUITPL2,2015-2023,"same name and title, years aside",in use
+COST1.TUITPL3,IC,TUITPL3,2015-2023,"same name and title, years aside",in use
+COST1.TUITPL4,IC,TUITPL4,2015-2023,"same name and title, years aside",in use
+COST1.TUITVARY,IC,TUITVARY,2015-2023,"same name and title, years aside",in use
+COST1.WKCMP1,IC_PY,WKCMP1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.CSCFA1N,SFA_P1,SCFA1N,2015-2023,"same title, different name",in use
+COST2_FINANCIALAID.GIS4A0,SFA_P2,GIS4A0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A1,SFA_P2,GIS4A1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A10,SFA_P2,GIS4A10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A11,SFA_P2,GIS4A11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A12,SFA_P2,GIS4A12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A2,SFA_P2,GIS4A2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A20,SFA_P2,GIS4A20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A21,SFA_P2,GIS4A21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A22,SFA_P2,GIS4A22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A30,SFA_P2,GIS4A30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A31,SFA_P2,GIS4A31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A32,SFA_P2,GIS4A32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A40,SFA_P2,GIS4A40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A41,SFA_P2,GIS4A41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A42,SFA_P2,GIS4A42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A50,SFA_P2,GIS4A50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A51,SFA_P2,GIS4A51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4A52,SFA_P2,GIS4A52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G0,SFA_P2,GIS4G0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G1,SFA_P2,GIS4G1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G10,SFA_P2,GIS4G10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G11,SFA_P2,GIS4G11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G12,SFA_P2,GIS4G12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G2,SFA_P2,GIS4G2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G20,SFA_P2,GIS4G20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G21,SFA_P2,GIS4G21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G22,SFA_P2,GIS4G22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G30,SFA_P2,GIS4G30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G31,SFA_P2,GIS4G31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G32,SFA_P2,GIS4G32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G40,SFA_P2,GIS4G40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G41,SFA_P2,GIS4G41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G42,SFA_P2,GIS4G42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G50,SFA_P2,GIS4G50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G51,SFA_P2,GIS4G51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4G52,SFA_P2,GIS4G52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N0,SFA_P2,GIS4N0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N1,SFA_P2,GIS4N1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N10,SFA_P2,GIS4N10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N11,SFA_P2,GIS4N11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N12,SFA_P2,GIS4N12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N2,SFA_P2,GIS4N2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N20,SFA_P2,GIS4N20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N21,SFA_P2,GIS4N21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N22,SFA_P2,GIS4N22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N30,SFA_P2,GIS4N30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N31,SFA_P2,GIS4N31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N32,SFA_P2,GIS4N32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N40,SFA_P2,GIS4N40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N41,SFA_P2,GIS4N41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N42,SFA_P2,GIS4N42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N50,SFA_P2,GIS4N50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N51,SFA_P2,GIS4N51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4N52,SFA_P2,GIS4N52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4OF0,SFA_P2,GIS4OF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4OF1,SFA_P2,GIS4OF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4OF2,SFA_P2,GIS4OF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4ON0,SFA_P2,GIS4ON0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4ON1,SFA_P2,GIS4ON1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4ON2,SFA_P2,GIS4ON2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T0,SFA_P2,GIS4T0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T1,SFA_P2,GIS4T1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T10,SFA_P2,GIS4T10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T11,SFA_P2,GIS4T11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T12,SFA_P2,GIS4T12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T2,SFA_P2,GIS4T2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T20,SFA_P2,GIS4T20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T21,SFA_P2,GIS4T21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T22,SFA_P2,GIS4T22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T30,SFA_P2,GIS4T30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T31,SFA_P2,GIS4T31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T32,SFA_P2,GIS4T32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T40,SFA_P2,GIS4T40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T41,SFA_P2,GIS4T41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T42,SFA_P2,GIS4T42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T50,SFA_P2,GIS4T50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T51,SFA_P2,GIS4T51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4T52,SFA_P2,GIS4T52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4UN0,SFA_P2,GIS4UN0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4UN1,SFA_P2,GIS4UN1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4UN2,SFA_P2,GIS4UN2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4WF0,SFA_P2,GIS4WF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4WF1,SFA_P2,GIS4WF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GIS4WF2,SFA_P2,GIS4WF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTA0,SFA_P2,GISTA0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTA1,SFA_P2,GISTA1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTA2,SFA_P2,GISTA2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTN0,SFA_P2,GISTN0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTN1,SFA_P2,GISTN1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTN2,SFA_P2,GISTN2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTOF0,SFA_P2,GISTOF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTOF1,SFA_P2,GISTOF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTOF2,SFA_P2,GISTOF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTON0,SFA_P2,GISTON0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTON1,SFA_P2,GISTON1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTON2,SFA_P2,GISTON2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTT0,SFA_P2,GISTT0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTT1,SFA_P2,GISTT1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTT2,SFA_P2,GISTT2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTUN0,SFA_P2,GISTUN0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTUN1,SFA_P2,GISTUN1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTUN2,SFA_P2,GISTUN2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTWF0,SFA_P2,GISTWF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTWF1,SFA_P2,GISTWF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GISTWF2,SFA_P2,GISTWF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A0,SFA_P2,GRN4A0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A1,SFA_P2,GRN4A1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A10,SFA_P2,GRN4A10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A11,SFA_P2,GRN4A11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A12,SFA_P2,GRN4A12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A2,SFA_P2,GRN4A2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A20,SFA_P2,GRN4A20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A21,SFA_P2,GRN4A21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A22,SFA_P2,GRN4A22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A30,SFA_P2,GRN4A30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A31,SFA_P2,GRN4A31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A32,SFA_P2,GRN4A32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A40,SFA_P2,GRN4A40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A41,SFA_P2,GRN4A41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A42,SFA_P2,GRN4A42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A50,SFA_P2,GRN4A50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A51,SFA_P2,GRN4A51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4A52,SFA_P2,GRN4A52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G0,SFA_P2,GRN4G0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G1,SFA_P2,GRN4G1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G10,SFA_P2,GRN4G10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G11,SFA_P2,GRN4G11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G12,SFA_P2,GRN4G12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G2,SFA_P2,GRN4G2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G20,SFA_P2,GRN4G20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G21,SFA_P2,GRN4G21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G22,SFA_P2,GRN4G22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G30,SFA_P2,GRN4G30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G31,SFA_P2,GRN4G31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G32,SFA_P2,GRN4G32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G40,SFA_P2,GRN4G40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G41,SFA_P2,GRN4G41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G42,SFA_P2,GRN4G42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G50,SFA_P2,GRN4G50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G51,SFA_P2,GRN4G51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4G52,SFA_P2,GRN4G52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N0,SFA_P2,GRN4N0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N1,SFA_P2,GRN4N1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N10,SFA_P2,GRN4N10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N11,SFA_P2,GRN4N11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N12,SFA_P2,GRN4N12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N2,SFA_P2,GRN4N2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N20,SFA_P2,GRN4N20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N21,SFA_P2,GRN4N21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N22,SFA_P2,GRN4N22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N30,SFA_P2,GRN4N30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N31,SFA_P2,GRN4N31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N32,SFA_P2,GRN4N32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N40,SFA_P2,GRN4N40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N41,SFA_P2,GRN4N41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N42,SFA_P2,GRN4N42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N50,SFA_P2,GRN4N50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N51,SFA_P2,GRN4N51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4N52,SFA_P2,GRN4N52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4OF0,SFA_P2,GRN4OF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4OF1,SFA_P2,GRN4OF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4OF2,SFA_P2,GRN4OF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4ON0,SFA_P2,GRN4ON0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4ON1,SFA_P2,GRN4ON1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4ON2,SFA_P2,GRN4ON2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T0,SFA_P2,GRN4T0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T1,SFA_P2,GRN4T1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T10,SFA_P2,GRN4T10,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T11,SFA_P2,GRN4T11,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T12,SFA_P2,GRN4T12,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T2,SFA_P2,GRN4T2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T20,SFA_P2,GRN4T20,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T21,SFA_P2,GRN4T21,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T22,SFA_P2,GRN4T22,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T30,SFA_P2,GRN4T30,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T31,SFA_P2,GRN4T31,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T32,SFA_P2,GRN4T32,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T40,SFA_P2,GRN4T40,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T41,SFA_P2,GRN4T41,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T42,SFA_P2,GRN4T42,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T50,SFA_P2,GRN4T50,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T51,SFA_P2,GRN4T51,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4T52,SFA_P2,GRN4T52,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4UN0,SFA_P2,GRN4UN0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4UN1,SFA_P2,GRN4UN1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4UN2,SFA_P2,GRN4UN2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4WF0,SFA_P2,GRN4WF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4WF1,SFA_P2,GRN4WF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRN4WF2,SFA_P2,GRN4WF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTA0,SFA_P2,GRNTA0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTA1,SFA_P2,GRNTA1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTA2,SFA_P2,GRNTA2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTN0,SFA_P2,GRNTN0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTN1,SFA_P2,GRNTN1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTN2,SFA_P2,GRNTN2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTOF0,SFA_P2,GRNTOF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTOF1,SFA_P2,GRNTOF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTOF2,SFA_P2,GRNTOF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTON0,SFA_P2,GRNTON0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTON1,SFA_P2,GRNTON1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTON2,SFA_P2,GRNTON2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTT0,SFA_P2,GRNTT0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTT1,SFA_P2,GRNTT1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTT2,SFA_P2,GRNTT2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTUN0,SFA_P2,GRNTUN0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTUN1,SFA_P2,GRNTUN1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTUN2,SFA_P2,GRNTUN2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTWF0,SFA_P2,GRNTWF0,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTWF1,SFA_P2,GRNTWF1,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.GRNTWF2,SFA_P2,GRNTWF2,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA11N,SFA_P1,SCFA11N,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA11P,SFA_P1,SCFA11P,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA12N,SFA_P1,SCFA12N,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA12P,SFA_P1,SCFA12P,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA13N,SFA_P1,SCFA13N,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA13P,SFA_P1,SCFA13P,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA14N,SFA_P1,SCFA14N,2015-2023,"same name and title, years aside",in use
+COST2_FINANCIALAID.SCFA14P,SFA_P1,SCFA14P,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPGRN0,SFA_P2,NPGRN0,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPGRN1,SFA_P2,NPGRN1,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPGRN2,SFA_P2,NPGRN2,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS410,SFA_P2,NPIS410,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS411,SFA_P2,NPIS411,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS412,SFA_P2,NPIS412,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS420,SFA_P2,NPIS420,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS421,SFA_P2,NPIS421,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS422,SFA_P2,NPIS422,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS430,SFA_P2,NPIS430,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS431,SFA_P2,NPIS431,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS432,SFA_P2,NPIS432,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS440,SFA_P2,NPIS440,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS441,SFA_P2,NPIS441,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS442,SFA_P2,NPIS442,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS450,SFA_P2,NPIS450,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS451,SFA_P2,NPIS451,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIS452,SFA_P2,NPIS452,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIST0,SFA_P2,NPIST0,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIST1,SFA_P2,NPIST1,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPIST2,SFA_P2,NPIST2,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT410,SFA_P2,NPT410,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT411,SFA_P2,NPT411,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT412,SFA_P2,NPT412,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT420,SFA_P2,NPT420,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT421,SFA_P2,NPT421,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT422,SFA_P2,NPT422,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT430,SFA_P2,NPT430,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT431,SFA_P2,NPT431,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT432,SFA_P2,NPT432,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT440,SFA_P2,NPT440,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT441,SFA_P2,NPT441,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT442,SFA_P2,NPT442,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT450,SFA_P2,NPT450,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT451,SFA_P2,NPT451,2015-2023,"same name and title, years aside",in use
+COST2_NETPRICE.NPT452,SFA_P2,NPT452,2015-2023,"same name and title, years aside",in use
+SFA.AGRNT_A,SFA_P1,AGRNT_A,2015-2023,"same name and title, years aside",in use
+SFA.AGRNT_N,SFA_P1,AGRNT_N,2015-2023,"same name and title, years aside",in use
+SFA.AGRNT_P,SFA_P1,AGRNT_P,2015-2023,"same name and title, years aside",in use
+SFA.AGRNT_T,SFA_P1,AGRNT_T,2015-2023,"same name and title, years aside",in use
+SFA.AIDFSIN,SFA_P1,AIDFSIN,2015-2023,"same name and title, years aside",in use
+SFA.AIDFSIP,SFA_P1,AIDFSIP,2015-2023,"same name and title, years aside",in use
+SFA.ANYAIDN,SFA_P1,ANYAIDN,2015-2023,"same name and title, years aside",in use
+SFA.ANYAIDP,SFA_P1,ANYAIDP,2015-2023,"same name and title, years aside",in use
+SFA.FGRNT_A,SFA_P1,FGRNT_A,2015-2023,"same name and title, years aside",in use
+SFA.FGRNT_N,SFA_P1,FGRNT_N,2015-2023,"same name and title, years aside",in use
+SFA.FGRNT_P,SFA_P1,FGRNT_P,2015-2023,"same name and title, years aside",in use
+SFA.FGRNT_T,SFA_P1,FGRNT_T,2015-2023,"same name and title, years aside",in use
+SFA.FLOAN_A,SFA_P1,FLOAN_A,2015-2023,"same name and title, years aside",in use
+SFA.FLOAN_N,SFA_P1,FLOAN_N,2015-2023,"same name and title, years aside",in use
+SFA.FLOAN_P,SFA_P1,FLOAN_P,2015-2023,"same name and title, years aside",in use
+SFA.FLOAN_T,SFA_P1,FLOAN_T,2015-2023,"same name and title, years aside",in use
+SFA.IGRNT_A,SFA_P1,IGRNT_A,2015-2023,"same name and title, years aside",in use
+SFA.IGRNT_N,SFA_P1,IGRNT_N,2015-2023,"same name and title, years aside",in use
+SFA.IGRNT_P,SFA_P1,IGRNT_P,2015-2023,"same name and title, years aside",in use
+SFA.IGRNT_T,SFA_P1,IGRNT_T,2015-2023,"same name and title, years aside",in use
+SFA.LOAN_A,SFA_P1,LOAN_A,2015-2023,"same name and title, years aside",in use
+SFA.LOAN_N,SFA_P1,LOAN_N,2015-2023,"same name and title, years aside",in use
+SFA.LOAN_P,SFA_P1,LOAN_P,2015-2023,"same name and title, years aside",in use
+SFA.LOAN_T,SFA_P1,LOAN_T,2015-2023,"same name and title, years aside",in use
+SFA.OFGRT_A,SFA_P1,OFGRT_A,2015-2023,"same name and title, years aside",in use
+SFA.OFGRT_N,SFA_P1,OFGRT_N,2015-2023,"same name and title, years aside",in use
+SFA.OFGRT_P,SFA_P1,OFGRT_P,2015-2023,"same name and title, years aside",in use
+SFA.OFGRT_T,SFA_P1,OFGRT_T,2015-2023,"same name and title, years aside",in use
+SFA.OLOAN_A,SFA_P1,OLOAN_A,2015-2023,"same name and title, years aside",in use
+SFA.OLOAN_N,SFA_P1,OLOAN_N,2015-2023,"same name and title, years aside",in use
+SFA.OLOAN_P,SFA_P1,OLOAN_P,2015-2023,"same name and title, years aside",in use
+SFA.OLOAN_T,SFA_P1,OLOAN_T,2015-2023,"same name and title, years aside",in use
+SFA.PGRNT_A,SFA_P1,PGRNT_A,2015-2023,"same name and title, years aside",in use
+SFA.PGRNT_N,SFA_P1,PGRNT_N,2015-2023,"same name and title, years aside",in use
+SFA.PGRNT_P,SFA_P1,PGRNT_P,2015-2023,"same name and title, years aside",in use
+SFA.PGRNT_T,SFA_P1,PGRNT_T,2015-2023,"same name and title, years aside",in use
+SFA.SCFA1N,SFA_P1,SCFA1N,2015-2023,"same name and title, years aside",in use
+SFA.SCFA1P,SFA_P1,SCFA1P,2015-2023,"same name and title, years aside",in use
+SFA.SCFA2,SFA_P1,SCFA2,2015-2023,"same name and title, years aside",in use
+SFA.SCFA2DG,SFA_P1,SCFA2DG,2022-2023,"same name and title, years aside",in use
+SFA.SCFY1N,SFA_P1,SCFY1N,2015-2023,"same name and title, years aside",in use
+SFA.SCFY1P,SFA_P1,SCFY1P,2015-2023,"same name and title, years aside",in use
+SFA.SCFY2,SFA_P1,SCFY2,2015-2023,"same name and title, years aside",in use
+SFA.SCFY2DG,SFA_P1,SCFY2DG,2022-2023,"same name and title, years aside",in use
+SFA.SCFY2ND,SFA_P1,SCFY2ND,2022-2023,"same name and title, years aside",in use
+SFA.SCUGDGSK,SFA_P1,SCUGDGSK,2022-2023,"same name and title, years aside",in use
+SFA.SCUGFFN,SFA_P1,SCUGFFN,2015-2023,"same name and title, years aside",in use
+SFA.SCUGFFP,SFA_P2,SCUGFFP,2015-2023,"same name and title, years aside",in use
+SFA.SCUGNDGS,SFA_P1,SCUGNDGS,2022-2023,"same name and title, years aside",in use
+SFA.SCUGRAD,SFA_P1,SCUGRAD,2015-2023,"same name and title, years aside",in use
+SFA.SGRNT_A,SFA_P1,SGRNT_A,2015-2023,"same name and title, years aside",in use
+SFA.SGRNT_N,SFA_P1,SGRNT_N,2015-2023,"same name and title, years aside",in use
+SFA.SGRNT_P,SFA_P1,SGRNT_P,2015-2023,"same name and title, years aside",in use
+SFA.SGRNT_T,SFA_P1,SGRNT_T,2015-2023,"same name and title, years aside",in use
+SFA.UAGRNTA,SFA_P1,UAGRNTA,2015-2023,"same name and title, years aside",in use
+SFA.UAGRNTN,SFA_P1,UAGRNTN,2015-2023,"same name and title, years aside",in use
+SFA.UAGRNTP,SFA_P1,UAGRNTP,2015-2023,"same name and title, years aside",in use
+SFA.UAGRNTT,SFA_P1,UAGRNTT,2015-2023,"same name and title, years aside",in use
+SFA.UDGAGRNTA,SFA_P1,UDGAGRNTA,2022-2023,"same name and title, years aside",in use
+SFA.UDGAGRNTN,SFA_P1,UDGAGRNTN,2022-2023,"same name and title, years aside",in use
+SFA.UDGAGRNTP,SFA_P1,UDGAGRNTP,2022-2023,"same name and title, years aside",in use
+SFA.UDGAGRNTT,SFA_P1,UDGAGRNTT,2022-2023,"same name and title, years aside",in use
+SFA.UDGFLOANA,SFA_P1,UDGFLOANA,2023,"same name and title, years aside",in use
+SFA.UDGFLOANN,SFA_P1,UDGFLOANN,2023,"same name and title, years aside",in use
+SFA.UDGFLOANP,SFA_P1,UDGFLOANP,2022-2023,"same name and title, years aside",in use
+SFA.UDGFLOANT,SFA_P1,UDGFLOANT,2023,"same name and title, years aside",in use
+SFA.UDGPGRNTA,SFA_P1,UDGPGRNTA,2023,"same name and title, years aside",in use
+SFA.UDGPGRNTN,SFA_P1,UDGPGRNTN,2023,"same name and title, years aside",in use
+SFA.UDGPGRNTP,SFA_P1,UDGPGRNTP,2022-2023,"same name and title, years aside",in use
+SFA.UDGPGRNTT,SFA_P1,UDGPGRNTT,2023,"same name and title, years aside",in use
+SFA.UFLOANA,SFA_P1,UFLOANA,2015-2023,"same name and title, years aside",in use
+SFA.UFLOANN,SFA_P1,UFLOANN,2015-2023,"same name and title, years aside",in use
+SFA.UFLOANP,SFA_P1,UFLOANP,2015-2023,"same name and title, years aside",in use
+SFA.UFLOANT,SFA_P1,UFLOANT,2015-2023,"same name and title, years aside",in use
+SFA.UNDAGRNTA,SFA_P1,UNDAGRNTA,2022-2023,"same name and title, years aside",in use
+SFA.UNDAGRNTN,SFA_P1,UNDAGRNTN,2022-2023,"same name and title, years aside",in use
+SFA.UNDAGRNTP,SFA_P1,UNDAGRNTP,2022-2023,"same name and title, years aside",in use
+SFA.UNDAGRNTT,SFA_P1,UNDAGRNTT,2022-2023,"same name and title, years aside",in use
+SFA.UNDFLOANA,SFA_P1,UNDFLOANA,2023,"same name and title, years aside",in use
+SFA.UNDFLOANN,SFA_P1,UNDFLOANN,2023,"same name and title, years aside",in use
+SFA.UNDFLOANP,SFA_P1,UNDFLOANP,2023,"same name and title, years aside",in use
+SFA.UNDFLOANT,SFA_P1,UNDFLOANT,2023,"same name and title, years aside",in use
+SFA.UNDPGRNTA,SFA_P1,UNDPGRNTA,2023,"same name and title, years aside",in use
+SFA.UNDPGRNTN,SFA_P1,UNDPGRNTN,2023,"same name and title, years aside",in use
+SFA.UNDPGRNTP,SFA_P1,UNDPGRNTP,2023,"same name and title, years aside",in use
+SFA.UNDPGRNTT,SFA_P1,UNDPGRNTT,2023,"same name and title, years aside",in use
+SFA.UPGRNTA,SFA_P1,UPGRNTA,2015-2023,"same name and title, years aside",in use
+SFA.UPGRNTN,SFA_P1,UPGRNTN,2015-2023,"same name and title, years aside",in use
+SFA.UPGRNTP,SFA_P1,UPGRNTP,2015-2023,"same name and title, years aside",in use
+SFA.UPGRNTT,SFA_P1,UPGRNTT,2015-2023,"same name and title, years aside",in use
+DRVCOST.CINDFAM,DRVIC,CINDFAM,2015-2023,"same name and title, years aside",in use
+DRVCOST.CINDOFF,DRVIC,CINDOFF,2015-2023,"same name and title, years aside",in use
+DRVCOST.CINDON,DRVIC,CINDON,2015-2023,"same name and title, years aside",in use
+DRVCOST.CINSFAM,DRVIC,CINSFAM,2015-2023,"same name and title, years aside",in use
+DRVCOST.CINSOFF,DRVIC,CINSOFF,2015-2023,"same name and title, years aside",in use
+DRVCOST.CINSON,DRVIC,CINSON,2015-2023,"same name and title, years aside",in use
+DRVCOST.COTSFAM,DRVIC,COTSFAM,2015-2023,"same name and title, years aside",in use
+DRVCOST.COTSOFF,DRVIC,COTSOFF,2015-2023,"same name and title, years aside",in use
+DRVCOST.COTSON,DRVIC,COTSON,2015-2023,"same name and title, years aside",in use
+DRVCOST.TUFEYR0,DRVIC,TUFEYR0,2015-2023,"same name and title, years aside",in use
+DRVCOST.TUFEYR1,DRVIC,TUFEYR1,2015-2023,"same name and title, years aside",in use
+DRVCOST.TUFEYR2,DRVIC,TUFEYR2,2015-2023,"same name and title, years aside",in use
+DRVCOST.TUFEYR3,DRVIC,TUFEYR3,2015-2023,"same name and title, years aside",in use
+DRVC.SCERT1A,DRVC,SCERT1,2015-2019,similar title (62% of words shared),to review
+DRVF.F1SWACSP,DRVF,F1ACSPPS,2015,similar title (90% of words shared),to review
+DRVF.F1SWCREP,DRVF,F1CREXPS,2015,similar title (89% of words shared),to review
+DRVF.F1SWINSP,DRVF,F1INSTPS,2015,similar title (89% of words shared),to review
+DRVF.F1SWISPP,DRVF,F1INSUPS,2015,similar title (90% of words shared),to review
+DRVF.F1SWOTEP,DRVF,F1OTEXPS,2015,similar title (92% of words shared),to review
+DRVF.F1SWPBSP,DRVF,F1PBSVPS,2015,similar title (90% of words shared),to review
+DRVF.F1SWRSRP,DRVF,F1RSRCPS,2015,similar title (89% of words shared),to review
+DRVF.F1SWSTSP,DRVF,F1STSVPS,2015,similar title (90% of words shared),to review
+DRVF.F2SWACSP,DRVF,F2ACSPPS,2015,similar title (90% of words shared),to review
+DRVF.F2SWCREP,DRVF,F2CREXPS,2015,similar title (89% of words shared),to review
+DRVF.F2SWINSP,DRVF,F2INSTPS,2015,similar title (89% of words shared),to review
+DRVF.F2SWISPP,DRVF,F2INSUPS,2015,similar title (90% of words shared),to review
+DRVF.F2SWOTEP,DRVF,F2OTEXPS,2015,similar title (92% of words shared),to review
+DRVF.F2SWPBSP,DRVF,F2PBSVPS,2015,similar title (90% of words shared),to review
+DRVF.F2SWRSRP,DRVF,F2RSRCPS,2015,similar title (89% of words shared),to review
+DRVF.F2SWSTSP,DRVF,F2STSVPS,2015,similar title (90% of words shared),to review
+DRVF.F3SWACSP,DRVF,F3ACSPPS,2015,similar title (91% of words shared),to review
+DRVF.F3SWCREP,DRVF,F3CREXPS,2015,similar title (90% of words shared),to review
+DRVF.F3SWINSP,DRVF,F3INSTPS,2015,similar title (90% of words shared),to review
+DRVF.F3SWISPP,DRVF,F3INSUPS,2015,similar title (91% of words shared),to review
+DRVF.F3SWOTEP,DRVF,F3OTEXPS,2015,similar title (92% of words shared),to review
+DRVF.F3SWPBSP,DRVF,F3PBSVPS,2015,similar title (91% of words shared),to review
+DRVF.F3SWRSRP,DRVF,F3RSRCPS,2015,similar title (90% of words shared),to review
+DRVF.F3SWSTSP,DRVF,F3STSVPS,2015,similar title (91% of words shared),to review
+DRVOM.OM1TotlEnYp8,DRVOM,OM_FTFT_ENRYP,2016,similar title (64% of words shared),to review
+DRVOM.OM3TotlEnAp8,DRVOM,OM_FTNFT_ENRAP,2016,similar title (60% of words shared),to review
+DRVOM.OM3TotlEnUp8,DRVOM,OM_FTNFT_ENRUP,2016,similar title (62% of words shared),to review
+DRVOM.OM3TotlEnYp8,DRVOM,OM_FTNFT_ENRYP,2016,similar title (67% of words shared),to review
+DRVOM.OM2TotlEnYp8,DRVOM,OM_PTFT_ENRYP,2016,similar title (64% of words shared),to review
+DRVOM.OM4TotlEnAp8,DRVOM,OM_PTNFT_ENRAP,2016,similar title (60% of words shared),to review
+DRVOM.OM4TotlEnUp8,DRVOM,OM_PTNFT_ENRUP,2016,similar title (62% of words shared),to review
+DRVOM.OM4TotlEnYp8,DRVOM,OM_PTNFT_ENRYP,2016,similar title (67% of words shared),to review
+F_F1A.F1C19DP,F_F1A,F1C144,2015,similar title (60% of words shared); claimed by more than one retired variable,to review
+F_F1A.F1C19OM,F_F1A,F1C146,2015,similar title (71% of words shared); claimed by more than one retired variable,to review
+F_F1A.F1C19IN,F_F1A,F1C147,2015,similar title (60% of words shared); claimed by more than one retired variable,to review
+F_F1A.F1C19DP,F_F1A,F1C194,2015,similar title (100% of words shared); claimed by more than one retired variable,to review
+F_F1A.F1C19OT,F_F1A,F1C195,2015,similar title (67% of words shared),to review
+F_F1A.F1C19OM,F_F1A,F1C196,2015,similar title (100% of words shared); claimed by more than one retired variable,to review
+F_F1A.F1C19IN,F_F1A,F1C197,2015,"same title, other name; claimed by more than one retired variable",to review
+HD.CARNEGIESIZE,HD,C21SZSET,2021-2023,similar title (60% of words shared),to review
+HD.CARNEGIEIC,HD,CARNEGIE,2015-2023,similar title (67% of words shared),to review
+COST1.APPLFEEG,IC,APPLFEEG,2015-2023,"same name, other title",to review
+COST1.APPLFEEU,IC,APPLFEEU,2015-2023,"same name, other title",to review
+FLAGS.ENRHSST,IC,ENRHSST,2023,"same name and title, years aside",in use
+FLAGS.ENRHSST1,IC,ENRHSST1,2023,"same name and title, years aside",in use
+FLAGS.ENRHSST2,IC,ENRHSST2,2023,"same name and title, years aside",in use
+COST1.ROOM,IC,ROOM,2015-2023,"same name, other title",to review

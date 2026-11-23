@@ -2294,6 +2294,22 @@ year,kind,name,table,measure,status,n_tested,n_ok
 2022,set,Outcome measures by Pell status,OM,OMACHRT,loaded,3661,3661
 2023,set,Outcome measures by Pell status,OM,OMACHRT,loaded,3626,3626
 2024,set,Outcome measures by Pell status,OM,OMACHRT,loaded,3590,3590
+2017,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2018,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2019,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2020,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2021,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2022,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2023,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2024,set,Outcome measures by Pell status,OM,OMACHT6,no data,0,0
+2017,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2018,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2019,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2020,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2021,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2022,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2023,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
+2024,set,Outcome measures by Pell status,OM,OMACHT8,no data,0,0
 2017,set,Outcome measures by Pell status,OM,OMASSC4,loaded,3984,3984
 2018,set,Outcome measures by Pell status,OM,OMASSC4,loaded,3818,3818
 2019,set,Outcome measures by Pell status,OM,OMASSC4,loaded,3719,3719
@@ -2470,6 +2486,22 @@ year,kind,name,table,measure,status,n_tested,n_ok
 2022,set,Outcome measures by Pell status,OM,OMENRYP,failed,3659,2160
 2023,set,Outcome measures by Pell status,OM,OMENRYP,failed,3626,2067
 2024,set,Outcome measures by Pell status,OM,OMENRYP,failed,3588,2046
+2017,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2018,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2019,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2020,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2021,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2022,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2023,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2024,set,Outcome measures by Pell status,OM,OMEXCL6,no data,0,0
+2017,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2018,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2019,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2020,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2021,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2022,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2023,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
+2024,set,Outcome measures by Pell status,OM,OMEXCL8,no data,0,0
 2017,set,Outcome measures by Pell status,OM,OMEXCLS,loaded,3984,3984
 2018,set,Outcome measures by Pell status,OM,OMEXCLS,loaded,3818,3818
 2019,set,Outcome measures by Pell status,OM,OMEXCLS,loaded,3719,3719
@@ -2494,6 +2526,22 @@ year,kind,name,table,measure,status,n_tested,n_ok
 2022,set,Outcome measures by Pell status,OM,OMRCHRT,loaded,3661,3661
 2023,set,Outcome measures by Pell status,OM,OMRCHRT,loaded,3626,3626
 2024,set,Outcome measures by Pell status,OM,OMRCHRT,loaded,3590,3590
+2017,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2018,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2019,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2020,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2021,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2022,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2023,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2024,set,Outcome measures by Pell status,OM,OMRCHT6,no data,0,0
+2017,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2018,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2019,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2020,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2021,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2022,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2023,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
+2024,set,Outcome measures by Pell status,OM,OMRCHT8,no data,0,0
 2015,set,Full-time instructional staff by rank,SAL_IS,SA09MAM,no data,0,0
 2016,set,Full-time instructional staff by rank,SAL_IS,SA09MAM,failed,2149,526
 2017,set,Full-time instructional staff by rank,SAL_IS,SA09MAM,failed,2081,463
@@ -2854,6 +2902,36 @@ year,kind,name,table,measure,status,n_tested,n_ok
 2022,set,Full-time instructional staff by rank,SAL_IS,SA12MOW,loaded,3856,3856
 2023,set,Full-time instructional staff by rank,SAL_IS,SA12MOW,loaded,3818,3818
 2024,set,Full-time instructional staff by rank,SAL_IS,SA12MOW,loaded,3782,3782
+2015,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,failed,4298,1844
+2016,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,failed,4094,1653
+2017,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2018,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2019,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2020,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2021,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2022,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2023,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2024,set,Full-time instructional staff by rank,SAL_IS,SAAVMNM,no data,0,0
+2015,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,failed,4490,1930
+2016,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,failed,4294,1750
+2017,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2018,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2019,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2020,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2021,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2022,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2023,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2024,set,Full-time instructional staff by rank,SAL_IS,SAAVMNT,no data,0,0
+2015,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,failed,4230,1786
+2016,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,failed,4060,1617
+2017,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2018,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2019,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2020,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2021,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2022,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2023,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
+2024,set,Full-time instructional staff by rank,SAL_IS,SAAVMNW,no data,0,0
 2015,set,Full-time instructional staff by rank,SAL_IS,SAEQ9AM,no data,0,0
 2016,set,Full-time instructional staff by rank,SAL_IS,SAEQ9AM,failed,4094,1653
 2017,set,Full-time instructional staff by rank,SAL_IS,SAEQ9AM,failed,4062,1615
@@ -2944,6 +3022,36 @@ year,kind,name,table,measure,status,n_tested,n_ok
 2022,set,Full-time instructional staff by rank,SAL_IS,SAINSTW,loaded,3856,3856
 2023,set,Full-time instructional staff by rank,SAL_IS,SAINSTW,loaded,3818,3818
 2024,set,Full-time instructional staff by rank,SAL_IS,SAINSTW,loaded,3782,3782
+2015,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,loaded,4490,4490
+2016,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,loaded,4295,4295
+2017,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2018,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2019,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2020,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2021,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2022,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2023,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2024,set,Full-time instructional staff by rank,SAL_IS,SAMNTHM,no data,0,0
+2015,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,loaded,4490,4490
+2016,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,loaded,4295,4295
+2017,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2018,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2019,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2020,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2021,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2022,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2023,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2024,set,Full-time instructional staff by rank,SAL_IS,SAMNTHT,no data,0,0
+2015,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,loaded,4490,4490
+2016,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,loaded,4295,4295
+2017,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2018,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2019,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2020,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2021,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2022,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2023,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
+2024,set,Full-time instructional staff by rank,SAL_IS,SAMNTHW,no data,0,0
 2015,set,Full-time instructional staff by rank,SAL_IS,SAOUTLM,loaded,4490,4490
 2016,set,Full-time instructional staff by rank,SAL_IS,SAOUTLM,loaded,4295,4295
 2017,set,Full-time instructional staff by rank,SAL_IS,SAOUTLM,loaded,4243,4243

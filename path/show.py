@@ -79,7 +79,11 @@ def topic_message(plan):
     if ready:
         return ("Yes. This app has: " + "; ".join(f"{m['name']} ({m['period']})" for m in ready)
                 + ".")
-    return "IPEDS collects this, but it is not set up in this app yet: " + "; ".join(m["name"] for m in t["measures"]) + "."
+    gone = [m["retired"] for m in t["measures"] if m.get("retired")]   # collected once, no longer: the "retired" message
+    if gone and len(gone) == len(t["measures"]):
+        return " ".join(gone)
+    still = "; ".join(m["name"] for m in t["measures"] if not m.get("retired"))
+    return " ".join(["IPEDS collects this, but it is not set up in this app yet: " + still + "."] + gone)
 
 
 def release_label(release):

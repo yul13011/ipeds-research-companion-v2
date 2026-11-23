@@ -14,7 +14,7 @@ One dated line per owner decision, with its reason.
 
 ## measures.csv
 
-One row per IPEDS variable in the release (2,599).
+One row per IPEDS variable in any of the ten releases: the 2,599 of the 2024-25 release, and 474 that appear only in earlier releases (retired variables, marked not set up, with the title and description from the last release they appeared in).
 
 - `table`: the data table the variable is in.
 - `variable`: the IPEDS variable name.
@@ -34,6 +34,7 @@ One row per IPEDS variable in the release (2,599).
 - `statement`: a sentence shown whenever an answer uses this measure, such as the note that IPEDS counts first-time students, not first-year students.
 - `detailed_measure`: for a summary measure, the same figure in a detailed table, written `TABLE.COLUMN where COLUMN = code; ...`, for example `EFA.EFTOTLT where EFALEVEL = 2` for undergraduate enrollment. When a breakdown is asked for on the summary measure, the app uses the detailed one and says so. The build checks that the two agree at every school and lists the schools where they do not (schools that report together with a related campus).
 - `breakdown_set`: filled when this column is one part of a breakdown stored as columns, such as "By race and ethnicity" or "By gender". All the columns of one table with the same name form the set.
+- `years_available`: for a retired variable, the releases it appeared in. The build works out every measure's years from the data (table `measure_years`); this column is for reading.
 - `set_total`: the column that the parts add up to, or `sum of parts` when the data has no total column. The build tests that the parts add up on every row; a set that fails is not loaded.
 
 ## terms.csv
@@ -143,6 +144,9 @@ Where a 2024-25 measure was stored before the 2024-25 reorganisation of the cost
 - `earlier_table`, `earlier_variable`: where the same figure is stored in earlier releases (same name and title once the years are taken out).
 - `years`: the releases that hold it there.
 - `how`: how the match was made.
+- `status`: `in use`, or `to review` (a possible successor waiting for the owner's decision; not used).
+
+The same file links a retired variable to its successor: a 2024-25 measure that first appears in the release after the retired variable last appeared, with the same meaning under a new name or table. The full list, with uncertain matches, is `docs/reports/stage5b/successors.csv`.
 
 Measures with no row have no earlier years. The years each measure has values are worked out from the data by the build (table `measure_years`), not written here.
 

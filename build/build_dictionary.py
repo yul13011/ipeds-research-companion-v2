@@ -45,6 +45,7 @@ TABLES = ["measures", "terms", "school_groups", "group_members", "school_nicknam
           "comparability_breaks"]
 BREAK_KINDS = ("definition change", "context")              # comparability_breaks.csv `kind`
 BREAK_STATUS = ("draft", "approved")                        # only approved rows may be shown
+HISTORY_STATUS = ("in use", "to review")                   # measure_history.csv; rows to review are not used
 IDENTITY = ["INSTNM", "IALIAS", "CITY", "STABBR"]          # always in the directory, from HD
 FILTER_KINDS = ("column", "universe")                       # groups defined by codes in directory columns
 METHODS = ("sum of counts", "weighted average")            # how a rates.csv row combines schools; see README
@@ -210,6 +211,9 @@ def check(db):
         for t in split(tables):
             if t not in data:
                 problems.append(f"comparability_breaks.csv: {t} is not a data table")
+    for measure, status in db.execute("SELECT measure, status FROM dict_measure_history"):
+        if status not in HISTORY_STATUS:
+            problems.append(f"measure_history.csv: {measure} has status '{status}'; it must be one of {HISTORY_STATUS}")
     for name, membership in db.execute('SELECT "group", membership FROM dict_school_groups'):
         if (membership or "") not in MEMBERSHIP:
             problems.append(f"school_groups.csv '{name}': membership must be blank or '{MEMBERSHIP[1]}'")
@@ -372,7 +376,7 @@ def build_breakdown_sets(db):
                                   "GROUP BY UNITID, year)").fetchone()
                 results = [(flat[2 * j] or 0, flat[2 * j + 1] or 0) for j in range(len(chunk))]
             for m, (tested, ok) in zip(chunk, results):
-                status = "additive" if total == ADDITIVE else ("loaded" if tested and tested == ok else "failed")
+                status = "additive" if total == ADDITIVE else ("loaded" if tested and tested == ok else "failed" if tested else "no data")
                 loaded = loaded or status != "failed"
                 db.execute("INSERT INTO breakdown_sets VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                            (name, table, "rows", column, total, fixed, m, len(parts), tested, ok, None, status))
@@ -403,7 +407,7 @@ def build_breakdown_sets(db):
             tested, ok, no_detail = db.execute(
                 f'SELECT SUM({any_part}), SUM({any_part} AND {added} = "{total}"), SUM(NOT {any_part}) '
                 f'FROM "{table}" WHERE "{total}" IS NOT NULL').fetchone()
-            status = "loaded" if tested and tested == ok else "failed"
+            status = "loaded" if tested and tested == ok else "failed" if tested else "no data"
         db.execute("INSERT INTO breakdown_sets VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                    (name, table, "columns", None, total, None, total if total != ADDITIVE else None, len(parts),
                     tested, ok, no_detail, status))
@@ -611,8 +615,10 @@ def build_measure_years(db):
     cols = columns_by_year(db)
     years = sorted({y for _, y in cols})
     latest = years[-1]
-    history = {m.upper(): (t, v, cell) for m, t, v, cell in
-               db.execute("SELECT measure, earlier_table, earlier_variable, years FROM dict_measure_history")}
+    history = {}                                            # rows marked "to review" are not used
+    for m, t, v, cell in db.execute("SELECT measure, earlier_table, earlier_variable, years FROM dict_measure_history "
+                                    "WHERE status = 'in use'"):
+        history.setdefault(m.upper(), []).append((t, v, cell))
     measures = [f"{t}.{v}" for t, v in db.execute('SELECT "table", variable FROM dict_measures')]
     listed = {m.upper() for m in measures}                  # the counts behind each rate, listed as measures or not
     for (m,) in db.execute("SELECT numerator FROM dict_rates UNION SELECT denominator FROM dict_rates").fetchall():
@@ -623,10 +629,13 @@ def build_measure_years(db):
         wanted = {}
         for m in measures:
             t, _, v = m.partition(".")
-            earlier = history.get(m.upper())
-            if earlier and y < latest and in_years(earlier[2], y):
-                t, v = earlier[0], earlier[1]
-            column = cols.get((t, y), {}).get(v.upper())
+            column = cols.get((t, y), {}).get(v.upper())    # the measure's own column first; else an earlier name
+            if not column:
+                for et, ev, cell in history.get(m.upper(), []):
+                    if in_years(cell, y) and cols.get((et, y), {}).get(ev.upper()):
+                        t, v = et, ev
+                        column = cols[(et, y)][ev.upper()]
+                        break
             if column:
                 wanted.setdefault(t, []).append((m, column))
         for t, items in wanted.items():

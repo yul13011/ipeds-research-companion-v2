@@ -76,7 +76,8 @@ def render(short, previous, pending, question, declined=None):
         parts[name] = lines
     rows = []
     for m in short["measures"]:
-        flag = " | not set up in this app yet" if not m["set_up"] else ""
+        flag = (f" | no longer collected: IPEDS collected it {m['retired']}" if m.get("retired")
+                else " | not set up in this app yet" if not m["set_up"] else "")
         b = (f" | breakdowns: {', '.join(m['breakdowns'])}" if m["breakdowns"] else "") + \
             (f" | breakdowns through the detailed table, held at {m.get('detail_held') or 'this measure'}: "
              f"{', '.join(m['breakdowns_via_detail'])}" if m["breakdowns_via_detail"] else "")

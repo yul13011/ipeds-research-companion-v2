@@ -538,6 +538,22 @@ class RealDictionary(unittest.TestCase):
                                  "AND measure='OMAWDP8'").fetchone()[0]
         self.assertEqual(status, "failed")
 
+    def test_retired_variables_carry_the_releases_they_appeared_in(self):
+        """Every retired variable is in measures.csv, not set up, and its years_available match the data."""
+        def spans(ys):
+            out = []
+            for y in ys:
+                out = out[:-1] + [(out[-1][0], y)] if out and y == out[-1][1] + 1 else out + [(y, y)]
+            return ", ".join(f"{a}-{b}" if a != b else str(a) for a, b in out)
+        rows = self.db.execute("SELECT \"table\" || '.' || variable, years_available, in_first_version FROM dict_measures "
+                               "WHERE years_available IS NOT NULL").fetchall()
+        self.assertGreater(len(rows), 400)
+        for measure, cell, set_up in rows:
+            years = [y for (y,) in self.db.execute("SELECT year FROM main.measure_years WHERE measure = ? ORDER BY year",
+                                                   (measure,))]
+            self.assertEqual((cell, set_up), (spans(years), "no"), measure)
+            self.assertNotIn(2024, years, measure)
+
     def test_breakdown_sets_stored_as_columns(self):
         race = dict(self.db.execute("SELECT \"table\", status FROM breakdown_sets WHERE set_name='By race and ethnicity'"))
         self.assertEqual(set(race.values()), {"loaded"})

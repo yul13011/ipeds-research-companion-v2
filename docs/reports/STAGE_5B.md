@@ -10,10 +10,11 @@ Date: 2026-11-22. Decisions are recorded in `dictionary/DECISIONS.md` under the 
 - **Every rate was checked in every year against NCES:** 83 of 88 rate-years with an NCES figure match, and the other 5 differ by less than 0.1 point.
 - **The national universe matches NCES in every year,** from 7,021 schools in 2015-16 to 5,626 in 2024-25.
 - **Years available are worked out per measure** (table `measure_years`). Of the 762 set-up measures, 488 have values in all ten years. A group rate is available only in years where all its counts have values (table `rate_years`).
-- **The comparability-breaks table is drafted:** 12 rows, each with its source, all marked `draft` and not used. They are listed below for your review.
+- **Every variable from all ten releases is now in the measures table:** 474 retired variables are added, with 3 successors linked and 45 for your review (section "Retired variables").
+- **The comparability-breaks table is drafted:** 13 rows, each with its source, all marked `draft` and not used. They are listed below for your review.
 - **The aid-split check is done.** The all-undergraduate totals did not change definition. The details are in `STAGE_5B_GAPS.md` section 9.
 - **The question log now records a conversation identifier and turn number** on every line (habit 5).
-- **Build time:** the dictionary now takes about 25 minutes (about two minutes a year, against 4 minutes for one year before). A full ten-year rebuild takes about 55 minutes.
+- **Build time:** the dictionary now takes about 32 minutes with the retired variables (about two minutes a year, against 4 minutes for one year before). A full ten-year rebuild takes about an hour.
 
 ## What was built
 
@@ -146,7 +147,7 @@ Measures used per year: `stage5b/measure_years_summary.csv`.
 
 ## The comparability-breaks rows, for your review
 
-All 12 rows are `draft`; none is shown until you approve it. "Release" is the release year, which is how the app names years. Full text and sources are in `dictionary/comparability_breaks.csv`.
+All 13 rows are `draft`; none is shown until you approve it. Row 13 (finance salary percentages) is in the retired-variables section. "Release" is the release year, which is how the app names years. Full text and sources are in `dictionary/comparability_breaks.csv`.
 
 | # | Kind | Tables | First release | Note shown | Source |
 | --- | --- | --- | --- | --- | --- |
@@ -172,16 +173,128 @@ Considered and left out, because they add or remove measures without changing wh
 
 The Carnegie 2025 classification is covered by decision 6d's statement, not a break. The HEERF candidate from the gap list is dropped: I found no codebook wording for it.
 
+## Retired variables (addition to part 5b)
+
+Your change order: the measures table covers every variable from all ten releases. Made by `scripts/retired_variables.py`, run once.
+
+- **474 variables that appear only in earlier releases are now in `measures.csv`,** not set up, with the title and description from the last release each appeared in, and a new `years_available` column (the releases it appeared in). A test checks that column against the data.
+  - **Why 474, not about 326:** the 326 in the part 5a report counted variables that disappeared between consecutive releases, by name. 474 is every variable of an earlier release that is not a 2024-25 measure. Another 559 earlier variables are already mapped (`measure_history.csv`) as the earlier names of 2024-25 cost and aid measures, so they are those measures, not retired ones.
+- **Successors are linked in `measure_history.csv`,** which now has a `status` column: `in use`, or `to review` (not used until you decide). The rule:
+  - a successor is a 2024-25 measure that first appears in the release right after the retired variable last appeared;
+  - the same name with the same title, or the same title under another name in the same table, is `in use`;
+  - the same name with another title, the same title in another table, or a similar title (most words shared) is `to review`;
+  - a successor claimed by two retired variables is `to review`.
+  - The codebooks' new-variable lists (NEWVARIABLES) exist only for 2023-24 and 2024-25, and list none of these successors.
+- **Result:** 3 successors `in use`, 45 `to review`, 426 with no successor. All the 2015-16 finance detail and the 2021-22 to 2023-24 branch-campus table have no successor; IPEDS stopped collecting them.
+- **Messages** (rows in `terms.csv`; tested):
+  - "IPEDS collected {what} from {first} to {last}." followed by "It was replaced by {successor}." or "It is no longer collected.";
+  - for a single release, "IPEDS collected {what} in {first} only.";
+  - where a successor waits for your review, the message gives the years only, so it never says "no longer collected" for something that may continue;
+  - beside measures that can be answered, the retired one is named in "Interpreted as" and the rest is answered;
+  - "what data exists" answers with the same message.
+
+  Examples from the app:
+  - "IPEDS collected Branch Campus Identifcation number from 2021-22 to 2023-24. It is no longer collected."
+  - "IPEDS collected Enolls high school students in college courses for credit in 2023-24 only. It was replaced by Enolls high school students in college courses for credit." (The misspellings are IPEDS's own titles. The successor is the same question, moved from IC to FLAGS.)
+- **The shortlist:** retired variables are listed after every current measure, at most 2 of them, and the model sees "no longer collected: IPEDS collected it 2021-22 to 2023-24". So a question about retired data finds it (never "not found") without pushing current measures off.
+- **A draft break row (13)** for the finance salary percentages, used only if you approve those successors (below).
+
+### The successor list, for your review
+
+| Retired (last release) | Title | Successor | Successor title | How matched | Status |
+| --- | --- | --- | --- | --- | --- |
+| IC.ENRHSST (2023-24) | Enolls high school students in college courses for credit | FLAGS.ENRHSST | Enolls high school students in college courses for credit | same name and title, years aside | **in use** |
+| IC.ENRHSST1 (2023-24) | Enolls high school students in college courses for credit within a dual enrollment program | FLAGS.ENRHSST1 | Enolls high school students in college courses for credit within a dual enrollment program | same name and title, years aside | **in use** |
+| IC.ENRHSST2 (2023-24) | Enolls high school students in college courses for credit outside a dual enrollment program | FLAGS.ENRHSST2 | Enolls high school students in college courses for credit outside a dual enrollment program | same name and title, years aside | **in use** |
+| DRVC.SCERT1 (2019-20) | Number of students receiving a certificate of less than 1-year | DRVC.SCERT1A | Number of students receiving certificates of less than 12 weeks | similar title (62% of words shared) | **to review** |
+| DRVF.F1ACSPPS (2015-16) | Salaries, wages, and benefit expenses for academic support as a percent of total expenses for academic support (GASB) | DRVF.F1SWACSP | Salaries and wages for academic support as a percent of total expenses for academic support (GASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F1CREXPS (2015-16) | Salaries, wages, and benefit expenses for core expenses as a percent of total core expenses (GASB) | DRVF.F1SWCREP | Salaries and wages for core expenses as a percent of total core expenses (GASB) | similar title (89% of words shared) | **to review** |
+| DRVF.F1INSTPS (2015-16) | Salaries, wages, and benefit expenses for instruction as a percent of total expenses for instruction (GASB) | DRVF.F1SWINSP | Salaries and wages for instruction as a percent of total expenses for instruction (GASB) | similar title (89% of words shared) | **to review** |
+| DRVF.F1INSUPS (2015-16) | Salaries, wages, and benefit expenses for institutional support as a percent of total expenses for institutional support (GASB) | DRVF.F1SWISPP | Salaries and wages for institutional support as a percent of total expenses for institutional support (GASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F1OTEXPS (2015-16) | Salaries, wages, and benefit expenses for other core expense functions  as a percent of total expenses for other core expense functions (GASB) | DRVF.F1SWOTEP | Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (GASB) | similar title (92% of words shared) | **to review** |
+| DRVF.F1PBSVPS (2015-16) | Salaries, wages, and benefit expenses for public service as a percent of total expenses for public service (GASB) | DRVF.F1SWPBSP | Salaries and wages for public service as a percent of total expenses for public service (GASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F1RSRCPS (2015-16) | Salaries, wages, and benefit expenses for research as a percent of total expenses for research (GASB) | DRVF.F1SWRSRP | Salaries and wages for research as a percent of total expenses for research (GASB) | similar title (89% of words shared) | **to review** |
+| DRVF.F1STSVPS (2015-16) | Salaries, wages, and benefit expenses for student services as a percent of total expenses for student services (GASB) | DRVF.F1SWSTSP | Salaries and wages for student services as a percent of total expenses for student services (GASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F2ACSPPS (2015-16) | Salaries, wages, and benefit expenses for academic support as a percent of total expenses for academic support (FASB) | DRVF.F2SWACSP | Salaries and wages for academic support as a percent of total expenses for academic support (FASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F2CREXPS (2015-16) | Salaries, wages, and benefit expenses for core expenses as a percent of total core expenses (FASB) | DRVF.F2SWCREP | Salaries and wages for core expenses as a percent of total core expenses (FASB) | similar title (89% of words shared) | **to review** |
+| DRVF.F2INSTPS (2015-16) | Salaries, wages, and benefit expenses for instruction as a percent of total expenses for instruction (FASB) | DRVF.F2SWINSP | Salaries and wages for instruction as a percent of total expenses for instruction (FASB) | similar title (89% of words shared) | **to review** |
+| DRVF.F2INSUPS (2015-16) | Salaries, wages, and benefit expenses for institutional support as a percent of total expenses for institutional support (FASB) | DRVF.F2SWISPP | Salaries and wages for institutional support as a percent of total expenses for institutional support (FASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F2OTEXPS (2015-16) | Salaries, wages, and benefit expenses for other core expense functions  as a percent of total expenses for other core expense functions (FASB) | DRVF.F2SWOTEP | Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (FASB) | similar title (92% of words shared) | **to review** |
+| DRVF.F2PBSVPS (2015-16) | Salaries, wages, and benefit expenses for public service as a percent of total expenses for public service (FASB) | DRVF.F2SWPBSP | Salaries and wages for public service as a percent of total expenses for public service (FASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F2RSRCPS (2015-16) | Salaries, wages, and benefit expenses for research as a percent of total expenses for research (FASB) | DRVF.F2SWRSRP | Salaries and wages for research as a percent of total expenses for research (FASB) | similar title (89% of words shared) | **to review** |
+| DRVF.F2STSVPS (2015-16) | Salaries, wages, and benefit expenses for student services as a percent of total expenses for student services (FASB) | DRVF.F2SWSTSP | Salaries and wages for student services as a percent of total expenses for student services (FASB) | similar title (90% of words shared) | **to review** |
+| DRVF.F3ACSPPS (2015-16) | Salaries, wages, and benefit expenses for academic support as a percent of total expenses for academic support (for-profit institutions) | DRVF.F3SWACSP | Salaries and wages for academic support as a percent of total expenses for academic support (for-profit institutions) | similar title (91% of words shared) | **to review** |
+| DRVF.F3CREXPS (2015-16) | Salaries, wages, and benefit expenses for core expenses as a percent of total core expenses (for-profit institutions) | DRVF.F3SWCREP | Salaries and wages for core expenses as a percent of total core expenses (for-profit institutions) | similar title (90% of words shared) | **to review** |
+| DRVF.F3INSTPS (2015-16) | Salaries, wages, and benefit expenses for instruction as a percent of total expenses for instruction (for-profit institutions) | DRVF.F3SWINSP | Salaries and wages for instruction as a percent of total expenses for instruction (for-profit institutions) | similar title (90% of words shared) | **to review** |
+| DRVF.F3INSUPS (2015-16) | Salaries, wages, and benefit expenses for institutional support as a percent of total expenses for institutional support (for-profit institutions) | DRVF.F3SWISPP | Salaries and wages for institutional support as a percent of total expenses for institutional support (for-profit institutions) | similar title (91% of words shared) | **to review** |
+| DRVF.F3OTEXPS (2015-16) | Salaries, wages, and benefit expenses for other core expense functions  as a percent of total expenses for other core expense functions (for-profit) | DRVF.F3SWOTEP | Salaries and wages for other core expense functions as a percent of total expenses for other core expense functions (for-profit) | similar title (92% of words shared) | **to review** |
+| DRVF.F3PBSVPS (2015-16) | Salaries, wages, and benefit expenses for public service as a percent of total expenses for public service (for-profit institutions) | DRVF.F3SWPBSP | Salaries and wages for public service as a percent of total expenses for public service (for-profit institutions) | similar title (91% of words shared) | **to review** |
+| DRVF.F3RSRCPS (2015-16) | Salaries, wages, and benefit expenses for research as a percent of total expenses for research (for-profit institutions) | DRVF.F3SWRSRP | Salaries and wages for research as a percent of total expenses for research (for-profit institutions) | similar title (90% of words shared) | **to review** |
+| DRVF.F3STSVPS (2015-16) | Salaries, wages, and benefit expenses for student services as a percent of total expenses for student services (for-profit institutions) | DRVF.F3SWSTSP | Salaries and wages for student services as a percent of total expenses for student services (for-profit institutions) | similar title (91% of words shared) | **to review** |
+| DRVOM.OM_FTFT_ENRYP (2016-17) | Percent of full-time, first-time, degree/certificate-seeking undergraduates still enrolled at same institution | DRVOM.OM1TotlEnYp8 | Percent full-time first-time still enrolled at same institution - 8 years | similar title (64% of words shared) | **to review** |
+| DRVOM.OM_FTNFT_ENRAP (2016-17) | Percent of full-time, non-first-time, degree/certificate-seeking undergraduates enrolled at another institution | DRVOM.OM3TotlEnAp8 | Percent full-time non-first-time subsequently enrolled at another institution - 8 years | similar title (60% of words shared) | **to review** |
+| DRVOM.OM_FTNFT_ENRUP (2016-17) | Percent of full-time, non-first-time, degree/certificate seeking undergraduates enrollment status unknown | DRVOM.OM3TotlEnUp8 | Percent full-time non-first-time enrollment status unknown - 8 years | similar title (62% of words shared) | **to review** |
+| DRVOM.OM_FTNFT_ENRYP (2016-17) | Percent of full-time, non-first-time, degree/certificate-seeking undergraduates still enrolled at same institution | DRVOM.OM3TotlEnYp8 | Percent full-time non-first-time still enrolled at same institution - 8 years | similar title (67% of words shared) | **to review** |
+| DRVOM.OM_PTFT_ENRYP (2016-17) | Percent of part-time, first-time, degree/certificate-seeking undergraduates still enrolled at same institution | DRVOM.OM2TotlEnYp8 | Percent part-time first-time still enrolled at same institution - 8 years | similar title (64% of words shared) | **to review** |
+| DRVOM.OM_PTNFT_ENRAP (2016-17) | Percent of part-time, non-first-time, degree/certificate-seeking undergraduates enrolled at another institution | DRVOM.OM4TotlEnAp8 | Percent part-time non-first-time subsequently enrolled at another institution - 8 years | similar title (60% of words shared) | **to review** |
+| DRVOM.OM_PTNFT_ENRUP (2016-17) | Percent of part-time, non-first-time, degree/certificate seeking undergraduates enrollment status unknown | DRVOM.OM4TotlEnUp8 | Percent part-time non-first-time enrollment status unknown - 8 years | similar title (62% of words shared) | **to review** |
+| DRVOM.OM_PTNFT_ENRYP (2016-17) | Percent of part-time, non-first-time, degree/certificate-seeking undergraduates still enrolled at same institution | DRVOM.OM4TotlEnYp8 | Percent part-time non-first-time still enrolled at same institution - 8 years | similar title (67% of words shared) | **to review** |
+| F_F1A.F1C144 (2015-16) | Other expenses  deductions - Depreciation | F_F1A.F1C19DP | Total expenses  and deductions - Depreciation | similar title (60% of words shared); claimed by more than one retired variable | **to review** |
+| F_F1A.F1C146 (2015-16) | Other expenses deductions -  Operations and maintenance of plant | F_F1A.F1C19OM | Total expenses and deductions - Operations and maintenance of plant | similar title (71% of words shared); claimed by more than one retired variable | **to review** |
+| F_F1A.F1C147 (2015-16) | Other expenses deductions - Interest | F_F1A.F1C19IN | Total expenses deductions - Interest | similar title (60% of words shared); claimed by more than one retired variable | **to review** |
+| F_F1A.F1C194 (2015-16) | Total expenses  deductions - Depreciation | F_F1A.F1C19DP | Total expenses  and deductions - Depreciation | similar title (100% of words shared); claimed by more than one retired variable | **to review** |
+| F_F1A.F1C195 (2015-16) | Total expenses  deductions - All other | F_F1A.F1C19OT | Total expenses and deductions - Other Natural Expenses and Deductions | similar title (67% of words shared) | **to review** |
+| F_F1A.F1C196 (2015-16) | Total expenses deductions - Operations and maintenance of plant | F_F1A.F1C19OM | Total expenses and deductions - Operations and maintenance of plant | similar title (100% of words shared); claimed by more than one retired variable | **to review** |
+| F_F1A.F1C197 (2015-16) | Total expenses deductions - Interest | F_F1A.F1C19IN | Total expenses deductions - Interest | same title, other name; claimed by more than one retired variable | **to review** |
+| HD.C21SZSET (2023-24) | Carnegie Classification 2021: Size and Setting | HD.CARNEGIESIZE | Carnegie Classification 2025: Institutional Size | similar title (60% of words shared) | **to review** |
+| HD.CARNEGIE (2023-24) | Carnegie Classification 2000 | HD.CARNEGIEIC | Carnegie Classification 2025: Institutional Classification | similar title (67% of words shared) | **to review** |
+| IC.APPLFEEG (2023-24) | Graduate application fee | COST1.APPLFEEG | Graduate program application fee | same name, other title | **to review** |
+| IC.APPLFEEU (2023-24) | Undergraduate application fee | COST1.APPLFEEU | Undergraduate program application fee | same name, other title | **to review** |
+| IC.ROOM (2023-24) | Institution provide nstitutionally-controlled housing (on-campus and/or off-campus) | COST1.ROOM | Institution provide Institutionally-controlled housing (on-campus and/or off-campus) | same name, other title | **to review** |
+
+Notes for the review:
+- **The 24 derived finance percentages (DRVF ...PS → ...SW...):** the meaning changed from "salaries, wages and benefits" to "salaries and wages", because IPEDS stopped collecting benefits by function in fiscal year 2016. If you approve them, break row 13 applies.
+- **Two finance lines are near-certain renames:**
+  - F_F1A.F1C197 → F1C19IN (interest; the part 5a report found it);
+  - F1C194 → F1C19DP (depreciation).
+
+  Each has a rival claimant from the "Other expenses" lines (F1C147, F1C144), which are not the same thing.
+- **Not the same scheme:** the two Carnegie matches (2000 and 2021 to 2025) and the certificate match (less than one year → less than 12 weeks). I expect you will reject them.
+- **Outcome Measures:** the eight DRVOM percents link 2015-16 and 2016-17 cohorts to the 2017-18 redesign (break row 1).
+
+### Retired variables by table
+
+| Table | Retired variables | No successor found |
+| --- | ---: | ---: |
+| IC_PCCAMPUSES | 169 | 169 |
+| F_F1A | 62 | 55 |
+| F_F2 | 58 | 58 |
+| F_F3 | 53 | 53 |
+| DRVF | 24 | 0 |
+| HD | 21 | 19 |
+| DRVOM | 20 | 12 |
+| FLAGS | 20 | 20 |
+| IC | 12 | 6 |
+| SFA_P1 | 8 | 8 |
+| OM | 7 | 7 |
+| GR_GENDER | 6 | 6 |
+| SAL_IS | 6 | 6 |
+| ADM | 4 | 4 |
+| CDEP | 2 | 2 |
+| AL | 1 | 1 |
+| DRVC | 1 | 0 |
+
 ## Tests, timing and size
 
-- **Tests:** 190 pass, up from 180. They do not call the API and write only to their own folders. New:
+- **Tests:** 197 pass, up from 180. They do not call the API and write only to their own folders. New:
   - **dictionary across years (loader):** years of category rows tested in each year; every table needs a year rule for every year; `measure_years` and `rate_years`; Carnegie-style groups as of the latest year; unreadable `years` cells;
   - **mapping:** a link tested in an earlier year through `same_as`; a link with no counterpart recorded as not in that year's data; a `same_as` claim that contradicts the data stops the build;
-  - **path:** period patterns; conversation and turn on log lines.
+  - **path:** period patterns; conversation and turn on log lines;
+  - **retired variables:** with a successor, without one, with one to review, beside a current measure, in "what data exists", their place on the shortlist, and `years_available` against the data.
 - **Benchmarks:** identical to the last run (2024-25).
-- **Timing:** dictionary 25 minutes: 98 to 126 seconds per year, plus about 4 minutes counting `measure_years`. Full ten-year rebuild about 55 minutes. `CLAUDE.md` and `UPDATING.md` updated.
-- **Lines:** the question path is 2,324 lines (2,302 before); the build is 1,056 (879 before).
-- **Note:** the 92 "failed, nothing tested" set results were relabelled "no data" in the stored table directly, rather than by running the 25-minute build again. The code now gives the same result.
+- **Timing:** dictionary 32 minutes with the retired variables (25 before them): about two minutes per year, plus several minutes counting `measure_years`. Full ten-year rebuild about 55 minutes. `CLAUDE.md` and `UPDATING.md` updated.
+- **Lines:** the question path is 2,376 lines (2,302 before); the build is 1,121 (879 before).
+- **"No data":** a set column with nothing to test that year is now recorded as "no data" by the test itself; the stored results come from a full build.
 
 ## Where existing code does not yet follow the version 3 habits
 
@@ -195,15 +308,16 @@ The Carnegie 2025 classification is covered by decision 6d's statement, not a br
 
 ## Open questions
 
-1. **The breaks rows.** Approve, change or drop each of the 12. Three need your eye:
+1. **The successor list.** Approve or reject each `to review` row in the list above.
+2. **The breaks rows.** Approve, change or drop each of the 13. Three need your eye:
    - row 2: the codebooks disagree on when the new-hire window changed;
    - row 5: whether fall enrollment by major (EFCP) moved to CIP 2020 at the same time is not confirmed;
    - row 7: a finance change I found in the 2020-21 codebook.
-2. **Which releases the pandemic note covers.** I attached it to the 2020-21 and 2021-22 releases. For July-to-June tables (completions, 12-month enrollment, aid), those releases cover July 2019 to June 2021. For fall tables they cover fall 2020 and fall 2021. Is that what you meant?
-3. **Outcome Measures in 2015-16 and 2016-17 have no total cohort row.** The total would be the sum of the four cohorts (codes 1-4). Should a trend of the total entering cohort start in 2017-18 (no total reported before), or compute 2015-16 and 2016-17 as the sum of the four, with the break note?
-4. **Mapping the Outcome Measures cohorts across 2017-18** (codes 1-4 = 10, 20, 30, 40) rests on the labels, while the cohort definition changed (break row 1). Keep the mapping with the note, or treat the earlier cohorts as not comparable?
-5. **Build time.** The dictionary takes 25 minutes because every year is tested every time. One option is to retest an earlier year only when its data or the dictionary rows for it change. That would bring a routine dictionary edit back to about 4 minutes. Proposal only; say if you want it.
-6. **Part 5c will apply:**
+3. **Which releases the pandemic note covers.** I attached it to the 2020-21 and 2021-22 releases. For July-to-June tables (completions, 12-month enrollment, aid), those releases cover July 2019 to June 2021. For fall tables they cover fall 2020 and fall 2021. Is that what you meant?
+4. **Outcome Measures in 2015-16 and 2016-17 have no total cohort row.** The total would be the sum of the four cohorts (codes 1-4). Should a trend of the total entering cohort start in 2017-18 (no total reported before), or compute 2015-16 and 2016-17 as the sum of the four, with the break note?
+5. **Mapping the Outcome Measures cohorts across 2017-18** (codes 1-4 = 10, 20, 30, 40) rests on the labels, while the cohort definition changed (break row 1). Keep the mapping with the note, or treat the earlier cohorts as not comparable?
+6. **Build time.** The dictionary takes about 30 minutes because every year is tested every time. One option is to retest an earlier year only when its data or the dictionary rows for it change. That would bring a routine dictionary edit back to about 4 minutes. Proposal only; say if you want it.
+7. **Part 5c will apply:**
    - the trend defaults (the all-undergraduate aid measures; grant-aid net price);
    - the rule that no trend mixes measures with different first years;
    - today's names with "(then: …)";

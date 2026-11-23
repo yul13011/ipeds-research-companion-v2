@@ -152,8 +152,9 @@ class Shortlist(unittest.TestCase):
 
     def test_measures_set_up_come_first(self):
         s = shortlist.shortlist("What was Yale's admission rate?", DB)
-        flags = [m["set_up"] for m in s["measures"]]
+        flags = [m["set_up"] for m in s["measures"] if not m.get("retired")]
         self.assertLessEqual(flags.count(False), shortlist.NOT_SET_UP)
+        self.assertLessEqual(sum(bool(m.get("retired")) for m in s["measures"]), shortlist.RETIRED)
         self.assertIn("DRVADM.DVADM01", [m["id"] for m in s["measures"]])
 
     def test_a_matched_term_brings_its_measures(self):
@@ -941,6 +942,51 @@ class Show(unittest.TestCase):
     def test_formats(self):
         self.assertEqual([show.fmt(c) for c in [(5, "percent"), (77.86, "percent"), (5300.4, "average"), (20066904, "count"),
                                                  (14, "ratio"), None]], ["5%", "77.9%", "$5,300", "20,066,904", "14", "no value"])
+
+
+class Retired(unittest.TestCase):
+    """Part 5b addition: variables IPEDS collected in earlier releases only. Never "not found"."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def run_request(self, request):
+        return answer.run_direct(request, {}, self.log, DB, question="[test]")
+
+    def test_retired_with_a_successor(self):
+        page = self.run_request(req("schools", measures=[M("IC.ENRHSST")], schools=[S("Yale", 130794)]))
+        self.assertEqual(page["kind"], "decline")
+        self.assertRegex(page["message"], r"^IPEDS collected .+ in 2023-24 only\. It was replaced by .+\.$")
+
+    def test_retired_with_no_successor(self):
+        page = self.run_request(req("schools", measures=[M("IC_PCCAMPUSES.CAMPUSID")], schools=[S("Yale", 130794)]))
+        self.assertRegex(page["message"], r"^IPEDS collected .+ to 2023-24\. It is no longer collected\.$")
+
+    def test_retired_with_a_successor_to_review_names_only_the_years(self):
+        page = self.run_request(req("schools", measures=[M("DRVF.F1INSTPS")], schools=[S("Yale", 130794)]))
+        self.assertRegex(page["message"], r"^IPEDS collected .+ in 2015-16 only\.$")
+
+    def test_retired_beside_a_current_measure_is_named_and_the_rest_answered(self):
+        page = self.run_request(req("schools", measures=[M("DRVADM.DVADM01"), M("IC.ENRHSST")], schools=[S("Yale", 130794)]))
+        self.assertEqual(page["kind"], "answer")
+        self.assertIn("IPEDS collected", page["interpreted"])                # named in "Interpreted as"
+
+    def test_what_data_exists_for_a_retired_variable(self):
+        page = self.run_request(req("data_exists", measures=[M("IC_PCCAMPUSES.CAMPUSID")], topic="branch campus IDs"))
+        self.assertTrue(page["message"].startswith("IPEDS collected"))
+
+    def test_retired_variables_rank_below_current_ones(self):
+        short = shortlist.shortlist("branch campus locations listed on College Navigator", DB)
+        kinds = [bool(m.get("retired")) for m in short["measures"]]
+        self.assertIn(True, kinds)                                  # found, so never "not found" ...
+        self.assertLessEqual(sum(kinds), shortlist.RETIRED)          # ... at most two ...
+        self.assertEqual(kinds, sorted(kinds))                       # ... and all after the current measures
 
 
 if __name__ == "__main__":

@@ -324,3 +324,10 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Same information, other column or code.** Where an earlier year stores the same information under a different column or different codes, the earlier row is mapped to the latest year's row through `category_codes.csv` (`years` and a new `same_as` column), so links and breakdowns are tested and usable in that year. Example: 12-month enrollment levels before 2020-21 are in `EFFYLEV` (1 all students, 2 undergraduate, 4 graduate = `EFFYALEV` 1, 2 and 12). Where both columns are filled (2020-21 to 2024-25), the build checks that they pick the same rows.
 - **"Not in this year's data"** is kept only for years where the information truly does not exist. The report lists those links and years, and why.
 - **A breakdown not usable in a year:** the total is still shown; only the breakdown is unavailable, and the message says why (message row "breakdown not this year").
+
+## 2026-11-22: retired variables (addition to part 5b)
+
+- **The measures table covers every variable from all ten releases,** not only 2024-25. Variables that exist only in earlier releases are added to `measures.csv`, marked not set up, with the title and description from the last year each appeared, and their years available.
+- **Successors.** Where a retired variable has a successor (the same meaning under a new name or table, as in the finance and Outcome Measures redesigns), it is linked in `measure_history.csv` so a trend can continue, with a comparability break where the definition changed. Matches are made by name, title and the codebooks' lists of new variables; uncertain matches are marked for the owner's review, not guessed.
+- **A message for retired data:** "IPEDS collected {what} from {first} to {last}." followed by "It was replaced by {successor}." or "It is no longer collected." The app never says "not found" for a variable that existed.
+- **Retired variables do not crowd current measures off the shortlist:** they rank below current measures, and are used mainly when nothing current fits, or for "what data exists" questions.
