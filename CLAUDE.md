@@ -7,7 +7,7 @@ measure how well the new question path works before building further.
 The owner is a statistician and former institutional researcher: strong in R, moderate in SQL,
 not a software engineer. Explain decisions in plain language.
 
-The full work order is in `docs/CLAUDE_CODE_PROMPT.md`. The design is `docs/V2_PLAN.md`.
+The full work order is in `docs/STAGE_1-4_WORK_ORDER.md`. The design is `docs/V2_PLAN.md`.
 Owner decisions are in `dictionary/DECISIONS.md`.
 
 ## How we work
@@ -48,7 +48,7 @@ Owner decisions are in `dictionary/DECISIONS.md`.
 ## Stages
 
 1. Data tables. 2. Dictionary and directory. 3. The question path (steps 2 to 6 of the flow). 4. Measure it.
-Details of each stage, the slice scope, and what is not in the slice are in `docs/CLAUDE_CODE_PROMPT.md`.
+Details of each stage, the slice scope, and what is not in the slice are in `docs/STAGE_1-4_WORK_ORDER.md`.
 
 ## Rules
 
