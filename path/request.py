@@ -242,3 +242,13 @@ def used_ids(request):
         ids["set"].add(request["breakdown"]["set"])
     ids["reading"] |= {(r["term"], r["reading"]) for r in request["readings"]}
     return ids
+
+
+def fill_years(text, year):
+    """Period text in the dictionary is written from the release year: {Y} is the release year, {Y-1} and {Y+1}
+    count from it, and {Y:yy} gives the last two digits. fill_years("July 1, {Y-1} - June 30, {Y}", 2024)
+    -> "July 1, 2023 - June 30, 2024"."""
+    def one(m):
+        y = year + int(m.group(1) or 0)
+        return f"{y % 100:02d}" if m.group(2) else str(y)
+    return re.sub(r"\{Y([+-]\d+)?(:yy)?\}", one, text) if text else text

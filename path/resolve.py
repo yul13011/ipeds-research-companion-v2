@@ -16,7 +16,7 @@ import json
 import re
 
 from path import shortlist as sl
-from path.request import apply_edit, used_ids
+from path.request import apply_edit, fill_years, used_ids
 
 CLOSEST_MATCHES = 3                 # how many of the best shortlisted measures a "not found" answer names
 
@@ -444,7 +444,7 @@ def cohort_period(m, covered, d):
         return None
     named = cohorts[0][0] if len(cohorts) == 1 or len({c for c, _ in cohorts}) == 1 else \
         " or ".join(f"{c} ({g.lower()} schools)" for c, g in dict.fromkeys(cohorts))
-    status = table_rule[1]
+    status = fill_years(table_rule[1], d.year)
     status = status[0].lower() + status[1:] if status else ""
     status = status.replace("status of student as of", "status as of")
     return d.setting("cohort period")[1].format(cohort=named, status=status)
@@ -468,7 +468,7 @@ def switch_to_detail(request, d, plan):
         detailed, rows = link[0], json.loads(link[1])
         table = detailed.partition(".")[0]
         labels = [label for k, v in rows.items() for (label,) in
-                  d.q('SELECT label FROM dict_category_codes WHERE "table"=? AND UPPER("column")=UPPER(?) AND code=? AND '
+                  d.q('SELECT label FROM dict_category_codes WHERE in_latest = \'yes\' AND "table"=? AND UPPER("column")=UPPER(?) AND code=? AND '
                       '"default" IS NULL', table, k, str(v))]
         names = dict(d.q('SELECT "table" || \'.\' || variable, COALESCE(plain_name, title) FROM dict_measures '
                          'WHERE "table" || \'.\' || variable IN (?, ?)', m["id"], detailed))
@@ -490,6 +490,7 @@ def topic_plan(plan, request, d, short=None):
                     'WHERE m."table" || \'.\' || m.variable = ?', m["id"])
         if row:
             found.append(dict(zip(("table", "variable", "name", "definition", "set_up", "unit", "period"), row)))
+            found[-1]["period"] = fill_years(found[-1]["period"], d.year)
     outside = d.one("SELECT topic, what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"] or "")
     plan["topic"] = dict(asked=request["topic"], measures=found,
                          outside=dict(zip(("topic", "say", "pointer"), outside)) if outside else None)
@@ -720,20 +721,20 @@ def measure(m, d, year):
         for column_, default, _ in keys:
             code = decided.get(column_.upper())
             if code is None:
-                options = d.q('SELECT code, label FROM dict_category_codes WHERE "table"=? AND "column"=? ORDER BY rowid',
+                options = d.q('SELECT code, label FROM dict_category_codes WHERE in_latest = \'yes\' AND "table"=? AND "column"=? ORDER BY rowid',
                               table, column_)
                 return outcome("need_row", name=name, column=column_, options=options)
             info["rows"][column_] = code
-            said = d.one('SELECT statement FROM dict_category_codes WHERE "table"=? AND "column"=? AND code=?', table, column_, code)
+            said = d.one('SELECT statement FROM dict_category_codes WHERE in_latest = \'yes\' AND "table"=? AND "column"=? AND code=?', table, column_, code)
             if said and said[0]:
                 info.setdefault("row_statements", []).append(said[0])
             if code != default:                         # a row the user asked for is named in "Interpreted as"
-                label = d.one('SELECT label FROM dict_category_codes WHERE "table"=? AND "column"=? AND code=?', table, column_, code)
+                label = d.one('SELECT label FROM dict_category_codes WHERE in_latest = \'yes\' AND "table"=? AND "column"=? AND code=?', table, column_, code)
                 info.setdefault("row_labels", []).append(label[0] if label else f"{column_} {code}")
     info["shown_as"] = m.get("shown_as")
     kind, period, caveat, flag = d.one('SELECT kind, period, caveat, parent_child_flag FROM dict_year_meaning WHERE "table"=?',
                                        info["period_table"])
-    info.update(period=info["own_period"] or period, period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
+    info.update(period=fill_years(info["own_period"] or period, d.year), period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
                 parent_child=[c.strip().partition(".")[2] for c in flag.split(";")] if flag else None)
     info["years"] = dict(held=True, missing=[])        # which of the years asked for are held
     if year and year.get("stated") and year.get("kind") != "latest":
@@ -835,7 +836,7 @@ def breakdown(request, plan, d):
             if key.upper() == column.upper() or key.upper() in info["fixed"]:
                 del m["rows"][key]
     info["fixed_labels"] = [label for k, v in info["fixed"].items() for (label,) in
-                            d.q('SELECT label FROM dict_category_codes WHERE "table"=? AND UPPER("column")=? AND code=?',
+                            d.q('SELECT label FROM dict_category_codes WHERE in_latest = \'yes\' AND "table"=? AND UPPER("column")=? AND code=?',
                                 m["table"], k, v)]
     plan["breakdown"] = info
     return None

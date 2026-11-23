@@ -171,3 +171,5 @@ owner,o49_hsi,1,scored,decline,*graduation rate,,5.0,No IPEDS flag for Hispanic-
 owner,o49_hsi,2,scored,answer|decline,,,5.0,Explains that IPEDS has no flag for this group
 owner,o49_yale_1990,1,scored,decline,DRVEF.ENRTOT,130794,5.0,1990 is outside the years held
 owner,o49_yale_1990,2,scored,answer|clarify,DRVEF.ENRTOT,130794,5.0,Offers the closest alternatives: the years available
+owner,o50_yale_pell_trend,1,scored,answer,SFA.UPGRNTP,130794,5c,"All undergraduates, all ten years (2015-16 to 2024-25 releases); the default Pell measure for trends"
+owner,o50_cc_dgs_pell_trend,1,scored,answer,SFA.UDGPGRNTP,127200,5c,"Degree-seeking undergraduates: starts in the 2022-23 release (aid year 2021-22); 2015-16 to 2021-22 named as not collected; never mixed with the all-undergraduate measure"

@@ -1,0 +1,281 @@
+rate,applies_to,release_year,nces_question,schools,figure,nces,difference,status
+Full-time retention rate,,2015,q32,5871,74.39,74.4,-0.01,match
+Full-time retention rate,,2016,q32,5541,75.14,75.1,0.04,match
+Full-time retention rate,,2017,q32,5467,75.36,75.4,-0.04,match
+Full-time retention rate,,2018,q32,5137,75.48,75.5,-0.02,match
+Full-time retention rate,,2019,q32,5029,76.05,76.0,0.05,match
+Full-time retention rate,,2020,q32,5020,75.71,75.7,0.01,match
+Full-time retention rate,,2021,q32,4935,75.52,75.5,0.02,match
+Full-time retention rate,,2022,q32,4922,76.62,76.6,0.02,match
+Full-time retention rate,,2023,q32,4829,77.52,77.5,0.02,match
+Full-time retention rate,,2024,q32,4783,77.86,77.9,-0.04,match
+Part-time retention rate,,2015,q33,3456,44.91,44.9,0.01,match
+Part-time retention rate,,2016,q33,3251,45.99,46.0,-0.01,match
+Part-time retention rate,,2017,q33,3246,46.55,46.5,0.05,match
+Part-time retention rate,,2018,q33,3036,46.47,46.5,-0.03,match
+Part-time retention rate,,2019,q33,2911,46.46,46.5,-0.04,match
+Part-time retention rate,,2020,q33,2909,43.53,43.5,0.03,match
+Part-time retention rate,,2021,q33,2953,44.92,44.9,0.02,match
+Part-time retention rate,,2022,q33,2956,45.82,45.8,0.02,match
+Part-time retention rate,,2023,q33,2886,46.51,46.5,0.01,match
+Part-time retention rate,,2024,q33,2876,46.95,46.9,0.05,match
+Admission rate,,2015,q102,2128,55.78,55.8,-0.02,match
+Admission rate,,2016,q102,1982,55.8,55.8,0.0,match
+Admission rate,,2017,q102,1986,56.34,56.3,0.04,match
+Admission rate,,2018,q102,1950,55.76,55.8,-0.04,match
+Admission rate,,2019,q102,1930,56.79,56.8,-0.01,match
+Admission rate,,2020,q102,1907,60.72,60.7,0.02,match
+Admission rate,,2021,q102,1903,60.2,60.2,0.0,match
+Admission rate,,2022,q102,1901,58.56,58.6,-0.04,match
+Admission rate,,2023,q102,1884,58.38,58.4,-0.02,match
+Admission rate,,2024,q102,1863,59.04,59.0,0.04,match
+Admissions yield,,2015,q103,2124,28.47,28.5,-0.03,match
+Admissions yield,,2016,q103,1977,27.23,27.2,0.03,match
+Admissions yield,,2017,q103,1982,26.69,26.7,-0.01,match
+Admissions yield,,2018,q103,1944,25.91,25.9,0.01,match
+Admissions yield,,2019,q103,1926,24.73,24.7,0.03,match
+Admissions yield,,2020,q103,1905,22.18,22.2,-0.02,match
+Admissions yield,,2021,q103,1897,21.98,22.0,-0.02,match
+Admissions yield,,2022,q103,1895,21.36,21.4,-0.04,match
+Admissions yield,,2023,q103,1881,20.62,20.6,0.02,match
+Admissions yield,,2024,q103,1859,19.39,19.4,-0.01,match
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2015,,2405,53.8,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2016,,2283,54.66,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2017,,2274,55.49,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2018,,2182,58.6,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2019,,2166,59.52,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2020,,2148,60.08,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2021,,2126,60.93,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2022,,2152,61.15,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2023,,2137,61.01,,,no NCES figure
+"Graduation rate within 150% of normal time, four-year schools",Four or more years,2024,,2155,60.97,,,no NCES figure
+Bachelor's six-year graduation rate,Four or more years,2015,q20,2044,59.46,59.4,0.06,differs
+Bachelor's six-year graduation rate,Four or more years,2016,q20,2008,59.7,59.7,-0.0,match
+Bachelor's six-year graduation rate,Four or more years,2017,q20,1999,60.41,60.4,0.01,match
+Bachelor's six-year graduation rate,Four or more years,2018,q20,1910,62.44,62.4,0.04,match
+Bachelor's six-year graduation rate,Four or more years,2019,q20,1890,63.41,63.4,0.01,match
+Bachelor's six-year graduation rate,Four or more years,2020,q20,1864,64.05,64.0,0.05,differs
+Bachelor's six-year graduation rate,Four or more years,2021,q20,1854,64.59,64.6,-0.01,match
+Bachelor's six-year graduation rate,Four or more years,2022,q20,1866,64.69,64.6,0.09,differs
+Bachelor's six-year graduation rate,Four or more years,2023,q20,1843,64.61,64.6,0.01,match
+Bachelor's six-year graduation rate,Four or more years,2024,q20,1842,64.79,64.8,-0.01,match
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2015,,1964,31.49,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2016,,1876,32.77,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2017,,1821,33.84,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2018,,1630,34.62,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2019,,1559,34.89,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2020,,1534,35.89,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2021,,1503,36.34,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2022,,1466,35.48,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2023,,1412,39.45,,,no NCES figure
+"Graduation rate within 150% of normal time, two-year schools",At least 2 but less than 4 years,2024,,1370,42.67,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2015,,,,,,not collected this year
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2016,,2025,47.84,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2017,,1997,47.6,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2018,,1914,50.08,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2019,,1875,51.13,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2020,,1852,51.96,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2021,,1833,52.65,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2022,,1856,52.72,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2023,,1851,52.55,,,no NCES figure
+Pell recipients' bachelor's six-year graduation rate,Four or more years,2024,,1848,52.89,,,no NCES figure
+Percent of undergraduates awarded Pell grants,,2015,q35,6719,38.44,38.5,-0.06,differs
+Percent of undergraduates awarded Pell grants,,2016,q35,6304,36.19,36.2,-0.01,match
+Percent of undergraduates awarded Pell grants,,2017,q35,6197,34.92,34.9,0.02,match
+Percent of undergraduates awarded Pell grants,,2018,q35,5854,34.79,34.8,-0.01,match
+Percent of undergraduates awarded Pell grants,,2019,q35,5696,33.97,34.0,-0.03,match
+Percent of undergraduates awarded Pell grants,,2020,q35,5642,33.61,33.6,0.01,match
+Percent of undergraduates awarded Pell grants,,2021,q35,5567,32.15,32.2,-0.05,match
+Percent of undergraduates awarded Pell grants,,2022,q35,5515,32.04,32.0,0.04,match
+Percent of undergraduates awarded Pell grants,,2023,q35,5421,31.56,31.6,-0.04,match
+Percent of undergraduates awarded Pell grants,,2024,q35,5369,32.36,32.4,-0.04,match
+Percent of undergraduates awarded federal loans,,2015,q37,6719,38.3,38.3,0.0,match
+Percent of undergraduates awarded federal loans,,2016,q37,6304,36.47,36.5,-0.03,match
+Percent of undergraduates awarded federal loans,,2017,q37,6197,35.78,35.8,-0.02,match
+Percent of undergraduates awarded federal loans,,2018,q37,5854,34.25,34.2,0.05,match
+Percent of undergraduates awarded federal loans,,2019,q37,5696,32.88,32.9,-0.02,match
+Percent of undergraduates awarded federal loans,,2020,q37,5642,31.8,31.8,-0.0,match
+Percent of undergraduates awarded federal loans,,2021,q37,5567,30.15,30.1,0.05,match
+Percent of undergraduates awarded federal loans,,2022,q37,5515,29.16,29.2,-0.04,match
+Percent of undergraduates awarded federal loans,,2023,q37,5421,28.64,28.6,0.04,match
+Percent of undergraduates awarded federal loans,,2024,q37,5369,27.78,27.8,-0.02,match
+Percent of undergraduates awarded grant aid,,2015,,6719,61.45,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2016,,6304,59.89,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2017,,6197,59.23,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2018,,5854,59.53,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2019,,5696,59.41,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2020,,5642,62.23,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2021,,5567,64.0,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2022,,5515,68.82,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2023,,5421,62.55,,,no NCES figure
+Percent of undergraduates awarded grant aid,,2024,,5369,61.34,,,no NCES figure
+Percent of full-time first-time students awarded any aid,,2015,q34,6428,83.33,83.4,-0.07,differs
+Percent of full-time first-time students awarded any aid,,2016,q34,6026,82.52,82.5,0.02,match
+Percent of full-time first-time students awarded any aid,,2017,q34,5877,82.54,82.5,0.04,match
+Percent of full-time first-time students awarded any aid,,2018,q34,5581,83.2,83.2,-0.0,match
+Percent of full-time first-time students awarded any aid,,2019,q34,5430,83.56,83.6,-0.04,match
+Percent of full-time first-time students awarded any aid,,2020,q34,5381,85.24,85.2,0.04,match
+Percent of full-time first-time students awarded any aid,,2021,q34,5304,85.27,85.3,-0.03,match
+Percent of full-time first-time students awarded any aid,,2022,q34,5275,86.85,86.8,0.05,match
+Percent of full-time first-time students awarded any aid,,2023,q34,5172,85.16,85.2,-0.04,match
+Percent of full-time first-time students awarded any aid,,2024,q34,5138,85.14,85.1,0.04,match
+Award within eight years (Outcome Measures),,2015,q200,,,,,not collected this year
+Award within eight years (Outcome Measures),,2016,q200,,,,,not collected this year
+Award within eight years (Outcome Measures),,2017,q200,3877,37.18,37.2,-0.02,match
+Award within eight years (Outcome Measures),,2018,q200,3663,37.97,38.0,-0.03,match
+Award within eight years (Outcome Measures),,2019,q200,3596,38.92,38.9,0.02,match
+Award within eight years (Outcome Measures),,2020,q200,3579,40.65,40.7,-0.05,match
+Award within eight years (Outcome Measures),,2021,q200,3546,42.76,42.8,-0.04,match
+Award within eight years (Outcome Measures),,2022,q200,3549,45.02,45.0,0.02,match
+Award within eight years (Outcome Measures),,2023,q200,3503,46.12,46.1,0.02,match
+Award within eight years (Outcome Measures),,2024,q200,3471,47.32,47.3,0.02,match
+Core expenses per FTE student,Reports on the GASB finance form,2015,,1923,21624.65,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2016,,1918,22736.35,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2017,,1914,23841.97,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2018,,1898,24868.19,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2019,,1891,25565.35,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2020,,1874,26654.4,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2021,,1866,27804.58,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2022,,1860,30864.36,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2023,,1839,31902.99,,,no NCES figure
+Core expenses per FTE student,Reports on the GASB finance form,2024,,1830,32973.26,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2015,,1894,37137.62,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2016,,1860,38688.23,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2017,,1862,39904.13,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2018,,1831,40901.38,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2019,,1816,42717.32,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2020,,1771,43677.9,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2021,,1755,43558.27,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2022,,1758,47060.83,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2023,,1734,50261.54,,,no NCES figure
+Core expenses per FTE student,Reports on the FASB finance form,2024,,1712,52612.78,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2015,,3169,12042.92,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2016,,2814,12270.13,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2017,,2702,12398.69,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2018,,2391,12153.82,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2019,,2284,12033.65,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2020,,2263,12072.63,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2021,,2207,11529.63,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2022,,2157,11976.78,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2023,,2104,12551.74,,,no NCES figure
+Core expenses per FTE student,Reports on the for-profit finance form,2024,,2072,12422.47,,,no NCES figure
+"Average Pell grant, undergraduates",,2015,,6655,3971.27,,,no NCES figure
+"Average Pell grant, undergraduates",,2016,,6240,4026.46,,,no NCES figure
+"Average Pell grant, undergraduates",,2017,,6138,4046.3,,,no NCES figure
+"Average Pell grant, undergraduates",,2018,,5801,4270.8,,,no NCES figure
+"Average Pell grant, undergraduates",,2019,,5639,4416.28,,,no NCES figure
+"Average Pell grant, undergraduates",,2020,,5596,4494.5,,,no NCES figure
+"Average Pell grant, undergraduates",,2021,,5520,4569.13,,,no NCES figure
+"Average Pell grant, undergraduates",,2022,,5458,4599.95,,,no NCES figure
+"Average Pell grant, undergraduates",,2023,,5373,4876.15,,,no NCES figure
+"Average Pell grant, undergraduates",,2024,,5321,5299.84,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2016,,4158,80446.73,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2017,,4117,82330.78,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2018,,3877,84377.71,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2019,,3808,86205.0,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2020,,3759,87418.62,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2021,,3727,89187.64,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2022,,3722,92758.47,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2023,,3672,96797.82,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, all ranks",,2024,,3636,100253.53,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, professors",,2016,,2450,115567.89,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2017,,2442,118303.29,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2018,,2407,121133.72,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2019,,2379,123739.26,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2020,,2375,124221.65,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2021,,2352,126562.27,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2022,,2371,131269.9,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2023,,2356,136345.0,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, professors",,2024,,2355,141002.62,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2016,,2346,82091.87,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2017,,2339,83877.4,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2018,,2312,85652.31,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2019,,2289,87489.13,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2020,,2264,88121.85,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2021,,2263,89903.37,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2022,,2256,93382.52,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2023,,2239,97484.46,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, associate professors",,2024,,2239,101068.37,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2016,,2330,69757.36,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2017,,2325,71336.69,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2018,,2301,73210.83,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2019,,2264,74822.59,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2020,,2235,75691.78,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2021,,2231,76981.02,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2022,,2242,79911.86,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2023,,2236,83331.97,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, assistant professors",,2024,,2228,86005.55,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, instructors",,2016,,2859,56898.7,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2017,,2816,58128.73,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2018,,2677,60613.4,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2019,,2652,61533.83,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2020,,2629,62850.04,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2021,,2576,64501.29,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2022,,2554,67181.9,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2023,,2531,70996.21,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, instructors",,2024,,2507,73028.23,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2016,,762,57734.48,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2017,,782,59641.47,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2018,,801,61318.46,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2019,,788,63065.79,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2020,,768,64964.28,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2021,,784,66657.21,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2022,,805,70384.1,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2023,,785,73825.14,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, lecturers",,2024,,773,77341.48,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2015,,,,,,not collected this year
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2016,,1145,57018.45,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2017,,1152,58144.49,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2018,,1045,58789.39,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2019,,1000,60310.96,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2020,,951,59897.29,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2021,,936,60497.03,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2022,,1007,64188.25,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2023,,951,67049.55,,,no NCES figure
+"Average salary equated to nine months, full-time instructional staff, no academic rank",,2024,,948,69696.81,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2015,,1894,10703.35,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2016,,1886,10919.68,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2017,,1879,11239.95,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2018,,1864,11186.63,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2019,,1834,11424.62,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2020,,1817,11709.37,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2021,,1801,11997.71,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2022,,1818,12466.52,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2023,,1802,12603.22,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, public (in-state)",Public,2024,,1794,12981.66,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2015,,4416,23381.77,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2016,,3982,24065.52,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2017,,3890,24642.04,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2018,,3609,25065.23,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2019,,3501,25676.19,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2020,,3474,26313.31,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2021,,3396,25823.23,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2022,,3337,27068.87,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2023,,3257,27772.03,,,no NCES figure
+"Average net price, students awarded grant or scholarship aid, private","Private, nonprofit or for-profit",2024,,3219,28026.2,,,no NCES figure
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2015,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2016,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2017,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2018,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2019,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2020,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2021,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2022,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2023,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, public (in-state)",Public,2024,,1775,12421.51,,,no NCES figure
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2015,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2016,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2017,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2018,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2019,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2020,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2021,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2022,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2023,,,,,,not collected this year
+"Average net price, students awarded Title IV federal aid, private","Private, nonprofit or for-profit",2024,,3210,26341.43,,,no NCES figure

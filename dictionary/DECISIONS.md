@@ -291,3 +291,36 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Part 5a approved.**
 - **Cost and aid tables reorganised in 2024-25.** In part 5b, a variable-by-variable mapping of the old tables (IC_AY, IC_PY, SFA_P1, SFA_P2, DRVIC) to the new ones (COST1, COST2_FINANCIALAID, COST2_NETPRICE, SFA, DRVCOST) is proposed for review. Where an old and a new table report the same aid year, the same school must give the same value in both; any mismatches are reported.
 - **The local database stays where it is,** in OneDrive (`data/ipeds_v2.sqlite`, untracked).
+
+## 2026-11-22: owner decisions on the part 5b gap list
+
+- **1a. Year rules as patterns.** Periods are written with pattern words counted from the release year: `{Y}` is the release year, `{Y-1}` and `{Y+1}` count from it, and `{Y:yy}` gives the last two digits. The 70 period cells are converted.
+- **1b. Measure titles that contain a year.** For an earlier year, that year's own codebook title is shown. The dictionary title stays the 2024-25 one.
+- **2a. The cost and aid mapping is approved.** Trends run 2015-16 to 2023-24 on the old tables (IC_AY, IC_PY, SFA_P1, SFA_P2, DRVIC, IC) and 2024-25 on the new ones. The 3 "check" variables and the 42 new ones are listed as they are, with no earlier years. For trends, the default net price is the measure with all ten years (average net price for students awarded grant or scholarship aid). The Title IV students reading is offered and labelled "2024-25 only".
+- **2b. One release per aid year.** Each aid year's figure is the one first published, from the release in which it is the current year, not a later revision.
+- **3. A year IPEDS did not collect.** It shows as a gap, never zero, with the message "IPEDS did not collect {what} in {year}." This is distinct from the per-school missing reasons: a school that did not report keeps its own "not reported" or "not applicable" wording.
+- **4a. Category codes by year.** `category_codes.csv` gains a `years` column. A breakdown set or default row uses each year's own codes.
+- **4b. Field of study across the CIP 2020 change.** The trend is shown with a break note, with no crosswalk for now. The note says the 2020 changes were mostly at the detailed six-digit level, and the broad two-digit fields used in the field-of-study breakdown changed much less.
+- **5a. A comparability-breaks table** (`comparability_breaks.csv`), with a `kind` column: `definition change` or `context`. The rows are drafted with their sources and shown to the owner before they are used.
+- **5b. The pandemic years.** One context row for 2020-21 and 2021-22, shown on enrollment, finance and retention trends crossing those years: "Figures for 2020-21 and 2021-22 cover the COVID-19 pandemic period." It is not a definition change.
+- **6a. School names in a trend.** Today's name, with "(then: …)" for earlier years where the name differed. Stated in the answer.
+- **6b. Closures and mergers.** The gap after a school left is shown, and the app says "merged into … in …" where the directory's NEWID says so.
+- **6c. "Its peers" in a trend.** Today's comparison group for every year, stated in the answer.
+- **6d. Carnegie groups in a trend.** The classification named in the group row, as of 2024-25, for every year, stated in the answer. This is an exception to the default of each year's own membership.
+- **7. Year rules for the seven earlier-only tables** (DRVIC, IC_AY, IC_PY, SFA_P1, SFA_P2, IC_PCCAMPUSES, GR_GENDER), drafted in the pattern form, following the 2024-25 tables they correspond to.
+- **8. Rates tested in every year** against the NCES trend files where they have figures. Also, where IPEDS provides a ready-made rate, it is checked each year against the rate computed from counts, and differences are reported.
+- **The degree-seeking split in the student aid tables** (before the 2024-25 reorganisation): checked whether the all-undergraduate totals changed definition; a comparability-breaks row says when the split begins (2022-23 release for grant aid and the Pell and loan percents; 2023-24 release for Pell and loan counts and amounts). Years are worked out per variable, so each measure starts in its own first year; a group rate computed from counts does not start before its counts exist; one trend never mixes measures with different first years. For trends, the default Pell, grant and loan measures are the all-undergraduate ones (ten years); the degree-seeking split is offered from the year it starts.
+- **Version 3 habit 5 now:** the question log records a conversation identifier with each turn. The other habits wait for the parts where those files are next changed.
+- **9. The plan for the aid-table split is approved:** the context row with its first years; start years worked out per variable; group rates starting only once all their counts exist; no trend mixing measures with different first years; all-undergraduate measures as the trend default.
+- **9a. Grant recipients 2021-22 and 2022-23.** A context note for grant-recipient trends crossing those years describes the rise and fall without naming a cause: "The number of students receiving grant aid rose in 2021-22 and fell in 2022-23 at many schools; IPEDS does not give a reason."
+
+## 2026-11-22: two additions to Stage 5, to build in part 5e
+
+- **A staged status line while the app works.** Each step is shown in plain words as it runs, for example "Finding matching data…", "Reading your question…", "Getting the numbers…", "Writing the summary…". It includes the AI's own search once part 5d adds it. The wording will be message rows in `terms.csv`, like the other messages.
+- **A single-number tile.** When the answer is one figure, it is shown large above the table, with its label, the school or group, and the period.
+
+## 2026-11-22: owner decisions on earlier years stored differently
+
+- **Same information, other column or code.** Where an earlier year stores the same information under a different column or different codes, the earlier row is mapped to the latest year's row through `category_codes.csv` (`years` and a new `same_as` column), so links and breakdowns are tested and usable in that year. Example: 12-month enrollment levels before 2020-21 are in `EFFYLEV` (1 all students, 2 undergraduate, 4 graduate = `EFFYALEV` 1, 2 and 12). Where both columns are filled (2020-21 to 2024-25), the build checks that they pick the same rows.
+- **"Not in this year's data"** is kept only for years where the information truly does not exist. The report lists those links and years, and why.
+- **A breakdown not usable in a year:** the total is still shown; only the breakdown is unavailable, and the message says why (message row "breakdown not this year").

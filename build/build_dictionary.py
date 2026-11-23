@@ -18,6 +18,11 @@ What it does, in plain terms:
        breakdown_slices  for sets in tables keyed by several category columns: every value of the
                          other columns at which the set adds up (bachelor's degrees by field,
                          undergraduates by age), not only the default
+       year_checks       the row-key, link and breakdown-set tests run in every year, each year with its own
+                         category rows (category_codes.csv, `years`); the tables above hold the latest year
+       measure_years     for every measure and year: where it is stored that year and how many values it has
+       rate_years        for every rate and year: how many schools have each of its counts that year
+       year_titles       each year's own codebook title for measures whose title names a year
 
 No IPEDS convention is decided in this file. It only applies what the dictionary tables say.
 
@@ -29,25 +34,51 @@ import json
 import itertools
 import sqlite3
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import config
 
 TABLES = ["measures", "terms", "school_groups", "group_members", "school_nicknames",
-          "rates", "category_codes", "year_meaning", "outside_ipeds", "special_codes"]
+          "rates", "category_codes", "year_meaning", "outside_ipeds", "special_codes", "measure_history",
+          "comparability_breaks"]
+BREAK_KINDS = ("definition change", "context")              # comparability_breaks.csv `kind`
+BREAK_STATUS = ("draft", "approved")                        # only approved rows may be shown
 IDENTITY = ["INSTNM", "IALIAS", "CITY", "STABBR"]          # always in the directory, from HD
 FILTER_KINDS = ("column", "universe")                       # groups defined by codes in directory columns
 METHODS = ("sum of counts", "weighted average")            # how a rates.csv row combines schools; see README
 ADDITIVE = "sum of parts"                                   # a breakdown set with no total row or column in the data
+MEMBERSHIP = ("", "as of latest year")                      # school_groups.csv `membership`; blank is each year's own list
 
 
 def split(cell, sep=","):
     return [x.strip() for x in (cell or "").split(sep) if x.strip()]
 
 
+def years_in(cell):
+    """'2015-2019' or '2015-2017, 2020' -> those years; blank -> None (every year). Raises ValueError if unreadable."""
+    if not cell:
+        return None
+    out = set()
+    for part in split(cell):
+        first, _, last = part.partition("-")
+        out |= set(range(int(first), int(last or first) + 1))
+    return out
+
+
+def in_years(cell, year):
+    """Does a `years` cell cover this year? (Also an SQL function.) An unreadable cell covers nothing; check() names it."""
+    try:
+        covered = years_in(cell)
+    except ValueError:
+        return 0
+    return 1 if covered is None or year in covered else 0
+
+
 def load_tables(db, folder):
-    """Step 1: each CSV becomes dict_<name>. Every column is text; an empty cell is missing."""
+    """Step 1: each CSV becomes dict_<name>. Every column is text; an empty cell is missing. Category rows also get
+    `in_latest`: whether the row's years cover the latest year, the year the app answers from."""
     for name in TABLES:
         with open(Path(folder) / f"{name}.csv", newline="", encoding="utf-8") as f:
             rows = list(csv.reader(f))
@@ -56,6 +87,10 @@ def load_tables(db, folder):
         db.execute(f"CREATE TABLE dict_{name} ({', '.join(chr(34) + h + chr(34) + ' TEXT' for h in header)})")
         db.executemany(f"INSERT INTO dict_{name} VALUES ({', '.join('?' * len(header))})",
                        [[(c.strip() or None) for c in r] for r in body])
+    db.create_function("in_years", 2, in_years)
+    db.execute("ALTER TABLE dict_category_codes ADD COLUMN in_latest TEXT")
+    db.execute("UPDATE dict_category_codes SET in_latest = CASE WHEN in_years(years, (SELECT MAX(year) FROM _tables)) "
+               "THEN 'yes' ELSE 'no' END")
 
 
 def check(db):
@@ -128,6 +163,23 @@ def check(db):
 
     for table, column in db.execute('SELECT DISTINCT "table", "column" FROM dict_category_codes'):
         exists(f"{table}.{column}", "category_codes.csv")
+    for table, column, code, same in db.execute('SELECT "table", "column", code, same_as FROM dict_category_codes '
+                                                "WHERE same_as IS NOT NULL").fetchall():
+        other, _, other_code = same.partition("=")
+        other, other_code = other.strip(), other_code.strip()
+        where = f"category_codes.csv: {table}.{column} {code} same as '{same}'"
+        if not other or not other_code:
+            problems.append(f"{where} is not written COLUMN = code")
+            continue
+        exists(f"{table}.{other}", where)
+        if other.upper() != column.upper() and column.upper() in data.get(table, ()) and other.upper() in data.get(table, ()):
+            for y, a, both, b in db.execute(       # where both columns are filled, the two rows must be the same rows
+                    f'SELECT year, SUM(CAST("{column}" AS TEXT) = ?), SUM(CAST("{column}" AS TEXT) = ? AND CAST("{other}" '
+                    f'AS TEXT) = ?), SUM(CAST("{other}" AS TEXT) = ?) FROM "{table}" WHERE "{column}" IS NOT NULL AND '
+                    f'"{other}" IS NOT NULL GROUP BY year', (code, code, other_code, other_code)):
+                if not a == both == b:
+                    problems.append(f"{where}: in {y}, {a} rows have {column} {code} and {b} have {other} {other_code}, "
+                                    f"but only {both} have both")
     for table, name, n in db.execute('SELECT "table", breakdown_set, COUNT(DISTINCT COALESCE(set_total, \'\') || \'|\' || '
                                      "COALESCE(set_fixed, '')) FROM dict_category_codes WHERE breakdown_set IS NOT NULL GROUP BY 1, 2"):
         if n > 1:
@@ -135,11 +187,32 @@ def check(db):
     for table, name, total in db.execute('SELECT DISTINCT "table", breakdown_set, set_total FROM dict_measures WHERE breakdown_set IS NOT NULL'):
         if total != ADDITIVE:
             exists(f"{table}.{total}", f"measures.csv breakdown set '{name}'")
-    covered = {t for (t,) in db.execute('SELECT "table" FROM dict_year_meaning')}
-    for (t,) in db.execute("SELECT DISTINCT local_table FROM _tables WHERE kind = 'data' "
-                           "AND year = (SELECT MAX(year) FROM _tables)"):   # the year the app answers from; the
-        if t not in covered:                                                # earlier years' tables are part 5b
+    for name in ("category_codes", "year_meaning", "measure_history"):
+        for (cell,) in db.execute(f"SELECT DISTINCT years FROM dict_{name} WHERE years IS NOT NULL"):
+            try:
+                years_in(cell)
+            except ValueError:
+                problems.append(f"{name}.csv: years '{cell}' is not a year or a range such as 2015-2019")
+    rules = db.execute('SELECT "table", years FROM dict_year_meaning').fetchall()
+    for t, y in db.execute("SELECT DISTINCT local_table, year FROM _tables WHERE kind = 'data' ORDER BY 1, 2"):
+        mine = [cell for table, cell in rules if table == t]
+        if not mine:
             problems.append(f"year_meaning.csv: no row for data table {t}")
+        elif not any(in_years(cell, y) for cell in mine):
+            problems.append(f"year_meaning.csv: no row for data table {t} covers {y}")
+    for measure, table, variable in db.execute("SELECT measure, earlier_table, earlier_variable FROM dict_measure_history"):
+        if (measure or "").upper() not in measures:
+            problems.append(f"measure_history.csv: {measure} is not in measures.csv")
+        exists(f"{table}.{variable}", f"measure_history.csv {measure}")
+    for kind, tables, status in db.execute("SELECT kind, tables, status FROM dict_comparability_breaks"):
+        if kind not in BREAK_KINDS or status not in BREAK_STATUS:
+            problems.append(f"comparability_breaks.csv: kind must be one of {BREAK_KINDS} and status one of {BREAK_STATUS}")
+        for t in split(tables):
+            if t not in data:
+                problems.append(f"comparability_breaks.csv: {t} is not a data table")
+    for name, membership in db.execute('SELECT "group", membership FROM dict_school_groups'):
+        if (membership or "") not in MEMBERSHIP:
+            problems.append(f"school_groups.csv '{name}': membership must be blank or '{MEMBERSHIP[1]}'")
     return problems
 
 
@@ -229,6 +302,12 @@ def build_groups(db):
             db.execute('INSERT INTO group_membership SELECT m."group", d.year, d.UNITID FROM dict_group_members m '
                        'JOIN directory d ON d.UNITID = CAST(m.unitid AS INTEGER) WHERE m."group" = ?', (name,))
         seen[name] = kind
+    latest = db.execute("SELECT MAX(year) FROM directory").fetchone()[0]
+    for (name,) in db.execute('SELECT DISTINCT "group" FROM dict_school_groups WHERE membership = ?', (MEMBERSHIP[1],)).fetchall():
+        db.execute("DELETE FROM group_membership WHERE group_name = ? AND year < ?", (name, latest))
+        db.execute("INSERT INTO group_membership SELECT m.group_name, d.year, d.UNITID FROM group_membership m "   # the latest
+                   "JOIN directory d ON d.UNITID = m.unitid AND d.year < ? WHERE m.group_name = ? AND m.year = ?",  # list, in
+                   (latest, name, latest))                                                                           # every year
     db.execute("CREATE INDEX ix_group_membership ON group_membership (group_name, year, unitid)")
     db.execute("CREATE INDEX ix_group_membership_school ON group_membership (unitid, year)")
     db.execute("UPDATE group_list SET n_schools = (SELECT COUNT(*) FROM group_membership m WHERE m.group_name = "
@@ -386,9 +465,11 @@ def parse_detail(text):
     return table, column, rows
 
 
-def build_detail_links(db):
+def build_detail_links(db, latest=True):
     """For each summary measure with a detailed equivalent: do the two agree at every school? A school with a summary
-    of 0 and no detailed row agrees (IPEDS reports no row for nothing). Returns a list of problems."""
+    of 0 and no detailed row agrees (IPEDS reports no row for nothing). In an earlier year whose detailed table is
+    keyed by other category columns, the link's rows are read through that year's category rows (`same_as`); only
+    where the year holds no such row is the link recorded as not in that year's data. Returns a list of problems."""
     db.executescript("""DROP TABLE IF EXISTS detail_links; DROP TABLE IF EXISTS detail_link_exceptions;
         CREATE TABLE detail_links (measure TEXT, detailed TEXT, rows TEXT, n_schools INTEGER, n_agree INTEGER,
                                    n_flagged INTEGER, n_unexplained INTEGER, status TEXT);
@@ -398,7 +479,16 @@ def build_detail_links(db):
     for table, column, text in db.execute('SELECT "table", variable, detailed_measure FROM dict_measures '
                                           "WHERE detailed_measure IS NOT NULL").fetchall():
         dt, dc, rows = parse_detail(text)
+        if not db.execute(f'SELECT 1 FROM "{table}" WHERE "{column}" IS NOT NULL LIMIT 1').fetchone():
+            continue                                    # no values in this year: nothing to test
         keys = {c.upper() for (c,) in db.execute('SELECT "column" FROM row_keys WHERE "table"=?', (dt,))}
+        if not latest and keys:                         # an earlier year: its own columns and codes for the same rows
+            rows = same_rows(db, dt, rows)
+            if rows is None or {k.upper() for k in rows} != keys:       # the information is not in that year's data
+                db.execute("INSERT INTO detail_links VALUES (?,?,?,?,?,?,?,?)",
+                           (f"{table}.{column}", f"{dt}.{dc}", json.dumps(parse_detail(text)[2]), None, None, None, None,
+                            "not in this year's data"))
+                continue
         if f"{dt}.{dc}".upper() not in measures or {k.upper() for k in rows} != keys:
             problems.append(f"measures.csv: {table}.{column} names '{text}', which is not a measure with one value "
                             f"for each of its category columns ({', '.join(sorted(keys))})")
@@ -423,19 +513,149 @@ def build_detail_links(db):
     return problems
 
 
-def latest_year_only(db, on=True):
-    """While the tests of category rows, summary-to-detailed links and breakdown sets run, each stacked table is
-    seen at the year the app answers from only (temporary views of the same names, which SQLite reads before the
-    stored tables). Part 5a stacks ten years without changing what the app answers; testing these in every year
-    is part 5b."""
-    tables = [t for (t,) in db.execute("SELECT DISTINCT local_table FROM _tables")]
-    for t in tables:
-        db.execute(f'DROP VIEW IF EXISTS temp."{t}"')
-        if on:
-            db.execute(f'CREATE TEMP VIEW "{t}" AS SELECT * FROM main."{t}" WHERE year = (SELECT MAX(year) FROM main._tables)')
+def same_rows(db, table, rows):
+    """{'EFFYALEV': '12'} -> {'EFFYLEV': '4'}: the rows a request names, in the category columns of the year being
+    tested, through the `same_as` cells of that year's category rows. A row the year has (same column and code) is
+    kept as it is. None when some row has no counterpart that year."""
+    out = {}
+    for column, code in rows.items():
+        if db.execute('SELECT 1 FROM dict_category_codes WHERE "table"=? AND UPPER("column")=? AND code=?',
+                      (table, column.upper(), str(code))).fetchone():
+            out[column] = code
+            continue
+        match = db.execute('SELECT "column", code FROM dict_category_codes WHERE "table"=? AND '
+                           "REPLACE(UPPER(same_as), ' ', '') = ?", (table, f"{column}={code}".upper().replace(" ", ""))).fetchone()
+        if not match:
+            return None
+        out[match[0]] = match[1]
+    return out
 
 
-def build(local_db=None, folder=None):
+def at_year(db, year=None):
+    """See every stacked table, and the category rows, as of one year: temporary views and copies of the same names,
+    which SQLite reads before the stored tables. The tables the tests read many times (those with category rows, and
+    FLAGS) are copied once for the year, which is much faster than reading all ten years at each test. at_year(db)
+    removes them."""
+    tested = {t for (t,) in db.execute('SELECT DISTINCT "table" FROM main.dict_category_codes')} | {"FLAGS"}
+    made = dict(db.execute("SELECT name, type FROM sqlite_temp_master WHERE type IN ('table', 'view')").fetchall())
+    for (t,) in db.execute("SELECT DISTINCT local_table FROM main._tables").fetchall():
+        if t in made:
+            db.execute(f'DROP {made[t].upper()} temp."{t}"')
+        if year is not None:
+            kind = "TABLE" if t in tested else "VIEW"
+            db.execute(f'CREATE TEMP {kind} "{t}" AS SELECT * FROM main."{t}" WHERE year = {int(year)}')
+    db.execute("DROP TABLE IF EXISTS temp.dict_category_codes")
+    if year is not None:                                    # the rows whose years cover this year, in file order
+        db.execute("CREATE TEMP TABLE dict_category_codes AS SELECT * FROM main.dict_category_codes "
+                   f"WHERE in_years(years, {int(year)}) ORDER BY rowid")
+
+
+def record_year(db, year):
+    """Keep this year's results of the row-key, link and breakdown-set tests in year_checks. 'no data' means the
+    table, or the column, has no values that year (IPEDS did not collect it then)."""
+    rows_in = lambda t: db.execute(f'SELECT COUNT(DISTINCT UNITID) FROM "{t}"').fetchone()[0]
+    out = []
+    keys = {}
+    for t, c, code in db.execute('SELECT "table", "column", default_code FROM row_keys').fetchall():
+        keys.setdefault(t, []).append((c, code))
+    for t, cols in keys.items():
+        schools = rows_in(t)
+        ok = None
+        if all(code is not None for _, code in cols):
+            where = " AND ".join(f"CAST(\"{c}\" AS TEXT) = '{code}'" for c, code in cols)
+            ok = db.execute(f'SELECT COUNT(DISTINCT UNITID) FROM "{t}" WHERE {where}').fetchone()[0]
+        status = "no data" if not schools else "no default" if ok is None else "loaded" if ok else "default not found"
+        out.append((year, "row key", ", ".join(c for c, _ in cols), t, None, status, schools, ok))
+    for measure, detailed, n, agree, status in db.execute(
+            "SELECT measure, detailed, n_schools, n_agree, status FROM detail_links").fetchall():
+        out.append((year, "link", measure, detailed.partition(".")[0], detailed, status, n, agree))
+    empty = {}
+    for name, t, m, n, ok, status in db.execute(
+            'SELECT set_name, "table", measure, n_tested, n_ok, status FROM breakdown_sets').fetchall():
+        if t not in empty:
+            empty[t] = rows_in(t) == 0
+        no_data = empty[t] or (status == "failed" and not n)   # the table, or this column, has no values that year
+        out.append((year, "set", name, t, m, "no data" if no_data else status, n, ok))
+    db.executemany("INSERT INTO year_checks VALUES (?,?,?,?,?,?,?,?)", out)
+
+
+def columns_by_year(db):
+    """{(table, year): {COLUMN: stored name}}: the columns each release has. Without a column registry (the tests'
+    made-up database), every stored column counts in every year."""
+    stored = {}
+    for (t,) in db.execute("SELECT DISTINCT local_table FROM main._tables").fetchall():
+        stored[t] = {r[1].upper(): r[1] for r in db.execute(f'PRAGMA main.table_info("{t}")')}
+    out = {}
+    try:
+        for t, c, y in db.execute("SELECT t.local_table, UPPER(c.column), t.year FROM _columns c JOIN _tables t "
+                                  "ON t.source_table = c.source_table AND t.release = c.release"):
+            if c in stored.get(t, {}):
+                out.setdefault((t, y), {})[c] = stored[t][c]
+    except sqlite3.OperationalError:
+        for t, y in db.execute("SELECT DISTINCT local_table, year FROM main._tables"):
+            out[(t, y)] = stored.get(t, {})
+    return out
+
+
+def build_measure_years(db):
+    """measure_years: for every measure and year, where it is stored that year (measure_history.csv names the
+    earlier tables of the reorganised cost and aid measures) and how many values it has. A year with no row is a
+    year IPEDS did not collect it. rate_years: for every rate and year, how many values each of its counts has; a
+    rate is available in a year only when every count has values. year_titles: each year's own codebook title for
+    measures whose title names a year."""
+    db.executescript("""DROP TABLE IF EXISTS measure_years; DROP TABLE IF EXISTS rate_years; DROP TABLE IF EXISTS year_titles;
+        CREATE TABLE measure_years (measure TEXT, year INTEGER, "table" TEXT, variable TEXT, n_values INTEGER);
+        CREATE TABLE rate_years (rate TEXT, rate_measure TEXT, applies_to TEXT, numerator TEXT, denominator TEXT,
+                                 year INTEGER, numerator_values INTEGER, denominator_values INTEGER, available TEXT);
+        CREATE TABLE year_titles (measure TEXT, year INTEGER, title TEXT);""")
+    cols = columns_by_year(db)
+    years = sorted({y for _, y in cols})
+    latest = years[-1]
+    history = {m.upper(): (t, v, cell) for m, t, v, cell in
+               db.execute("SELECT measure, earlier_table, earlier_variable, years FROM dict_measure_history")}
+    measures = [f"{t}.{v}" for t, v in db.execute('SELECT "table", variable FROM dict_measures')]
+    listed = {m.upper() for m in measures}                  # the counts behind each rate, listed as measures or not
+    for (m,) in db.execute("SELECT numerator FROM dict_rates UNION SELECT denominator FROM dict_rates").fetchall():
+        if m and m.upper() not in listed:
+            measures.append(m)
+            listed.add(m.upper())
+    for y in years:
+        wanted = {}
+        for m in measures:
+            t, _, v = m.partition(".")
+            earlier = history.get(m.upper())
+            if earlier and y < latest and in_years(earlier[2], y):
+                t, v = earlier[0], earlier[1]
+            column = cols.get((t, y), {}).get(v.upper())
+            if column:
+                wanted.setdefault(t, []).append((m, column))
+        for t, items in wanted.items():
+            for i in range(0, len(items), 200):
+                chunk = items[i:i + 200]
+                counts = db.execute(f'SELECT {", ".join(f"COUNT({chr(34)}{c}{chr(34)})" for _, c in chunk)} '
+                                    f'FROM main."{t}" WHERE year = ?', (y,)).fetchone()
+                db.executemany("INSERT INTO measure_years VALUES (?,?,?,?,?)",
+                               [(m, y, t, c, n) for (m, c), n in zip(chunk, counts)])
+    db.execute('CREATE INDEX ix_measure_years ON measure_years (measure, year)')
+    db.execute("""INSERT INTO rate_years
+        SELECT r.rate, r.rate_measure, r.applies_to, r.numerator, r.denominator, y.year, n.n_values, d.n_values,
+               CASE WHEN COALESCE(n.n_values, 0) > 0 AND COALESCE(d.n_values, 0) > 0 THEN 'yes' ELSE 'no' END
+        FROM dict_rates r JOIN (SELECT DISTINCT year FROM measure_years) y
+        LEFT JOIN measure_years n ON UPPER(n.measure) = UPPER(r.numerator) AND n.year = y.year
+        LEFT JOIN measure_years d ON UPPER(d.measure) = UPPER(r.denominator) AND d.year = y.year""")
+    try:
+        db.execute("""INSERT INTO year_titles
+            SELECT my.measure, my.year, MAX(v.varTitle) FROM measure_years my
+            JOIN dict_measures m ON m."table" || '.' || m.variable = my.measure
+            JOIN _tables t ON t.local_table = my."table" AND t.year = my.year
+            JOIN VARTABLE v ON UPPER(v.TableName) = UPPER(t.source_table) AND UPPER(v.VarName) = UPPER(my.variable)
+                           AND v.year = my.year
+            WHERE m.title GLOB '*[12][09][0-9][0-9]*' GROUP BY my.measure, my.year""")
+    except sqlite3.OperationalError:                        # no codebook in the tests' made-up database
+        pass
+
+
+def build(local_db=None, folder=None, verbose=False):
     """Load, check, then build. Stops with a list of problems if the dictionary does not fit the data."""
     db = sqlite3.connect(local_db or config.LOCAL_DB)
     try:
@@ -447,14 +667,27 @@ def build(local_db=None, folder=None):
         build_value_labels(db)
         build_directory(db)
         build_groups(db)
-        latest_year_only(db)
-        problems = build_row_keys(db)
-        problems += build_detail_links(db) if not problems else []
+        db.executescript("""DROP TABLE IF EXISTS year_checks;
+            CREATE TABLE year_checks (year INTEGER, kind TEXT, name TEXT, "table" TEXT, measure TEXT, status TEXT,
+                                      n_tested INTEGER, n_ok INTEGER);""")
+        problems = []
+        years = [y for (y,) in db.execute("SELECT DISTINCT year FROM _tables ORDER BY year").fetchall()]
+        for year in years:
+            started = time.time()
+            at_year(db, year)                               # each year with its own category rows; the latest last,
+            found = build_row_keys(db)                      # so the result tables the app reads hold the latest year
+            found += build_detail_links(db, latest=year == years[-1]) if not found else []
+            problems += [f"{year}: {p}" for p in found]
+            if not found:
+                build_breakdown_sets(db)
+                record_year(db, year)
+            if verbose:
+                print(f"  {year}: tested in {time.time() - started:.0f} s", flush=True)
+        at_year(db)
         if problems:
             db.rollback()
             raise ValueError("The dictionary does not fit the data:\n  " + "\n  ".join(problems))
-        build_breakdown_sets(db)
-        latest_year_only(db, on=False)
+        build_measure_years(db)
         db.commit()
         return {name: db.execute(f"SELECT COUNT(*) FROM dict_{name}").fetchone()[0] for name in TABLES}
     finally:
@@ -462,7 +695,7 @@ def build(local_db=None, folder=None):
 
 
 if __name__ == "__main__":
-    for name, n in build().items():
+    for name, n in build(verbose=True).items():
         print(f"dict_{name:<18}{n:>7,} rows")
     con = sqlite3.connect(config.LOCAL_DB)
     print("directory: %d schools in the latest year, %d school-years, %d columns" % (

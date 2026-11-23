@@ -67,8 +67,8 @@ Details of each stage, the slice scope, and what is not in the slice are in `doc
 
 ## Running things
 
-- Full build (data, cleaning, dictionary, directory; about three minutes): `python build/build_data.py`
-- Reload the dictionary only (about a minute and a half, most of it testing breakdown sets; use after a change to any table except `special_codes.csv`): `python build/build_dictionary.py`
+- Full build (ten releases: data, cleaning, dictionary, directory; about 55 minutes): `python build/build_data.py`. One release: `python build/build_data.py --release <folder>` (see `UPDATING.md`).
+- Reload the dictionary only (about 25 minutes: the category-row, link and breakdown-set tests run in each of the ten years, about two minutes a year; use after a change to any table except `special_codes.csv`): `python build/build_dictionary.py`
 - Run the tests: `python -m unittest discover -s tests -v`
 - Run the chat page: `streamlit run app.py` (needs `ANTHROPIC_API_KEY` set; the model is `IPEDS_MODEL`, default Sonnet)
 - Live smoke test, only with the owner's approval (it costs money): `python scripts/smoke_test.py --yes`

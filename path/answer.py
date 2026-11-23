@@ -5,10 +5,12 @@
     pick_school()  the school picker: fills in the school and runs the request, with no model call
 
 `state` is the conversation, kept by the page: "history" (requests answered, oldest first),
-"pending" (options on screen) and "picker" (a request waiting for a school).
+"pending" (options on screen) and "picker" (a request waiting for a school). Every log line carries the
+conversation's identifier and the turn number, so one conversation's turns can be read together.
 """
 import sqlite3
 import time
+import uuid
 
 import config
 from path import fetch, interpret, resolve, show, shortlist
@@ -29,6 +31,13 @@ def release(db, year=None):
         name = db.execute("SELECT release FROM _tables ORDER BY year DESC LIMIT 1").fetchone()[0]
         row = (None, name, "provisional" if "Provisional" in name else "final")
     return dict(zip(("year", "release", "status"), row))
+
+
+def turn(state):
+    """The conversation's identifier (made on its first turn; a cleared conversation gets a new one) and this turn's number."""
+    state.setdefault("conversation_id", uuid.uuid4().hex[:12])
+    state["turns"] = state.get("turns", 0) + 1
+    return dict(conversation=state["conversation_id"], turn=state["turns"])
 
 
 def finish(out, state, db, log, row):
@@ -72,7 +81,8 @@ def finish(out, state, db, log, row):
             state["last_decline"] = dict(message=out["message"], missing=out["missing"], pointer=out.get("pointer"),
                                          closest=out.get("closest"), request=out.get("request"))
             state["pending"] = None
-            log.decline(dict(question=row.get("question"), wanted=out.get("wanted") or out.get("request"),
+            log.decline(dict(conversation=row.get("conversation"), turn=row.get("turn"), question=row.get("question"),
+                             wanted=out.get("wanted") or out.get("request"),
                              missing=out["missing"], closest=out.get("closest"), message=out["message"]))
     return page
 
@@ -90,7 +100,7 @@ def ask(question, state, log, db_path=None, call=None, model=None):
     db = connect(db_path)
     try:
         out = resolve.resolve(reply, short, state, db, db_path)
-        row = dict(question=question, reply=reply, shortlist={t: key for t, (_, key) in short["tags"].items()},
+        row = dict(**turn(state), question=question, reply=reply, shortlist={t: key for t, (_, key) in short["tags"].items()},
                    raw_reply=meta.get("raw_reply"), prompt_parts=meta.get("prompt_parts"),
                    model=meta["model"], tokens_in=meta["input_tokens"], tokens_out=meta["output_tokens"],
                    cache_write=meta.get("cache_write_tokens"), cache_read=meta.get("cache_read_tokens"),
@@ -110,7 +120,7 @@ def run_direct(request, state, log, db_path, question):
     db = connect(db_path)
     try:
         out = resolve.resolve_request(request, resolve.Dictionary(db, db_path), None)
-        row = dict(question=question, reply=None, model=None)
+        row = dict(**turn(state), question=question, reply=None, model=None)
         page = finish(out, state, db, log, row)
     finally:
         db.close()

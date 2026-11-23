@@ -28,7 +28,7 @@ One row per IPEDS variable in the release (2,599).
 - `priority`: 1 for ready-made and most-asked measures, then 2 and 3.
 - `in_first_version`: `yes` or `no`. A `no` means "IPEDS collects it, but it is not set up in this app yet".
 - `entering_cohort`: for graduation measures that cover one entering cohort, the cohort as a kind and an offset from the release year, such as `fall -6` (the 2024 release: students who entered in fall 2018). Blank means the table's rule in `year_meaning.csv`.
-- `period`: filled only when the variable reports a different year from its table (net price for 2023-24 in a 2024-25 table). Blank means the table's period in `year_meaning.csv`.
+- `period`: filled only when the variable reports a different year from its table (net price for 2023-24 in a 2024-25 table), written with the year words described under `year_meaning.csv`. Blank means the table's period in `year_meaning.csv`.
 - `plain_name`: your plain-English name. Blank means the IPEDS title is used.
 - `synonyms`: other words users say for this measure.
 - `statement`: a sentence shown whenever an answer uses this measure, such as the note that IPEDS counts first-time students, not first-year students.
@@ -68,6 +68,7 @@ Every way a user can name a group of schools.
 - `statement`: the definition the app states in "Interpreted as".
 - `caveat`: a warning shown with the definition.
 - `word_note`: a sentence explaining which words the group stands for ("State schools" means public four-year). Shown in "Definitions & sources", not in "Interpreted as".
+- `membership`: blank means each year's own list of schools. `as of latest year` means the latest year's list is used for every year (the Carnegie groups, whose classification exists only in recent releases), and the answer says so.
 - `status`: `in use` or `decline`.
 - `priority`: 1 for the groups most likely to be asked.
 - `note`: anything else.
@@ -117,6 +118,8 @@ Every code in the category columns of the multi-row tables.
 - `set_total`: the code of the row the parts add up to, or `sum of parts` when the data has no total row. The same on every row of the set.
 - `statement`: a sentence shown whenever an answer uses this row, such as the staff grand total's note that it excludes graduate assistants.
 - `set_fixed`: in tables keyed by several category columns, the default values the other columns are held at, such as `CIPCODE = 99; MAJORNUM = 1`. The same on every row of the set. A request may ask for another value (bachelor's degrees only, undergraduates only); the build tests the set at every value and allows only those that add up.
+- `years`: the release years the row applies to, such as `2015-2019` or `2020-2024`. Blank means every year. A code that IPEDS changed has one row for each span (award levels before and after 2020-21; 12-month enrollment levels, keyed by `EFFYLEV` before 2020-21). Each year's tests use only the rows for that year, and the app answers from the rows for the latest year.
+- `same_as`: for a row of an earlier year that holds the same information under another column or code, the latest year's row it stands for, written `COLUMN = code` (12-month enrollment `EFFYLEV 4`, Graduate, is `EFFYALEV = 12`). A summary-to-detailed link or a request that names the latest year's row is read through it in that year. Where both columns are filled in the same year, the build checks that they pick the same rows. A year with no such row does not hold the information, and its breakdown is not offered for that year.
 
 The build tests each set: at every school, do the parts add up to the total? A set is loaded only for the count columns where it does. The breakdown operation uses only loaded sets.
 
@@ -124,13 +127,37 @@ The build tests each set: at every school, do the parts add up to the total? A s
 
 What the year means for each table. Every result must state this period.
 
-- `table`, `year`: the table and the release year.
+- `table`, `years`: the table and the release years the row applies to (`2015-2024`). One row per table.
 - `kind`: fall, fiscal year, academic year, cohort, or 12 months July to June.
-- `period`: the period text shown to the user.
+- `period`: the period text shown to the user, written with year words counted from the release year: `{Y}` is the release year (2024 for the 2024-25 release), `{Y-1}` and `{Y+1}` count from it, and `{Y:yy}` gives the last two digits. `July 1, {Y-1} - June 30, {Y}` reads "July 1, 2023 - June 30, 2024" for the 2024-25 release.
 - `entering_cohort`: for graduation and outcome tables, the entering cohort as offsets from the release year, by school level where they differ: `fall -6 for Four or more years; fall -3 for At least 2 but less than 4 years`. Each level name is a school group. A measure's own `entering_cohort` wins.
 - `title`: the IPEDS table title.
 - `parent_child_flag`: the two `FLAGS` columns that say whether a school reports this survey together with a related campus, written `FLAGS.PRCH_EF; FLAGS.IDX_EF`. The first holds 1 (parent record, includes data from child campuses) or 2 (child record, data reported with the parent); the second holds the parent's ID. A summary-to-detailed link may differ only at such schools, and any answer that shows such a school says which campus it reports with (the "related campus" setting).
 - `caveat`: a warning shown whenever figures from this table are given for a group of schools, such as optional-year reporting.
+
+## measure_history.csv
+
+Where a 2024-25 measure was stored before the 2024-25 reorganisation of the cost and aid tables, so a trend reads the same figure from the earlier tables. Each year's figure comes from the release in which it is the current year.
+
+- `measure`: the 2024-25 measure, as in `measures.csv`.
+- `earlier_table`, `earlier_variable`: where the same figure is stored in earlier releases (same name and title once the years are taken out).
+- `years`: the releases that hold it there.
+- `how`: how the match was made.
+
+Measures with no row have no earlier years. The years each measure has values are worked out from the data by the build (table `measure_years`), not written here.
+
+## comparability_breaks.csv
+
+Years in which IPEDS changed a definition, or that need a note in a trend. Shown when a trend's period crosses `first_release` (or falls within `first_release` to `last_release`). The data is never hidden.
+
+- `kind`: `definition change` or `context` (a note where no definition changed).
+- `tables`: the tables the row applies to.
+- `applies_to`: what the note is about, in plain words.
+- `first_release`, `last_release`: the release years, such as `2020-21`. `last_release` is blank for a lasting change.
+- `what_changed`: the change, for review.
+- `note_shown`: the sentence shown with the trend.
+- `source`: where the change is documented.
+- `status`: `draft` (not shown) or `approved`.
 
 ## outside_ipeds.csv
 

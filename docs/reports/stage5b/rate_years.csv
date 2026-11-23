@@ -1,0 +1,281 @@
+rate,rate_measure,applies_to,numerator,denominator,year,numerator_values,denominator_values,available
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2015,2196,2212,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2016,2052,2069,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2017,2047,2075,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2018,2013,2039,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2019,1993,2011,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2020,1966,1989,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2021,1963,1981,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2022,1964,1991,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2023,1949,1973,yes
+Admission rate,DRVADM.DVADM01,,ADM.ADMSSN,ADM.APPLCN,2024,1931,1956,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2015,2192,2196,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2016,2046,2052,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2017,2043,2047,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2018,2007,2013,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2019,1988,1993,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2020,1964,1966,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2021,1957,1963,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2022,1958,1964,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2023,1946,1949,yes
+Admissions yield,DRVADM.DVADM04,,ADM.ENRLT,ADM.ADMSSN,2024,1928,1931,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2015,6959,6959,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2016,6544,6544,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2017,6394,6394,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2018,6114,6114,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2019,5909,5909,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2020,5859,5859,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2021,5779,5779,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2022,5709,5709,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2023,5653,5653,yes
+"Average Pell grant, undergraduates",SFA.UPGRNTA,,SFA.UPGRNTT,SFA.UPGRNTN,2024,5575,5575,yes
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2015,,4576,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2016,,4124,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2017,,4018,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2018,,3778,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2019,,3618,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2020,,3591,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2021,,3499,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2022,,3448,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2023,,3386,no
+"Average net price, students awarded Title IV federal aid, private",COST2_NETPRICE.NPT42,"Private, nonprofit or for-profit",COST2_NETPRICE.NPT42,COST2_FINANCIALAID.GRN4N2,2024,3322,3322,yes
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2015,,1910,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2016,,1900,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2017,,1889,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2018,,1879,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2019,,1853,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2020,,1829,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2021,,1821,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2022,,1833,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2023,,1806,no
+"Average net price, students awarded Title IV federal aid, public (in-state)",COST2_NETPRICE.NPIS42,Public,COST2_NETPRICE.NPIS42,COST2_FINANCIALAID.GIS4N2,2024,1800,1800,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2015,4592,4597,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2016,4151,4151,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2017,4029,4030,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2018,3787,3788,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2019,3651,3655,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2020,3627,3627,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2021,3540,3541,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2022,3477,3477,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2023,3414,3415,yes
+"Average net price, students awarded grant or scholarship aid, private",COST2_NETPRICE.NPGRN2,"Private, nonprofit or for-profit",COST2_NETPRICE.NPGRN2,COST2_FINANCIALAID.GRNTN2,2024,3351,3351,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2015,1926,1927,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2016,1920,1920,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2017,1907,1907,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2018,1891,1891,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2019,1860,1861,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2020,1844,1844,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2021,1831,1831,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2022,1845,1845,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2023,1830,1830,yes
+"Average net price, students awarded grant or scholarship aid, public (in-state)",COST2_NETPRICE.NPIST2,Public,COST2_NETPRICE.NPIST2,COST2_FINANCIALAID.GISTN2,2024,1823,1823,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, all ranks",DRVHR.SALTOTL,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, assistant professors",DRVHR.SalAsst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, associate professors",DRVHR.SalAssc,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, instructors",DRVHR.SalInst,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, lecturers",DRVHR.Sallect,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, no academic rank",DRVHR.SALNRNK,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2015,,16943,no
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2016,16558,16558,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2017,16459,16459,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2018,15939,15939,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2019,15683,15683,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2020,15464,15464,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2021,15381,15381,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2022,15455,15455,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2023,15308,15308,yes
+"Average salary equated to nine months, full-time instructional staff, professors",DRVHR.SalProf,,SAL_IS.SAEQ9OT,SAL_IS.SATOTLT,2024,15216,15216,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2015,13577,,no
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2016,13202,,no
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2017,51601,51601,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2018,50006,50006,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2019,48535,48535,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2020,48200,48200,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2021,47779,47779,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2022,47892,47892,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2023,47362,47362,yes
+Award within eight years (Outcome Measures),,,OM.OMAWDN8,OM.OMACHRT,2024,47029,47029,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2015,57349,57349,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2016,55737,55737,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2017,54747,54747,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2018,51906,51906,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2019,50493,50493,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2020,50103,50103,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2021,49547,49547,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2022,48217,48217,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2023,51391,51391,yes
+Bachelor's six-year graduation rate,DRVGR.GBA6RTT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2024,51011,51011,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2015,1996,7322,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2016,1958,6951,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2017,1954,6785,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2018,1919,6562,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2019,1905,6272,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2020,1862,6169,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2021,1847,6087,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2022,1848,6037,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2023,1831,5960,yes
+Core expenses per FTE student,,Reports on the FASB finance form,DRVF.F2COREXP,DRVEF12.FTE12MN,2024,1815,5862,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2015,2022,7322,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2016,2020,6951,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2017,2015,6785,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2018,1993,6562,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2019,1987,6272,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2020,1969,6169,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2021,1964,6087,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2022,1954,6037,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2023,1933,5960,yes
+Core expenses per FTE student,,Reports on the GASB finance form,DRVF.F1COREXP,DRVEF12.FTE12MN,2024,1927,5862,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2015,3286,7322,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2016,2939,6951,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2017,2803,6785,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2018,2508,6562,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2019,2390,6272,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2020,2373,6169,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2021,2307,6087,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2022,2251,6037,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2023,2218,5960,yes
+Core expenses per FTE student,,Reports on the for-profit finance form,DRVF.F3COREXP,DRVEF12.FTE12MN,2024,2172,5862,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2015,6499,6499,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2016,6079,6079,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2017,5982,5982,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2018,5664,5664,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2019,5523,5523,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2020,5521,5521,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2021,5456,5456,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2022,5406,5406,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2023,5357,5357,yes
+Full-time retention rate,EFD.RET_PCF,,EFD.RET_NMF,EFD.RRFTCTA,2024,5304,5304,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2015,57349,57349,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2016,55737,55737,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2017,54747,54747,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2018,51906,51906,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2019,50493,50493,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2020,50103,50103,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2021,49547,49547,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2022,48217,48217,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2023,51391,51391,yes
+"Graduation rate within 150% of normal time, four-year schools",DRVGR.GRRTTOT,Four or more years,GR.GRTOTLT,GR.GRTOTLT,2024,51011,51011,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2015,57349,57349,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2016,55737,55737,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2017,54747,54747,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2018,51906,51906,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2019,50493,50493,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2020,50103,50103,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2021,49547,49547,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2022,48217,48217,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2023,51391,51391,yes
+"Graduation rate within 150% of normal time, two-year schools",DRVGR.GRRTTOT,At least 2 but less than 4 years,GR.GRTOTLT,GR.GRTOTLT,2024,51011,51011,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2015,4346,4346,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2016,4094,4094,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2017,4034,4034,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2018,3854,3854,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2019,3737,3737,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2020,3758,3758,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2021,3734,3734,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2022,3729,3729,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2023,3661,3661,yes
+Part-time retention rate,EFD.RET_PCP,,EFD.RET_NMP,EFD.RRPTCTA,2024,3648,3648,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2015,,,no
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2016,5671,9325,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2017,5559,9118,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2018,5412,8765,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2019,5258,8505,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2020,5231,8440,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2021,5211,8357,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2022,5257,8345,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2023,5218,8220,yes
+Pell recipients' bachelor's six-year graduation rate,,Four or more years,GR_PELL_SSL.PGCMBAC,GR_PELL_SSL.PGADJCT,2024,5238,8173,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2015,6649,6959,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2016,6240,6544,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2017,6050,6376,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2018,5801,6114,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2019,5615,5909,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2020,5568,5859,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2021,5485,5779,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2022,5448,5709,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2023,5372,5653,yes
+Percent of full-time first-time students awarded any aid,SFA.ANYAIDP,,SFA.ANYAIDN,SFA.SCUGFFN,2024,5311,5575,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2015,6959,6959,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2016,6544,6544,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2017,6394,6394,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2018,6114,6114,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2019,5909,5909,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2020,5859,5859,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2021,5779,5779,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2022,5709,5709,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2023,5653,5653,yes
+Percent of undergraduates awarded Pell grants,SFA.UPGRNTP,,SFA.UPGRNTN,SFA.SCUGRAD,2024,5575,5575,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2015,6959,6959,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2016,6544,6544,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2017,6394,6394,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2018,6114,6114,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2019,5909,5909,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2020,5859,5859,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2021,5779,5779,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2022,5709,5709,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2023,5653,5653,yes
+Percent of undergraduates awarded federal loans,SFA.UFLOANP,,SFA.UFLOANN,SFA.SCUGRAD,2024,5575,5575,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2015,6959,6959,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2016,6544,6544,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2017,6394,6394,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2018,6114,6114,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2019,5909,5909,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2020,5859,5859,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2021,5779,5779,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2022,5709,5709,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2023,5653,5653,yes
+Percent of undergraduates awarded grant aid,SFA.UAGRNTP,,SFA.UAGRNTN,SFA.SCUGRAD,2024,5575,5575,yes

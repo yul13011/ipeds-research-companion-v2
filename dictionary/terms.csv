@@ -8,8 +8,8 @@ graduation rate,graduation rate; completion rate,group,Two-year schools only,Two
 graduation rate,graduation rate; completion rate,group,Both shown separately,Both shown separately,,split by level,no,,,mixed levels,"Graduation rates differ by school level: four-year schools use the bachelor's six-year rate, and two-year schools the overall rate within 150% of normal time.",always,in use,
 net price,net price,measure,Students awarded grant or scholarship aid,"Average net price, students awarded grant or scholarship aid",COST2_NETPRICE.NPIST2,,yes,,Public,no,Net price is reported one year behind the rest of the release; the period shown is the latest available.,always,in use,Public schools report this field
 net price,net price,measure,Students awarded grant or scholarship aid,"Average net price, students awarded grant or scholarship aid",COST2_NETPRICE.NPGRN2,,yes,,"Private, nonprofit or for-profit",no,Net price is reported one year behind the rest of the release; the period shown is the latest available.,always,in use,Private schools report this field
-net price,net price,measure,All students awarded Title IV federal aid,"Average net price, students awarded Title IV federal aid",COST2_NETPRICE.NPIS42,,no,,Public,no,Net price is reported one year behind the rest of the release; the period shown is the latest available.,always,in use,Public schools report this field
-net price,net price,measure,All students awarded Title IV federal aid,"Average net price, students awarded Title IV federal aid",COST2_NETPRICE.NPT42,,no,,"Private, nonprofit or for-profit",no,Net price is reported one year behind the rest of the release; the period shown is the latest available.,always,in use,Private schools report this field
+net price,net price,measure,All students awarded Title IV federal aid (2024-25 only),"Average net price, students awarded Title IV federal aid",COST2_NETPRICE.NPIS42,,no,,Public,no,Net price is reported one year behind the rest of the release; the period shown is the latest available.,always,in use,Public schools report this field
+net price,net price,measure,All students awarded Title IV federal aid (2024-25 only),"Average net price, students awarded Title IV federal aid",COST2_NETPRICE.NPT42,,no,,"Private, nonprofit or for-profit",no,Net price is reported one year behind the rest of the release; the period shown is the latest available.,always,in use,Private schools report this field
 enrollment,enrollment; students; headcount,measure,Fall total headcount,Fall total headcount,DRVEF.ENRTOT,,yes,,,no,,always,in use,
 enrollment,enrollment; students; headcount,measure,Undergraduate fall enrollment,Undergraduate fall enrollment,DRVEF.EFUG,,no,,,no,,always,in use,
 enrollment,enrollment; students; headcount,measure,Graduate fall enrollment,Graduate fall enrollment,DRVEF.EFGRAD,,no,,,no,,always,in use,
@@ -93,6 +93,8 @@ low-income,low-income; low income,measure,Percent of undergraduates awarded Pell
 message,,setting,years,years,,,no,,,no,"I have {what} for {held} only, so I can't show {asked}.",,in use,
 message,,setting,years partly,years partly,,,no,,,no,"I have {what} for {held} only; {missing} {verb} not available, so only {held} is shown.",,in use,
 message,,setting,not set up,not set up,,,no,,,no,"IPEDS collects {what}, but it isn't set up in this app yet.",,in use,
+message,,setting,not collected year,not collected year,,,no,,,no,IPEDS did not collect {what} in {year}.,,in use,
+message,,setting,breakdown not this year,breakdown not this year,,,no,,,no,"The breakdown ""{set}"" isn't available for {year}, because {why}. The total is shown.",,in use,
 message,,setting,not set up partly,not set up partly,,,no,,,no,"IPEDS collects {what}, but it isn't set up in this app yet, so it is left out.",,in use,
 message,,setting,not collected,not collected,,,no,,,no,{say},,in use,
 message,,setting,not collected source,not collected source,,,no,,,no,You may find this in {pointer}.,,in use,

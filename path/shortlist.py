@@ -11,7 +11,7 @@ import re
 import sqlite3
 from collections import Counter
 
-from path.request import TAG_RANGES
+from path.request import TAG_RANGES, fill_years
 
 SET_UP, NOT_SET_UP = 15, 5         # measures: the best set-up ones, then a few IPEDS collects but the app has not set up
 PER_TABLE = 5                       # at most this many of the set-up measures from one table, unless ...
@@ -146,7 +146,8 @@ def build_index(db):
     """Read every searchable entry once. Returns {kind: (BM25 index, {key: details})}."""
     q = lambda sql: db.execute(sql).fetchall()
     titles = dict(q('SELECT "table", title FROM dict_year_meaning'))
-    periods = dict(q('SELECT "table", period FROM dict_year_meaning'))
+    latest = q("SELECT MAX(year) FROM directory")[0][0]
+    periods = {t: fill_years(p, latest) for t, p in q('SELECT "table", period FROM dict_year_meaning')}
     index = {}
 
     measures = {}
@@ -154,7 +155,7 @@ def build_index(db):
             'SELECT "table", variable, title, long_description, plain_name, synonyms, in_first_version, unit, period, '
             "rows_per_school FROM dict_measures"):
         name = plain or title
-        measures[f"{t}.{v}"] = dict(id=f"{t}.{v}", name=name, table=t, unit=unit, period=period or periods.get(t),
+        measures[f"{t}.{v}"] = dict(id=f"{t}.{v}", name=name, table=t, unit=unit, period=fill_years(period, latest) or periods.get(t),
                                     set_up=first == "yes", many_rows=(per_school or "").startswith("many"),
                                     main=f"{name} {syn or ''}", context=f"{titles.get(t, '')} {(desc or '')[:300]}")
         measures[f"{t}.{v}"]["text"] = measures[f"{t}.{v}"]["main"] + " " + measures[f"{t}.{v}"]["context"]
@@ -186,9 +187,9 @@ def build_index(db):
     groups = {g: dict(name=g, statement=s, status=status, text=" ".join([g, w or "", s or ""]))
               for g, w, s, status in q("SELECT group_name, words, statement, status FROM group_list")}
     rows = {(t, c, code): dict(table=t, column=c, code=code, label=label, text=f"{label} {syn or ''}")
-            for t, c, code, label, syn in q('SELECT k."table", k."column", c.code, c.label, c.synonyms FROM row_keys k JOIN dict_category_codes c '
+            for t, c, code, label, syn in q('SELECT k."table", k."column", c.code, c.label, c.synonyms FROM row_keys k JOIN (SELECT * FROM dict_category_codes WHERE in_latest = \'yes\') c '
                                        'ON c."table" = k."table" AND UPPER(c."column") = UPPER(k."column")')}
-    labels = {(t, c.upper(), str(code)): label for t, c, code, label in q('SELECT "table", "column", code, label FROM dict_category_codes')}
+    labels = {(t, c.upper(), str(code)): label for t, c, code, label in q('SELECT "table", "column", code, label FROM dict_category_codes WHERE in_latest = \'yes\'')}
     def held(table, pairs):                     # {column: code} -> "label; label", in the words IPEDS uses
         return "; ".join(labels.get((table, c.upper(), str(v)), f"{c} {v}") for c, v in pairs.items())
     def parse(fixed):

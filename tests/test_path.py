@@ -49,6 +49,13 @@ def saved(call_reply):
 
 
 class Request(unittest.TestCase):
+    def test_period_patterns_fill_from_the_release_year(self):
+        self.assertEqual(rq.fill_years("July 1, {Y-1} - June 30, {Y}", 2024), "July 1, 2023 - June 30, 2024")
+        self.assertEqual(rq.fill_years("Academic year {Y}-{Y+1:yy}", 2015), "Academic year 2015-16")
+        self.assertEqual(rq.fill_years("{Y-1}-{Y:yy}", 2000), "1999-00")
+        self.assertEqual(rq.fill_years("Fall 2024", 2015), "Fall 2024")            # no pattern words: unchanged
+        self.assertIsNone(rq.fill_years(None, 2024))
+
     def setUp(self):
         self.base = req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003), S("WPI", 168421)])
 
@@ -309,6 +316,17 @@ class Path_(unittest.TestCase):
         self.assertEqual(last["outcome"], "wrong_reading")
         self.assertIn("SFA.UPGRNTP", json.dumps(last["detail"]))
         self.assertIn("DRVADM.DVADM01", last["shortlist"].values())             # the shortlist is logged, tag by tag
+
+    def test_log_lines_carry_the_conversation_and_turn(self):
+        wrong = reply_request(req("schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)]))
+        state = {}
+        self.ask("What was Yale's admission rate?", wrong, state)
+        self.ask("What was Yale's admission rate?", wrong, state)
+        self.ask("What was Yale's admission rate?", wrong, {})                  # a new conversation
+        rows = [json.loads(x) for x in (Path(self.dir.name) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-3:]]
+        self.assertEqual([r["turn"] for r in rows], [1, 2, 1])
+        self.assertEqual(rows[0]["conversation"], rows[1]["conversation"])
+        self.assertNotEqual(rows[1]["conversation"], rows[2]["conversation"])
 
     def test_unclear_school_opens_the_picker(self):
         state = {}

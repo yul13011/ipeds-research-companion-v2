@@ -67,8 +67,8 @@ GOOD = {
         dict(table="ENR", column="LEVEL", code="5", label="Part-time", role="part", breakdown_set="By attendance", set_total="1", set_fixed="STUDY = 1"),
         dict(table="ENR", column="LEVEL", code="6", label="Online", role="part", breakdown_set="By mode", set_total="sum of parts"),
         dict(table="ENR", column="LEVEL", code="7", label="In person", role="part", breakdown_set="By mode", set_total="sum of parts")],
-    "outside_ipeds": [], "special_codes": [],
-    "year_meaning": [dict(table=t, year="2024", kind="fall", period="Fall 2024") for t in ("HD", "IC", "DRVADM", "ENR")],
+    "outside_ipeds": [], "special_codes": [], "measure_history": [], "comparability_breaks": [],
+    "year_meaning": [dict(table=t, years="2024", kind="fall", period="Fall {Y}") for t in ("HD", "IC", "DRVADM", "ENR")],
 }
 
 
@@ -273,6 +273,125 @@ class LoaderLogic(unittest.TestCase):
 
     def test_data_table_without_a_year_meaning_stops_the_build(self):
         self.assertProblem("no row for data table IC", year_meaning=[r for r in GOOD["year_meaning"] if r["table"] != "IC"])
+
+    # ---- part 5b: the dictionary across years
+    def add_2023(self):
+        """A second, earlier year: the same schools, with level 2 of ENR reported under code 8 instead (a code
+        that IPEDS changed), and school 3 not yet open."""
+        con = sqlite3.connect(self.db_path)
+        for t in ("HD", "IC", "DRVADM", "ENR"):
+            con.execute(f"INSERT INTO _tables VALUES ('{t}', '{t}2023', 'data', 2023)")
+            con.executescript(f"CREATE TEMP TABLE copy AS SELECT * FROM {t} WHERE year = 2024; UPDATE copy SET year = 2023; "
+                              f"INSERT INTO {t} SELECT * FROM copy; DROP TABLE copy;")
+        con.execute("UPDATE ENR SET LEVEL = 8 WHERE year = 2023 AND LEVEL = 2")
+        con.execute("DELETE FROM HD WHERE year = 2023 AND UNITID = 3")
+        con.commit()
+        con.close()
+
+    def test_years_of_category_rows_and_tests_in_every_year(self):
+        self.add_2023()
+        codes = [dict(r, years="2024") if r["code"] == "2" else dict(r) for r in GOOD["category_codes"]]
+        codes.append(dict(table="ENR", column="LEVEL", code="8", label="Undergraduate", role="part", breakdown_set="By level",
+                          set_total="1", set_fixed="STUDY = 1", years="2023"))
+        db = self.build(category_codes=codes, year_meaning=[dict(r, years="2023-2024") for r in GOOD["year_meaning"]])
+        status = dict(db.execute("SELECT year, status FROM year_checks WHERE name='By level' AND measure='CNT'").fetchall())
+        self.assertEqual(status, {2023: "loaded", 2024: "loaded"})              # each year tested with its own codes
+        self.assertEqual([p for (p,) in db.execute(       # the result tables hold the latest year's parts
+"SELECT part FROM breakdown_parts WHERE set_name='By level' ORDER BY 1")], ["2", "3"])
+        self.assertEqual(dict(db.execute("SELECT code, in_latest FROM dict_category_codes WHERE code IN ('2', '8')")),
+                         {"2": "yes", "8": "no"})
+        db.close()
+
+    def test_year_meaning_must_cover_every_year(self):
+        self.add_2023()
+        self.assertProblem("no row for data table ENR covers 2023")
+
+    def test_measure_years_and_rate_years(self):
+        self.add_2023()
+        con = sqlite3.connect(self.db_path)
+        con.execute("INSERT INTO DRVADM VALUES (2024, 1, 50, 5, 10), (2023, 1, 50, NULL, 10)")   # 2023: no admits count
+        con.commit()
+        con.close()
+        db = self.build(year_meaning=[dict(r, years="2023-2024") for r in GOOD["year_meaning"]])
+        try:
+            years = dict(db.execute("SELECT year, n_values FROM measure_years WHERE measure='DRVADM.DVADM01'").fetchall())
+            self.assertEqual(years, {2023: 1, 2024: 1})
+            rate = dict(db.execute("SELECT year, available FROM rate_years WHERE rate='Admission rate'").fetchall())
+            self.assertEqual(rate, {2023: "no", 2024: "yes"})                  # a rate starts only once all its counts exist
+        finally:
+            db.close()
+
+    def test_group_as_of_latest_year(self):
+        self.add_2023()
+        con = sqlite3.connect(self.db_path)
+        con.execute("UPDATE HD SET SECTOR = 2 WHERE year = 2023 AND UNITID = 4")  # school 4 was private in 2023
+        con.commit()
+        con.close()
+        groups = [dict(r) for r in GOOD["school_groups"]] + [dict(group="Public now", kind="column", table="HD", column="SECTOR",
+                                                                   codes="1", membership="as of latest year")]
+        db = self.build(school_groups=groups, year_meaning=[dict(r, years="2023-2024") for r in GOOD["year_meaning"]])
+        each = [u for (u,) in db.execute("SELECT unitid FROM group_membership WHERE group_name='Public four-year' AND year=2023 ORDER BY 1")]
+        latest = [u for (u,) in db.execute("SELECT unitid FROM group_membership WHERE group_name='Public now' AND year=2023 ORDER BY 1")]
+        self.assertEqual((each, latest), ([1], [1, 4]))
+        db.close()
+
+    def old_column_setup(self, fill_2024=False):
+        """2023 keeps the student level in another column, OLDLEV (codes 101-107), as 12-month enrollment did before
+        2020-21. DRVADM.TOT is a summary of ENR.CNT at level 1, study 1."""
+        self.add_2023()
+        con = sqlite3.connect(self.db_path)
+        con.executescript("""ALTER TABLE ENR ADD COLUMN OLDLEV INTEGER; ALTER TABLE DRVADM ADD COLUMN TOT INTEGER;
+            UPDATE ENR SET LEVEL = 2 WHERE year = 2023 AND LEVEL = 8;
+            UPDATE ENR SET OLDLEV = LEVEL + 100, LEVEL = NULL WHERE year = 2023;
+            INSERT INTO DRVADM (year, UNITID, TOT) VALUES (2024, 1, 100), (2024, 2, 10), (2023, 1, 100), (2023, 2, 10);""")
+        if fill_2024:                                   # both columns filled in 2024, so the claim can be checked
+            con.execute("UPDATE ENR SET OLDLEV = LEVEL + 100 WHERE year = 2024")
+        con.commit()
+        con.close()
+
+    def old_column_dictionary(self, same_as=True):
+        codes = [dict(r, years="2024") if r["column"] == "LEVEL" else dict(r) for r in GOOD["category_codes"]]
+        for r in GOOD["category_codes"]:
+            if r["column"] == "LEVEL":
+                codes.append(dict(r, column="OLDLEV", code=str(100 + int(r["code"])), years="2023", breakdown_set="",
+                                  set_total="", set_fixed="", same_as=f"LEVEL = {r['code']}" if same_as else ""))
+        measures = GOOD["measures"] + [dict(table="DRVADM", variable="TOT", title="Students", format="Cont", data_type="N",
+                                            detailed_measure="ENR.CNT where LEVEL = 1; STUDY = 1")]
+        return dict(category_codes=codes, measures=measures,
+                    year_meaning=[dict(r, years="2023-2024") for r in GOOD["year_meaning"]])
+
+    def test_link_is_tested_in_an_earlier_year_through_same_as(self):
+        self.old_column_setup()
+        db = self.build(**self.old_column_dictionary())
+        try:
+            status = dict(db.execute("SELECT year, status FROM year_checks WHERE kind='link' AND name='DRVADM.TOT'").fetchall())
+            self.assertEqual(status, {2023: "loaded", 2024: "loaded"})
+            self.assertEqual(db.execute("SELECT rows FROM detail_links WHERE measure='DRVADM.TOT'").fetchone()[0],
+                             '{"LEVEL": "1", "STUDY": "1"}')              # the app's year keeps the dictionary's rows
+        finally:
+            db.close()
+
+    def test_link_without_a_counterpart_is_not_in_that_years_data(self):
+        self.old_column_setup()
+        db = self.build(**self.old_column_dictionary(same_as=False))     # no same_as: the build cannot read 2023
+        try:
+            status = dict(db.execute("SELECT year, status FROM year_checks WHERE kind='link' AND name='DRVADM.TOT'").fetchall())
+            self.assertEqual(status, {2023: "not in this year's data", 2024: "loaded"})
+        finally:
+            db.close()
+
+    def test_same_as_is_checked_where_both_columns_are_filled(self):
+        self.old_column_setup(fill_2024=True)
+        self.build(**self.old_column_dictionary()).close()                # the claim holds in 2024: no problem
+        con = sqlite3.connect(self.db_path)
+        con.execute("UPDATE ENR SET OLDLEV = 109 WHERE year = 2024 AND UNITID = 2 AND LEVEL = 1")   # now it does not
+        con.commit()
+        con.close()
+        self.assertProblem("but only 1 have both", **self.old_column_dictionary())
+
+    def test_unreadable_years_stop_the_build(self):
+        codes = [dict(r, years="from 2020") if r["code"] == "2" else dict(r) for r in GOOD["category_codes"]]
+        self.assertProblem("years 'from 2020' is not a year", category_codes=codes)
 
 
 @unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built; run python build/build_data.py")

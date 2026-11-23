@@ -73,9 +73,9 @@ Each command does the following:
 3. Checks that every table has as many rows as its source.
 4. Rebuilds the dictionary tables, checking every dictionary rule against the data. If anything does not fit, it stops with a list of problems.
 
-Each command takes about 5 to 10 minutes. It prints, for example, `IPEDS_2024-25_Final: 56 tables loaded; replaced IPEDS_2024-25_Provisional`.
+Each command takes about 30 to 35 minutes, most of it the dictionary step, which tests every year. It prints, for example, `IPEDS_2024-25_Final: 56 tables loaded; replaced IPEDS_2024-25_Provisional`.
 
-To rebuild everything from scratch instead (all releases in `config.py`; about 30 minutes for ten years, plus 4 for the dictionary):
+To rebuild everything from scratch instead (all releases in `config.py`; about 30 minutes for ten years, plus 25 for the dictionary):
 
 ```bash
 python build/build_data.py
@@ -91,13 +91,19 @@ The stacking report shows what changed:
 python scripts/stack_report.py
 ```
 
+The every-year rate check compares each rate with the NCES trend files and checks IPEDS's ready-made rates against the counts:
+
+```bash
+python scripts/rates_by_year.py
+```
+
 It writes to `docs/reports/stage5a/`:
 - row counts per table and year against the source;
 - columns that change type;
 - tables present only in some years;
 - variables added, retired or renamed.
 
-You decide what to set up, leave aside, or record as a comparability break. Each change goes into the dictionary folder with a dated line in `dictionary/DECISIONS.md`. Then reload the dictionary (about 4 minutes):
+You decide what to set up, leave aside, or record as a comparability break. Each change goes into the dictionary folder with a dated line in `dictionary/DECISIONS.md`. When a new release is added, also give it a place in the year rules: `year_meaning.csv` must cover the new year for every table (the build says which do not), and any code IPEDS changed needs `years` (and, where the same information moved, `same_as`) in `category_codes.csv`. Then reload the dictionary (about 25 minutes):
 
 ```bash
 python build/build_dictionary.py
