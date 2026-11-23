@@ -25,3 +25,5 @@ o49_hsi,1,49,5.0,Graduation rate for Hispanic-serving institutions
 o49_hsi,2,49,5.0,Why not?
 o49_yale_1990,1,49,5.0,Enrollment at Yale in 1990
 o49_yale_1990,2,49,5.0,What can you show me instead?
+o50_yale_pell_trend,1,50,5c,Pell grant percentage at Yale since 2015
+o50_cc_dgs_pell_trend,1,50,5c,Share of degree-seeking undergraduates with Pell grants at Front Range Community College since 2015

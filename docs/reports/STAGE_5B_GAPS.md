@@ -151,6 +151,28 @@ DRVIC, IC_AY, IC_PY, SFA_P1, SFA_P2, IC_PCCAMPUSES and GR_GENDER. Approve that I
 
 The NCES trend files have figures for most rate measures across the ten years (graduation rates q19–21, retention q32–33, aid q34–37, admissions q101–103 and others). I'll test every rate in every year where NCES has a figure, after loading. Nothing to decide, unless you want years without an NCES figure checked another way.
 
+### 9. The degree-seeking split in the aid tables (added at the owner's request)
+
+Script `scripts/aid_split_check.py`; results in `stage5b/aid_split_parts.csv` and `stage5b/aid_split_national.csv`.
+
+**Do the parts add to the total?** Yes. Degree-seeking plus non-degree-seeking equals the total at every school with all three values, except 0 to 2 schools a year (aid cohort: 0 in 2021-22, 2 in 2022-23, 2 in 2023-24; grant recipients 0 in every year; Pell and loan recipients 0 in 2022-23, 1 in 2023-24). The fall and full-year cohort parts do not add up at about 2,100 to 3,500 schools, because those cohorts are reported only by some schools; they are not trend measures.
+
+**Did the national totals move unusually?** (Aid years; each year's own national universe.)
+- The aid cohort stays at 76.3% to 77.6% of the 12-month undergraduate headcount in all ten years, including 2021-22 to 2022-23 (77.3%, 76.8%). A definition change would move this share; it did not.
+- Pell recipients change smoothly: -2.8% (2021-22), -2.0% (2022-23), +5.5% (2023-24). The Pell share of the cohort goes 32.0%, 31.6%, 32.4%.
+- Loan recipients fall steadily, as in earlier years.
+- Grant recipients are the exception: +4.4% (2019-20), -1.0%, +4.8% (2021-22), then -9.6% (2022-23) and +0.9%. The drop is broad: 3,331 schools down, 1,934 up; the ten largest drops (mostly large community colleges) are only 12% of it. This looks like pandemic emergency grants entering and leaving the count, but the codebook descriptions of UAGRNTN for 2020-21 to 2024-25 say nothing about emergency grants, so the cause is not confirmed.
+
+**Conclusion:** the totals did not change definition. I propose one comparability-breaks row of kind "context": "IPEDS began reporting degree-seeking and non-degree-seeking undergraduates separately in 2022-23 for grant aid and the Pell and loan percents, and in 2023-24 for Pell and loan counts and amounts. The all-undergraduate totals are unchanged." This depends on decision 5a (the new file), and the file would need a "kind" column (definition change or context).
+
+- **9a.** Should the grant-recipient swing of 2019-20 to 2022-23 get its own context note (a change in the count, cause not stated by IPEDS)? I recommend yes, worded without naming a cause.
+
+**Planned handling when loading (for your approval):**
+- Years available are worked out per variable from the loaded data, not per table. A group rate starts no earlier than the first year all its counts exist.
+- One trend never mixes measures with different first years; where a measure starts later, its earlier years are named as not collected.
+- For trends, the default Pell, grant and loan measures are the all-undergraduate ones (ten years). The degree-seeking measures are offered from their first year.
+- Two test questions added for stage 5c in `docs/owner_questions.csv`: "Pell grant percentage at Yale since 2015" (all undergraduates, ten years) and "Share of degree-seeking undergraduates with Pell grants at Front Range Community College since 2015" (from its first year, earlier years named as not collected). Their expectation rows are still to be written.
+
 ## Where existing code does not yet follow the version 3 habits
 
 | Habit | State |

@@ -1,0 +1,15 @@
+total,parts,what,release_year,aid_year,schools,with_all_three,parts_differ,examples
+SCUGRAD,SCUGDGSK + SCUGNDGS,undergraduates in the aid cohort,2022,2021-22,5709,5709,0,
+SCUGRAD,SCUGDGSK + SCUGNDGS,undergraduates in the aid cohort,2023,2022-23,5653,5653,2,481571: 6 + 0 vs 24; 495244: 60 + 0 vs 62
+SCUGRAD,SCUGDGSK + SCUGNDGS,undergraduates in the aid cohort,2024,2023-24,5575,5575,2,154688: 1113 + 409 vs 1457; 490090: 47 + 26 vs 123
+SCFA2,SCFA2DG + SCFA2ND,"undergraduates, fall cohort",2024,2023-24,5575,3505,2,154688: 1113 + 409 vs 1457; 491570: 29 + 5 vs 29
+SCFY2,SCFY2DG + SCFY2ND,"undergraduates, full-year cohort",2022,2021-22,5709,2140,2,134307: 440 + 215 vs 1148; 490090: 16 + 33 vs 51
+SCFY2,SCFY2DG + SCFY2ND,"undergraduates, full-year cohort",2023,2022-23,5653,2120,2,481571: 6 + 0 vs 24; 495244: 60 + 0 vs 62
+SCFY2,SCFY2DG + SCFY2ND,"undergraduates, full-year cohort",2024,2023-24,5575,2070,1,490090: 47 + 26 vs 123
+UAGRNTN,UDGAGRNTN + UNDAGRNTN,undergraduates awarded grant aid,2022,2021-22,5709,5709,0,
+UAGRNTN,UDGAGRNTN + UNDAGRNTN,undergraduates awarded grant aid,2023,2022-23,5653,5653,0,
+UAGRNTN,UDGAGRNTN + UNDAGRNTN,undergraduates awarded grant aid,2024,2023-24,5575,5575,0,
+UPGRNTN,UDGPGRNTN + UNDPGRNTN,undergraduates awarded Pell grants,2023,2022-23,5653,5653,0,
+UPGRNTN,UDGPGRNTN + UNDPGRNTN,undergraduates awarded Pell grants,2024,2023-24,5575,5575,1,244233: 96 + 0 vs 144
+UFLOANN,UDGFLOANN + UNDFLOANN,undergraduates awarded federal loans,2023,2022-23,5653,5653,0,
+UFLOANN,UDGFLOANN + UNDFLOANN,undergraduates awarded federal loans,2024,2023-24,5575,5575,1,244233: 150 + 0 vs 225
