@@ -31,6 +31,9 @@ STANDING RULES FOR THIS STAGE
   4. "What data exists" stays a self-contained step that can be called on its own.
   5. Logs record a conversation identifier with each turn.
   Do not build version 3 features; just follow these habits, and say in each report where existing code does not yet follow them.
+- Names: measures are shown by their official IPEDS titles, to match the codebook. Plain names are kept only for the 20 "Grand total" measures. Where two or more measures share a title, the shown name is "subject: title", with the subject taken from IPEDS's own table title. The build checks that no two measures are shown with the same name.
+- Build and test cadence (owner decision, Nov 23): use the fast build path for routine changes. Run a full rebuild only before a push to GitHub, at the end of each stage, and for yearly updates; its result must match the fast path, as tested. Run the question set once per change order, and twice only at the end of a part, when the scorecard is judged.
+- Judging wrong readings (owner decision, Part 5.0): a path defect must never appear. Model readings are tracked as a rate over two runs of the full set, must stay at or above 90% right or acceptable, and are reported with the range across runs. A misreading that recurs across runs is fixed through a synonym, a dictionary row or an instruction line, never a special-case patch.
 - Out of scope for Stage 5: moving the Access-to-SQLite converter and the cross-year index into version 2 (a later task), web search, the formula field, category sets, groups from a confirmed list, data extracts, the format-chart panel, downloads, the Explore page, "Need ideas?" and the About page.
 
 PART 5.0. FIXES FROM OWNER TESTING (one year of data, as now)
@@ -94,6 +97,16 @@ PART 5c. TREND QUESTIONS
 - Follow-ups that change the period ("now since 2015", "just the last three years").
 - A basic automatic chart: a line for trends, bars for comparisons. Take the palette and fonts from version 1's chart settings (read only). No formatting panel.
 
+Trend rules decided in Part 5b (recorded in DECISIONS.md):
+- Default measures for trends are those covering all ten years: the all-undergraduate aid measures, and the average net price for students awarded grant or scholarship aid. The degree-seeking aid split and the Title IV net price are offered from their own first years.
+- Years available are worked out per variable. A group rate starts only once all its counts exist, and one trend never mixes measures with different first years.
+- Each aid year's figure is taken as first published, from the release where it is the current year.
+- Schools are shown by today's name, with "(then: …)" for earlier years, and "merged into … in …" where the directory records it. "Its peers" uses today's comparison group for every year. Carnegie groups use the stated classification for every year.
+- A year IPEDS did not collect a measure gets "IPEDS did not collect {what} in {year}"; a breakdown not available in a year gets its own message, and the total is still shown.
+- Comparability-break and context notes are shown on any trend crossing them. The pandemic note goes by the period a figure covers (March 2020 to June 2022), not by release.
+- Graduate 12-month headcount before 2020-21 comes from the detailed table, since the summary lacks it.
+- Retired variables use the "IPEDS collected {what} from {first} to {last}" message, continuing through an approved successor where there is one.
+
 PART 5d. UNDERSTANDING ANY PHRASING
 
 - Write a test set of 30 to 50 badly written questions: misspellings, abbreviations (UConn, UMich, CUNY, Mizzou, WSU Tech), informal phrasing ("how many kids go there"), and "RTI" (RIT, or RTI International, which is not a college). Include expected outcomes. Show me the set before using it.
@@ -101,12 +114,15 @@ PART 5d. UNDERSTANDING ANY PHRASING
 - The AI's own search: when nothing on the shortlist fits, the model calls the app's search with its own words, at most twice. Log every search call. Code still rejects any item that did not come from a search shown to the model for that question.
 - Group near-duplicate measures (those differing only by a subgroup such as Pell status or gender) so they do not crowd the shortlist, judged from the dictionary's own category labels.
 - Measure the shortlist-miss rate and the number of wrong readings before and after each layer. Speed limits: typical questions under 5 seconds, hard ones under 10.
+- The search now has to work for every measure set up in Part 5b2 (about 3,000, including retired ones). Fix the three shortlist tests marked for this part, and keep retired variables ranked below current measures (at most two on the shortlist).
 
 PART 5e. WRITTEN SUMMARY
 
 - A second model call writes two or three neutral sentences about the result, given only the table and its notes. No interpretation beyond the numbers.
 - Code checks that every number in the summary appears in the table (allowing for rounding and percent formatting). If the check fails, the summary is dropped and logged; the table stands alone.
 - It streams in under the table and can be switched off. Log its time and cost. Tests use saved replies.
+- A staged status line while the app works, showing each step in plain words (for example "Finding matching data…", "Reading your question…", "Getting the numbers…", "Writing the summary…"), including the AI's own search from Part 5d.
+- A single-number tile: when the answer is one figure, show it large, with its label, school or group and period, above the table.
 
 PART 5f. EXPLAINING TERMS AND CONCEPTS (question types 44 and 45)
 
@@ -128,6 +144,7 @@ PART 5g. MEASURE IT
 - The full question set with trend questions now scored, plus the owner questions due by stage 5f (set IPEDS_STAGE accordingly) and the badly written set.
 - Version 1 against version 2 on the trend questions, from version 1's log, as far as the log allows.
 - Time and cost per question.
+- Judge model readings as set out in the standing rules: two runs of the full set, the range across runs, and the 90% threshold.
 - A scorecard against the success test in the plan: benchmarks match apart from known definition differences; at least 90% of scored questions right or acceptable, trend questions included; no false "IPEDS does not collect this"; the speed limits.
 
 START by reading the documents above and telling me in a few sentences how you understand Part 5.0, with anything unclear. Then wait for my go.
