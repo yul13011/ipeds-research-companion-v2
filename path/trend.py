@@ -74,12 +74,13 @@ def plan(request, plan_, d, say):
     m0 = plan_["measures"][0] if plan_["measures"] else None
     covered = plan_["members"] if plan_["members"] is not None else {s["id"] for s in plan_["schools"]}
     pattern = (m0 or {}).get("period_pattern") or "{Y}"
-    rule = cohort_rule(m0, covered, d) if m0 and year.get("kind") == "entering cohort" else None
-    if rule:                                            # years named as entering cohorts: matched by cohort
+    rules = [cohort_rule(m, covered, d) for m in plan_["measures"]] if year.get("kind") == "entering cohort" else []
+    rule = next((r for r in rules if r), None)          # years named as entering cohorts: matched by the cohort of
+    if rule:                                            # the first measure that has one
         pattern = f"{rule[0]} {{Y{rule[1]:+d}}}"
     chosen = choose(year, pattern, years)
-    if not chosen and year.get("span") == "one year" and (year.get("start") or 0) >= years[-1]:
-        return None                                     # the newest release's year: the usual latest-year answer
+    if not chosen and year.get("span") == "one year" and year.get("start") == years[-1]:
+        return None                                     # the newest release's own year: the usual latest-year answer
     if not chosen:
         first, last = (fill_years(m0["period_pattern"], years[0]), fill_years(m0["period_pattern"], years[-1])) if m0 else ("", "")
         latest = dict(year, span=None, start=None, end=None, last=None, change=False, kind="latest", stated=None)

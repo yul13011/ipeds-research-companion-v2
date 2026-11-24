@@ -97,8 +97,14 @@ def ask(question, state, log, db_path=None, call=None, model=None):
     carried = history[-1:] + [o["request"] for o in pending]
     short = shortlist.shortlist(question, db_path, carried)
     declined = (state.get("last_decline") or {}).get("missing")
+    short_now = {"short": short}
+
+    def searched(words):                            # the model's own search, on the latest shortlist
+        short_now["short"], added = shortlist.extend(short_now["short"], words, db_path)
+        return short_now["short"], added
     reply, meta = interpret.interpret(question, short, history[-1] if history else None, pending, call=call, model=model,
-                                      declined=declined)
+                                      declined=declined, search=searched if config.AI_SEARCH else None)
+    short = meta.get("short") or short
     db = connect(db_path)
     try:
         out = resolve.resolve(reply, short, state, db, db_path)
@@ -106,7 +112,8 @@ def ask(question, state, log, db_path=None, call=None, model=None):
                    raw_reply=meta.get("raw_reply"), prompt_parts=meta.get("prompt_parts"),
                    model=meta["model"], tokens_in=meta["input_tokens"], tokens_out=meta["output_tokens"],
                    cache_write=meta.get("cache_write_tokens"), cache_read=meta.get("cache_read_tokens"),
-                   cost_usd=meta["cost_usd"], model_seconds=meta["seconds"], model_error=meta["error"])
+                   cost_usd=meta["cost_usd"], model_seconds=meta["seconds"], model_error=meta["error"],
+                   calls=meta.get("calls"), searches=meta.get("searches"), search_seconds=meta.get("search_seconds"))
         page = finish(out, state, db, log, row)
     finally:
         db.close()

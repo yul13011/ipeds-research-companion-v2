@@ -46,6 +46,12 @@ Rules:
         reason and closest are for the app's log only; keep each to one short sentence (at most 25 words).
   about_decline: the user asks about the answer the app just declined: "why not?" (about = why),
         "where can I find that?" (where), "what can you show instead?" (instead). Fill decline.about only.
+  search: nothing on the SHORTLIST fits what the question needs (a measure, a group, a school). Put in search_words
+        a few plain words for the missing item only, in the words a data dictionary would use ("total fall
+        enrollment", "community colleges", "University of Missouri"); leave out the rest of the question. The app
+        searches and shows the shortlist again with what it found first. Use it only while SEARCHES LEFT is above 0,
+        and only before deciding to decline for want of a measure, group or school. With no searches left, answer
+        from the shortlist or decline. For every other kind, search_words is empty.
 - Operations: {operations}
 - measures: pick the measure that matches. For a multi-row measure, name a category row (R tag listed for that
   measure) only when the user asks for one, such as transfer-in students; otherwise leave `row` empty and the app
@@ -82,7 +88,7 @@ Rules:
 """
 
 
-def render(short, previous, pending, question, declined=None):
+def render(short, previous, pending, question, declined=None, searches=None, searches_left=0):
     """The shortlist and conversation as plain text for the model, in tags. Returns (text, words per part)."""
     parts = {}
     def section(name, lines):
@@ -120,6 +126,10 @@ def render(short, previous, pending, question, declined=None):
     section("outside", ["Outside IPEDS (tag | topic):"] + [f"  {o['tag']} | {o['topic']}" for o in short["outside"]])
     convo = ["PREVIOUS REQUEST" + (f" (the app declined it: {declined})" if declined else "") + ": " +
              (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
+    for s in searches or []:
+        convo.append(f"YOUR SEARCH: {s['words']!r} found " + (", ".join(f"{len(v)} {k}" for k, v in s["added"].items())
+                                                                  or "nothing new") + " (listed first above)")
+    convo.append(f"SEARCHES LEFT: {searches_left}")
     if pending:
         convo += ["PENDING OPTIONS:"] + [f"  {i}: {o['label']}" for i, o in enumerate(pending)]
     section("conversation", convo)
@@ -131,6 +141,8 @@ def render(short, previous, pending, question, declined=None):
 
 def check(reply):
     """The parts a reply of each kind must carry. Returns a problem, or None."""
+    if reply["kind"] == "search" and not reply.get("search_words"):
+        return "a reply of kind search came without search words"
     needs = {"request": "request", "edit": "edit", "decline": "decline"}
     if reply["kind"] in needs and not reply.get(needs[reply["kind"]]):
         return f"a reply of kind {reply['kind']} came without its {needs[reply['kind']]}"
@@ -139,6 +151,31 @@ def check(reply):
     if reply["kind"] == "choose" and not reply.get("chosen"):
         return "a reply of kind choose named no option"
     return None
+
+
+MAX_SEARCHES = 2                    # the model's own searches per question (owner decision, 2026-11-24)
+
+
+def one_call(system, user, model, schema, short, call, meta):
+    """One model call with one retry. Returns the reply in code form, or None (meta["error"] says why)."""
+    meta["calls"] += 1
+    reply = None
+    for _ in range(2):                              # one retry, then a plain failure
+        meta["attempts"] += 1
+        try:
+            text, usage = call(system, user, model, schema)
+            for key in ("input_tokens", "output_tokens", "cache_write_tokens", "cache_read_tokens"):
+                meta[key] += usage.get(key, 0)
+            meta["raw_reply"] = json.loads(text)
+            reply = from_wire(meta["raw_reply"], short["tags"])
+            problem = check(reply)
+            if problem:
+                raise ValueError(problem)
+            meta["error"] = None
+            return reply
+        except Exception as e:                      # any failure is recorded and retried once
+            reply, meta["error"] = None, f"{type(e).__name__}: {e}"
+    return reply
 
 
 def call_api(system, user, model, schema):
@@ -158,35 +195,41 @@ def call_api(system, user, model, schema):
                   "cache_write_tokens": u.cache_creation_input_tokens or 0, "cache_read_tokens": u.cache_read_input_tokens or 0}
 
 
-def interpret(question, short, previous=None, pending=None, call=None, model=None, declined=None):
-    """Returns (reply, meta). On two failed attempts the reply is None and meta["error"] says why."""
+def interpret(question, short, previous=None, pending=None, call=None, model=None, declined=None, search=None):
+    """Returns (reply, meta). On two failed attempts the reply is None and meta["error"] says why.
+
+    `search` (words -> (shortlist, added)) is the app's own search. When the model replies with kind "search", the
+    search runs on its words and the model is asked again with the longer shortlist, at most MAX_SEARCHES times. The
+    reply's tags are read against the shortlist of the last call; meta["short"] is that shortlist, and
+    meta["searches"] records each search (its words, what it added, and its seconds)."""
     model = model or config.INTERPRET_MODEL
     call = call or call_api
     system = INSTRUCTIONS.format(operations="; ".join(f"{k}: {v}" for k, v in OPERATIONS.items()),
                                  comparisons=", ".join(COMPARISONS))
-    user, parts = render(short, previous, pending, question, declined)
     schema = REPLY_SCHEMA
-    meta = {"model": model, "attempts": 0, "input_tokens": 0, "output_tokens": 0, "cache_write_tokens": 0,
-            "cache_read_tokens": 0, "error": None,
-            "prompt_words": len((system + user).split()),
-            "prompt_parts": dict(instructions=len(system.split()), **parts, schema_characters=len(json.dumps(schema))),
-            "system": system, "user": user}
+    meta = {"model": model, "attempts": 0, "calls": 0, "input_tokens": 0, "output_tokens": 0, "cache_write_tokens": 0,
+            "cache_read_tokens": 0, "error": None, "searches": [], "search_seconds": 0.0}
     start = time.time()
-    for _ in range(2):                              # one retry, then a plain failure
-        meta["attempts"] += 1
-        try:
-            text, usage = call(system, user, model, schema)
-            for key in ("input_tokens", "output_tokens", "cache_write_tokens", "cache_read_tokens"):
-                meta[key] += usage.get(key, 0)
-            meta["raw_reply"] = json.loads(text)
-            reply = from_wire(meta["raw_reply"], short["tags"])
-            problem = check(reply)
-            if problem:
-                raise ValueError(problem)
-            meta["error"] = None
+    while True:
+        left = MAX_SEARCHES - len(meta["searches"]) if search else 0
+        user, parts = render(short, previous, pending, question, declined, meta["searches"], left)
+        meta.update(prompt_words=len((system + user).split()), system=system, user=user,
+                    prompt_parts=dict(instructions=len(system.split()), **parts, schema_characters=len(json.dumps(schema))))
+        reply = one_call(system, user, model, schema, short, call, meta)
+        if not (reply and reply["kind"] == "search"):
             break
-        except Exception as e:                      # any failure is recorded and retried once
-            reply, meta["error"] = None, f"{type(e).__name__}: {e}"
+        if left <= 0:                               # a search asked for when none are left: nothing on the shortlist fits
+            reply = dict(kind="decline", search_words=None, request=None, edit=None, options=[], chosen=[],
+                         decline=dict(reason="nothing found after the searches allowed", wanted=reply["search_words"],
+                                      missing="measure", closest="", about=None), unknown_tags=[])
+            break
+        t0 = time.time()
+        short, added = search(reply["search_words"])
+        seconds = round(time.time() - t0, 2)
+        meta["search_seconds"] += seconds
+        meta["searches"].append(dict(words=reply["search_words"], added=added, seconds=seconds))
+    meta["short"] = short
+    meta["search_seconds"] = round(meta["search_seconds"], 2)
     price_in, price_out = config.PRICES.get(model, (0, 0))
     meta["cost_usd"] = round((meta["input_tokens"] * price_in + meta["cache_write_tokens"] * price_in * 1.25 +
                               meta["cache_read_tokens"] * price_in * 0.1 + meta["output_tokens"] * price_out) / 1e6, 6)

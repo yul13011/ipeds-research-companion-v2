@@ -35,6 +35,7 @@ RELEASES = [
 INTERPRET_MODEL = os.environ.get("IPEDS_MODEL", "claude-haiku-5-5")
 INTERPRET_EFFORT = os.environ.get("IPEDS_EFFORT", "medium")
 MODELS = {"Haiku": "claude-haiku-5-5", "Sonnet": "claude-sonnet-5-5"}
+AI_SEARCH = os.environ.get("IPEDS_AI_SEARCH", "1") != "0"   # the model's own search (Part 5d); 0 turns it off
 PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)}   # US$ per million tokens, in and out
 
 # Local logs. Tests pass their own folder, so they never write here.

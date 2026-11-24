@@ -174,3 +174,59 @@ owner,o49_yale_1990,2,scored,answer|clarify,DRVEF.ENRTOT,130794,5.0,Offers the c
 owner,o50_yale_pell_trend,1,scored,answer,SFA.UPGRNTP,130794,5c,"All undergraduates, nine years (aid years 2015-16 to 2023-24, the 2016-17 to 2024-25 releases): periods that start in 2015 or later (owner decision 2026-11-23); the default Pell measure for trends"
 owner,o50_cc_dgs_pell_trend,1,scored,answer,SFA.UDGPGRNTP,127200,5c,Degree-seeking undergraduates: starts in the 2022-23 release (aid year 2021-22); 2015-16 to 2021-22 named as not collected; never mixed with the all-undergraduate measure
 owner,o51_negative_net_worth,1,scored,answer,F_F1A.F1A18|F_F2.F2A06|F_F3.F3A03,,5b2,"A list of schools meeting a condition (below zero), each form's own measure: net position (public, F1A18), total net assets (private nonprofit, F2A06), total equity (for-profit, F3A03); grouped by form, naming each measure, with the statement that the three are not strictly comparable; system offices left out (outside the national universe), and said so; the pension note on the public rows; fiscal 2024 stated. Data: 147 public, 28 private nonprofit and 50 for-profit report a negative figure; 123, 26 and 50 (199) inside the national universe."
+bad,bw01,1,badly written,answer,DRVADM.DVADM01,130794,5d,acceptence; no apostrophe
+bad,bw02,1,badly written,answer,DRVGR.GBA6RTT,166027,5d,two misspellings; the school name itself misspelled
+bad,bw03,1,badly written,answer,DRVEF.ENRTOT,129020,5d,nickname table (picker row: university of connecticut)
+bad,bw04,1,badly written,answer,DRVEF.ENRTOT,170976,5d,"""kids"" for students; nickname table (picker row)"
+bad,bw05,1,badly written,answer,DRVCOST.TUFEYR3,178396,5d,no nickname row and no IPEDS alias: University of Missouri-Columbia
+bad,bw06,1,badly written,answer|clarify,DRVGR.GRRTTOT,156107,5d,"IPEDS alias: the directory lists ""WSU Tech"" for Wichita State University Campus of Applied Sciences and Technology from 2018-19 on"
+bad,bw07,1,badly written,clarify,DRVEF.ENRTOT,,5d,"Washington State, Wayne State, Wichita State, Winona State and others: the school picker, never a guess"
+bad,bw08,1,badly written,clarify,DRVGR.GBA6RTT,,5d,"RIT (195003) offered, or a question; RTI International is not a college and must never be named as one"
+bad,bw09,1,badly written,decline|clarify,,,5d,"A good answer says RTI International is a research organisation, not a college (not in IPEDS), and asks whether RIT (195003) was meant; a clarifying question is acceptable. Never invent a college"
+bad,bw10,1,badly written,answer,DRVEF.ENRTOT,,5d,"groups: System: City University of New York; a group figure for the 21 CUNY colleges, not one school"
+bad,bw11,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,5d,"groups: System: City University of New York; mixed levels: a ranking, or the level question; the reading chosen is stated"
+bad,bw12,1,badly written,answer,DRVADM.DVADM01,110662;123961,5d,"""admit rate""; USC could also be South Carolina: either picker or USC (Southern California) is acceptable"
+bad,bw13,1,badly written,answer,COST2_NETPRICE.NPIST2,139755,5d,nickname table (picker row)
+bad,bw14,1,badly written,answer,EFD.STUFACR,166683,5d,no hyphens
+bad,bw15,1,badly written,answer|clarify,*cost,193900,5d,"tuition, net price or cost of attendance: an answer that states the reading chosen, or a question"
+bad,bw16,1,badly written,answer|clarify,DRVEF.EFUG,214777,5d,"main campus, or the picker for its campuses"
+bad,bw17,1,badly written,answer,SFA.UPGRNTP,228778,5d,"""%"" for percent"
+bad,bw18,1,badly written,answer,EFD.RET_PCF,233921,5d,virgina; nickname row is virginia tech
+bad,bw19,1,badly written,answer,*SAT scores,199120,5d,SAT 25th/50th/75th percentiles
+bad,bw20,1,badly written,answer|clarify,F_F1A.F1H02,159391,5d,"LSU is an IPEDS alias of six schools: the main campus, or the picker"
+bad,bw21,1,badly written,answer|clarify,DRVEF.ENRTOT,228723,5d,IPEDS alias of College Station
+bad,bw22,1,badly written,answer|clarify,DRVEF.ENRTOT,104151,5d,"Arizona State, Appalachian State, Alabama State, Angelo State...: the picker, or Arizona State with ""Interpreted as"" naming it"
+bad,bw23,1,badly written,answer,COST1.chg5ay2,240444,5d,nickname table; room and board is on-campus food and housing
+bad,bw24,1,badly written,answer,COST1.chg3ay3,243780,5d,no hyphens
+bad,bw25,1,badly written,clarify,DRVGR.GBA6RTT,,5d,"Boston, Binghamton and Baylor are all called BU: the picker only (owner, 2026-11-24)"
+bad,bw26,1,badly written,answer,DRVEF.ENRTOT,134130;134097,5d,word order
+bad,bw27,1,badly written,answer|clarify,EAP.EAPTOT|EAP.EAPFT,236948,5d,"""faculty"" has several readings: an answer that states the reading chosen, or the question"
+bad,bw28,1,badly written,decline,,167358,5d,co-op participation is not collected by IPEDS: a decline naming the closest data
+bad,bw29,1,badly written,answer,DRVEF.ENRTOT,127200,5d,IPEDS alias FRCC
+bad,bw30,1,badly written,answer|clarify,DRVEF.ENRTOT,135717,5d,"a ranking of public two-year colleges by enrollment, or a question about which group"
+bad,bw31,1,badly written,answer,DRVCOST.TUFEYR3,130794,5d,a single earlier year (2019-20)
+bad,bw32,1,badly written,answer,DRVEF.ENRTOT,166027,5d,British spelling; a trend from fall 2015
+bad,bw33,1,badly written,answer,DRVGR.GBA6RTT,171100,5d,"""rat"" for rate"
+bad,bw34,1,badly written,answer,DRVADM.DVADM01,,5d,"groups: Ivy League; ivys; a ranking, lowest first"
+bad,bw35,1,badly written,answer,SFA.UPGRNTP,,5d,"groups: State: Ohio; ""w/""; a ranking, highest first"
+bad,bw36,1,badly written,answer,,,5d,groups: State: Vermont; collages; a count of schools
+bad,bw37,1,badly written,answer|clarify,*cost,194824;195003,5d,"RPI is an IPEDS alias (2 schools); cost has several readings: an answer that states the reading chosen, or a question"
+bad,bw38,1,badly written,answer,*U.S. Nonresident students,145637,5d,"""intl"" for international; IPEDS calls them U.S. Nonresident"
+bad,bw39,1,badly written,clarify,*women share of enrollment,,5d,"Ohio State, Oklahoma State, Oregon State: the picker"
+bad,bw40,1,badly written,answer,DRVHR.SalProf|DRVHR.SALTOTL,172644,5d,"""profs""; ""wayne st"""
+bad,bw41,1,badly written,clarify,,243744,5d,which figure: a question back
+bad,bw42,1,badly written,decline,,123961,5d,default rates are in the outside-IPEDS table; the request names no measure (decision 7)
+bad,bw43,1,badly written,answer,DRVGR.GBA6RTT,178396;170976;129020,5d,mizou (misspelled nickname); three schools
+bad,bw44,1,badly written,decline,,139755,5d,earnings are outside IPEDS; GT could be Georgia Tech
+bad,bw45,1,badly written,answer,*SAT scores,130794,5d,no apostrophes
+bad,bw45,2,badly written,answer,*SAT scores,166027,5d,"an edit: replace the school, keep the measure"
+bad,bw46,1,badly written,answer,DRVEF.ENRTOT,,5d,groups: System: City University of New York; the 21 CUNY colleges as one group figure
+bad,bw47,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,5d,"groups: System: State University of New York System; the 60 SUNY schools; mixed levels: the reading chosen is stated, or the level question"
+bad,bw48,1,badly written,answer|decline,DRVCOST.TUFEYR3,,5d,"groups: System: California State University; tuition is reported per school and is not combined into one group figure: each campus's figure (a ranking or list), or the decline offering it"
+bad,bw49,1,badly written,answer,DRVADM.DVADM01,,5d,groups: System: University of California; a group rate computed from admissions and applicants across the UC campuses
+bad,bw50,1,badly written,answer|clarify,DRVEF.ENRTOT,199120,5d,"groups: System: University of North Carolina; the system (17 schools) or Chapel Hill: the picker, or a stated reading"
+bad,bw51,1,badly written,clarify,DRVGR.GBA6RTT,,5d,"Michigan, Minnesota, Maryland, Memphis, Mississippi...: the picker only"
+bad,bw52,1,badly written,answer,EFD.RET_PCF,,5d,"groups: Public, 2-year;State: Texas; comunity, texs: public two-year colleges in Texas, full-time retention"
+bad,bw53,1,badly written,answer|decline,COST2_NETPRICE.NPGRN2,,5d,"groups: Private not-for-profit;New England; privat; net price reported per school: a group figure is not combined, so each school's figure or the decline offering it is also acceptable"
+bad,bw54,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,5d,"groups: HBCUs; lower case; mixed levels: the reading chosen is stated, or the level question"
+bad,bw55,1,badly written,answer,DRVEF.ENRTOT,,5d,"groups: Ivy League; leage, enrolment"

@@ -398,6 +398,26 @@ def tag(short, index):
     return short
 
 
+def extend(short, words, db_path):
+    """The shortlist after the model's own search: what the app's search finds for the model's words comes first, then
+    the shortlist it already had (trimmed at the end where the tag ranges are full), all tagged afresh. Returns the new
+    shortlist and what the search added, by kind."""
+    index = get_index(db_path)
+    found = shortlist(words, db_path)
+    keys = {"measures": lambda e: e["id"], "schools": lambda e: e["id"], "groups": lambda e: e["name"],
+            "rows": lambda e: (e["table"], e["column"], e["code"]), "sets": lambda e: (e["set"], e["table"]),
+            "outside": lambda e: e["topic"], "terms": lambda e: e["term"]}
+    merged, added = {}, {}
+    for kind, key in keys.items():
+        before = {key(e) for e in short[kind]}
+        new = [e for e in found[kind] if key(e) not in before]
+        added[kind] = [key(e) for e in new]
+        merged[kind] = [{k: v for k, v in e.items() if k != "tag"} for e in new + short[kind]]
+    for t in merged["terms"]:
+        t["readings"] = [{k: v for k, v in r.items() if k != "tag"} for r in t["readings"]]
+    return tag(merged, index), {k: v for k, v in added.items() if v}
+
+
 def search_schools(name, db_path, limit=8):
     """Candidates for the school picker: the schools whose names best match what the user wrote."""
     bm25, entries = get_index(db_path)["schools"]

@@ -96,7 +96,8 @@ def reply_schema():
         readings={"type": "array", "items": of("readings")},
     )
     return obj(
-        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline", "about_decline"]},
+        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline", "about_decline", "search"]},
+        search_words=STRING,                    # kind search: the words to look for (plain text, never nullable)
         requests={"type": "array", "items": request},
         changes={"type": "array", "items": obj(
             field={"type": "string", "enum": list(LIST_FIELDS + SCALAR_FIELDS)},
@@ -154,7 +155,7 @@ def from_wire(reply, tags=None):
     unknown = []
     items = [request_from_wire(r, tags or {}, unknown) for r in reply["requests"]]
     labels = [no_tags(r.get("label")) or f"Option {i + 1}" for i, r in enumerate(reply["requests"])]
-    return dict(kind=kind,
+    return dict(kind=kind, search_words=(reply.get("search_words") or "").strip() or None,
                 request=items[0] if kind in ("request", "decline") and items else None,
                 edit=dict(changes=reply["changes"], values=items[0] if items else None) if kind == "edit" else None,
                 options=[dict(label=l, request=r) for l, r in zip(labels, items)] if kind == "options" else [],

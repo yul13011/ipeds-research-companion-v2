@@ -1128,6 +1128,12 @@ class Trends(unittest.TestCase):
         self.assertIn("fall 2009", page["interpreted"])
         self.assertIn("fall 2018", page["interpreted"])
 
+    def test_a_text_value_is_shown_as_text(self):
+        """probe_cat_city_smith: the model's search found the directory's city column; a text value must not be read
+        as a number."""
+        page = self.run_request(req("schools", measures=[M("HD.CITY")], schools=[S("Smith", 167835)]))
+        self.assertEqual(page["table"]["rows"][0][1], "Northampton")
+
     def test_a_rate_computed_from_counts_over_time(self):
         """Log 58.7: a rate with no table of its own (core expenses per FTE student, counts from DRVF and DRVEF12)
         crashed the break notes. Each year divides that year's counts, and the breaks of the counts' tables apply."""
@@ -1172,6 +1178,18 @@ class Trends(unittest.TestCase):
                                     year=Y(stated="2024-25", span="one year", start=2024, end=2025)))
         self.assertEqual(page["kind"], "answer")
         self.assertIn("one year behind", page["interpreted"])
+
+    def test_a_future_year_is_declined(self):
+        page = self.run_request(req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("Harvard", 166027)],
+                                    year=Y(stated="2030", span="one year", start=2030)))
+        self.assertEqual(page["kind"], "decline")
+
+    def test_an_entering_cohort_uses_the_measure_that_has_one(self):
+        """fu_change_measure: bachelor's degrees beside the six-year rate for "the 2016 entering cohort": the cohort
+        decides the release (2022-23 for four-year schools), for both measures."""
+        page = self.run_request(req("schools", measures=[M("DRVC.BASDEG"), M("DRVGR.GBA6RTT")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="2016 entering cohort", kind="entering cohort", span="one year", start=2016)))
+        self.assertIn("students who entered in fall 2016", page["interpreted"])
 
     def test_a_year_not_held_offers_the_latest_instead(self):
         state = {}
@@ -1441,6 +1459,96 @@ class Trends(unittest.TestCase):
         self.assertEqual(page["table"]["columns"][0], "School")
         self.assertEqual(page["chart"]["kind"], "bar")                       # a comparison: bars
         self.assertEqual(len(page["chart"]["points"]), 2)
+
+
+def wire_reply(kind, request=None, words=""):
+    """A reply as the model writes it (tags), for the AI's own search tests."""
+    blank = dict(label="", operation="schools", measures=[], schools=[], groups=[], peers_of=None, conditions=[],
+                 breakdown=None, split_by=None, sort=None, topic=None, outside=None, readings=[],
+                 year=dict(stated=None, kind=None, span="one year", start=0, end=0, last=0, membership="each year"))
+    return dict(kind=kind, search_words=words, requests=[dict(blank, **request)] if request else [], changes=[], chosen=[],
+                decline=None)
+
+
+def tag_of(user, name):
+    """The tag the shortlist shown to the model gives an item, read from the prompt text."""
+    import re
+    found = re.search(r"([MSG]\d+) \| " + re.escape(name) + r" \|", user)
+    return found.group(1) if found else None
+
+
+class AISearch(unittest.TestCase):
+    """Part 5d: when nothing on the shortlist fits, the model searches with its own words, at most twice."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def scripted(self, steps):
+        """A stand-in for the API: each step is a function of the prompt text that returns a wire reply."""
+        prompts = []
+        def call(system, user, model, schema=None):
+            prompts.append(user)
+            return json.dumps(steps[min(len(prompts), len(steps)) - 1](user)), {"input_tokens": 100, "output_tokens": 10}
+        return call, prompts
+
+    def test_a_search_brings_a_school_the_shortlist_lacked(self):
+        """"Mizzou enrollment": no nickname row, so the word search misses the school; the model searches for it."""
+        q = "Mizzou enrollment"
+        self.assertIsNone(tag_of(interpret.render(shortlist.shortlist(q, DB), None, None, q)[0], "University of Missouri-Columbia"))
+        call, prompts = self.scripted([
+            lambda u: wire_reply("search", words="University of Missouri"),
+            lambda u: wire_reply("request", dict(operation="schools", measures=[dict(measure=tag_of(u, "Total  enrollment"), row=[])],
+                                                 schools=[dict(name="Mizzou", school=tag_of(u, "University of Missouri-Columbia"))]))])
+        state = {}
+        page = answer.ask(q, state, self.log, DB, call=call)
+        self.assertEqual(page["kind"], "answer", page.get("message"))
+        self.assertEqual(page["table"]["rows"][0][0], "University of Missouri-Columbia")
+        self.assertIn("SEARCHES LEFT: 2", prompts[0])
+        self.assertIn("YOUR SEARCH: 'University of Missouri'", prompts[1])
+        self.assertIn("SEARCHES LEFT: 1", prompts[1])
+        logged = json.loads(Path(self.dir.name, "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual(logged["calls"], 2)
+        self.assertEqual(logged["searches"][0]["words"], "University of Missouri")
+        self.assertIn("schools", logged["searches"][0]["added"])
+        self.assertIn(178396, logged["shortlist"].values())          # the shortlist logged is the one the answer used
+
+    def test_at_most_two_searches(self):
+        call, prompts = self.scripted([lambda u: wire_reply("search", words="something that is not there")])
+        page = answer.ask("frobnication index at yale", {}, self.log, DB, call=call)
+        self.assertEqual(len(prompts), 3)                             # two searches, then no more
+        self.assertIn("SEARCHES LEFT: 0", prompts[2])
+        self.assertEqual(page["kind"], "decline")
+        logged = json.loads(Path(self.dir.name, "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual(len(logged["searches"]), 2)
+
+    def test_a_tag_never_shown_is_still_rejected(self):
+        call, _ = self.scripted([
+            lambda u: wire_reply("search", words="University of Missouri"),
+            lambda u: wire_reply("request", dict(measures=[dict(measure="M64", row=[])], schools=[dict(name="x", school="S16")]))])
+        page = answer.ask("Mizzou enrollment", {}, self.log, DB, call=call)
+        self.assertEqual(page["kind"], "wrong_reading")
+
+    def test_search_can_be_turned_off(self):
+        saved, config.AI_SEARCH = config.AI_SEARCH, False
+        try:
+            call, prompts = self.scripted([lambda u: wire_reply("search", words="University of Missouri")])
+            page = answer.ask("Mizzou enrollment", {}, self.log, DB, call=call)
+            self.assertIn("SEARCHES LEFT: 0", prompts[0])
+            self.assertEqual(len(prompts), 1)
+            self.assertEqual(page["kind"], "decline")
+        finally:
+            config.AI_SEARCH = saved
+
+    def test_the_reply_shape_holds_the_search(self):
+        props = rq.REPLY_SCHEMA["properties"]
+        self.assertIn("search", props["kind"]["enum"])
+        self.assertEqual(props["search_words"], {"type": "string"})  # plain text: nullable fields grow the grammar
 
 
 if __name__ == "__main__":

@@ -53,6 +53,11 @@ def conversations():
         owner.setdefault(r["case"], []).append((int(r["turn"]), r["question"], False))
     for case, turns in owner.items():
         yield "owner", case, sorted(turns)
+    bad = {}                                            # Part 5d: the badly written set (docs/stage5d)
+    for r in csv.DictReader(open(ROOT / "docs" / "stage5d" / "badly_written.csv", encoding="utf-8")):
+        bad.setdefault(r["case"], []).append((int(r["turn"]), r["question"], False))
+    for case, turns in bad.items():
+        yield "bad", case, sorted(turns)
 
 
 def summary(page):
@@ -89,7 +94,8 @@ with open(folder / "turns.jsonl", "a", encoding="utf-8") as out:
                        options=first.get("options"), missing=first.get("missing"), detail=first.get("detail"),
                        shortlist=first.get("shortlist"), tokens_in=first.get("tokens_in"), tokens_out=first.get("tokens_out"),
                        cache_write=first.get("cache_write"), cache_read=first.get("cache_read"), cost_usd=first.get("cost_usd"),
-                       model_seconds=first.get("model_seconds"), model_error=first.get("model_error"))
+                       model_seconds=first.get("model_seconds"), model_error=first.get("model_error"),
+                       calls=first.get("calls"), searches=first.get("searches"), search_seconds=first.get("search_seconds"))
             out.write(json.dumps(rec, default=str) + "\n")
             out.flush()
             print(f"{source} {case}.{turn} {page['kind']:<13} {rec['seconds']:>5}s  {question[:70]}", flush=True)

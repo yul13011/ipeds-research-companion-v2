@@ -17,6 +17,8 @@ def fmt(cell):
     if not isinstance(cell, tuple):
         return str(cell)
     value, unit = cell
+    if isinstance(value, str):                          # a text value (a city, a name): shown as it is
+        return value
     if unit == "percent":
         return f"{value:.1f}%" if value != int(value) else f"{int(value)}%"
     if unit in ("dollars", "average"):

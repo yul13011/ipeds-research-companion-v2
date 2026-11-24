@@ -538,3 +538,144 @@ haiku_5c_decisions,owner,o50_yale_pell_trend,1,yes,yes,wrong reading,api,,API co
 haiku_5c_decisions,log,4,1,yes,yes,correct answer,,,"bachelor's degrees, 2014-15 (1,327), from the 2015-16 release (decision 3)"
 haiku_5c_decisions,eval,faq_bach_yale_1415,1,yes,yes,correct answer,,,"bachelor's degrees, 2014-15 (1,327), from the 2015-16 release (decision 3)"
 haiku_5c_decisions,log,58,6,yes,yes,correct answer,,,"the schools of the previous request kept (RIT beside its peers), as the instruction says; the five schools of 58.5 were never read"
+haiku_5d_before,log,1,1,yes,yes,wrong reading,model,,"read as ""what data exists""; a trend of Ivy admission rates was expected (same reading as haiku_5c_decisions)"
+haiku_5d_before,log,3,2,yes,yes,correct answer,,,undergraduates by race from 12-month enrollment (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,13,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,15,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,24,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,24,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,24,4,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,24,5,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,24,6,no,yes,wrong reading,model,,"listed the dual-enrollment schools alphabetically; asked for rank order, largest first (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)"
+haiku_5d_before,log,45,2,yes,yes,wrong reading,model,,no measure named: declined (a trend is expected) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,58,2,yes,yes,correct answer,,,"RIT bachelor's six-year rate, cohorts 2009 to 2018 (same reading as haiku_5c_decisions)"
+haiku_5d_before,log,58,3,yes,yes,correct answer,,,RIT beside its comparison group (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,58,6,yes,yes,correct answer,,,"the schools of the previous request kept (RIT beside its peers), as the instruction says; the five schools of 58.5 were never read (same reading as haiku_5c_decisions)"
+haiku_5d_before,log,58,7,yes,yes,correct answer,,,"core expenses per FTE, RIT beside its peers, by year (same reading as haiku_5c_decisions)"
+haiku_5d_before,log,63,1,yes,yes,correct answer,,,"WSU Tech found from ""wsu tehc""; not Texas Tech (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)"
+haiku_5d_before,log,63,2,yes,yes,correct answer,,,WSU Tech (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,"grant-aided net price, 2023-24, Yale beside the Ivies (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,fu_add_year,1,yes,yes,correct answer,,,"12-month headcount, July 2022 to June 2023 (one earlier year) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,fu_rechart,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,fu_go_back,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,fu_go_back,2,yes,yes,correct answer,,,net price for Yale and Harvard (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,fu_go_back,3,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,faq_cost_harvard,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,faq_ma_distance,1,yes,yes,correct answer,,,partial: schools with undergraduates enrolled only in distance education (a proxy for offering it) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,trap_medical_scope,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,eval,probe_al_books_harv,1,yes,yes,correct answer,,,"physical books, fiscal year 2023 (one earlier year) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_al_ebooks_yale,1,yes,yes,correct answer,,,"digital books, fiscal year 2023 (one earlier year) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_sal_prof_smith,1,yes,yes,correct answer,,,"full professors, fall 2023 (2023-24) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_eap_fac_yale,1,yes,yes,correct answer,,,"full-time instructional faculty, fall 2023 (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_om_rate_yale,1,yes,yes,correct answer,,,"award within eight years, status as of 2023 (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_effy_yale,1,yes,yes,correct answer,,,"12-month headcount, July 2022 to June 2023 (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_ef_dist_yale,1,yes,yes,correct answer,,,"exclusively distance education, fall 2023 (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_ef_race_yale,1,yes,yes,correct answer,,,"undergraduates by race, fall 2023 (one-row year table) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_cost_tuit_smith,1,yes,yes,correct answer,,,"the academic-year tuition, 2023-24 ($61,568), through the calendar pairing (decision 2): fixed (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_cost_netprice_we,1,yes,yes,correct answer,,,"the private-school net price, 2022-23, through the kind-of-school pairing (decision 2): fixed (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)"
+haiku_5d_before,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,owner,o47_low_income,1,yes,yes,correct answer,,,partial: defines the Pell share only (same reading as haiku_5b2_second) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_before,log,4,1,yes,yes,correct answer,,,"bachelor's degrees, 2014-15 (1,327)"
+haiku_5d_before,log,7,1,yes,yes,correct answer,,,"full-time 2,995 and part-time 805 instructional staff"
+haiku_5d_before,log,11,1,yes,yes,wrong reading,model,,"three cost-of-attendance years from one release, not a trend"
+haiku_5d_before,log,55,2,yes,yes,correct answer,,,public two-year colleges ranked by graduation rate
+haiku_5d_before,log,8,2,yes,yes,correct answer,,,"degrees by level, Marian University, ten-year trend"
+haiku_5d_before,log,4,6,yes,yes,wrong reading,model,,"a one-year group figure for Ivy Plus, not a trend"
+haiku_5d_before,eval,fu_resort,1,yes,yes,wrong reading,model,,"the model wrote 2022 to 2023 for ""2023-24"", so 2022-23 was shown"
+haiku_5d_before,eval,fu_resort,2,yes,yes,wrong reading,model,,kept the wrong year from turn 1
+haiku_5d_before,eval,fu_change_measure,2,yes,yes,correct answer,path,,bachelor's degrees shown; the graduation rate kept beside it was read at the wrong cohort (path: the cohort rule came from the first measure; fixed with a test)
+haiku_5d_before,eval,faq_bach_yale_1415,1,yes,yes,correct answer,,,"bachelor's degrees, 2014-15 (1,327)"
+haiku_5d_before,eval,refuse_gradrate_2030,1,yes,yes,wrong reading,path,,answered with the latest year (path: the newest-year fallback took any later year; fixed with a test)
+haiku_5d_before,eval,trap_netprice_lag,1,yes,yes,correct answer,,,"Title IV net price, 2023-24, with the lag stated (reading stated)"
+haiku_5d_before,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,"master's degrees, 2023-24"
+haiku_5d_before,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,research doctorates from awards by level (712)
+haiku_5d_before,eval,probe_sal_cmp,1,yes,yes,correct answer,,,"average salary, all ranks, fall 2023"
+haiku_5d_before,eval,probe_f_tuitrev_yale,1,no,yes,wrong reading,model,,tuition revenue per FTE instead of the total
+haiku_5d_before,eval,probe_f_expenses_yale,1,yes,yes,correct answer,,,"total expenses, fiscal year 2023"
+haiku_5d_before,eval,probe_f_endow_harv,1,yes,yes,correct answer,,,"endowment, fiscal year 2023"
+haiku_5d_before,eval,probe_cost_roomboard_mh,1,yes,yes,correct answer,,,"on-campus food and housing, 2023-24 ($18,838)"
+haiku_5d_before,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,the test-score consideration with score ranges
+haiku_5d_before,bad,bw04,1,yes,yes,correct answer,,,"12-month headcount for ""how many kids go to umich"": an enrollment figure, stated"
+haiku_5d_before,bad,bw19,1,yes,yes,correct answer,,,SAT 25th/50th/75th percentiles
+haiku_5d_before,bad,bw23,1,yes,yes,correct answer,,,"on-campus food and housing, 2024-25 (the latest year; the expectation named the 2023-24 column)"
+haiku_5d_before,bad,bw45,1,yes,yes,correct answer,,,SAT ranges
+haiku_5d_before,bad,bw45,2,yes,yes,correct answer,,,SAT ranges for Harvard (the edit kept the measure)
+haiku_5d_search,log,1,1,yes,yes,wrong reading,model,,"read as ""what data exists""; a trend of Ivy admission rates was expected (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,log,3,2,yes,yes,correct answer,,,undergraduates by race from 12-month enrollment (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,13,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,15,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,24,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,24,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,24,4,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,24,5,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,24,6,no,yes,wrong reading,model,,"listed the dual-enrollment schools alphabetically; asked for rank order, largest first (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,log,58,2,yes,yes,correct answer,,,"RIT bachelor's six-year rate, cohorts 2009 to 2018 (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,log,58,3,yes,yes,correct answer,,,RIT beside its comparison group (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,log,63,1,yes,yes,correct answer,,,"WSU Tech found from ""wsu tehc""; not Texas Tech (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,log,63,2,yes,yes,correct answer,,,WSU Tech (same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,eval,fu_netprice_narrow,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,eval,fu_netprice_narrow,2,yes,yes,correct answer,,,"grant-aided net price, 2023-24, Yale beside the Ivies (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,fu_add_year,1,yes,yes,correct answer,,,"12-month headcount, July 2022 to June 2023 (one earlier year) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,fu_go_back,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,eval,fu_go_back,3,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,eval,faq_cost_harvard,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,eval,refuse_gradrate_2030,1,yes,yes,wrong reading,path,,answered with the latest year (path: the newest-year fallback took any later year; fixed with a test) (same reading as haiku_5d_before)
+haiku_5d_search,eval,trap_netprice_lag,1,yes,yes,correct answer,,,"Title IV net price, 2023-24, with the lag stated (reading stated) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,trap_medical_scope,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,eval,probe_c_mast_yale,1,yes,yes,correct answer,,,"master's degrees, 2023-24 (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_al_ebooks_yale,1,yes,yes,correct answer,,,"digital books, fiscal year 2023 (one earlier year) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_sal_prof_smith,1,yes,yes,correct answer,,,"full professors, fall 2023 (2023-24) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_sal_cmp,1,yes,yes,correct answer,,,"average salary, all ranks, fall 2023 (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_f_expenses_yale,1,yes,yes,correct answer,,,"total expenses, fiscal year 2023 (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_f_endow_harv,1,yes,yes,correct answer,,,"endowment, fiscal year 2023 (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_eap_fac_yale,1,yes,yes,correct answer,,,"full-time instructional faculty, fall 2023 (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_om_rate_yale,1,yes,yes,correct answer,,,"award within eight years, status as of 2023 (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_effy_yale,1,yes,yes,correct answer,,,"12-month headcount, July 2022 to June 2023 (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_ef_dist_yale,1,yes,yes,correct answer,,,"exclusively distance education, fall 2023 (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_ef_race_yale,1,yes,yes,correct answer,,,"undergraduates by race, fall 2023 (one-row year table) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_cost_tuit_smith,1,yes,yes,correct answer,,,"the academic-year tuition, 2023-24 ($61,568), through the calendar pairing (decision 2): fixed (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_cost_netprice_we,1,yes,yes,correct answer,,,"the private-school net price, 2022-23, through the kind-of-school pairing (decision 2): fixed (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)"
+haiku_5d_search,eval,probe_adm_act_yale,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,owner,o47_low_income,1,yes,yes,correct answer,,,partial: defines the Pell share only (same reading as haiku_5b2_second) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions) (same reading as haiku_5d_before)
+haiku_5d_search,bad,bw04,1,yes,yes,correct answer,,,"12-month headcount for ""how many kids go to umich"": an enrollment figure, stated (same reading as haiku_5d_before)"
+haiku_5d_search,bad,bw23,1,yes,yes,correct answer,,,"on-campus food and housing, 2024-25 (the latest year; the expectation named the 2023-24 column) (same reading as haiku_5d_before)"
+haiku_5d_search,bad,bw45,1,yes,yes,correct answer,,,SAT ranges (same reading as haiku_5d_before)
+haiku_5d_search,bad,bw45,2,yes,yes,correct answer,,,SAT ranges for Harvard (the edit kept the measure) (same reading as haiku_5d_before)
+haiku_5d_search,log,55,2,yes,yes,correct answer,,,graduation rate for public two-year colleges as a group figure (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_search,eval,fu_resort,1,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_search,eval,fu_resort,2,yes,yes,correct answer,,,(same reading as haiku_5_0_third) (same reading as haiku_5b2_first) (same reading as haiku_5b2_fix_first) (same reading as haiku_5b2_names) (same reading as haiku_5c_first) (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_search,eval,probe_c_cmp_bach,1,yes,yes,correct answer,,,"students receiving a bachelor's degree, Yale and Princeton, 2023-24 (same reading as haiku_5c_first) (same reading as haiku_5c_decisions)"
+haiku_5d_search,eval,probe_cat_housing_smith,1,yes,yes,correct answer,,,provides institutionally controlled housing (same reading as haiku_5c_second) (same reading as haiku_5c_decisions)
+haiku_5d_search,log,1,1,yes,yes,wrong reading,model,,"read as ""what data exists""; a trend was expected"
+haiku_5d_search,log,4,1,yes,yes,correct answer,,,"bachelor's degrees, 2014-15 (1,327)"
+haiku_5d_search,log,4,6,yes,yes,wrong reading,model,,declined for want of the group (Ivy Plus was on the shortlist)
+haiku_5d_search,log,16,1,yes,yes,correct answer,,,offers bachelor's and master's degrees (IC)
+haiku_5d_search,log,16,2,yes,yes,correct answer,,,"counselling, placement and childcare (IC student services)"
+haiku_5d_search,log,55,1,yes,yes,wrong reading,model,,"one year beside the Colorado system, not a trend"
+haiku_5d_search,log,58,7,yes,yes,correct answer,,,"core expenses per FTE, RIT, by year"
+haiku_5d_search,log,62,2,yes,yes,wrong reading,model,,declined; UH campuses not read
+haiku_5d_search,log,64,1,yes,yes,wrong reading,model,,declined after a search for Kansas community colleges
+haiku_5d_search,eval,fu_rechart,1,yes,yes,wrong reading,model,,"""2023-24"" read as 2022-23 (as in fu_resort)"
+haiku_5d_search,eval,fu_go_back,2,yes,yes,correct answer,,,net price for Yale and Harvard
+haiku_5d_search,eval,fu_change_measure,2,yes,yes,correct answer,path,,bachelor's degrees shown; the graduation rate beside it at the wrong cohort (path; fixed after this run)
+haiku_5d_search,eval,faq_bach_yale_1415,1,yes,yes,correct answer,,,"bachelor's degrees, 2014-15 (1,327)"
+haiku_5d_search,eval,faq_instr_staff_yale,1,yes,yes,correct answer,,,full-time and part-time instructional staff
+haiku_5d_search,eval,faq_services_smith,1,yes,yes,correct answer,,,"counselling, placement and childcare (IC student services)"
+haiku_5d_search,eval,faq_ma_distance,1,yes,yes,correct answer,,,Massachusetts schools offering distance education courses
+haiku_5d_search,eval,refuse_gradrate_2030,1,yes,yes,wrong reading,path,,answered with the latest year (path; fixed after this run)
+haiku_5d_search,eval,probe_c_doc_harv,1,yes,yes,correct answer,,,research doctorates (712)
+haiku_5d_search,eval,probe_cost_roomboard_mh,1,yes,yes,correct answer,,,"on-campus food and housing, 2023-24"
+haiku_5d_search,eval,probe_adm_req_yale,1,yes,yes,correct answer,,,the test-score consideration with score ranges
+haiku_5d_search,eval,probe_cat_city_smith,1,yes,yes,wrong reading,path,,the model searched and found the city column; the display read the text as a number and crashed (path; fixed with a test: Northampton)
+haiku_5d_search,bad,bw08,1,yes,yes,wrong reading,model,,"searched for RTI and Research Triangle Institute, then declined without offering RIT"
+haiku_5d_search,bad,bw09,1,yes,yes,wrong reading,model,,answered RIT's directory status without saying RTI International is not a college
+haiku_5d_search,bad,bw15,1,yes,yes,correct answer,,,"total price, tuition and net price, each named"
+haiku_5d_search,bad,bw19,1,yes,yes,correct answer,,,SAT percentiles
+haiku_5d_search,bad,bw30,1,yes,yes,wrong reading,model,,declined after searching for enrollment and community colleges
+haiku_5d_search,bad,bw38,1,yes,yes,wrong reading,model,,found U.S. Nonresident enrollment but declined
+haiku_5d_search,bad,bw51,1,no,no,wrong reading,model,,chose Michigan; the picker was expected
+haiku_5d_search,bad,bw52,1,yes,yes,wrong reading,model,,declined for want of the community colleges group
+haiku_5d_before,bad,bw11,1,yes,no,wrong reading,model,,"each CUNY college listed (with the CUNY System Office), not the system as a group"
+haiku_5d_before,bad,bw49,1,yes,no,wrong reading,model,,"each UC campus listed, not the system as a group rate"
+haiku_5d_search,bad,bw49,1,yes,yes,correct answer,,,"the UC system as a group, after the model searched for it"
