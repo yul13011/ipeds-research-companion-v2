@@ -1,0 +1,57 @@
+case,turn,question,kind,expect,measures,schools,groups,note
+bw01,1,whats the acceptence rate at yale,misspelling,answer,DRVADM.DVADM01,130794,,acceptence; no apostrophe
+bw02,1,graduaton rate harvrd,misspelling,answer,DRVGR.GBA6RTT,166027,,two misspellings; the school name itself misspelled
+bw03,1,UConn enrollment,abbreviation,answer,DRVEF.ENRTOT,129020,,nickname table (picker row: university of connecticut)
+bw04,1,how many kids go to umich,informal + abbreviation,answer,DRVEF.ENRTOT,170976,,"""kids"" for students; nickname table (picker row)"
+bw05,1,Mizzou tuition,abbreviation,answer,DRVCOST.TUFEYR3,178396,,no nickname row and no IPEDS alias: University of Missouri-Columbia
+bw06,1,WSU Tech grad rate,abbreviation,answer|clarify,DRVGR.GRRTTOT,156107,,"IPEDS alias: the directory lists ""WSU Tech"" for Wichita State University Campus of Applied Sciences and Technology from 2018-19 on"
+bw07,1,WSU enrollment,ambiguous abbreviation,clarify,DRVEF.ENRTOT,,,"Washington State, Wayne State, Wichita State, Winona State and others: the school picker, never a guess"
+bw08,1,RTI graduation rate,ambiguous abbreviation,clarify,DRVGR.GBA6RTT,,,"RIT (195003) offered, or a question; RTI International is not a college and must never be named as one"
+bw09,1,is rti a real college,ambiguous abbreviation,decline|clarify,,,,"A good answer says RTI International is a research organisation, not a college (not in IPEDS), and asks whether RIT (195003) was meant; a clarifying question is acceptable. Never invent a college"
+bw10,1,how many students at CUNY,abbreviation (system),answer,DRVEF.ENRTOT,,System: City University of New York,"a group figure for the 21 CUNY colleges, not one school"
+bw11,1,cuny schools grad rates,abbreviation (system),answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,System: City University of New York,"mixed levels: a ranking, or the level question; the reading chosen is stated"
+bw12,1,UCLA vs USC admit rate,abbreviation,answer,DRVADM.DVADM01,110662;123961,,"""admit rate""; USC could also be South Carolina: either picker or USC (Southern California) is acceptable"
+bw13,1,georgia tech net price,abbreviation,answer,COST2_NETPRICE.NPIST2,139755,,nickname table (picker row)
+bw14,1,MIT student faculty ratio,abbreviation,answer,EFD.STUFACR,166683,,no hyphens
+bw15,1,nyu how much does it cost to go there,informal,answer|clarify,*cost,193900,,"tuition, net price or cost of attendance: an answer that states the reading chosen, or a question"
+bw16,1,penn state undergrads,abbreviation + informal,answer|clarify,DRVEF.EFUG,214777,,"main campus, or the picker for its campuses"
+bw17,1,UT austin pell %,abbreviation + symbol,answer,SFA.UPGRNTP,228778,,"""%"" for percent"
+bw18,1,virgina tech retention,misspelling + abbreviation,answer,EFD.RET_PCF,233921,,virgina; nickname row is virginia tech
+bw19,1,unc chapel hill sat scores,abbreviation,answer,*SAT scores,199120,,SAT 25th/50th/75th percentiles
+bw20,1,lsu endowment,abbreviation,answer|clarify,F_F1A.F1H02,159391,,"LSU is an IPEDS alias of six schools: the main campus, or the picker"
+bw21,1,tamu enrollment,abbreviation,answer|clarify,DRVEF.ENRTOT,228723,,IPEDS alias of College Station
+bw22,1,ASU how big is it,ambiguous abbreviation + informal,answer|clarify,DRVEF.ENRTOT,104151,,"Arizona State, Appalachian State, Alabama State, Angelo State...: the picker, or Arizona State with ""Interpreted as"" naming it"
+bw23,1,uw madison room and board,abbreviation,answer,COST1.chg5ay2,240444,,nickname table; room and board is on-campus food and housing
+bw24,1,purdue out of state tuition,informal,answer,COST1.chg3ay3,243780,,no hyphens
+bw25,1,BU graduation rate,ambiguous abbreviation,clarify,DRVGR.GBA6RTT,,,"Boston, Binghamton and Baylor are all called BU: the picker only (owner, 2026-11-24)"
+bw26,1,UF and FSU enrollment compare,abbreviation,answer,DRVEF.ENRTOT,134130;134097,,word order
+bw27,1,uw seattle number of faculty,abbreviation,answer|clarify,EAP.EAPTOT|EAP.EAPFT,236948,,"""faculty"" has several readings: an answer that states the reading chosen, or the question"
+bw28,1,northeastern co-op %,informal,decline,,167358,,co-op participation is not collected by IPEDS: a decline naming the closest data
+bw29,1,frcc how many students,abbreviation + informal,answer,DRVEF.ENRTOT,127200,,IPEDS alias FRCC
+bw30,1,is miami dade the biggest community college,informal,answer|clarify,DRVEF.ENRTOT,135717,,"a ranking of public two-year colleges by enrollment, or a question about which group"
+bw31,1,yale tution 2019,misspelling + earlier year,answer,DRVCOST.TUFEYR3,130794,,a single earlier year (2019-20)
+bw32,1,harvard enrolment since 2015,misspelling + trend,answer,DRVEF.ENRTOT,166027,,British spelling; a trend from fall 2015
+bw33,1,michigan state grad rat,misspelling,answer,DRVGR.GBA6RTT,171100,,"""rat"" for rate"
+bw34,1,which ivys have the lowest admit rate,misspelling + informal,answer,DRVADM.DVADM01,,Ivy League,"ivys; a ranking, lowest first"
+bw35,1,schools in ohio w/ highest pell %,abbreviation + symbol,answer,SFA.UPGRNTP,,State: Ohio,"""w/""; a ranking, highest first"
+bw36,1,how many collages in vermont,misspelling,answer,,,State: Vermont,collages; a count of schools
+bw37,1,rpi vs rit cost,abbreviation,answer|clarify,*cost,194824;195003,,"RPI is an IPEDS alias (2 schools); cost has several readings: an answer that states the reading chosen, or a question"
+bw38,1,uiuc intl students,abbreviation,answer,*U.S. Nonresident students,145637,,"""intl"" for international; IPEDS calls them U.S. Nonresident"
+bw39,1,what % of osu students are women,ambiguous abbreviation,clarify,*women share of enrollment,,,"Ohio State, Oklahoma State, Oregon State: the picker"
+bw40,1,salary of profs at wayne st,abbreviation + informal,answer,DRVHR.SalProf|DRVHR.SALTOTL,172644,,"""profs""; ""wayne st"""
+bw41,1,hi can u tell me abt stanford,informal,clarify,,243744,,which figure: a question back
+bw42,1,student loan default rate at usc,outside IPEDS,decline,,123961,,default rates are in the outside-IPEDS table; the request names no measure (decision 7)
+bw43,1,mizou vs umich vs uconn grad rates,misspelling + abbreviation,answer,DRVGR.GBA6RTT,178396;170976;129020,,mizou (misspelled nickname); three schools
+bw44,1,how much $ do ppl make after graduating from GT,outside IPEDS + abbreviation,decline,,139755,,earnings are outside IPEDS; GT could be Georgia Tech
+bw45,1,whats yales sat range,misspelling,answer,*SAT scores,130794,,no apostrophes
+bw45,2,now do it for hrvard,misspelling + follow-up,answer,*SAT scores,166027,,"an edit: replace the school, keep the measure"
+bw46,1,CUNY enrollment,system as a group,answer,DRVEF.ENRTOT,,System: City University of New York,the 21 CUNY colleges as one group figure
+bw47,1,SUNY graduation rates,system as a group,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,System: State University of New York System,"the 60 SUNY schools; mixed levels: the reading chosen is stated, or the level question"
+bw48,1,cal state tuition,system as a group,answer|decline,DRVCOST.TUFEYR3,,System: California State University,"tuition is reported per school and is not combined into one group figure: each campus's figure (a ranking or list), or the decline offering it"
+bw49,1,UC system admit rate,system as a group,answer,DRVADM.DVADM01,,System: University of California,a group rate computed from admissions and applicants across the UC campuses
+bw50,1,UNC enrollment,ambiguous system or campus,answer|clarify,DRVEF.ENRTOT,199120,System: University of North Carolina,"the system (17 schools) or Chapel Hill: the picker, or a stated reading"
+bw51,1,U of M graduation rate,ambiguous abbreviation,clarify,DRVGR.GBA6RTT,,,"Michigan, Minnesota, Maryland, Memphis, Mississippi...: the picker only"
+bw52,1,comunity colleges in texs retention,misspelled group,answer,EFD.RET_PCF,,"Public, 2-year;State: Texas","comunity, texs: public two-year colleges in Texas, full-time retention"
+bw53,1,privat nonprofits in new england net price,misspelled group,answer|decline,COST2_NETPRICE.NPGRN2,,Private not-for-profit;New England,"privat; net price reported per school: a group figure is not combined, so each school's figure or the decline offering it is also acceptable"
+bw54,1,hbcus graduation rate,misspelled group,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,HBCUs,"lower case; mixed levels: the reading chosen is stated, or the level question"
+bw55,1,ivy leage enrolment,misspelled group,answer,DRVEF.ENRTOT,,Ivy League,"leage, enrolment"

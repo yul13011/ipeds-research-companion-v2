@@ -417,3 +417,11 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **4. No re-run now;** Part 5d will measure the fixes.
 - **Database inventory:** `docs/DATABASE.md`, written by `scripts/database_inventory.py` after each full rebuild (committed 2026-11-24).
 - **Go: Part 5d,** starting with the badly written test set for the owner's review before it is used.
+
+## 2026-11-24: the Part 5d badly written test set is approved
+
+- **RTI:** as proposed. For "is rti a real college", a good answer says RTI International is a research organisation, not a college, and asks whether RIT was meant; a clarifying question is acceptable.
+- **BU** is truly ambiguous (Boston, Binghamton, Baylor): the picker only. **ASU** as proposed, but if Arizona State is chosen, "Interpreted as" names it.
+- **Questions with several readings:** an answer is acceptable when the chosen reading is stated.
+- **WSU Tech:** the IPEDS directory lists "WSU Tech" as the alias of Wichita State University Campus of Applied Sciences and Technology from 2018-19 on (the earlier report was wrong to say it had no entry).
+- **Ten questions added:** systems as groups (CUNY, SUNY, Cal State, UC), ambiguous system or campus names (UNC, U of M) and misspelled groups. 55 questions in all (`docs/stage5d/badly_written.csv`).
