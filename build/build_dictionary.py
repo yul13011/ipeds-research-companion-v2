@@ -943,6 +943,9 @@ def full_build(db, folder, verbose=False):
     build_name_clashes(db)
 
 
+LAST = {}                                           # what the last build() did, for the command line
+
+
 def build(local_db=None, folder=None, verbose=False, full=False, table=None):
     """Bring the database up to date with the dictionary folder. By default only what changed since the last build
     is rerun (build/changes.py); `full` reruns everything; `table` reloads that one dictionary table on its own.
@@ -959,6 +962,7 @@ def build(local_db=None, folder=None, verbose=False, full=False, table=None):
         if steps is None:                               # "in progress", so the next run is a full rebuild
             full_build(db, folder, verbose)
             steps = ["full rebuild"]
+        LAST["steps"] = steps
         changes.mark(db, "finished", fresh, only=table)
         if verbose:
             print("; ".join(steps))
@@ -989,3 +993,7 @@ if __name__ == "__main__":
     print("breakdown sets (set and count column): " + ", ".join(f"{n} {s}" for s, n in con.execute(
         "SELECT status, COUNT(*) FROM breakdown_sets GROUP BY 1")))
     con.close()
+    if LAST.get("steps") == ["full rebuild"]:          # after a full rebuild: rewrite docs/DATABASE.md
+        sys.path.insert(0, str(config.ROOT / "scripts"))
+        import database_inventory
+        print("inventory: %s" % database_inventory.write()[0])

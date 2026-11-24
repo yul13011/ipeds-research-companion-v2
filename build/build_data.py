@@ -396,5 +396,8 @@ if __name__ == "__main__":
         from build import build_dictionary
         loaded = build_dictionary.build()
         print(f"Dictionary: {len(loaded)} tables loaded, {sum(loaded.values()):,} rows")
+        sys.path.insert(0, str(config.ROOT / "scripts"))     # after the data are rebuilt: rewrite docs/DATABASE.md
+        import database_inventory
+        print(f"Inventory: {database_inventory.write()[0]}")
     print(f"Local database: {config.LOCAL_DB} ({config.LOCAL_DB.stat().st_size / 1e6:.0f} MB)")
     sys.exit(1 if bad else 0)
