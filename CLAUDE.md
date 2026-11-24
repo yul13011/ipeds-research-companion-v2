@@ -67,11 +67,13 @@ Details of each stage, the slice scope, and what is not in the slice are in `doc
 
 ## Running things
 
-- Full build (ten releases: data, cleaning, dictionary, directory; about an hour): `python build/build_data.py`. One release: `python build/build_data.py --release <folder>` (see `UPDATING.md`).
-- Reload the dictionary after a change to any table except `special_codes.csv`: `python build/build_dictionary.py` reruns only what the change affects (seconds for wording, minutes for a measure or a table's category rows). One table on its own: `--table <name>`. Everything: `--full` (about 30 minutes; required before each part's final report and for every yearly update).
-- Database inventory: `docs/DATABASE.md` (every table, its layer, columns and rows by release). Rewritten by `python scripts/database_inventory.py`, which both full rebuilds run at the end.
-- Run the tests: `python -m unittest discover -s tests -v`
-- Run the chat page: `streamlit run app.py` (needs `ANTHROPIC_API_KEY` set; the model is `IPEDS_MODEL`, default Sonnet)
-- Live smoke test, only with the owner's approval (it costs money): `python scripts/smoke_test.py --yes`
-- Cadence (owner decision, 2026-11-23): use the fast build path for routine changes; run a full rebuild (`--full`) only before a push to GitHub, at the end of each stage, and for yearly updates (its result must match the fast path, as tested). Run the question set on Haiku once per change order (`python scripts/stage4_run.py --yes --model haiku`), and twice only at the end of a part, when the scorecard is judged. Before every full question-set run, make one cheap trial call to confirm the API accepts the reply format (owner decision, 2026-11-23).
+- Version 2 has its own Python environment, `.venv` in this folder (ignored by git), with every package pinned in `requirements.txt`. Set it up once: `python -m venv .venv`, then `.venv\Scripts\python.exe -m pip install -r requirements.txt`. Run everything with `.venv\Scripts\python.exe`, never the main Python (owner decision, 2026-11-24).
+
+- Full build (ten releases: data, cleaning, dictionary, directory; about an hour): `.venv\Scripts\python.exe build/build_data.py`. One release: `.venv\Scripts\python.exe build/build_data.py --release <folder>` (see `UPDATING.md`).
+- Reload the dictionary after a change to any table except `special_codes.csv`: `.venv\Scripts\python.exe build/build_dictionary.py` reruns only what the change affects (seconds for wording, minutes for a measure or a table's category rows). One table on its own: `--table <name>`. Everything: `--full` (about 30 minutes; required before each part's final report and for every yearly update).
+- Database inventory: `docs/DATABASE.md` (every table, its layer, columns and rows by release). Rewritten by `.venv\Scripts\python.exe scripts/database_inventory.py`, which both full rebuilds run at the end.
+- Run the tests: `.venv\Scripts\python.exe -m unittest discover -s tests -v`
+- Run the chat page: `.venv\Scripts\python.exe -m streamlit run app.py` (needs `ANTHROPIC_API_KEY` set; the model is `IPEDS_MODEL`, default Haiku)
+- Live smoke test, only with the owner's approval (it costs money): `.venv\Scripts\python.exe scripts/smoke_test.py --yes`
+- Cadence (owner decision, 2026-11-23): use the fast build path for routine changes; run a full rebuild (`--full`) only before a push to GitHub, at the end of each stage, and for yearly updates (its result must match the fast path, as tested). Run the question set on Haiku once per change order (`.venv\Scripts\python.exe scripts/stage4_run.py --yes --model haiku`), and twice only at the end of a part, when the scorecard is judged. Before every full question-set run, make one cheap trial call to confirm the API accepts the reply format (owner decision, 2026-11-23).
 - The question path is in `path/`, one module per step: request, shortlist, interpret, resolve, fetch, show, log, answer.

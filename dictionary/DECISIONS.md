@@ -425,3 +425,10 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Questions with several readings:** an answer is acceptable when the chosen reading is stated.
 - **WSU Tech:** the IPEDS directory lists "WSU Tech" as the alias of Wichita State University Campus of Applied Sciences and Technology from 2018-19 on (the earlier report was wrong to say it had no entry).
 - **Ten questions added:** systems as groups (CUNY, SUNY, Cal State, UC), ambiguous system or campus names (UNC, U of M) and misspelled groups. 55 questions in all (`docs/stage5d/badly_written.csv`).
+
+## 2026-11-24: decisions on the meaning-search comparison
+
+- **1. fastembed** is the library to use if meaning search goes into the app, but it is not added yet: meaning search helped groups but not measures on real questions, so it waits until the AI's own search is built and measured.
+- **2. Next in Part 5d: the AI's own search.** When nothing on the shortlist fits, the model calls the app's search with its own words, at most twice; every call is logged; code still rejects anything not returned by a search shown to the model. Measured on the badly written set and the full question set: shortlist hits and wrong readings before and after, time added and cost.
+- **3. Then the meaning-search comparison again,** in the throwaway environment, on top of the AI's own search, in two variants: on the raw question, and on the model's own search words. The report says whether either still adds right measures or groups the AI's own search misses; the owner decides on fastembed from that.
+- **4. The version 2 environment:** a `.venv` folder in the project, ignored by git; `requirements.txt` with exact versions of the app's current packages (no fastembed yet); the run commands in `CLAUDE.md` use it; the tests pass in it.
