@@ -270,6 +270,10 @@ class LoaderLogic(unittest.TestCase):
     def test_group_code_that_never_occurs_stops_the_build(self):
         self.assertProblem("code 9 never occurs", school_groups=[dict(group="Bad", kind="column", table="HD", column="SECTOR", codes="9")])
 
+    def test_synonyms_for_a_group_that_does_not_exist_stop_the_build(self):
+        groups = [dict(r) for r in GOOD["school_groups"]] + [dict(group="System: Nowhere University", kind="synonyms", words="NU")]
+        self.assertProblem("synonyms for groups that do not exist: System: Nowhere University", school_groups=groups)
+
     def test_unknown_school_in_a_member_list_stops_the_build(self):
         self.assertProblem("school 99 in 'Pair' is not in the directory", group_members=GOOD["group_members"] + [dict(group="Pair", unitid="99")])
 

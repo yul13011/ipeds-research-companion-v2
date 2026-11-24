@@ -1,232 +1,232 @@
-source,case,turn,category,expect,measures,schools,stage,note
-log,1,1,trend,trend,DRVADM.DVADM01,,,"asks which years: one year only in the slice; the latest-year comparison could be answered; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,2,1,greeting,,,,,
-log,3,1,scored,answer,DRVADM.DVADM01,130794,,
-log,3,2,scored,answer,*race,130794,,undergraduate enrollment by race and ethnicity (a tested breakdown set)
-log,4,1,scored,answer,*bachelor's degrees,130794,,"2014-15 is not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
-log,4,2,scored,answer,DRVGR.GBA6RTT,,,"2015 outcome year is not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
-log,4,3,trend,trend,DRVGR.GBA6RTT,130794,,"cohorts 2009-2018: trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,4,4,trend,trend,DRVGR.GBA6RTT,,,"trend compared to a group; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,4,5,trend,trend,,130794,,trend for peers; 2026-11-23 (owner): expects a trend
-log,4,6,trend,trend,,,,"trend for Ivies plus MIT and Stanford; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,4,7,trend,decline|answer|clarify,,166683,,follow-up naming MIT
-log,6,1,trend,trend,DRVADM.DVADM01,130794;166027;186131,,"2015-2024; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,7,1,scored,answer|clarify,*instructional staff,130794,,full-time and part-time instructional staff
-log,8,2,trend,decline|clarify,*degrees,151786,,last ten years
-log,8,3,trend,decline|clarify|answer,,151786,,confirms the school
-log,11,1,trend,trend,*cost of attendance,144050;166027;186131;130794;243744,,"change over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,11,2,scored,answer,DRVADM.DVADM01,,,Ivy League group
-log,11,3,trend,trend,DRVADM.DVADM01,,,"change since 10 years ago; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,13,1,scored,answer,*cost of attendance,166027,,
-log,14,1,scored,decline,,,,return on investment is not in IPEDS
-log,14,2,scored,decline,,,,composite ranking over two years
-log,14,3,scored,decline,,,,composite ranking
-log,14,4,scored,decline|clarify,,,,yes please (to the composite ranking)
-log,14,5,scored,decline,,,,composite ranking with weights
-log,15,1,scored,answer,*dual enrollment,,,public 2-year colleges in New York
-log,15,2,scored,decline|answer,,,,share of headcount needs a formula (not in the slice)
-log,16,1,scored,answer|decline,*award levels offered,167835;166939;168218,,
-log,16,2,scored,answer|decline,*student services,167835,,
-log,17,1,scored,decline|answer,,,,data on institutional AI policies: outside IPEDS
-log,17,2,scored,decline|answer|clarify,,,,yes
-log,22,2,trend,trend,*grant aid percent,130794,,"2014-15 through 2023-24; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,23,1,scored,decline,,,,PhD economics enrollment by field is not in the slice
-log,24,1,scored,answer|clarify,*dual enrollment,,,
-log,24,2,scored,answer|clarify,*dual enrollment,,,
-log,24,3,scored,answer|clarify,*dual enrollment,,,
-log,24,4,scored,answer,*dual enrollment,,,
-log,24,5,scored,answer,*dual enrollment,,,count of colleges over 10000
-log,24,6,scored,answer,*dual enrollment,,,rank largest to smallest
-log,25,1,scored,answer,DRVEF.EFGRAD,130794,,
-log,26,1,chart,,,,,
-log,27,1,chart,,,,,
-log,28,1,chart,,,,,
-log,29,1,chart,,,,,
-log,30,1,test,,,,,
-log,31,1,test,,,,,
-log,33,1,scored,answer,,,,what data exists on faculty
-log,34,1,scored,answer,,,,what data exists on tuition
-log,35,1,scored,answer,,,,what data exists on graduation rates
-log,36,1,scored,clarify|answer,*enrollment,170976,,Michigan enrollment: which school
-log,36,4,scored,clarify|decline,,,,another topic for Michigan: unclear
-log,37,1,chart,,,,,
-log,38,1,test,,,,,
-log,39,1,test,,,,,
-log,39,2,test,,,,,
-log,41,1,scored,clarify|answer|decline,*applicants;admission rate,,,data extract with no schools named
-log,42,1,greeting,,,,,
-log,44,1,test,,,,,
-log,44,2,test,,,,,
-log,45,1,trend,clarify,,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend; 2026-11-24 (owner): no measure is named, so a clarifying question (which measure, and which school or group)"
-log,45,2,trend,clarify,,,,"longitudinal trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend; 2026-11-24 (owner): no measure is named, so a clarifying question (which measure, and which school or group)"
-log,48,1,trend,trend,,196413,,"change 2015 to 2023; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,50,1,scored,answer|clarify,EFD.RET_PCP,,,part-time retention
-log,55,1,trend,trend,,127200,,"trends over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,55,2,scored,answer,*graduation rate,,,All public 2-year colleges
-log,58,2,trend,trend,*graduation rate,195003,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,58,3,scored,answer|clarify,*graduation rate,195003,,peers of RIT
-log,58,5,scored,answer,*graduation rate,168421;201645;186867;212054;167358,,the named comparison schools
-log,58,6,scored,answer|clarify|decline,*graduation rate,,,use the institutions in the example set
-log,58,7,trend,trend,*expenses per FTE,,,"ten-year trends; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,60,1,scored,decline,,,,economic mobility is outside IPEDS
-log,60,2,scored,decline,,,,income after graduation is outside IPEDS
-log,60,3,scored,decline|answer,,,,what College Scorecard is: outside IPEDS
-log,60,4,scored,answer|clarify,*net price,,,"lowest net price; 2026-11-23 (owner decision): a clarifying question is acceptable, since universe is also a dictionary term"
-log,60,5,scored,decline,,,,income data is not in IPEDS
-log,61,1,scored,answer,DRVEF.EFGRAD,130794,,"added 2026-11-22; a repeat of conversations 25 and 49, so the runner skips it unless repeats are run"
-log,62,1,scored,clarify,,,,"added 2026-11-22; ""hawaii"": schools in Hawaii, the University of Hawaii system, or a measure"
-log,62,2,scored,answer|clarify,*entering and graduating students,,,added 2026-11-22; the University of Hawaii system (System: University of Hawaii Board of Regents) recognised as the group
-log,62,3,scored,answer|clarify,*completions by field and race; fall enrollment by race for major fields,,,"added 2026-11-22; answer the parts IPEDS has and say what it lacks (graduation rates by major, high school of graduation, SAT by major, linking individual students)"
-log,62,4,context,,,,,"added 2026-11-22; ""1 ALL / 2 trend / 3 yes / 4 broad"": context only, not scored"
-log,63,1,scored,clarify|answer,*fall enrollment,156107,,"added 2026-11-22; ""wsu tehc"": clarify which WSU, or WSU Tech; Texas Tech (229115) is a wrong reading"
-log,63,2,scored,answer,*fall enrollment,156107,,added 2026-11-22; WSU Tech; Wichita State main campus (156125) is a wrong reading
-log,64,1,trend,trend,*graduation rate,156107,,"added 2026-11-22; five-year trend against Kansas community colleges; until trends exist, the latest year with a note; 2026-11-23 (owner): expects a trend"
-log,64,2,display,,,,,"added 2026-11-22; table pivot and title request: display request, not scored"
-eval,fu_netprice_narrow,1,scored,answer|clarify,*net price,130794,,net price lags a year: caveat or clarify
-eval,fu_netprice_narrow,2,scored,answer,*net price,,,2023-24 grant-aided net price
-eval,fu_swap_institution,1,scored,answer,DRVADM.DVADM01,130794,,
-eval,fu_swap_institution,2,scored,answer,DRVADM.DVADM01,,,
-eval,fu_add_year,1,scored,decline|answer,*12-month headcount,130794,,2022-23 is not in the slice (12-month data in the 2024-25 release is 2023-24)
-eval,fu_add_year,2,trend,trend,,130794,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-eval,fu_resort,1,scored,answer,*net price,,,
-eval,fu_resort,2,scored,answer,*net price,,,sort
-eval,fu_rechart,1,scored,answer,*net price,,,
-eval,fu_rechart,2,chart,,,,,
-eval,fu_go_back,1,scored,answer,*net price,,,
-eval,fu_go_back,2,scored,answer,*net price,130794;166027,,
-eval,fu_go_back,3,scored,answer,*net price,,,added after the run (turn missed when the file was written)
-eval,fu_change_measure,1,scored,decline|answer,DRVGR.GBA6RTT,130794,,2016 cohort is not in the slice (2018 cohort is)
-eval,fu_change_measure,2,scored,decline|answer|clarify,*bachelor's degrees,130794,,
-eval,fu_add_institution,1,scored,answer,DRVADM.DVADM01,130794;166027,,
-eval,fu_add_institution,2,scored,answer,DRVADM.DVADM01,130794;166027;186131,,
-eval,faq_admrate_yale,1,scored,answer,DRVADM.DVADM01,130794,,
-eval,faq_cost_harvard,1,scored,answer,*cost of attendance,166027,,
-eval,faq_grant_pct_ivies,1,scored,answer,*grant aid percent,,,
-eval,faq_bach_yale_1415,1,scored,answer,*bachelor's degrees,130794,,"2014-15 not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
-eval,faq_instr_staff_yale,1,scored,answer|clarify,*instructional staff,130794,,
-eval,faq_services_smith,1,scored,answer|decline,*student services,167835,,
-eval,faq_ma_distance,1,scored,answer|decline,*distance education,,,
-eval,refuse_faculty_sat,1,scored,decline,,,,
-eval,refuse_nonbinary_faculty,1,scored,decline,,,,
-eval,refuse_salary_by_field,1,scored,decline|answer,,,,"2026-11-23 (owner decision 5): a partial answer counts as expected: salaries by rank, with the statement that IPEDS has no salaries by field"
-eval,refuse_gradrate_2030,1,scored,decline,,,,
-eval,refuse_student_debt,1,scored,decline,,,,
-eval,refuse_student_names,1,scored,decline,,,,
-eval,trap_faculty_ambiguity,1,scored,clarify|answer,*instructional staff,130794,,
-eval,trap_netprice_lag,1,scored,clarify|answer,*net price,130794,,the app must state the real period (2023-24)
-eval,trap_medical_scope,1,scored,clarify|answer,*salary,130794,,
-eval,probe_c_mast_yale,1,scored,answer|decline,*master's degrees,130794,,2023 read as 2022-23 is not in the slice; 2023-24 is
-eval,probe_c_doc_harv,1,scored,answer|decline,*doctoral degrees,166027,,same year question
-eval,probe_c_cmp_bach,1,scored,answer|decline,*bachelor's degrees,130794;186131,,
-eval,probe_al_books_harv,1,scored,answer|decline,*library books,166027,,
-eval,probe_al_ebooks_yale,1,scored,answer|decline,*library e-books,130794,,
-eval,probe_sal_prof_smith,1,scored,answer,*salary,167835,,2023-24 salaries are in the 2024-25 release
-eval,probe_sal_cmp,1,scored,answer,*salary,167835;166939;168218,,
-eval,probe_f_tuitrev_yale,1,scored,decline|answer,*tuition revenue,130794,,2022-23 finance: check the release's fiscal year
-eval,probe_f_expenses_yale,1,scored,decline|answer,*expenses,130794,,
-eval,probe_f_endow_harv,1,scored,decline|answer,*endowment,166027,,
-eval,probe_eap_fac_yale,1,scored,decline|answer|clarify,*instructional staff,130794,,fall 2023 is not in the slice
-eval,probe_s_total_smith,1,scored,decline|answer,*staff,167835,,2023
-eval,probe_om_rate_yale,1,scored,answer|decline,*award within eight years,130794,,
-eval,probe_om_behav,1,scored,answer|decline,*award within eight years,104151,,Pell subgroup of Outcome Measures
-eval,probe_effy_yale,1,scored,decline|answer,*12-month headcount,130794,,
-eval,probe_ef_dist_yale,1,scored,decline|answer,*distance education,130794,,fall 2023 not in the slice
-eval,probe_ef_race_yale,1,scored,decline|answer,*race,130794,,fall 2023 not in the slice
-eval,probe_cost_tuit_smith,1,scored,answer|decline,*tuition,167835,,
-eval,probe_cost_roomboard_mh,1,scored,answer|decline,*room and board,166939,,
-eval,probe_cost_netprice_we,1,scored,decline|answer,*net price,168218,,2022-23 net price is not in the slice
-eval,probe_adm_act_yale,1,scored,answer,*ACT submitters,130794,,
-eval,probe_adm_req_yale,1,scored,answer|decline,*test requirements,130794,,
-eval,probe_agg_gradrate,1,scored,decline|answer,DRVGR.GBA6RTT,,,2016 cohort not in the slice
-eval,probe_agg_instcount,1,scored,answer|decline,,,,count of public four-year institutions
-eval,probe_agg_totalenr,1,scored,answer|decline,DRVEF.ENRTOT,,,fall 2023 not in the slice
-eval,probe_def_retention,1,scored,answer,,,,definition
-eval,probe_disc_finance,1,scored,answer,,,,what data exists on finance
-eval,probe_trend_effy_yale,1,trend,trend,*12-month headcount,130794,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-eval,probe_cat_housing_smith,1,scored,answer|decline,*on-campus housing,167835,,
-eval,probe_cat_city_smith,1,scored,answer|decline,*city,167835,,
-owner,o44_fte,1,scored,answer,,,5f,Explains full-time equivalent and how IPEDS calculates it for enrollment
-owner,o44_adjusted_cohort,1,scored,answer,,,5f,The entering cohort minus allowed exclusions
-owner,o45_retention_persistence,1,scored,answer,,,5f,Explains both; IPEDS reports retention
-owner,o45_sticker_net,1,scored,answer,,,5f,Explains both and the net price lag
-owner,o45_grad_rate_transfers,1,scored,answer,,,5f,"Explains the first-time, full-time cohort; points to Outcome Measures"
-owner,o45_net_price_lag,1,scored,answer,,,5f,Explains the reporting lag
-owner,o44_provisional,1,scored,answer,,,5f,Provisional versus final release
-owner,o44_title_iv,1,scored,answer,,,5f,Federal aid eligibility; it defines the national universe
-owner,o44_comparison_group,1,scored,answer,,,5f,The custom comparison group; not all schools have one
-owner,o44_summer_melt,1,scored,answer,,,5f,"Not in the concepts table: a general explanation labelled as such, and logged"
-owner,o46_grad_vs_om,1,scored,answer,DRVGR.GRRTTOT|DRVGR.GBA6RTT|rate:Award within eight years (Outcome Measures),,6,"Who each covers, when to use which; offers both"
-owner,o46_total_vs_net,1,scored,answer,*total price; net price,,6,Recommends net price; offers both
-owner,o46_fall_vs_12month,1,scored,answer,DRVEF.ENRTOT|DRVEF12.UNDUP,,6,Snapshot versus unduplicated count
-owner,o46_instr_vs_faculty,1,scored,answer,*instructional staff; faculty status,130794,6,"Both definitions, with Yale's two figures"
-owner,o47_low_income,1,scored,answer,*Pell share; Pell graduation rate; net price,,6,Two to four measures with their limits; offers to run them
-owner,o47_cc_success,1,scored,answer,*Outcome Measures; 150% graduation rate; retention,,6,"Outcome Measures, 150% graduation rate, retention, with limits"
-owner,o47_financial_health,1,scored,answer,*equity ratio; expenses per student; endowment,,6,Available measures; IPEDS has no single financial-health score
-owner,o47_selectivity,1,scored,answer,*admission rate; yield; test scores,,6,"Admission rate, yield, test scores, noting test-optional limits"
-owner,o48_marian,1,scored,decline|clarify,*degrees,151786,5.0,Ten years against the one-year data: declined for years (or which Marian)
-owner,o48_marian,2,scored,clarify,*degrees awarded,151786,5.0,"Owner decision 2026-11-22: asks again which Marian, with 2023-24 applied"
-owner,o48_roi,1,scored,decline,,130794,5.0,Return on investment is not in IPEDS
-owner,o48_roi,2,scored,answer|decline,,,5.0,"Points to College Scorecard, from the outside-IPEDS table"
-owner,o49_hsi,1,scored,decline,*graduation rate,,5.0,No IPEDS flag for Hispanic-serving institutions
-owner,o49_hsi,2,scored,answer|decline,,,5.0,Explains that IPEDS has no flag for this group
-owner,o49_yale_1990,1,scored,decline,DRVEF.ENRTOT,130794,5.0,1990 is outside the years held
-owner,o49_yale_1990,2,scored,answer|clarify,DRVEF.ENRTOT,130794,5.0,Offers the closest alternatives: the years available
-owner,o50_yale_pell_trend,1,scored,answer,SFA.UPGRNTP,130794,5c,"All undergraduates, nine years (aid years 2015-16 to 2023-24, the 2016-17 to 2024-25 releases): periods that start in 2015 or later (owner decision 2026-11-23); the default Pell measure for trends"
-owner,o50_cc_dgs_pell_trend,1,scored,answer,SFA.UDGPGRNTP,127200,5c,Degree-seeking undergraduates: starts in the 2022-23 release (aid year 2021-22); 2015-16 to 2021-22 named as not collected; never mixed with the all-undergraduate measure
-owner,o51_negative_net_worth,1,scored,answer,F_F1A.F1A18|F_F2.F2A06|F_F3.F3A03,,5b2,"A list of schools meeting a condition (below zero), each form's own measure: net position (public, F1A18), total net assets (private nonprofit, F2A06), total equity (for-profit, F3A03); grouped by form, naming each measure, with the statement that the three are not strictly comparable; system offices left out (outside the national universe), and said so; the pension note on the public rows; fiscal 2024 stated. Data: 147 public, 28 private nonprofit and 50 for-profit report a negative figure; 123, 26 and 50 (199) inside the national universe."
-bad,bw01,1,badly written,answer,DRVADM.DVADM01,130794,5d,acceptence; no apostrophe
-bad,bw02,1,badly written,answer,DRVGR.GBA6RTT,166027,5d,two misspellings; the school name itself misspelled
-bad,bw03,1,badly written,answer,DRVEF.ENRTOT,129020,5d,nickname table (picker row: university of connecticut)
-bad,bw04,1,badly written,answer,DRVEF.ENRTOT,170976,5d,"""kids"" for students; nickname table (picker row)"
-bad,bw05,1,badly written,answer,DRVCOST.TUFEYR3,178396,5d,no nickname row and no IPEDS alias: University of Missouri-Columbia
-bad,bw06,1,badly written,answer|clarify,DRVGR.GRRTTOT,156107,5d,"IPEDS alias: the directory lists ""WSU Tech"" for Wichita State University Campus of Applied Sciences and Technology from 2018-19 on"
-bad,bw07,1,badly written,clarify,DRVEF.ENRTOT,,5d,"Washington State, Wayne State, Wichita State, Winona State and others: the school picker, never a guess"
-bad,bw08,1,badly written,clarify,DRVGR.GBA6RTT,,5d,"RIT (195003) offered, or a question; RTI International is not a college and must never be named as one"
-bad,bw09,1,badly written,decline|clarify,,,5d,"A good answer says RTI International is a research organisation, not a college (not in IPEDS), and asks whether RIT (195003) was meant; a clarifying question is acceptable. Never invent a college"
-bad,bw10,1,badly written,answer,DRVEF.ENRTOT,,5d,"groups: System: City University of New York; a group figure for the 21 CUNY colleges, not one school"
-bad,bw11,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,5d,"groups: System: City University of New York; mixed levels: a ranking, or the level question; the reading chosen is stated"
-bad,bw12,1,badly written,answer,DRVADM.DVADM01,110662;123961,5d,"""admit rate""; USC could also be South Carolina: either picker or USC (Southern California) is acceptable"
-bad,bw13,1,badly written,answer,COST2_NETPRICE.NPIST2,139755,5d,nickname table (picker row)
-bad,bw14,1,badly written,answer,EFD.STUFACR,166683,5d,no hyphens
-bad,bw15,1,badly written,answer|clarify,*cost,193900,5d,"tuition, net price or cost of attendance: an answer that states the reading chosen, or a question"
-bad,bw16,1,badly written,answer|clarify,DRVEF.EFUG,214777,5d,"main campus, or the picker for its campuses"
-bad,bw17,1,badly written,answer,SFA.UPGRNTP,228778,5d,"""%"" for percent"
-bad,bw18,1,badly written,answer,EFD.RET_PCF,233921,5d,virgina; nickname row is virginia tech
-bad,bw19,1,badly written,answer,*SAT scores,199120,5d,SAT 25th/50th/75th percentiles
-bad,bw20,1,badly written,answer|clarify,F_F1A.F1H02,159391,5d,"LSU is an IPEDS alias of six schools: the main campus, or the picker"
-bad,bw21,1,badly written,answer|clarify,DRVEF.ENRTOT,228723,5d,IPEDS alias of College Station
-bad,bw22,1,badly written,answer|clarify,DRVEF.ENRTOT,104151,5d,"Arizona State, Appalachian State, Alabama State, Angelo State...: the picker, or Arizona State with ""Interpreted as"" naming it"
-bad,bw23,1,badly written,answer,COST1.chg5ay2,240444,5d,nickname table; room and board is on-campus food and housing
-bad,bw24,1,badly written,answer,COST1.chg3ay3,243780,5d,no hyphens
-bad,bw25,1,badly written,clarify,DRVGR.GBA6RTT,,5d,"Boston, Binghamton and Baylor are all called BU: the picker only (owner, 2026-11-24)"
-bad,bw26,1,badly written,answer,DRVEF.ENRTOT,134130;134097,5d,word order
-bad,bw27,1,badly written,answer|clarify,EAP.EAPTOT|EAP.EAPFT,236948,5d,"""faculty"" has several readings: an answer that states the reading chosen, or the question"
-bad,bw28,1,badly written,decline,,167358,5d,co-op participation is not collected by IPEDS: a decline naming the closest data
-bad,bw29,1,badly written,answer,DRVEF.ENRTOT,127200,5d,IPEDS alias FRCC
-bad,bw30,1,badly written,answer|clarify,DRVEF.ENRTOT,135717,5d,"a ranking of public two-year colleges by enrollment, or a question about which group"
-bad,bw31,1,badly written,answer,DRVCOST.TUFEYR3,130794,5d,a single earlier year (2019-20)
-bad,bw32,1,badly written,answer,DRVEF.ENRTOT,166027,5d,British spelling; a trend from fall 2015
-bad,bw33,1,badly written,answer,DRVGR.GBA6RTT,171100,5d,"""rat"" for rate"
-bad,bw34,1,badly written,answer,DRVADM.DVADM01,,5d,"groups: Ivy League; ivys; a ranking, lowest first"
-bad,bw35,1,badly written,answer,SFA.UPGRNTP,,5d,"groups: State: Ohio; ""w/""; a ranking, highest first"
-bad,bw36,1,badly written,answer,,,5d,groups: State: Vermont; collages; a count of schools
-bad,bw37,1,badly written,answer|clarify,*cost,194824;195003,5d,"RPI is an IPEDS alias (2 schools); cost has several readings: an answer that states the reading chosen, or a question"
-bad,bw38,1,badly written,answer,*U.S. Nonresident students,145637,5d,"""intl"" for international; IPEDS calls them U.S. Nonresident"
-bad,bw39,1,badly written,clarify,*women share of enrollment,,5d,"Ohio State, Oklahoma State, Oregon State: the picker"
-bad,bw40,1,badly written,answer,DRVHR.SalProf|DRVHR.SALTOTL,172644,5d,"""profs""; ""wayne st"""
-bad,bw41,1,badly written,clarify,,243744,5d,which figure: a question back
-bad,bw42,1,badly written,decline,,123961,5d,default rates are in the outside-IPEDS table; the request names no measure (decision 7)
-bad,bw43,1,badly written,answer,DRVGR.GBA6RTT,178396;170976;129020,5d,mizou (misspelled nickname); three schools
-bad,bw44,1,badly written,decline,,139755,5d,earnings are outside IPEDS; GT could be Georgia Tech
-bad,bw45,1,badly written,answer,*SAT scores,130794,5d,no apostrophes
-bad,bw45,2,badly written,answer,*SAT scores,166027,5d,"an edit: replace the school, keep the measure"
-bad,bw46,1,badly written,answer,DRVEF.ENRTOT,,5d,groups: System: City University of New York; the 21 CUNY colleges as one group figure
-bad,bw47,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,5d,"groups: System: State University of New York System; the 60 SUNY schools; mixed levels: the reading chosen is stated, or the level question"
-bad,bw48,1,badly written,answer|decline,DRVCOST.TUFEYR3,,5d,"groups: System: California State University; tuition is reported per school and is not combined into one group figure: each campus's figure (a ranking or list), or the decline offering it"
-bad,bw49,1,badly written,answer,DRVADM.DVADM01,,5d,groups: System: University of California; a group rate computed from admissions and applicants across the UC campuses
-bad,bw50,1,badly written,answer|clarify,DRVEF.ENRTOT,199120,5d,"groups: System: University of North Carolina; the system (17 schools) or Chapel Hill: the picker, or a stated reading"
-bad,bw51,1,badly written,clarify,DRVGR.GBA6RTT,,5d,"Michigan, Minnesota, Maryland, Memphis, Mississippi...: the picker only"
-bad,bw52,1,badly written,answer,EFD.RET_PCF,,5d,"groups: Public, 2-year;State: Texas; comunity, texs: public two-year colleges in Texas, full-time retention"
-bad,bw53,1,badly written,answer|decline,COST2_NETPRICE.NPGRN2,,5d,"groups: Private not-for-profit;New England; privat; net price reported per school: a group figure is not combined, so each school's figure or the decline offering it is also acceptable"
-bad,bw54,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,5d,"groups: HBCUs; lower case; mixed levels: the reading chosen is stated, or the level question"
-bad,bw55,1,badly written,answer,DRVEF.ENRTOT,,5d,"groups: Ivy League; leage, enrolment"
+source,case,turn,category,expect,measures,schools,groups,stage,note
+log,1,1,trend,trend,DRVADM.DVADM01,,,,"asks which years: one year only in the slice; the latest-year comparison could be answered; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,2,1,greeting,,,,,,
+log,3,1,scored,answer,DRVADM.DVADM01,130794,,,
+log,3,2,scored,answer,*race,130794,,,undergraduate enrollment by race and ethnicity (a tested breakdown set)
+log,4,1,scored,answer,*bachelor's degrees,130794,,,"2014-15 is not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
+log,4,2,scored,answer,DRVGR.GBA6RTT,,,,"2015 outcome year is not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
+log,4,3,trend,trend,DRVGR.GBA6RTT,130794,,,"cohorts 2009-2018: trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,4,4,trend,trend,DRVGR.GBA6RTT,,,,"trend compared to a group; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,4,5,trend,trend,,130794,,,trend for peers; 2026-11-23 (owner): expects a trend
+log,4,6,trend,trend,,,,,"trend for Ivies plus MIT and Stanford; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,4,7,trend,decline|answer|clarify,,166683,,,follow-up naming MIT
+log,6,1,trend,trend,DRVADM.DVADM01,130794;166027;186131,,,"2015-2024; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,7,1,scored,answer|clarify,*instructional staff,130794,,,full-time and part-time instructional staff
+log,8,2,trend,decline|clarify,*degrees,151786,,,last ten years
+log,8,3,trend,decline|clarify|answer,,151786,,,confirms the school
+log,11,1,trend,trend,*cost of attendance,144050;166027;186131;130794;243744,,,"change over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,11,2,scored,answer,DRVADM.DVADM01,,,,Ivy League group
+log,11,3,trend,trend,DRVADM.DVADM01,,,,"change since 10 years ago; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,13,1,scored,answer,*cost of attendance,166027,,,
+log,14,1,scored,decline,,,,,return on investment is not in IPEDS
+log,14,2,scored,decline,,,,,composite ranking over two years
+log,14,3,scored,decline,,,,,composite ranking
+log,14,4,scored,decline|clarify,,,,,yes please (to the composite ranking)
+log,14,5,scored,decline,,,,,composite ranking with weights
+log,15,1,scored,answer,*dual enrollment,,,,public 2-year colleges in New York
+log,15,2,scored,decline|answer,,,,,share of headcount needs a formula (not in the slice)
+log,16,1,scored,answer|decline,*award levels offered,167835;166939;168218,,,
+log,16,2,scored,answer|decline,*student services,167835,,,
+log,17,1,scored,decline|answer,,,,,data on institutional AI policies: outside IPEDS
+log,17,2,scored,decline|answer|clarify,,,,,yes
+log,22,2,trend,trend,*grant aid percent,130794,,,"2014-15 through 2023-24; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,23,1,scored,decline,,,,,PhD economics enrollment by field is not in the slice
+log,24,1,scored,answer|clarify,*dual enrollment,,,,
+log,24,2,scored,answer|clarify,*dual enrollment,,,,
+log,24,3,scored,answer|clarify,*dual enrollment,,,,
+log,24,4,scored,answer,*dual enrollment,,,,
+log,24,5,scored,answer,*dual enrollment,,,,count of colleges over 10000
+log,24,6,scored,answer,*dual enrollment,,,,rank largest to smallest
+log,25,1,scored,answer,DRVEF.EFGRAD,130794,,,
+log,26,1,chart,,,,,,
+log,27,1,chart,,,,,,
+log,28,1,chart,,,,,,
+log,29,1,chart,,,,,,
+log,30,1,test,,,,,,
+log,31,1,test,,,,,,
+log,33,1,scored,answer,,,,,what data exists on faculty
+log,34,1,scored,answer,,,,,what data exists on tuition
+log,35,1,scored,answer,,,,,what data exists on graduation rates
+log,36,1,scored,clarify|answer,*enrollment,170976,,,Michigan enrollment: which school
+log,36,4,scored,clarify|decline,,,,,another topic for Michigan: unclear
+log,37,1,chart,,,,,,
+log,38,1,test,,,,,,
+log,39,1,test,,,,,,
+log,39,2,test,,,,,,
+log,41,1,scored,clarify|answer|decline,*applicants;admission rate,,,,data extract with no schools named
+log,42,1,greeting,,,,,,
+log,44,1,test,,,,,,
+log,44,2,test,,,,,,
+log,45,1,trend,clarify,,,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend; 2026-11-24 (owner): no measure is named, so a clarifying question (which measure, and which school or group)"
+log,45,2,trend,clarify,,,,,"longitudinal trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend; 2026-11-24 (owner): no measure is named, so a clarifying question (which measure, and which school or group)"
+log,48,1,trend,trend,,196413,,,"change 2015 to 2023; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,50,1,scored,answer|clarify,EFD.RET_PCP,,,,part-time retention
+log,55,1,trend,trend,,127200,,,"trends over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,55,2,scored,answer,*graduation rate,,,,All public 2-year colleges
+log,58,2,trend,trend,*graduation rate,195003,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,58,3,scored,answer|clarify,*graduation rate,195003,,,peers of RIT
+log,58,5,scored,answer,*graduation rate,168421;201645;186867;212054;167358,,,the named comparison schools
+log,58,6,scored,answer|clarify|decline,*graduation rate,,,,use the institutions in the example set
+log,58,7,trend,trend,*expenses per FTE,,,,"ten-year trends; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,60,1,scored,decline,,,,,economic mobility is outside IPEDS
+log,60,2,scored,decline,,,,,income after graduation is outside IPEDS
+log,60,3,scored,decline|answer,,,,,what College Scorecard is: outside IPEDS
+log,60,4,scored,answer|clarify,*net price,,,,"lowest net price; 2026-11-23 (owner decision): a clarifying question is acceptable, since universe is also a dictionary term"
+log,60,5,scored,decline,,,,,income data is not in IPEDS
+log,61,1,scored,answer,DRVEF.EFGRAD,130794,,,"added 2026-11-22; a repeat of conversations 25 and 49, so the runner skips it unless repeats are run"
+log,62,1,scored,clarify,,,,,"added 2026-11-22; ""hawaii"": schools in Hawaii, the University of Hawaii system, or a measure"
+log,62,2,scored,answer|clarify,*entering and graduating students,,,,added 2026-11-22; the University of Hawaii system (System: University of Hawaii Board of Regents) recognised as the group
+log,62,3,scored,answer|clarify,*completions by field and race; fall enrollment by race for major fields,,,,"added 2026-11-22; answer the parts IPEDS has and say what it lacks (graduation rates by major, high school of graduation, SAT by major, linking individual students)"
+log,62,4,context,,,,,,"added 2026-11-22; ""1 ALL / 2 trend / 3 yes / 4 broad"": context only, not scored"
+log,63,1,scored,clarify|answer,*fall enrollment,156107,,,"added 2026-11-22; ""wsu tehc"": clarify which WSU, or WSU Tech; Texas Tech (229115) is a wrong reading"
+log,63,2,scored,answer,*fall enrollment,156107,,,added 2026-11-22; WSU Tech; Wichita State main campus (156125) is a wrong reading
+log,64,1,trend,trend,*graduation rate,156107,,,"added 2026-11-22; five-year trend against Kansas community colleges; until trends exist, the latest year with a note; 2026-11-23 (owner): expects a trend"
+log,64,2,display,,,,,,"added 2026-11-22; table pivot and title request: display request, not scored"
+eval,fu_netprice_narrow,1,scored,answer|clarify,*net price,130794,,,net price lags a year: caveat or clarify
+eval,fu_netprice_narrow,2,scored,answer,*net price,,,,2023-24 grant-aided net price
+eval,fu_swap_institution,1,scored,answer,DRVADM.DVADM01,130794,,,
+eval,fu_swap_institution,2,scored,answer,DRVADM.DVADM01,,,,
+eval,fu_add_year,1,scored,decline|answer,*12-month headcount,130794,,,2022-23 is not in the slice (12-month data in the 2024-25 release is 2023-24)
+eval,fu_add_year,2,trend,trend,,130794,,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+eval,fu_resort,1,scored,answer,*net price,,,,
+eval,fu_resort,2,scored,answer,*net price,,,,sort
+eval,fu_rechart,1,scored,answer,*net price,,,,
+eval,fu_rechart,2,chart,,,,,,
+eval,fu_go_back,1,scored,answer,*net price,,,,
+eval,fu_go_back,2,scored,answer,*net price,130794;166027,,,
+eval,fu_go_back,3,scored,answer,*net price,,,,added after the run (turn missed when the file was written)
+eval,fu_change_measure,1,scored,decline|answer,DRVGR.GBA6RTT,130794,,,2016 cohort is not in the slice (2018 cohort is)
+eval,fu_change_measure,2,scored,decline|answer|clarify,*bachelor's degrees,130794,,,
+eval,fu_add_institution,1,scored,answer,DRVADM.DVADM01,130794;166027,,,
+eval,fu_add_institution,2,scored,answer,DRVADM.DVADM01,130794;166027;186131,,,
+eval,faq_admrate_yale,1,scored,answer,DRVADM.DVADM01,130794,,,
+eval,faq_cost_harvard,1,scored,answer,*cost of attendance,166027,,,
+eval,faq_grant_pct_ivies,1,scored,answer,*grant aid percent,,,,
+eval,faq_bach_yale_1415,1,scored,answer,*bachelor's degrees,130794,,,"2014-15 not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
+eval,faq_instr_staff_yale,1,scored,answer|clarify,*instructional staff,130794,,,
+eval,faq_services_smith,1,scored,answer|decline,*student services,167835,,,
+eval,faq_ma_distance,1,scored,answer|decline,*distance education,,,,
+eval,refuse_faculty_sat,1,scored,decline,,,,,
+eval,refuse_nonbinary_faculty,1,scored,decline,,,,,
+eval,refuse_salary_by_field,1,scored,decline|answer,,,,,"2026-11-23 (owner decision 5): a partial answer counts as expected: salaries by rank, with the statement that IPEDS has no salaries by field"
+eval,refuse_gradrate_2030,1,scored,decline,,,,,
+eval,refuse_student_debt,1,scored,decline,,,,,
+eval,refuse_student_names,1,scored,decline,,,,,
+eval,trap_faculty_ambiguity,1,scored,clarify|answer,*instructional staff,130794,,,
+eval,trap_netprice_lag,1,scored,clarify|answer,*net price,130794,,,the app must state the real period (2023-24)
+eval,trap_medical_scope,1,scored,clarify|answer,*salary,130794,,,
+eval,probe_c_mast_yale,1,scored,answer|decline,*master's degrees,130794,,,2023 read as 2022-23 is not in the slice; 2023-24 is
+eval,probe_c_doc_harv,1,scored,answer|decline,*doctoral degrees,166027,,,same year question
+eval,probe_c_cmp_bach,1,scored,answer|decline,*bachelor's degrees,130794;186131,,,
+eval,probe_al_books_harv,1,scored,answer|decline,*library books,166027,,,
+eval,probe_al_ebooks_yale,1,scored,answer|decline,*library e-books,130794,,,
+eval,probe_sal_prof_smith,1,scored,answer,*salary,167835,,,2023-24 salaries are in the 2024-25 release
+eval,probe_sal_cmp,1,scored,answer,*salary,167835;166939;168218,,,
+eval,probe_f_tuitrev_yale,1,scored,decline|answer,*tuition revenue,130794,,,2022-23 finance: check the release's fiscal year
+eval,probe_f_expenses_yale,1,scored,decline|answer,*expenses,130794,,,
+eval,probe_f_endow_harv,1,scored,decline|answer,*endowment,166027,,,
+eval,probe_eap_fac_yale,1,scored,decline|answer|clarify,*instructional staff,130794,,,fall 2023 is not in the slice
+eval,probe_s_total_smith,1,scored,decline|answer,*staff,167835,,,2023
+eval,probe_om_rate_yale,1,scored,answer|decline,*award within eight years,130794,,,
+eval,probe_om_behav,1,scored,answer|decline,*award within eight years,104151,,,Pell subgroup of Outcome Measures
+eval,probe_effy_yale,1,scored,decline|answer,*12-month headcount,130794,,,
+eval,probe_ef_dist_yale,1,scored,decline|answer,*distance education,130794,,,fall 2023 not in the slice
+eval,probe_ef_race_yale,1,scored,decline|answer,*race,130794,,,fall 2023 not in the slice
+eval,probe_cost_tuit_smith,1,scored,answer|decline,*tuition,167835,,,
+eval,probe_cost_roomboard_mh,1,scored,answer|decline,*room and board,166939,,,
+eval,probe_cost_netprice_we,1,scored,decline|answer,*net price,168218,,,2022-23 net price is not in the slice
+eval,probe_adm_act_yale,1,scored,answer,*ACT submitters,130794,,,
+eval,probe_adm_req_yale,1,scored,answer|decline,*test requirements,130794,,,
+eval,probe_agg_gradrate,1,scored,decline|answer,DRVGR.GBA6RTT,,,,2016 cohort not in the slice
+eval,probe_agg_instcount,1,scored,answer|decline,,,,,count of public four-year institutions
+eval,probe_agg_totalenr,1,scored,answer|decline,DRVEF.ENRTOT,,,,fall 2023 not in the slice
+eval,probe_def_retention,1,scored,answer,,,,,definition
+eval,probe_disc_finance,1,scored,answer,,,,,what data exists on finance
+eval,probe_trend_effy_yale,1,trend,trend,*12-month headcount,130794,,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+eval,probe_cat_housing_smith,1,scored,answer|decline,*on-campus housing,167835,,,
+eval,probe_cat_city_smith,1,scored,answer|decline,*city,167835,,,
+owner,o44_fte,1,scored,answer,,,,5f,Explains full-time equivalent and how IPEDS calculates it for enrollment
+owner,o44_adjusted_cohort,1,scored,answer,,,,5f,The entering cohort minus allowed exclusions
+owner,o45_retention_persistence,1,scored,answer,,,,5f,Explains both; IPEDS reports retention
+owner,o45_sticker_net,1,scored,answer,,,,5f,Explains both and the net price lag
+owner,o45_grad_rate_transfers,1,scored,answer,,,,5f,"Explains the first-time, full-time cohort; points to Outcome Measures"
+owner,o45_net_price_lag,1,scored,answer,,,,5f,Explains the reporting lag
+owner,o44_provisional,1,scored,answer,,,,5f,Provisional versus final release
+owner,o44_title_iv,1,scored,answer,,,,5f,Federal aid eligibility; it defines the national universe
+owner,o44_comparison_group,1,scored,answer,,,,5f,The custom comparison group; not all schools have one
+owner,o44_summer_melt,1,scored,answer,,,,5f,"Not in the concepts table: a general explanation labelled as such, and logged"
+owner,o46_grad_vs_om,1,scored,answer,DRVGR.GRRTTOT|DRVGR.GBA6RTT|rate:Award within eight years (Outcome Measures),,,6,"Who each covers, when to use which; offers both"
+owner,o46_total_vs_net,1,scored,answer,*total price; net price,,,6,Recommends net price; offers both
+owner,o46_fall_vs_12month,1,scored,answer,DRVEF.ENRTOT|DRVEF12.UNDUP,,,6,Snapshot versus unduplicated count
+owner,o46_instr_vs_faculty,1,scored,answer,*instructional staff; faculty status,130794,,6,"Both definitions, with Yale's two figures"
+owner,o47_low_income,1,scored,answer,*Pell share; Pell graduation rate; net price,,,6,Two to four measures with their limits; offers to run them
+owner,o47_cc_success,1,scored,answer,*Outcome Measures; 150% graduation rate; retention,,,6,"Outcome Measures, 150% graduation rate, retention, with limits"
+owner,o47_financial_health,1,scored,answer,*equity ratio; expenses per student; endowment,,,6,Available measures; IPEDS has no single financial-health score
+owner,o47_selectivity,1,scored,answer,*admission rate; yield; test scores,,,6,"Admission rate, yield, test scores, noting test-optional limits"
+owner,o48_marian,1,scored,decline|clarify,*degrees,151786,,5.0,Ten years against the one-year data: declined for years (or which Marian)
+owner,o48_marian,2,scored,clarify,*degrees awarded,151786,,5.0,"Owner decision 2026-11-22: asks again which Marian, with 2023-24 applied"
+owner,o48_roi,1,scored,decline,,130794,,5.0,Return on investment is not in IPEDS
+owner,o48_roi,2,scored,answer|decline,,,,5.0,"Points to College Scorecard, from the outside-IPEDS table"
+owner,o49_hsi,1,scored,decline,*graduation rate,,,5.0,No IPEDS flag for Hispanic-serving institutions
+owner,o49_hsi,2,scored,answer|decline,,,,5.0,Explains that IPEDS has no flag for this group
+owner,o49_yale_1990,1,scored,decline,DRVEF.ENRTOT,130794,,5.0,1990 is outside the years held
+owner,o49_yale_1990,2,scored,answer|clarify,DRVEF.ENRTOT,130794,,5.0,Offers the closest alternatives: the years available
+owner,o50_yale_pell_trend,1,scored,answer,SFA.UPGRNTP,130794,,5c,"All undergraduates, nine years (aid years 2015-16 to 2023-24, the 2016-17 to 2024-25 releases): periods that start in 2015 or later (owner decision 2026-11-23); the default Pell measure for trends"
+owner,o50_cc_dgs_pell_trend,1,scored,answer,SFA.UDGPGRNTP,127200,,5c,Degree-seeking undergraduates: starts in the 2022-23 release (aid year 2021-22); 2015-16 to 2021-22 named as not collected; never mixed with the all-undergraduate measure
+owner,o51_negative_net_worth,1,scored,answer,F_F1A.F1A18|F_F2.F2A06|F_F3.F3A03,,,5b2,"A list of schools meeting a condition (below zero), each form's own measure: net position (public, F1A18), total net assets (private nonprofit, F2A06), total equity (for-profit, F3A03); grouped by form, naming each measure, with the statement that the three are not strictly comparable; system offices left out (outside the national universe), and said so; the pension note on the public rows; fiscal 2024 stated. Data: 147 public, 28 private nonprofit and 50 for-profit report a negative figure; 123, 26 and 50 (199) inside the national universe."
+bad,bw01,1,badly written,answer,DRVADM.DVADM01,130794,,5d,acceptence; no apostrophe
+bad,bw02,1,badly written,answer,DRVGR.GBA6RTT,166027,,5d,two misspellings; the school name itself misspelled
+bad,bw03,1,badly written,answer,DRVEF.ENRTOT,129020,,5d,nickname table (picker row: university of connecticut)
+bad,bw04,1,badly written,answer,DRVEF.ENRTOT,170976,,5d,"""kids"" for students; nickname table (picker row)"
+bad,bw05,1,badly written,answer,DRVCOST.TUFEYR3,178396,,5d,no nickname row and no IPEDS alias: University of Missouri-Columbia
+bad,bw06,1,badly written,answer|clarify,DRVGR.GRRTTOT,156107,,5d,"IPEDS alias: the directory lists ""WSU Tech"" for Wichita State University Campus of Applied Sciences and Technology from 2018-19 on"
+bad,bw07,1,badly written,clarify,DRVEF.ENRTOT,,,5d,"Washington State, Wayne State, Wichita State, Winona State and others: the school picker, never a guess"
+bad,bw08,1,badly written,clarify,DRVGR.GBA6RTT,,,5d,"RIT (195003) offered, or a question; RTI International is not a college and must never be named as one"
+bad,bw09,1,badly written,decline|clarify,,,,5d,"A good answer says RTI International is a research organisation, not a college (not in IPEDS), and asks whether RIT (195003) was meant; a clarifying question is acceptable. Never invent a college"
+bad,bw10,1,badly written,answer,DRVEF.ENRTOT,,System: City University of New York,5d,"groups: System: City University of New York; a group figure for the 21 CUNY colleges, not one school"
+bad,bw11,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,System: City University of New York,5d,"groups: System: City University of New York; mixed levels: a ranking, or the level question; the reading chosen is stated"
+bad,bw12,1,badly written,answer,DRVADM.DVADM01,110662;123961,,5d,"""admit rate""; USC could also be South Carolina: either picker or USC (Southern California) is acceptable"
+bad,bw13,1,badly written,answer,COST2_NETPRICE.NPIST2,139755,,5d,nickname table (picker row)
+bad,bw14,1,badly written,answer,EFD.STUFACR,166683,,5d,no hyphens
+bad,bw15,1,badly written,answer|clarify,*cost,193900,,5d,"tuition, net price or cost of attendance: an answer that states the reading chosen, or a question"
+bad,bw16,1,badly written,answer|clarify,DRVEF.EFUG,214777,,5d,"main campus, or the picker for its campuses"
+bad,bw17,1,badly written,answer,SFA.UPGRNTP,228778,,5d,"""%"" for percent"
+bad,bw18,1,badly written,answer,EFD.RET_PCF,233921,,5d,virgina; nickname row is virginia tech
+bad,bw19,1,badly written,answer,*SAT scores,199120,,5d,SAT 25th/50th/75th percentiles
+bad,bw20,1,badly written,answer|clarify,F_F1A.F1H02,159391,,5d,"LSU is an IPEDS alias of six schools: the main campus, or the picker"
+bad,bw21,1,badly written,answer|clarify,DRVEF.ENRTOT,228723,,5d,IPEDS alias of College Station
+bad,bw22,1,badly written,answer|clarify,DRVEF.ENRTOT,104151,,5d,"Arizona State, Appalachian State, Alabama State, Angelo State...: the picker, or Arizona State with ""Interpreted as"" naming it"
+bad,bw23,1,badly written,answer,COST1.chg5ay2,240444,,5d,nickname table; room and board is on-campus food and housing
+bad,bw24,1,badly written,answer,COST1.chg3ay3,243780,,5d,no hyphens
+bad,bw25,1,badly written,clarify,DRVGR.GBA6RTT,,,5d,"Boston, Binghamton and Baylor are all called BU: the picker only (owner, 2026-11-24)"
+bad,bw26,1,badly written,answer,DRVEF.ENRTOT,134130;134097,,5d,word order
+bad,bw27,1,badly written,answer|clarify,EAP.EAPTOT|EAP.EAPFT,236948,,5d,"""faculty"" has several readings: an answer that states the reading chosen, or the question"
+bad,bw28,1,badly written,decline,,167358,,5d,co-op participation is not collected by IPEDS: a decline naming the closest data
+bad,bw29,1,badly written,answer,DRVEF.ENRTOT,127200,,5d,IPEDS alias FRCC
+bad,bw30,1,badly written,answer|clarify,DRVEF.ENRTOT,135717,,5d,"a ranking of public two-year colleges by enrollment, or a question about which group"
+bad,bw31,1,badly written,answer,DRVCOST.TUFEYR3,130794,,5d,a single earlier year (2019-20)
+bad,bw32,1,badly written,answer,DRVEF.ENRTOT,166027,,5d,British spelling; a trend from fall 2015
+bad,bw33,1,badly written,answer,DRVGR.GBA6RTT,171100,,5d,"""rat"" for rate"
+bad,bw34,1,badly written,answer,DRVADM.DVADM01,,Ivy League,5d,"groups: Ivy League; ivys; a ranking, lowest first"
+bad,bw35,1,badly written,answer,SFA.UPGRNTP,,State: Ohio,5d,"groups: State: Ohio; ""w/""; a ranking, highest first"
+bad,bw36,1,badly written,answer,,,State: Vermont,5d,groups: State: Vermont; collages; a count of schools
+bad,bw37,1,badly written,answer|clarify,*cost,194824;195003,,5d,"RPI is an IPEDS alias (2 schools); cost has several readings: an answer that states the reading chosen, or a question"
+bad,bw38,1,badly written,answer,*U.S. Nonresident students,145637,,5d,"""intl"" for international; IPEDS calls them U.S. Nonresident"
+bad,bw39,1,badly written,clarify,*women share of enrollment,,,5d,"Ohio State, Oklahoma State, Oregon State: the picker"
+bad,bw40,1,badly written,answer,DRVHR.SalProf|DRVHR.SALTOTL,172644,,5d,"""profs""; ""wayne st"""
+bad,bw41,1,badly written,clarify,,243744,,5d,which figure: a question back
+bad,bw42,1,badly written,decline,,123961,,5d,default rates are in the outside-IPEDS table; the request names no measure (decision 7)
+bad,bw43,1,badly written,answer,DRVGR.GBA6RTT,178396;170976;129020,,5d,mizou (misspelled nickname); three schools
+bad,bw44,1,badly written,decline,,139755,,5d,earnings are outside IPEDS; GT could be Georgia Tech
+bad,bw45,1,badly written,answer,*SAT scores,130794,,5d,no apostrophes
+bad,bw45,2,badly written,answer,*SAT scores,166027,,5d,"an edit: replace the school, keep the measure"
+bad,bw46,1,badly written,answer,DRVEF.ENRTOT,,System: City University of New York,5d,groups: System: City University of New York; the 21 CUNY colleges as one group figure
+bad,bw47,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,System: State University of New York System,5d,"groups: System: State University of New York System; the 60 SUNY schools; mixed levels: the reading chosen is stated, or the level question"
+bad,bw48,1,badly written,answer|decline,DRVCOST.TUFEYR3,,System: California State University,5d,"groups: System: California State University; tuition is reported per school and is not combined into one group figure: each campus's figure (a ranking or list), or the decline offering it"
+bad,bw49,1,badly written,answer,DRVADM.DVADM01,,System: University of California,5d,groups: System: University of California; a group rate computed from admissions and applicants across the UC campuses
+bad,bw50,1,badly written,answer|clarify,DRVEF.ENRTOT,199120,System: University of North Carolina,5d,"groups: System: University of North Carolina; the system (17 schools) or Chapel Hill: the picker, or a stated reading"
+bad,bw51,1,badly written,clarify,DRVGR.GBA6RTT,,,5d,"Michigan, Minnesota, Maryland, Memphis, Mississippi...: the picker only"
+bad,bw52,1,badly written,answer,EFD.RET_PCF,,"Public, 2-year;State: Texas",5d,"groups: Public, 2-year;State: Texas; comunity, texs: public two-year colleges in Texas, full-time retention"
+bad,bw53,1,badly written,answer|decline,COST2_NETPRICE.NPGRN2,,Private not-for-profit;New England,5d,"groups: Private not-for-profit;New England; privat; net price reported per school: a group figure is not combined, so each school's figure or the decline offering it is also acceptable"
+bad,bw54,1,badly written,answer|clarify,DRVGR.GRRTTOT|DRVGR.GBA6RTT,,HBCUs,5d,"groups: HBCUs; lower case; mixed levels: the reading chosen is stated, or the level question"
+bad,bw55,1,badly written,answer,DRVEF.ENRTOT,,Ivy League,5d,"groups: Ivy League; leage, enrolment"

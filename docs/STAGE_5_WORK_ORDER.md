@@ -121,7 +121,7 @@ PART 5e. WRITTEN SUMMARY
 - A second model call writes two or three neutral sentences about the result, given only the table and its notes. No interpretation beyond the numbers.
 - Code checks that every number in the summary appears in the table (allowing for rounding and percent formatting). If the check fails, the summary is dropped and logged; the table stands alone.
 - It streams in under the table and can be switched off. Log its time and cost. Tests use saved replies.
-- A staged status line while the app works, showing each step in plain words (for example "Finding matching data…", "Reading your question…", "Getting the numbers…", "Writing the summary…"), including the AI's own search from Part 5d.
+- A staged status line while the app works, showing each step in plain words (for example "Finding matching data…", "Reading your question…", "Getting the numbers…", "Writing the summary…"), including the AI's own search from Part 5d. Time limits (owner decision, 2026-11-24): up to 20 seconds for a turn where the AI searches; 10 seconds for others.
 - A single-number tile: when the answer is one figure, show it large, with its label, school or group and period, above the table.
 
 PART 5f. EXPLAINING TERMS AND CONCEPTS (question types 44 and 45)

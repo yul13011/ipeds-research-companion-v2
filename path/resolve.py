@@ -146,6 +146,11 @@ def model_decline(reply, short, d):
     "IPEDS does not collect this" needs an outside-IPEDS row; any other "not in IPEDS" becomes "not found"."""
     x, request = reply["decline"], reply.get("request")
     log = dict(reason=x.get("reason"), wanted=x.get("wanted"), closest=x.get("closest"), missing=x.get("missing"))
+    unnamed = [i for i, s in enumerate((request or {}).get("schools") or []) if s["id"] is None and s.get("name")]
+    if unnamed:                                         # a school the user named that no listed school clearly is
+        s = request["schools"][unnamed[0]]
+        return outcome("picker", name=s["name"], index=unnamed[0], request=request, candidates=picker_names(s["name"], d),
+                       log=log)
     missing = x.get("missing")
     if request and missing == "years" and request["measures"]:
         got = resolve_request(request, d, short)        # the app's own year check: answers what it can, or says why not
@@ -266,10 +271,17 @@ def resolve_request(request, d, short, new_question=False):
     bad = off_shortlist(request, short)
     if bad:
         return outcome("wrong_reading", message=say(d, "could not read"), detail=bad, request=request)
+    request = shared_abbreviations(request, d)
+    direct = {tuple(sl.words(n)): int(u) for n, u in d.q("SELECT nickname, unitid FROM dict_school_nicknames WHERE kind = 'direct'")}
+    if any(s["id"] is None and tuple(sl.words(s["name"])) in direct for s in request["schools"]):
+        request = copy.deepcopy(request)                # a nickname that means one school resolves without asking
+        for s in request["schools"]:
+            if s["id"] is None and tuple(sl.words(s["name"])) in direct:
+                s["id"] = direct[tuple(sl.words(s["name"]))]
     for i, s in enumerate(request["schools"]):
         if s["id"] is None:
-            return outcome("picker", name=s["name"], index=i, request=request, candidates=sl.search_schools(s["name"], d.db_path))
-    ask = state_or_school(request, d) if new_question else None
+            return outcome("picker", name=s["name"], index=i, request=request, candidates=picker_names(s["name"], d))
+    ask = (state_or_school(request, d) or system_or_school(request, d, short)) if new_question else None
     if ask:
         return ask
     request = copy.deepcopy(request)
@@ -411,6 +423,63 @@ def resolve_request(request, d, short, new_question=False):
 
 
 SCHOOL_OPTIONS = 3
+
+
+def picker_names(name, d):
+    """The nearest schools for a name: the names an ambiguous abbreviation stands for (school_nicknames.csv kind
+    'ambiguous'), or the schools whose names best match what the user wrote, misspellings allowed."""
+    row = next((p for n, p in d.q("SELECT nickname, search_phrase FROM dict_school_nicknames WHERE kind = 'ambiguous'")
+                if sl.words(n) == sl.words(name)), None)
+    nick = next(((u, p) for n, u, p in d.q("SELECT nickname, unitid, search_phrase FROM dict_school_nicknames "
+                                         "WHERE kind IN ('direct', 'alias', 'picker')") if sl.words(n) == sl.words(name)), None)
+    if nick and not row:                                # a nickname: its school first, or its search phrase
+        first = [c for c in sl.search_schools(d.name(int(nick[0])), d.db_path, 1)] if nick[0] else []
+        rest = sl.search_schools(nick[1] or name, d.db_path) if nick[1] else []
+        return first + [c for c in rest if c["id"] not in {f["id"] for f in first}]
+    if row:
+        found = []
+        for phrase in (p.strip() for p in row.split(";") if p.strip()):
+            found += [c for c in sl.search_schools(phrase, d.db_path, 1) if c["id"] not in {f["id"] for f in found}]
+        return found
+    vocabulary = sl.get_index(d.db_path)["vocabulary"]
+    return sl.search_schools(sl.corrected(name, vocabulary), d.db_path)
+
+
+def shared_abbreviations(request, d):
+    """A school written as an abbreviation several schools share ("bu", "u of m") goes to the picker, whichever school
+    the model chose for it."""
+    shared = {tuple(sl.words(n)) for (n,) in d.q("SELECT nickname FROM dict_school_nicknames WHERE kind = 'ambiguous'")}
+    if not any(s["id"] is not None and tuple(sl.words(s["name"])) in shared for s in request["schools"]):
+        return request
+    request = copy.deepcopy(request)
+    for s in request["schools"]:
+        if tuple(sl.words(s["name"])) in shared:
+            s["id"] = None
+    return request
+
+
+def system_or_school(request, d, short):
+    """A name that means a system or one of its schools ("unc"): when the request uses one and not the other, ask,
+    with both as options (school_nicknames.csv kind 'system or school', found by the shortlist)."""
+    for e in (short or {}).get("either") or []:
+        has_school = any(s["id"] == e["school"] for s in request["schools"])
+        has_group = e["group"] in request["groups"]
+        if has_school == has_group:
+            continue
+        as_group, as_school = copy.deepcopy(request), copy.deepcopy(request)
+        as_group["schools"] = [s for s in as_group["schools"] if s["id"] != e["school"]]
+        as_group["groups"] = list(dict.fromkeys(as_group["groups"] + [e["group"]]))
+        if as_group["operation"] == "schools" and not as_group["schools"]:
+            as_group["operation"] = "group"
+        as_school["groups"] = [g for g in as_school["groups"] if g != e["group"]]
+        if not any(s["id"] == e["school"] for s in as_school["schools"]):
+            as_school["schools"].append(dict(name=e["name"], id=e["school"]))
+        if as_school["operation"] in ("group", "split"):
+            as_school["operation"] = "schools"
+        statement = (d.one("SELECT statement FROM group_list WHERE group_name = ?", e["group"]) or (e["group"],))[0]
+        return outcome("clarify", question=(d.setting("system or school")[1] or "").format(name=e["name"]),
+                       options=[dict(label=statement or e["group"], request=as_group), dict(label=d.name(e["school"]), request=as_school)])
+    return None
 
 
 def state_or_school(request, d):

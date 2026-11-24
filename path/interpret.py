@@ -65,7 +65,10 @@ Rules:
   If the term says "always ask" and the user did not say, return options, one per reading.
   Otherwise use the reading marked default.
 - schools: write each name as the user wrote it, with its S tag if the shortlist clearly has that school,
-  or null if it does not or several schools could be meant.
+  or null if it does not or several schools could be meant. A nickname or short name that means one school (UConn,
+  UMich, Mizzou, Purdue, Northeastern) is that school: give its tag. Only for a name several schools share (such as
+  "BU" or "U of M") or a name no listed school has (such as "RTI"), give null, never another school's tag; the app
+  then offers the nearest names. This holds in a decline too.
 - groups: G tags. A school must be in every group named.
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
@@ -77,7 +80,8 @@ Rules:
     a range of years: "2015 through 2024", "between 2016 and 2020", "2014-15 to 2023-24" (start and end);
     the last N years: "the last five years", "a 10-year trend" (last);
     the change between two years: "how did it change from 2015 to 2024" (start and end).
-  start and end are calendar years as the user named them (the first year of "2014-15" is 2014); for one year, start
+  start and end are calendar years exactly as the user named them (the first year of "2014-15" is 2014), never
+  shifted for a measure that is reported a year behind: the app handles that; for one year, start
   is that year, or 0 if no year was named; a year written as two ("2022-23") gives start 2022 and end 2023. Write 0 for any of start, end and last the span does not use.
   For a ranking or a list over a period, the figure is the change between the first and last year, and a condition
   ("lost enrollment", "grew by more than 1,000") applies to that change. For a group over time, membership is "each year" unless the user asks
@@ -102,7 +106,9 @@ def render(short, previous, pending, question, declined=None, searches=None, sea
              f"{', '.join(m['breakdowns_via_detail'])}" if m["breakdowns_via_detail"] else "")
         cats = "".join(f" | categories by {c['column']} (default: {c['default']}): {', '.join(c['tags']) or 'none shortlisted'}"
                        for c in m.get("categories", []))
-        rows.append(f"  {m['tag']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{cats}{b}{flag}")
+        also = (f" | also by subgroup, not listed (search for one if asked): {', '.join(m['variants'][:12])}"
+                if m.get("variants") else "")
+        rows.append(f"  {m['tag']} | {m['name']} | {m['period'] or ''} | {m['unit'] or ''}{cats}{b}{also}{flag}")
     section("measures", ["Measures (tag | name | period | unit):"] + rows)
     rows = []
     for t in short["terms"]:

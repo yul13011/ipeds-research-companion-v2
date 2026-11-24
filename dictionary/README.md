@@ -62,7 +62,7 @@ Words with more than one possible reading. One row per reading and measure. A re
 Every way a user can name a group of schools.
 
 - `group`: the group's name. Rows with the same name must all hold (only the national universe uses this).
-- `kind`: `column` (schools with these codes), `any value` (every value of the column is its own group, such as each state), `member list` (members are in `group_members.csv`), `per school` (depends on the school asked about, such as its comparison group), `has rows` (schools with at least one row in the named table), `has value` (schools with a value in the named column), `universe` (the national universe), `none` (no definition; see `status`).
+- `kind`: `column` (schools with these codes), `any value` (every value of the column is its own group, such as each state), `member list` (members are in `group_members.csv`), `per school` (depends on the school asked about, such as its comparison group), `has rows` (schools with at least one row in the named table), `has value` (schools with a value in the named column), `universe` (the national universe), `none` (no definition; see `status`), `synonyms` (more words for a group made from a column's values, such as "CUNY" for "System: City University of New York": `group` is that group's full name and `words` the words; the build stops if the group does not exist).
 - `words`: what users say.
 - `table`, `column`: where the codes are. Several columns mean a match in any of them.
 - `codes`: the codes that define the group, or `any`.
@@ -90,6 +90,8 @@ Short names users type for a school.
 - `kind`: `direct` resolves to the school without asking. `alias` suggests the school first but still shows the picker when other schools match. `picker` only supplies a search phrase.
 - `unitid`, `name`: the school, for `direct` and `alias`.
 - `search_phrase`: the phrase searched for, for `picker`.
+- `kind` `system or school`: a name that can mean a system or one of its schools ("unc"). `unitid` and `name` are the school, `search_phrase` the system group's full name. Both go on the shortlist and the app asks which, unless the question names the school in full (its own words beyond the system's name, such as "chapel hill").
+- `kind` `ambiguous`: an abbreviation several schools share ("bu", "u of m"). `search_phrase` lists their names, separated by semicolons. A school written as this abbreviation always goes to the school picker, which offers those names; it is never replaced by one of them silently.
 
 ## rates.csv
 

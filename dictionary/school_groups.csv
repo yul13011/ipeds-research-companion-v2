@@ -166,3 +166,23 @@ Reports on the FASB finance form,has value,,DRVF,F2COREXP,,Schools that report f
 Reports on the for-profit finance form,has value,,DRVF,F3COREXP,,Schools that report finance on the for-profit form (private for-profit institutions),,,,,in use,2,
 Charges by academic year,column,,IC,CALSYS,"1, 2, 3, 4, 5","Schools on an academic calendar (semester, quarter, trimester, 4-1-4 or other academic year), which report tuition and fees for the academic year",,,,by academic year,in use,3,Owner decision 2026-11-23 (item 2): the kind-of-school pairing for program-year tuition
 Charges by program,column,,IC,CALSYS,"6, 7","Schools whose calendar differs by program or is continuous, which report tuition and fees for the largest program",,,,by program,in use,3,Owner decision 2026-11-23 (item 2): the kind-of-school pairing for program-year tuition
+System: City University of New York,synonyms,CUNY,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: State University of New York System,synonyms,SUNY; SUNY system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of North Carolina,synonyms,UNC system; UNC,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of California,synonyms,UC system; UC,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: California State University,synonyms,Cal State; CSU system; CSU,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: The University of Texas System,synonyms,UT System; University of Texas system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: Texas A&M University System,synonyms,Texas A&M System; A&M System; TAMU System,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of Wisconsin System,synonyms,UW System; Universities of Wisconsin,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University System of Georgia,synonyms,USG; Georgia university system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of Massachusetts,synonyms,UMass system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: State University System of Florida,synonyms,Florida university system; SUS,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: Pennsylvania State System of Higher Education,synonyms,PASSHE; PA State System,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: Minnesota State Colleges and Universities,synonyms,Minnesota State; Minnesota State system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University System of Maryland,synonyms,USM; Maryland university system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: California Community College System,synonyms,California community colleges; CCC system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: TBR - The College System of Tennessee,synonyms,TBR; Tennessee Board of Regents,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: The University of Tennessee System,synonyms,UT system (Tennessee),,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of Minnesota,synonyms,University of Minnesota system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of Colorado,synonyms,CU system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations
+System: University of Illinois Board of Trustees,synonyms,University of Illinois system; U of I system,,,,,,,,,in use,,Owner decision 2026-11-24 (Part 5d): common system abbreviations

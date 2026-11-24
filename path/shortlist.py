@@ -78,8 +78,9 @@ def corrected(text, vocabulary):
     for w in set(words(text)):
         if w in vocabulary.get(len(w), ()) or w.isdigit() or len(w) < 3:
             continue
-        if len(w) <= SWAP_ONLY_UP_TO:
-            found = [v for v in vocabulary.get(len(w), ()) if swapped(w, v)]
+        if len(w) <= SWAP_ONLY_UP_TO:                   # two letters swapped, or one letter left out ("texs")
+            found = [v for v in vocabulary.get(len(w), ()) if swapped(w, v)] or \
+                    [v for v in vocabulary.get(len(w) + 1, ()) if v[0] == w[0] and distance(w, v, 1) == 1]
         else:
             most = 1 if len(w) <= ONE_OFF_UP_TO else 2
             found = []
@@ -131,8 +132,8 @@ class FieldBM25:
     """BM25 over two fields: a match in the main field (name and synonyms) counts NAME_WEIGHT times a match in the
     context field (the table's title and the description), so a table title helps choose the table without lifting
     every measure in it equally."""
-    def __init__(self, docs, idf):
-        self.main = BM25([(k, main) for k, main, _ in docs], idf)
+    def __init__(self, docs, idf, main_b=0.75):
+        self.main = BM25([(k, main) for k, main, _ in docs], idf, b=main_b)
         self.context = BM25([(k, context) for k, _, context in docs], idf)
 
     def scores(self, text):
@@ -141,6 +142,20 @@ class FieldBM25:
 
     def search(self, text, limit):
         return best(self.scores(text), limit)
+
+
+class GroupSearch(FieldBM25):
+    """Groups: the best by their own dictionary words and the best by their names, merged, so a curated group
+    ("community colleges") and a group named in the question ("State: Texas") both reach the shortlist instead of
+    one cutting the other off. A group's own words carry no penalty for being several (most groups have none)."""
+    def __init__(self, docs, idf):
+        super().__init__(docs, idf, main_b=0)
+
+    def search(self, text, limit):
+        main, context = self.main.scores(text), self.context.scores(text)
+        keys = list(dict.fromkeys(best(main, limit // 2) + best(context, limit)))
+        combined = {k: NAME_WEIGHT * main.get(k, 0) + context.get(k, 0) for k in keys}
+        return sorted(keys, key=lambda k: -combined[k])[:limit]
 
 
 def build_index(db):
@@ -198,7 +213,8 @@ def build_index(db):
     schools = {u: dict(id=u, name=name, alias=alias, city=city, state=st, text=" ".join([name, alias or ""] + nick.get(u, [])))
                for u, name, alias, city, st in q("SELECT UNITID, INSTNM, IALIAS, CITY, STABBR FROM directory "
                                                  "WHERE year = (SELECT MAX(year) FROM directory)")}
-    groups = {g: dict(name=g, statement=s, status=status, text=" ".join([g, w or "", s or ""]))
+    groups = {g: dict(name=g, statement=s, status=status, text=" ".join([g, w or "", s or ""]), main=w or "",
+                      context=" ".join([g, s or ""]))
               for g, w, s, status in q("SELECT group_name, words, statement, status FROM group_list")}
     rows = {(t, c, code): dict(table=t, column=c, code=code, label=label, text=f"{label} {syn or ''}")
             for t, c, code, label, syn in q('SELECT k."table", k."column", c.code, c.label, c.synonyms FROM row_keys k JOIN (SELECT * FROM dict_category_codes WHERE in_latest = \'yes\') c '
@@ -228,6 +244,8 @@ def build_index(db):
     for kind, entries in kinds:
         index[kind] = (BM25([(k, e["text"]) for k, e in entries.items()], idf), entries)
     index["measures"] = (FieldBM25([(k, e["main"], e["context"]) for k, e in measures.items()], idf), measures)
+    index["groups"] = (GroupSearch([(k, e["main"], e["context"]) for k, e in groups.items()], idf), groups)
+    families(measures, q)
     support = {}
     for s, t, how, measure, total in q("SELECT set_name, \"table\", stored_as, measure, total FROM breakdown_sets "
                                        "WHERE status IN ('loaded', 'additive')"):
@@ -241,7 +259,10 @@ def build_index(db):
     index["row_keys"] = {}                       # each multi-row table's category columns and their default rows
     for t, column, label in q('SELECT "table", "column", default_label FROM row_keys'):
         index["row_keys"].setdefault(t, []).append((column, label))
-    index["picker_phrases"] = q("SELECT nickname, search_phrase FROM dict_school_nicknames WHERE search_phrase IS NOT NULL")
+    index["picker_phrases"] = q("SELECT nickname, search_phrase FROM dict_school_nicknames WHERE search_phrase IS NOT NULL "
+                                "AND kind = 'picker'")   # 'ambiguous' names are for the picker only
+    index["either"] = q("SELECT nickname, CAST(unitid AS INTEGER), search_phrase FROM dict_school_nicknames "
+                        "WHERE kind = 'system or school'")
     index["first_version"] = {}
     for m in measures.values():
         if m["table"] and m["set_up"]:
@@ -281,11 +302,33 @@ def shortlist(question, db_path, carried=()):
             low = " " + " ".join(words(question)) + " "
             text += " " + " ".join(p for n, p in index["picker_phrases"] if f" {' '.join(words(n))} " in low)
         found[kind] = {key: entries[key] for key in bm25.search(text, limit)}
+    either = []
+    asked = set(words(question))
+    for nickname, unitid, group in index["either"]:
+        if f" {' '.join(words(nickname))} " not in " " + " ".join(words(question)) + " ":
+            continue
+        school = index["schools"][1].get(unitid)
+        if not school or group not in index["groups"][1]:
+            continue
+        own = set(words(school["name"])) - set(words(group)) - set(words(nickname)) - STOPWORDS
+        if own and own <= asked:                # the school named in full ("unc chapel hill"): no question
+            continue
+        found["schools"] = {unitid: school, **found["schools"]}
+        found["groups"] = {group: index["groups"][1][group], **found["groups"]}
+        either.append(dict(name=nickname, school=unitid, group=group))
 
     entries = index["measures"][1]
-    ranked = list(found["measures"])
     score = index["measures"][0].scores(question)
+    ranked = sorted(found["measures"], key=lambda k: (-score.get(k, 0), entries[k].get("subgroup") is not None))
     per_table, set_up, held_back = Counter(), [], []
+    kept, variants = {}, {}                     # near-duplicates (families): the best one, and the others' subgroups
+    for k in list(ranked):
+        family = entries[k].get("family")
+        if family and family in kept:
+            variants.setdefault(kept[family], []).append(entries[k].get("subgroup") or "total")
+            ranked.remove(k)
+        elif family:
+            kept[family] = k
     for k in (k for k in ranked if entries[k]["set_up"] and not entries[k].get("retired")):   # the best set-up measures,
         table = entries[k]["table"] or "rate"               # at most PER_TABLE per table, unless a held-back one clearly
                                                             # outscores the next one
@@ -301,7 +344,7 @@ def shortlist(question, db_path, carried=()):
     current = [k for k in ranked if not entries[k]["set_up"] and not entries[k].get("retired")][:NOT_SET_UP]
     gone = [k for k in ranked if entries[k].get("retired")][:RETIRED]
     keep = set_up + current + gone              # retired variables rank below every current measure
-    measures = {k: entries[k] for k in keep}
+    measures = {k: dict(entries[k], variants=variants[k]) if k in variants else entries[k] for k in keep}
     for t in found["terms"].values():           # a matched term brings the measures of its readings
         for r in t["readings"]:
             for mid in r["measures"]:
@@ -345,7 +388,38 @@ def shortlist(question, db_path, carried=()):
         if s["table"] in tables:
             found["sets"].setdefault(key, s)
     found["measures"] = dict(sorted(measures.items(), key=lambda kv: bool(kv[1].get("retired"))))  # retired last
-    return tag({kind: [public(e) for e in found[kind].values()] for kind in LIMITS}, index)
+    short = tag({kind: [public(e) for e in found[kind].values()] for kind in LIMITS}, index)
+    short["either"] = either
+    return short
+
+
+STOPWORDS = {"the", "of", "at", "in", "and", "a", "an", "for", "university", "college"}
+
+
+def families(measures, q):
+    """Near-duplicate measures: in one table, names that are the same once the part labels of the person-subgroup
+    breakdown sets (terms.csv "near-duplicate subgroups") and the total words ("subgroup total words") are taken out.
+    Sets each measure's `family` (table, the rest of its name) and `subgroup` (the label it carries, or None)."""
+    try:
+        sets = [s.strip() for s in (q("SELECT condition FROM dict_terms WHERE term = 'near-duplicate subgroups'")[0][0] or "").split(";")]
+        totals = [w.strip().lower() for w in (q("SELECT condition FROM dict_terms WHERE term = 'subgroup total words'")[0][0] or "").split(";")]
+    except (IndexError, sqlite3.OperationalError):     # a dictionary without these settings: no grouping
+        return
+    tokens = lambda text: re.findall(r"[a-z0-9.]+", (text or "").lower())
+    quoted = ",".join("'" + s.replace("'", "''") + "'" for s in sets)
+    total_words = {w for t in totals for w in tokens(t)}
+    label_words = {"non"}                               # "non-Hispanic", "Non-Pell": the label words, and their negation
+    for (label,) in q(f"SELECT DISTINCT label FROM breakdown_parts WHERE set_name IN ({quoted})"):
+        label_words |= set(tokens(label)) - total_words
+    for m in measures.values():
+        if not m.get("table"):
+            continue
+        name = tokens(m["name"])
+        subgroup = [w for w in name if w in label_words]
+        is_total = any(" " + t + " " in " " + " ".join(name) + " " for t in totals)
+        if subgroup or is_total:                        # the family: the rest of the name, within the table
+            m["family"] = (m["table"], " ".join(w for w in name if w not in label_words and w not in total_words))
+            m["subgroup"] = " ".join(w for w in name if w in label_words) or None
 
 
 PREFIX = {"measures": "M", "schools": "S", "groups": "G", "rows": "R", "sets": "B", "outside": "O"}
@@ -415,7 +489,9 @@ def extend(short, words, db_path):
         merged[kind] = [{k: v for k, v in e.items() if k != "tag"} for e in new + short[kind]]
     for t in merged["terms"]:
         t["readings"] = [{k: v for k, v in r.items() if k != "tag"} for r in t["readings"]]
-    return tag(merged, index), {k: v for k, v in added.items() if v}
+    merged = tag(merged, index)
+    merged["either"] = short.get("either", [])        # only the user's own words ask "the system or one school"
+    return merged, {k: v for k, v in added.items() if v}
 
 
 def search_schools(name, db_path, limit=8):

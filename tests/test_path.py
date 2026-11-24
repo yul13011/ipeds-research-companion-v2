@@ -1551,5 +1551,127 @@ class AISearch(unittest.TestCase):
         self.assertEqual(props["search_words"], {"type": "string"})  # plain text: nullable fields grow the grammar
 
 
+class Part5dSearch(unittest.TestCase):
+    """Part 5d decisions: system abbreviations, a system or one school, shared abbreviations, unclear school names,
+    misspelled groups, and near-duplicate measures on the shortlist."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def groups(self, q):
+        return [g["name"] for g in shortlist.shortlist(q, DB)["groups"]]
+
+    def ask(self, q, reply):
+        return answer.ask(q, {}, self.log, DB, call=AISearch.scripted(None, [reply])[0])
+
+    def test_system_abbreviations_find_their_system(self):
+        for q, group in [("how many students at CUNY", "System: City University of New York"),
+                         ("SUNY graduation rates", "System: State University of New York System"),
+                         ("cal state tuition", "System: California State University"),
+                         ("UC system admit rate", "System: University of California")]:
+            self.assertIn(group, self.groups(q)[:3], q)
+
+    def test_a_four_letter_word_missing_a_letter_is_corrected(self):
+        fixed = shortlist.corrected("texs", shortlist.get_index(DB)["vocabulary"]).split()
+        self.assertIn("texa", fixed)                                    # the index holds words trimmed: texas -> texa
+
+    def test_misspelled_community_colleges_in_texas_find_both_groups(self):
+        """"comunity colleges in texs retention": the public two-year group had ranked 108th among groups."""
+        found = self.groups("comunity colleges in texs retention")
+        self.assertIn("Public, 2-year", found)
+        self.assertIn("State: Texas", found)
+
+    def test_a_system_or_one_school_is_asked(self):
+        """"UNC enrollment": the system and Chapel Hill are both on the shortlist; whichever the model picks, the app asks."""
+        page = self.ask("UNC enrollment", lambda u: wire_reply("request", dict(
+            measures=[dict(measure=tag_of(u, "Total  enrollment"), row=[])],
+            schools=[dict(name="UNC", school=tag_of(u, "University of North Carolina at Chapel Hill"))])))
+        self.assertEqual(page["kind"], "clarify")
+        self.assertIn("can mean the system or one school", page["message"])
+        self.assertEqual(len(page["options"]), 2)
+        self.assertIn("University of North Carolina at Chapel Hill", page["options"])
+
+    def test_the_models_search_words_do_not_ask_system_or_school(self):
+        """"tamu enrollment": the model searched for "Texas A&M University"; the user never wrote a name that means
+        the system, so no question."""
+        short = shortlist.shortlist("tamu enrollment", DB)
+        extended, _ = shortlist.extend(short, "Texas A&M University", DB)
+        self.assertEqual(extended["either"], [])
+
+    def test_the_school_named_in_full_is_not_asked(self):
+        short = shortlist.shortlist("unc chapel hill sat scores", DB)
+        self.assertEqual(short["either"], [])
+
+    def test_a_shared_abbreviation_goes_to_the_picker(self):
+        """"BU graduation rate": the model chose Boston University; BU is also Binghamton and Baylor, so the picker."""
+        page = self.ask("BU graduation rate", lambda u: wire_reply("request", dict(
+            measures=[dict(measure=tag_of(u, "Graduation rate - Bachelor degree within 6 years, total"), row=[])],
+            schools=[dict(name="BU", school=tag_of(u, "Boston University"))])))
+        self.assertEqual(page["kind"], "picker")
+        names = " ".join(label for _, label in page["candidates"])
+        for school in ("Boston University", "Binghamton University", "Baylor University"):
+            self.assertIn(school, names)
+
+    def test_u_of_m_goes_to_the_picker(self):
+        page = self.ask("U of M graduation rate", lambda u: wire_reply("request", dict(
+            measures=[dict(measure=tag_of(u, "Graduation rate - Bachelor degree within 6 years, total"), row=[])],
+            schools=[dict(name="U of M", school=tag_of(u, "University of Michigan-Ann Arbor"))])))
+        self.assertEqual(page["kind"], "picker")
+        names = " ".join(label for _, label in page["candidates"])
+        self.assertIn("University of Michigan-Ann Arbor", names)
+        self.assertIn("University of Minnesota-Twin Cities", names)
+
+    def test_a_nickname_for_one_school_is_unaffected(self):
+        page = self.ask("Mizzou tuition", lambda u: wire_reply("search", words="University of Missouri") if "YOUR SEARCH" not in u
+                        else wire_reply("request", dict(measures=[dict(measure=tag_of(u, "Tuition and fees, 2024-25"), row=[])],
+                                                        schools=[dict(name="Mizzou", school=tag_of(u, "University of Missouri-Columbia"))])))
+        self.assertNotEqual(page["kind"], "picker")
+
+    def test_a_decline_naming_an_unclear_school_goes_to_the_picker(self):
+        """"RTI graduation rate": the model declined; RTI names no school, so the picker offers the nearest (RIT)."""
+        for q in ("RTI graduation rate", "is rti a real college"):
+            reply = dict(wire_reply("decline", dict(schools=[dict(name="RTI", school=None)])),
+                         decline=dict(reason="no such school", wanted="RTI", missing="other", closest="", about=None))
+            page = self.ask(q, lambda u: reply)
+            self.assertEqual(page["kind"], "picker", q)
+            self.assertIn("Rochester Institute of Technology", " ".join(label for _, label in page["candidates"]), q)
+
+    def test_an_unresolved_nickname_offers_its_school_first(self):
+        """A run found the model leaving UConn unresolved; the picker then had nothing to offer."""
+        reply = wire_reply("request", dict(schools=[dict(name="UConn", school=None)]))
+        page = self.ask("UConn enrollment", lambda u: dict(reply, requests=[dict(reply["requests"][0],
+                        measures=[dict(measure=tag_of(u, "Total  enrollment"), row=[])])]))
+        self.assertEqual(page["kind"], "picker")
+        self.assertTrue(page["candidates"][0][1].startswith("University of Connecticut"), page["candidates"][:2])
+
+    def test_a_direct_nickname_resolves_even_when_left_empty(self):
+        reply = wire_reply("request", dict(schools=[dict(name="yale", school=None)]))
+        page = self.ask("yale enrollment", lambda u: dict(reply, requests=[dict(reply["requests"][0],
+                        measures=[dict(measure=tag_of(u, "Total  enrollment"), row=[])])]))
+        self.assertEqual(page["kind"], "answer")
+
+    def test_near_duplicates_are_listed_once(self):
+        short = shortlist.shortlist("graduation rate at Yale", DB)
+        ids = [m["id"] for m in short["measures"]]
+        self.assertIn("DRVGR.GRRTTOT", ids)
+        for variant in ("DRVGR.GRRTW", "DRVGR.GRRTM", "DRVGR.GRRTHS", "DRVGR.GRRTBK"):
+            self.assertNotIn(variant, ids)
+        total = next(m for m in short["measures"] if m["id"] == "DRVGR.GRRTTOT")
+        self.assertIn("women", total["variants"])
+        self.assertIn("graduation rate", interpret.render(short, None, None, "x")[0].lower())
+        self.assertIn("also by subgroup", interpret.render(short, None, None, "x")[0])
+
+    def test_the_subgroup_asked_for_is_the_one_listed(self):
+        ids = [m["id"] for m in shortlist.shortlist("graduation rate for women at Yale", DB)["measures"]]
+        self.assertIn("DRVGR.GRRTW", ids)
+        self.assertNotIn("DRVGR.GRRTM", ids)
+
+
 if __name__ == "__main__":
     unittest.main()

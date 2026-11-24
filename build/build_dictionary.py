@@ -372,6 +372,8 @@ def build_groups(db):
                       "FROM dict_school_groups ORDER BY rowid").fetchall()
     seen = {}
     for name, kind, words, table, column, codes, statement, caveat, status, priority in rows:
+        if kind == "synonyms":                              # words for a group made from a column's values: below
+            continue
         if kind == "any value":                             # each value of the column is its own group
             labels = {}
             for col in split(column):
@@ -410,6 +412,13 @@ def build_groups(db):
             db.execute('INSERT INTO group_membership SELECT m."group", d.year, d.UNITID FROM dict_group_members m '
                        'JOIN directory d ON d.UNITID = CAST(m.unitid AS INTEGER) WHERE m."group" = ?', (name,))
         seen[name] = kind
+    missing = []
+    for name, words in db.execute("SELECT \"group\", words FROM dict_school_groups WHERE kind = 'synonyms'").fetchall():
+        if not db.execute("SELECT 1 FROM group_list WHERE group_name = ?", (name,)).fetchone():
+            missing.append(name)
+        db.execute("UPDATE group_list SET words = TRIM(COALESCE(words || '; ', '') || ?) WHERE group_name = ?", (words, name))
+    if missing:
+        raise ValueError("school_groups.csv: synonyms for groups that do not exist: " + "; ".join(missing))
     latest = db.execute("SELECT MAX(year) FROM directory").fetchone()[0]
     for (name,) in db.execute('SELECT DISTINCT "group" FROM dict_school_groups WHERE membership = ?', (MEMBERSHIP[1],)).fetchall():
         db.execute("DELETE FROM group_membership WHERE group_name = ? AND year < ?", (name, latest))

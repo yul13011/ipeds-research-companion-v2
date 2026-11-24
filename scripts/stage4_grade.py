@@ -66,13 +66,15 @@ def ids(t):
 
 def auto_reading(t, e):
     """Measure and schools right? True/False where the expectation names IDs; None where a person must judge."""
-    ms, ss, _ = ids(t)
+    ms, ss, gs = ids(t)
     m_ok = None
     if e["measures"] and not e["measures"].startswith("*"):
         m_ok = any(x in ms for x in e["measures"].split("|"))
     elif not e["measures"]:
         m_ok = True
     s_ok = {int(x) for x in e["schools"].split(";")} <= ss if e["schools"] else True
+    if e.get("groups"):                                 # the groups expected must be in the request too
+        s_ok = s_ok and set(e["groups"].split(";")) <= gs
     return m_ok, s_ok
 
 

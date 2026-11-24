@@ -22,3 +22,16 @@ georgia tech,picker,,,georgia institute of technology
 virginia tech,picker,,,virginia polytechnic institute
 ole miss,picker,,,university of mississippi
 penn state,picker,,,pennsylvania state university
+unc,system or school,199120,University of North Carolina at Chapel Hill,System: University of North Carolina
+university of north carolina,system or school,199120,University of North Carolina at Chapel Hill,System: University of North Carolina
+texas a&m,system or school,228723,Texas A&M University-College Station,System: Texas A&M University System
+university of texas,system or school,228778,The University of Texas at Austin,System: The University of Texas System
+university of minnesota,system or school,174066,University of Minnesota-Twin Cities,System: University of Minnesota
+university of wisconsin,system or school,240444,University of Wisconsin-Madison,System: University of Wisconsin System
+university of colorado,system or school,126614,University of Colorado Boulder,System: University of Colorado
+university of illinois,system or school,145637,University of Illinois Urbana-Champaign,System: University of Illinois Board of Trustees
+university of tennessee,system or school,221759,The University of Tennessee-Knoxville,System: The University of Tennessee System
+bu,ambiguous,,,boston university; binghamton university; baylor university
+u of m,ambiguous,,,university of michigan; university of minnesota; university of maryland; university of memphis; university of mississippi; university of montana; university of miami
+wsu,ambiguous,,,washington state university; wayne state university; wichita state university; winona state university; weber state university
+osu,ambiguous,,,ohio state university; oklahoma state university; oregon state university
