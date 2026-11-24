@@ -459,8 +459,8 @@ def _detail(notes):
 def by_change(plan_, db, result, fetch):
     """A ranking or list by the change between the first and last year chosen. A school counts when it belongs to the
     group in both years (each year's own schools), or today (today's schools only), and has a value in both years;
-    missing values are never zero, and values of zero or below are left out of a ranking. A rate keeps the ranking
-    guard in both years."""
+    missing values are never zero. A change keeps values of zero; only a percent change needs a starting value above
+    zero. A rate keeps the ranking guard in both years."""
     t, op = plan_["trend"], plan_["operation"]
     say = lambda key, **f: fetch.say(db, key, **f)
     a, b = t["years"][0], t["years"][-1]
@@ -494,7 +494,7 @@ def by_change(plan_, db, result, fetch):
         kept, no_value, small = [], 0, 0
         for u in who:
             got = change(m, u)
-            if got is None or got[0] <= 0 or got[1] <= 0:
+            if got is None:                             # a change keeps values of zero (owner, 2026-11-24)
                 no_value += 1
                 continue
             if plan_["guard"] and any((counts[y].get(u, (None, None))[1] or 0) < plan_["guard"] for y in (a, b)):
@@ -509,7 +509,9 @@ def by_change(plan_, db, result, fetch):
         for i, ((va, vb, _), u) in enumerate(top, 1):
             result["rows"].append([i, names[u][0], names[u][1], fetch.cell(va, unit), fetch.cell(vb, unit),
                                    difference(va, vb, unit)])
-        said = say("change ranked", ranked=f"{len(kept):,}", schools=f"{len(who):,}", left=f"{no_value:,}")
+        said = say("change ranked", ranked=f"{len(kept):,}", schools=f"{len(who):,}")
+        if no_value:
+            said += " " + say("change ranked missing", left=f"{no_value:,}")
         if plan_["guard"]:
             said += " " + say("change ranked guard", small=f"{small:,}", guard=plan_["guard"])
         result["notes"].append(said)
@@ -537,5 +539,5 @@ def difference(va, vb, unit):
     if unit == "percent":
         return f"{vb - va:+.1f} points"
     money = "$" if unit in ("dollars", "average") else ""
-    pct = f" ({100 * (vb / va - 1):+.1f}%)" if va else ""
+    pct = f" ({100 * (vb / va - 1):+.1f}%)" if va > 0 else ""    # no percent change from zero or below
     return f"{'-' if vb < va else '+'}{money}{abs(vb - va):,.0f}{pct}"

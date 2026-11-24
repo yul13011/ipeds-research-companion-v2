@@ -57,8 +57,8 @@ log,41,1,scored,clarify|answer|decline,*applicants;admission rate,,,data extract
 log,42,1,greeting,,,,,
 log,44,1,test,,,,,
 log,44,2,test,,,,,
-log,45,1,trend,trend,,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
-log,45,2,trend,trend,,,,"longitudinal trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,45,1,trend,clarify,,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend; 2026-11-24 (owner): no measure is named, so a clarifying question (which measure, and which school or group)"
+log,45,2,trend,clarify,,,,"longitudinal trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend; 2026-11-24 (owner): no measure is named, so a clarifying question (which measure, and which school or group)"
 log,48,1,trend,trend,,196413,,"change 2015 to 2023; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,50,1,scored,answer|clarify,EFD.RET_PCP,,,part-time retention
 log,55,1,trend,trend,,127200,,"trends over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"

@@ -1207,12 +1207,18 @@ class Trends(unittest.TestCase):
         a, b = (int(first[i].replace(",", "")) for i in (3, 4))
         self.assertEqual(changes[0], b - a)
         self.assertTrue(any("ranked by the change" in n for n in page["notes"]))
+        self.assertFalse(any("zero or below" in n for n in page["notes"]))   # a change keeps values of zero (2026-11-24)
 
     def test_ranking_a_rate_by_change_keeps_the_guard(self):
         page = self.run_request(req("rank", measures=[M("EFD.RET_PCF")], groups=["State: Connecticut"],
                                     sort=dict(order="highest", limit=5), year=Y(stated="2016 to 2024", start=2016, end=2024)))
         self.assertTrue(any("in the denominator in one of the years" in n for n in page["notes"]), page["notes"])
         self.assertTrue(all(r[5].endswith("points") for r in page["table"]["rows"]))
+
+    def test_a_change_keeps_values_of_zero(self):
+        from path.trend import difference
+        self.assertEqual(difference(0, 25, "count"), "+25")              # no percent change from zero
+        self.assertEqual(difference(100, 125, "count"), "+25 (+25.0%)")
 
     def test_listing_by_the_change(self):
         """"Which Connecticut schools lost enrollment since 2015?": the condition applies to the change."""
@@ -1229,6 +1235,11 @@ class Trends(unittest.TestCase):
         self.assertEqual(names["F_F1A.F1N04"], "Net position (financial health section)")
         self.assertEqual(names["F_F1A.F1C197"], "Total expenses deductions - Interest (until 2015-16)")
         self.assertEqual(names["F_F1A.F1C19IN"], "Total expenses deductions - Interest")
+        both = dict(self.db.execute("SELECT variable, shown_name FROM dict_measures WHERE variable IN ('F3B01', 'F3D09')"))
+        self.assertEqual(both, {"F3B01": "Total revenues and investment return (summary of changes in equity)",
+                                "F3D09": "Total revenues and investment return (revenues section)"})
+        clashes = [n for (n,) in self.db.execute("SELECT name FROM name_clashes")]
+        self.assertEqual(clashes, ["institutional characteristics: none"])     # IC TUITVRY1-3, left unnamed
         self.assertEqual(self.db.execute("SELECT in_first_version FROM dict_measures WHERE variable = 'TUITVRY1'").fetchone()[0], "no")
 
     def test_the_instruction_for_questions_wholly_outside_ipeds(self):

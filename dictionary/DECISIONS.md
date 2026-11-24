@@ -408,3 +408,12 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **7. Questions wholly outside IPEDS.** When the question as a whole is about a topic in `outside_ipeds.csv`, the request names no measure. When only part of a question is outside IPEDS, the rest is still answered, as decided in Part 5.0.
 - **Standing rule:** before every full question-set run, one cheap trial call confirms the API accepts the reply format.
 - **Push:** Part 5c is pushed to GitHub (the full rebuild has run).
+
+## 2026-11-24: decisions on the Part 5c decisions report; Part 5d begins
+
+- **1. F3B01 / F3D09:** named by the codebook's section names, as with the financial-health pairs: F3B01 "(summary of changes in equity)", F3D09 "(revenues section)".
+- **2. 45.1 and 45.2** ("Show a 10-year trend", "Show a longitudinal trend"): expect a clarifying question (which measure, and which school or group), not a decline.
+- **3. Note wordings for rankings and lists by change:** the guard note and the list note are approved as written. The first note is split: "{left} left out because a value is missing in one of the years." and, only for a percent change, "{left} left out because the starting value is zero or below, so a percent change can't be computed." A change in counts keeps schools whose values are zero.
+- **4. No re-run now;** Part 5d will measure the fixes.
+- **Database inventory:** `docs/DATABASE.md`, written by `scripts/database_inventory.py` after each full rebuild (committed 2026-11-24).
+- **Go: Part 5d,** starting with the badly written test set for the owner's review before it is used.
