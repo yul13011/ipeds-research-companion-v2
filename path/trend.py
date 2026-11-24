@@ -19,7 +19,8 @@ import re
 
 from path.request import covers, fill_years
 
-OPERATIONS = ("schools", "group", "school_vs_group", "split", "breakdown")
+OPERATIONS = ("schools", "group", "school_vs_group", "split", "breakdown", "rank", "list")   # over several years; one
+                                                        # named year works with every operation
 MARK = "*"                                              # marks a year a note refers to
 
 
@@ -43,14 +44,22 @@ def calendar_years(text):
 
 def choose(year, pattern, years):
     """The releases a trend shows, chosen by the period each release's figure covers (`pattern`, the measure's period
-    written from the release year), so "since 2015" means figures for 2015 on, whatever the release."""
+    written from the release year): periods that start in the years asked (owner decision, 2026-11-23), so "since
+    2015" means fall 2015, aid year 2015-16 or fiscal year 2015 on, whatever the release. One named year is a range of
+    one."""
     if year.get("last"):
         return years[-int(year["last"]):]
-    start, end = year.get("start") or 0, year.get("end") or 9999
+    start = year.get("start") or 0
+    end = start if year.get("span") == "one year" else (year.get("end") or 9999)
+    if year.get("span") == "one year" and year.get("end") == start + 1:   # "2022-23": the periods inside July to June
+        inside = [y for y in years if (lambda p: p and f"{start}-07" <= p[0] and p[1] <= f"{start + 1}-06")(
+            period_months(fill_years(pattern, y)))]
+        if inside:
+            return inside[-1:]
     chosen = []
     for y in years:
         covered = calendar_years(fill_years(pattern, y))
-        if covered and max(covered) >= start and min(covered) <= end:   # any figure whose period reaches the years asked
+        if covered and start <= min(covered) <= end:    # a period is placed by the year it starts
             chosen.append(y)
     if year.get("change") and len(chosen) >= 2:
         return [chosen[0], chosen[-1]]
@@ -69,14 +78,26 @@ def plan(request, plan_, d, say):
     if rule:                                            # years named as entering cohorts: matched by cohort
         pattern = f"{rule[0]} {{Y{rule[1]:+d}}}"
     chosen = choose(year, pattern, years)
+    if not chosen and year.get("span") == "one year" and (year.get("start") or 0) >= years[-1]:
+        return None                                     # the newest release's year: the usual latest-year answer
     if not chosen:
-        held = f"{fill_years(m0['period_pattern'], years[0])} to {fill_years(m0['period_pattern'], years[-1])}" if m0 else ""
-        return decline(d, "years", request, wanted=year.get("stated"), what=m0["name"] if m0 else "", held=held,
-                       asked=year.get("stated") or "")
+        first, last = (fill_years(m0["period_pattern"], years[0]), fill_years(m0["period_pattern"], years[-1])) if m0 else ("", "")
+        latest = dict(year, span=None, start=None, end=None, last=None, change=False, kind="latest", stated=None)
+        return decline(d, "years", request, wanted=year.get("stated"), what=m0["name"] if m0 else "",
+                       held=f"{first} to {last}", asked=year.get("stated") or "",
+                       closest=dict(text=f"{m0['name']} for {last}", request=without(request, year=latest)) if m0 else None)
+    single = len(chosen) == 1 and not year.get("change")
+    op = plan_["operation"]
+    if not single and (op not in OPERATIONS or (op == "breakdown" and len(plan_["schools"]) > 1)):
+        return decline(d, "trend operation", request, closest=dict(
+            text=say("trend operation instead"), request=without(request, year=dict(year, span=None, start=None, end=None,
+                                                                                    last=None, change=False))))
+    if single and chosen == years[-1:] and not any(m.get("retired") for m in plan_["measures"]):
+        return None                                     # the latest year: the usual one-year answer
     membership = year.get("membership") or "each year"
     periods = {y: "; ".join(dict.fromkeys(cohort_period(m, covered, d, y) or fill_years(m.get("period_pattern") or "", y)
                                           for m in plan_["measures"])) for y in chosen}
-    plan_["trend"] = dict(years=chosen, change=bool(year.get("change")), membership=membership, periods=periods,
+    plan_["trend"] = dict(years=chosen, change=bool(year.get("change")), membership=membership, periods=periods, single=single,
                           groups=list(plan_.get("group_names") or []), fixed=plan_.get("peer_members"), latest=years[-1])
     if plan_["members"] is not None and plan_["operation"] != "schools":
         if plan_.get("peer_members") is not None:
@@ -314,10 +335,7 @@ def run(plan_, db, result, fetch):
         result["rows"].append(change_row(say("trend change"), series, values, years))
     for name, ys in missing.items():
         result["notes"].append(say("not collected year", what=name, year=spans(ys)))
-    detail = {}
-    for name, link, y in notes.get("detail", ()):
-        detail.setdefault((name, link), []).append(y)
-    for (name, link), ys in detail.items():
+    for (name, link), ys in _detail(notes).items():
         result["notes"].append(say("trend detail", what=name, detail=link, year=spans(ys)))
     if plan_["schools"]:
         names_then(plan_, db, years, result, say)
@@ -375,17 +393,149 @@ def breakdown_year(plan_, m, mm, y, data, members, put, result, say, db):
 
 
 def change_row(title, series, values, years):
-    """The change between the first and last year: points for percents, otherwise the difference and percent change."""
+    """The change between the first and last year, one cell per column."""
     a, b = years
     row = [title, f"{label(a)} to {label(b)}"]
     for key, _, unit in series:
         va, vb = values[key].get(a), values[key].get(b)
-        if va is None or vb is None:
-            row.append("no value")
-        elif unit == "percent":
-            row.append(f"{vb - va:+.1f} points")
-        else:
-            money = "$" if unit in ("dollars", "average") else ""
-            pct = f" ({100 * (vb / va - 1):+.1f}%)" if va else ""
-            row.append(f"{'-' if vb < va else '+'}{money}{abs(vb - va):,.0f}{pct}")
+        row.append("no value" if va is None or vb is None else difference(va, vb, unit))
     return row
+
+
+# ---- one earlier year, and rankings or lists by the change between two years
+
+def answer(plan_, db, result, fetch):
+    """The trend answer for the plan: one named earlier year, a ranking or list by change, or the table by year."""
+    t, op = plan_["trend"], plan_["operation"]
+    if t["single"] and op != "breakdown":
+        single(plan_, db, result, fetch)
+    elif op in ("rank", "list"):
+        by_change(plan_, db, result, fetch)
+    else:
+        run(plan_, db, result, fetch)
+
+
+def single(plan_, db, result, fetch):
+    """One named earlier year, answered as the latest year would be: the same operation, on that year's release, with
+    that year's measures, codes and schools."""
+    y = plan_["trend"]["years"][0]
+    say = lambda key, **f: fetch.say(db, key, **f)
+    notes, gone = {}, []
+    year_plan = dict(plan_, measures=[], conditions=[])
+    for m in plan_["measures"]:
+        mm = at_year(m, y, db, notes)
+        if mm is None:
+            gone.append(m["name"])
+        else:
+            year_plan["measures"].append(mm)
+    for c in plan_["conditions"]:
+        mm = at_year(c["measure"], y, db, notes)
+        if mm is None:
+            gone.append(c["measure"]["name"])
+        else:
+            year_plan["conditions"].append(dict(c, measure=mm))
+    if plan_["members"] is not None:
+        year_plan["members"] = group_members(plan_, db, y)
+    for name in dict.fromkeys(gone):
+        result["notes"].append(say("not collected year", what=name, year=label(y)))
+    if (plan_["measures"] and not year_plan["measures"]) or len(year_plan["conditions"]) < len(plan_["conditions"]):
+        return                                          # nothing to show for that year: the note says why
+    data = fetch.Data(db, year=y)
+    fetch.OPS[plan_["operation"]](year_plan, data, result)
+    fetch.campus_notes(year_plan, data, result, fetch.shown_schools(year_plan, result))
+    for (name, link), ys in _detail(notes).items():
+        result["notes"].append(say("trend detail", what=name, detail=link, year=spans(ys)))
+    if plan_["schools"] and plan_["operation"] not in ("rank", "list"):
+        names_then(plan_, db, [y], result, say)
+
+
+def _detail(notes):
+    out = {}
+    for name, link, y in notes.get("detail", ()):
+        out.setdefault((name, link), []).append(y)
+    return out
+
+
+def by_change(plan_, db, result, fetch):
+    """A ranking or list by the change between the first and last year chosen. A school counts when it belongs to the
+    group in both years (each year's own schools), or today (today's schools only), and has a value in both years;
+    missing values are never zero, and values of zero or below are left out of a ranking. A rate keeps the ranking
+    guard in both years."""
+    t, op = plan_["trend"], plan_["operation"]
+    say = lambda key, **f: fetch.say(db, key, **f)
+    a, b = t["years"][0], t["years"][-1]
+    notes = {}
+    data = {a: fetch.Data(db, year=a), b: fetch.Data(db, year=b)}
+    who = group_members(plan_, db, a) & group_members(plan_, db, b)
+    shown = list({m["id"]: m for m in [c["measure"] for c in plan_["conditions"]] + plan_["measures"]}.values())
+    at = {(m["id"], y): at_year(m, y, db, notes) for m in shown for y in (a, b)}
+    gone = [(m["name"], y) for m in shown for y in (a, b) if at[(m["id"], y)] is None]
+    for name, y in gone:
+        result["notes"].append(say("not collected year", what=name, year=label(y)))
+    if gone:
+        return                                          # a change needs both years: the note says which is missing
+    values = {(m["id"], y): fetch.school_values(at[(m["id"], y)], data[y]) for m in shown for y in (a, b)}
+
+    def change(m, u):
+        va, vb = values[(m["id"], a)].get(u), values[(m["id"], b)].get(u)
+        return None if va is None or vb is None else (va, vb, vb - va)
+
+    tables = {mm["table"] for mm in at.values()} - {None}
+    marks = {}
+    for i, (note, marked) in enumerate(break_notes(db, [a, b], tables, {}), 1):
+        for y in marked:
+            marks.setdefault(y, []).append(f"{MARK}{i}")
+        result["notes"].append(f"{MARK}{i} {note}")
+    heading = lambda y: label(y) + "".join(" " + k for k in marks.get(y, []))
+    if op == "rank":
+        m = plan_["measures"][0]
+        unit = fetch.unit_of(m)
+        counts = {y: fetch.school_counts(at[(m["id"], y)], data[y]) if m["rates"] else {} for y in (a, b)}
+        kept, no_value, small = [], 0, 0
+        for u in who:
+            got = change(m, u)
+            if got is None or got[0] <= 0 or got[1] <= 0:
+                no_value += 1
+                continue
+            if plan_["guard"] and any((counts[y].get(u, (None, None))[1] or 0) < plan_["guard"] for y in (a, b)):
+                small += 1
+                continue
+            kept.append((got, u))
+        kept.sort(key=lambda x: -x[0][2] if plan_["sort"]["order"] == "highest" else x[0][2])
+        top = kept[:plan_["sort"]["limit"]]
+        names = data[b].names([u for _, u in top])
+        result["listed"] = [u for _, u in top]
+        result["columns"] = ["Rank", "School", "State", heading(a), heading(b), say("trend change")]
+        for i, ((va, vb, _), u) in enumerate(top, 1):
+            result["rows"].append([i, names[u][0], names[u][1], fetch.cell(va, unit), fetch.cell(vb, unit),
+                                   difference(va, vb, unit)])
+        said = say("change ranked", ranked=f"{len(kept):,}", schools=f"{len(who):,}", left=f"{no_value:,}")
+        if plan_["guard"]:
+            said += " " + say("change ranked guard", small=f"{small:,}", guard=plan_["guard"])
+        result["notes"].append(said)
+        return
+    kept = set(who)                                     # a list: each condition on the change of its measure
+    for c in plan_["conditions"]:
+        kept = {u for u in kept if change(c["measure"], u) and
+                fetch.passes(change(c["measure"], u)[2], c["comparison"], c["value"])}
+    names = data[b].names(sorted(kept))
+    result["listed"] = sorted(kept)
+    result["columns"] = ["School", "State"] + [f"{m['name']}, {h}" for m in shown
+                                               for h in (heading(a), heading(b), say("trend change"))]
+    for u in sorted(kept, key=lambda u: names[u][0]):
+        row = [names[u][0], names[u][1]]
+        for m in shown:
+            got, unit = change(m, u), fetch.unit_of(m)
+            row += ([fetch.cell(got[0], unit), fetch.cell(got[1], unit), difference(got[0], got[1], unit)] if got
+                    else ["no value"] * 3)
+        result["rows"].append(row)
+    result["notes"].append(say("change listed", listed=f"{len(kept):,}", schools=f"{len(who):,}"))
+
+
+def difference(va, vb, unit):
+    """The change from va to vb: points for percents, otherwise the difference and the percent change."""
+    if unit == "percent":
+        return f"{vb - va:+.1f} points"
+    money = "$" if unit in ("dollars", "average") else ""
+    pct = f" ({100 * (vb / va - 1):+.1f}%)" if va else ""
+    return f"{'-' if vb < va else '+'}{money}{abs(vb - va):,.0f}{pct}"

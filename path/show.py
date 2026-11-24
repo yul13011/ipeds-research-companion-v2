@@ -31,6 +31,9 @@ def interpreted(plan):
         else (plan["scope"] or "the schools named")
     names = list(dict.fromkeys((m.get("shown_as") or m["name"]) + "".join(f", {x}" for x in m.get("row_labels", []))
                                for m in plan["measures"]))
+    trend = plan.get("trend")
+    if trend and not trend["single"] and plan["operation"] in ("rank", "list"):   # ranked or listed by the change
+        names = [f"the change in {n}" for n in names]
     text = PHRASES[plan["operation"]].format(
         measures=", ".join(names) or "schools", who=who, order=(plan["sort"] or {}).get("order", ""),
         set=" ".join([(plan["breakdown"] or {}).get("set", "").lower()] +
@@ -94,7 +97,8 @@ def topic_message(plan):
 
 def bars(plan, result):
     """A bar chart for a comparison in one year: one bar per row, for the first column of figures."""
-    if plan.get("trend") or plan["operation"] not in ("schools", "rank", "split", "school_vs_group", "breakdown"):
+    trend = plan.get("trend")
+    if (trend and not trend["single"]) or plan["operation"] not in ("schools", "rank", "split", "school_vs_group", "breakdown"):
         return None
     if plan["operation"] == "schools" and len(result["rows"]) < 2:
         return None
@@ -135,7 +139,10 @@ def render(plan, result, release):
                 status=result["missing"], definitions=definitions(plan), message=None,
                 data_release=f"Figures from the {release_label(release)}.", chart=result.get("chart") or bars(plan, result),
                 offers=[o["label"] for o in plan.get("offers") or []])
-    if plan.get("trend"):                               # each year's figure comes from its own release
+    if plan.get("trend") and plan["trend"]["single"]:   # one earlier year: its own release
+        y = plan["trend"]["years"][0]
+        page["data_release"] = f"Figures from the IPEDS {y}-{(y + 1) % 100:02d} release."
+    elif plan.get("trend"):                             # each year's figure comes from its own release
         years = plan["trend"]["years"]
         page["data_release"] = (f"Figures from the IPEDS releases {years[0]}-{(years[0] + 1) % 100:02d} to "
                                 f"{years[-1]}-{(years[-1] + 1) % 100:02d}; each year's figure comes from the release in "

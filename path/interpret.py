@@ -40,7 +40,8 @@ Rules:
         years (years not held), measure (no listed measure fits), group, calculation, breakdown,
         not a data question, other. Use "not in IPEDS" only with an outside-IPEDS topic (O tag) in the request;
         never decide on your own that IPEDS lacks something: if nothing listed fits, use measure.
-        If one part of the question is outside IPEDS (O tag) and another part can be answered, do not decline:
+        If the question as a whole is about an outside-IPEDS topic (O tag), the request names no measure.
+        If only one part of the question is outside IPEDS and another part can be answered, do not decline:
         return a request for the part that can be answered, with the O tag in outside.
         reason and closest are for the app's log only; keep each to one short sentence (at most 25 words).
   about_decline: the user asks about the answer the app just declined: "why not?" (about = why),
@@ -70,8 +71,10 @@ Rules:
     a range of years: "2015 through 2024", "between 2016 and 2020", "2014-15 to 2023-24" (start and end);
     the last N years: "the last five years", "a 10-year trend" (last);
     the change between two years: "how did it change from 2015 to 2024" (start and end).
-  start and end are calendar years as the user named them (the first year of "2014-15" is 2014). Write 0 for any of
-  start, end and last the span does not use. For a group over time, membership is "each year" unless the user asks
+  start and end are calendar years as the user named them (the first year of "2014-15" is 2014); for one year, start
+  is that year, or 0 if no year was named; a year written as two ("2022-23") gives start 2022 and end 2023. Write 0 for any of start, end and last the span does not use.
+  For a ranking or a list over a period, the figure is the change between the first and last year, and a condition
+  ("lost enrollment", "grew by more than 1,000") applies to that change. For a group over time, membership is "each year" unless the user asks
   for today's schools only ("today").
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
   For a broad topic ("admissions", "finance", "faculty"), list every shortlist measure that belongs to it, up to 15.

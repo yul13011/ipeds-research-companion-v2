@@ -11571,7 +11571,7 @@ F_F1A,F1N03,Change in net position,"These variables are intended to collect the 
 Change in net position is the sum of the institution’s change in net position assets and the institution’s FASB component unit’s change in net assets (if applicable), regardless of whether the net asset is expendable or nonexpendable, restricted or unrestricted.",Cont,N,one row per school,dollars,GASB,2,yes,,,,,,,,,
 F_F1A,F1N04,Net position,"These variables are intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
-Net position is the sum of the institution’s beginning of the year total net position assets and the institution’s FASB component unit’s beginning of the year’s total net assets (if applicable).",Cont,N,one row per school,dollars,GASB,2,yes,,,,,,,,,
+Net position is the sum of the institution’s beginning of the year total net position assets and the institution’s FASB component unit’s beginning of the year’s total net assets (if applicable).",Cont,N,one row per school,dollars,GASB,2,yes,,,Net position (financial health section),,,,,,
 F_F1A,F1N05,Expendable net assets,"These variables are intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
 Expendable net assets is the sum of the institution’s expendable net assets and the institution’s FASB component unit’s expendable net assets (if applicable). Includes all unrestricted and expendable restricted net assets. Excludes net assets to be invested in plant. 
@@ -11827,7 +11827,7 @@ F_F2,F2I04,Total net assets,"These variables are intended to collect the numerat
 
 Total net assets from F2B05
 
-Net assets, beginning of year includes the amount of net assets, end of year from the previous year's IPEDS Finance report. In all cases except when the institution reports a change in accounting principle via retroactive adjustment, this amount is also the beginning net asset balance in your general purpose financial statements.",Cont,N,one row per school,dollars,FASB,2,yes,,,,,,,,,
+Net assets, beginning of year includes the amount of net assets, end of year from the previous year's IPEDS Finance report. In all cases except when the institution reports a change in accounting principle via retroactive adjustment, this amount is also the beginning net asset balance in your general purpose financial statements.",Cont,N,one row per school,dollars,FASB,2,yes,,,Total net assets (financial health section),,,,,,
 F_F2,F2I05,Expendable net assets,"These variables are intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
 Expendable net assets is the institution’s expendable net assets. Includes net assets without donor restriction and net assets with donor restriction – subject to time or purpose restriction. Excludes net investment in plant and net assets with donor restriction – subject to time or purpose restriction that will be invested in plant.",Cont,N,one row per school,dollars,FASB,2,yes,,,,,,,,,
@@ -11838,7 +11838,7 @@ Plant-related debt from F2A03a
 Amounts for all long-term debt obligations including bonds payable, mortgages payable, capital leases payable, and long-term notes payable. (FARM para. 420.3, 423) If the current portion of long-term debt is separately reported in the GPFS, then that amount is included.",Cont,N,one row per school,dollars,FASB,2,yes,,,,,,,,,
 F_F2,F2I07,Total expenses,"These variables are intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
-Total expenses from F2B02",Cont,N,one row per school,dollars,FASB,2,yes,,,,,,,,,
+Total expenses from F2B02",Cont,N,one row per school,dollars,FASB,2,yes,,,Total expenses (financial health section),,,,,,
 F_F3,F3A01,Total assets,"Total assets is the sum of the following amounts: cash, cash equivalents and temporary investments; receivables (net of allowance for uncollectible accounts); inventories, prepaid expenses, and deferred charges; amounts held by trustees for construction and debt service; long-term investments; plant, property, and equipment; and other assets.",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
 F_F3,F3A01A,Long-term investments,Long-term investments includes the amount for all assets held for long-term investments.,Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
 F_F3,F3A01B,"Property, plant, and equipment, net of accumulated depreciation","Property, plant, and equipment, net of accumulated depreciation includes end-of-year market value for categories such as land, buildings, improvements other than buildings, equipment, and library books, combined and net of accumulated depreciation (FARM para. 407).",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
@@ -12001,10 +12001,10 @@ F_F3,F3G03,Total equity,"These variables are  intended to collect the numerator 
 
 Total equity has been carried forward from F3A03. This is calculated as the total assets minus total liabilities. 
 
-Total equity is the sum of the following amounts: stock (common, preferred, treasury, etc.) and additional paid-in-capital; retained earnings; and accumulated other comprehensive income.",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
+Total equity is the sum of the following amounts: stock (common, preferred, treasury, etc.) and additional paid-in-capital; retained earnings; and accumulated other comprehensive income.",Cont,N,one row per school,dollars,for-profit,2,yes,,,Total equity (financial health section),,,,,,
 F_F3,F3G04,Total assets,"These variables are  intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
-Total assets from F3A01 is the sum of the following amounts: cash, cash equivalents and temporary investments; receivables (net of allowance for uncollectible accounts); inventories, prepaid expenses, and deferred charges; amounts held by trustees for construction and debt service; long-term investments; plant, property, and equipment; and other assets.",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
+Total assets from F3A01 is the sum of the following amounts: cash, cash equivalents and temporary investments; receivables (net of allowance for uncollectible accounts); inventories, prepaid expenses, and deferred charges; amounts held by trustees for construction and debt service; long-term investments; plant, property, and equipment; and other assets.",Cont,N,one row per school,dollars,for-profit,2,yes,,,Total assets (financial health section),,,,,,
 F_F3,F3G05,Adjusted equity,"These variables are  intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
 Adjusted equity is total equity (part A, line 03) minus net property, plant & equipment (part A, line 01b) and intangible assets (part A, line 01c).",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
@@ -12015,7 +12015,7 @@ Debt related to property, plant, and equipment has been from F302a.
 Amounts for all long-term debt obligations including bonds payable, mortgages payable, capital leases payable, and long-term notes payable. (FARM para. 420.3, 423) If the current portion of long-term debt is separately reported in the GPFS, then that amount is included.",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
 F_F3,F3G07,Total expenses,"These variables are  intended to collect the numerator and denominator used to calculate financial health ratios that compose the Composite Financial Index (CFI).
 
-Total expense has been carried forward from F3B02",Cont,N,one row per school,dollars,for-profit,2,yes,,,,,,,,,
+Total expense has been carried forward from F3B02",Cont,N,one row per school,dollars,for-profit,2,yes,,,Total expenses (financial health section),,,,,,
 FLAGS,STAT_IC,Response status -  Institutional characteristics component,Response status of the institution Fall Collection IC component,Disc,N,one row per school,coded,,2,yes,,,,,,,,,
 FLAGS,LOCK_IC,Status of IC component when institution was migrated,Status of IC component when institution was migrated,Disc,N,one row per school,coded,,2,yes,,,,,,,,,
 FLAGS,IMP_IC,Type of imputation method Institutional Characteristics,Imputation status of the institution - Institutional characteristics,Disc,N,one row per school,coded,,2,yes,,,,,,,,,
@@ -12262,7 +12262,7 @@ The student left school to serve on an official church mission.
 NOTE: Students who leave the institution for one of the above reasons, but return prior to the 200 percent status date of August 31, may still be reported as exclusions.",Cont,N,one row per school,count,,2,yes,,,,,,,,,
 GR200,BAAC200,Adjusted bachelor's degree-seeking cohort within 200% of normal time,Adjusted bachelor's degree-seeking cohort within 200% of normal time. - Adjusted cohort minus additional exclusion who left institution between 150% of normal time and 200% of normal time,Cont,N,one row per school,count,,2,yes,,,,,,,,,
 GR200,BANC200A,Number completed a bachelor's degree between 150% and 200% of normal time,"The number of students from the adjusted bachelor's degree-seeking cohort,  who completed a bachelor's degree between 150% and  200% (7 or 8 years) of normal time .",Cont,N,one row per school,count,,2,yes,,,,,,,,,
-GR200,BASTEND,Still enrolled,Still enrolled - The number of students who are still enrolled as of the fall census date,Cont,N,one row per school,count,,2,yes,,,,,,,,,
+GR200,BASTEND,Still enrolled,Still enrolled - The number of students who are still enrolled as of the fall census date,Cont,N,one row per school,count,,2,yes,,,"Still enrolled, bachelor's degree cohort (four-year schools)",,,,,,
 GR200,BANC200,Number completed a bachelor's degree within 200% of normal time (8-years),"The number of students from the adjusted bachelor's degree-seeking cohort,  who completed a bachelor's degree within 200 percent of normal time  (8 years).",Cont,N,one row per school,count,,2,yes,,,,,,,,,
 GR200,BAGR200,8-year Graduation rate - bachelor's degree within 200% of normal time,"8-year Graduation rate - bachelor’s degree within 200% of normal time.
 
@@ -12311,7 +12311,7 @@ Normal time is 2 years for an associate's degree in a standard term-based instit
 GR200,L4NC200a,Number completed a  degree/certificate between 150% and 200% of normal time,"The number of students from the adjusted degree/certificate-seeking cohort,  who completed a program  between 150% and  200% of normal time. (two-year and less-than-two year institutions).
 
 Normal time is 2 years for an associate's degree in a standard term-based institution; and the various scheduled times for certificate programs.",Cont,N,one row per school,count,,2,yes,,,,,,,,,
-GR200,L4STEND,Still enrolled,Still enrolled - The number of students who are still enrolled as of the fall census date,Cont,N,one row per school,count,,2,yes,,,,,,,,,
+GR200,L4STEND,Still enrolled,Still enrolled - The number of students who are still enrolled as of the fall census date,Cont,N,one row per school,count,,2,yes,,,"Still enrolled, schools below four years",,,,,,
 GR200,L4NC200,Number completed a degree/certificate within 200% of normal time,"The number of students from the adjusted degree/certificate-seeking cohort,  who completed a program within 200% of normal time. (two-year and less-than-two year institutions).
 
 Normal time is 2 years for an associate's degree in a standard term-based institution; and the various scheduled times for certificate programs.",Cont,N,one row per school,count,,2,yes,,,,,,,,,
@@ -14066,10 +14066,10 @@ Graduate student  A student who holds a bachelor's degree or above and is taking
 
 Full-time student  Undergraduate: A student enrolled for 12 or more semester credits , or 12 or more quarter credits, or 24 or more clock hours a week each term. Graduate: A student enrolled for 9 or more semester credits, or 9 or more quarter credits, or a student involved in thesis or dissertation preparation that is considered full time by the institution. Doctor's degree - Professional practice - as defined by the institution.  
 
-Part-time student  Undergraduate: A student enrolled for either less than 12 semester or quarter credits, or less than 24 clock hours a week each term. Graduate: A student enrolled for less than 9 semester or quarter credits",Disc,N,many rows per school,coded,,3,yes,,,,,,,,,
+Part-time student  Undergraduate: A student enrolled for either less than 12 semester or quarter credits, or less than 24 clock hours a week each term. Graduate: A student enrolled for less than 9 semester or quarter credits",Disc,N,many rows per school,coded,,3,yes,,,Level of student (detailed),,,,,,
 EFA,LINE,Level of student (original line number on survey form),Level of student (original line number on survey form),Disc,N,many rows per school,coded,,3,yes,,,,,,,,,
 EFA,SECTION,Attendance status of student,Attendance status of student - Defines full and part-time status of student,Disc,N,many rows per school,coded,,3,yes,,,,,,,,,
-EFA,LSTUDY,Level of student,Level of student,Disc,N,many rows per school,coded,,3,yes,,,,,,,,,
+EFA,LSTUDY,Level of student,Level of student,Disc,N,many rows per school,coded,,3,yes,,,Level of student (summary),,,,,,
 EFA,EFTOTLT,Grand total,"Grand total men and women enrolled for credit during the fall
 
 CREDIT - Recognition of attendance or performance in an instructional activity (course or program) that can be applied by a recipient toward the requirements for a degree, diploma, certificate, or other formal award.
@@ -16829,7 +16829,7 @@ F_F1A,F1C195,Total expenses  deductions - All other,"Total expenses and deductio
 operating expenses not classified as salaries and wages, benefits, or           
 depreciation.",Cont,N,one row per school,dollars,GASB,3,yes,,,,,,,,,2015
 F_F1A,F1C196,Total expenses deductions - Operations and maintenance of plant,,Cont,N,one row per school,dollars,GASB,3,yes,,,,,,,,,2015
-F_F1A,F1C197,Total expenses deductions - Interest,Total expenses and deductions - interest ist the amount incurred on debt for all expenses.,Cont,N,one row per school,dollars,GASB,3,yes,,,,,,,,,2015
+F_F1A,F1C197,Total expenses deductions - Interest,Total expenses and deductions - interest ist the amount incurred on debt for all expenses.,Cont,N,one row per school,dollars,GASB,3,yes,,,Total expenses deductions - Interest (until 2015-16),,,,,,2015
 F_F2,F2E013,Instruction-Benefits,Instruction-Benefits,Cont,N,one row per school,dollars,FASB,3,yes,,,,,,,,,2015
 F_F2,F2E014,Instruction-Operation and maintenance of plant,Instruction-Operation and maintenance of plant,Cont,N,one row per school,dollars,FASB,3,yes,,,,,,,,,2015
 F_F2,F2E015,Instruction-Depreciation,Instruction-Depreciation,Cont,N,one row per school,dollars,FASB,3,yes,,,,,,,,,2015
@@ -17555,9 +17555,9 @@ Student Services - Indicate which of the listed services are offered by your ins
 Remedial services 
 
 REMEDIAL SERVICES - Instructional activities designed for students deficient in the general competencies necessary for a regular postsecondary curriculum and educational setting.",Disc,N,one row per school,coded,,3,yes,,,,,,,,,2015-2021
-IC,TUITVRY1,,,,,one row per school,,,3,yes,,,,,,,,,2023
-IC,TUITVRY2,,,,,one row per school,,,3,yes,,,,,,,,,2023
-IC,TUITVRY3,,,,,one row per school,,,3,yes,,,,,,,,,2023
+IC,TUITVRY1,,,,,one row per school,,,3,no,,,,,,,,,2023
+IC,TUITVRY2,,,,,one row per school,,,3,no,,,,,,,,,2023
+IC,TUITVRY3,,,,,one row per school,,,3,no,,,,,,,,,2023
 IC_PCCAMPUSES,CAMPUSID,Branch Campus Identifcation number,This is the 2-digit ID number of the Branch campus location.  The unique ID of branch campus location displayed on college navigator is an 8 digit Id consisting of the 6 digit UNITID of the Parent campus and 2 digit id for each branch location,Cont,N,one row per school,,,3,yes,,,,,,,,,2021-2023
 IC_PCCAMPUSES,OLDUNITID,Former unitid if branch location once reported in IPEDS,"This ID can represent the UNITID of an institution that once reported IPEDS data in a previous collection year.   However some branch locations that have never responded to IPEDS do get assigned a unique 6 digit unitid and appear on the most current directory file  HD2021 with an ACT code of ""G"", which identifies a branch location.",Cont,N,one row per school,,,3,yes,,,,,,,,,2021-2023
 IC_PCCAMPUSES,PCACT,Status of institution,A code to indicate the status of institution's participation in IPEDS.,Disc,A,one row per school,coded,,3,yes,,,,,,,,,2021-2023

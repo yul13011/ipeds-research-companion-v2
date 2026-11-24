@@ -136,7 +136,7 @@ def shown(m, value, data):
 
 def additive_total(measures, data):
     """If the measures are the parts of a set marked 'sum of parts', the name of that set."""
-    if not measures or not all(m["column"] for m in measures):
+    if len(measures) < 2 or not all(m["column"] for m in measures):   # one measure is its own total
         return None
     tables = {m["table"] for m in measures}
     row = data.q("SELECT set_name FROM breakdown_sets WHERE status='additive' AND \"table\"=?", next(iter(tables)))
@@ -176,16 +176,12 @@ def shown_schools(plan, result):
 
 def fetch(plan, db):
     result = dict(columns=[], rows=[], counts_columns=[], counts=[], notes=[], missing=[], warnings=[])
-    if plan.get("trend"):                               # several years: path/trend.py, one year at a time
+    if plan.get("trend"):                               # chosen years, or one earlier year: path/trend.py
         from path import trend
-        trend.run(plan, db, result, sys.modules[__name__])
+        trend.answer(plan, db, result, sys.modules[__name__])
         return result
     data = Data(db)
-    op = plan["operation"]
-    run = {"schools": schools, "rank": rank, "list": listing, "count_schools": count_schools, "group": group,
-           "split": split, "school_vs_group": school_vs_group, "breakdown": breakdown,
-           "define": topic, "data_exists": topic}[op]
-    run(plan, data, result)
+    OPS[plan["operation"]](plan, data, result)
     campus_notes(plan, data, result, shown_schools(plan, result))
     if getattr(data, "unlabelled", False):              # a coded answer the codebook gives no label for
         result["notes"].append(say(db, "no label"))
@@ -396,3 +392,7 @@ def topic(plan, data, result):
     result["columns"] = ["Measure", "Period", "Set up in this app"] if t["measures"] else []
     for m in t["measures"]:
         result["rows"].append([m["name"], m["period"], "yes" if m["set_up"] == "yes" else "not yet"])
+
+
+OPS = {"schools": schools, "rank": rank, "list": listing, "count_schools": count_schools, "group": group, "split": split,
+       "school_vs_group": school_vs_group, "breakdown": breakdown, "define": topic, "data_exists": topic}

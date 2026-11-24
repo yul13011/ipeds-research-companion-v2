@@ -1,22 +1,22 @@
 source,case,turn,category,expect,measures,schools,stage,note
-log,1,1,trend,decline|answer,DRVADM.DVADM01,,,"asks which years: one year only in the slice; the latest-year comparison could be answered; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,1,1,trend,trend,DRVADM.DVADM01,,,"asks which years: one year only in the slice; the latest-year comparison could be answered; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,2,1,greeting,,,,,
 log,3,1,scored,answer,DRVADM.DVADM01,130794,,
 log,3,2,scored,answer,*race,130794,,undergraduate enrollment by race and ethnicity (a tested breakdown set)
-log,4,1,scored,decline,*bachelor's degrees,130794,,2014-15 is not in the slice
-log,4,2,scored,decline,DRVGR.GBA6RTT,,,2015 outcome year is not in the slice
-log,4,3,trend,decline|answer,DRVGR.GBA6RTT,130794,,"cohorts 2009-2018: trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
-log,4,4,trend,decline|answer,DRVGR.GBA6RTT,,,"trend compared to a group; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
-log,4,5,trend,decline|clarify,,130794,,trend for peers
-log,4,6,trend,decline|answer,,,,"trend for Ivies plus MIT and Stanford; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,4,1,scored,answer,*bachelor's degrees,130794,,"2014-15 is not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
+log,4,2,scored,answer,DRVGR.GBA6RTT,,,"2015 outcome year is not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
+log,4,3,trend,trend,DRVGR.GBA6RTT,130794,,"cohorts 2009-2018: trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,4,4,trend,trend,DRVGR.GBA6RTT,,,"trend compared to a group; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,4,5,trend,trend,,130794,,trend for peers; 2026-11-23 (owner): expects a trend
+log,4,6,trend,trend,,,,"trend for Ivies plus MIT and Stanford; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,4,7,trend,decline|answer|clarify,,166683,,follow-up naming MIT
-log,6,1,trend,decline|answer,DRVADM.DVADM01,130794;166027;186131,,"2015-2024; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,6,1,trend,trend,DRVADM.DVADM01,130794;166027;186131,,"2015-2024; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,7,1,scored,answer|clarify,*instructional staff,130794,,full-time and part-time instructional staff
 log,8,2,trend,decline|clarify,*degrees,151786,,last ten years
 log,8,3,trend,decline|clarify|answer,,151786,,confirms the school
-log,11,1,trend,decline|answer,*cost of attendance,144050;166027;186131;130794;243744,,"change over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,11,1,trend,trend,*cost of attendance,144050;166027;186131;130794;243744,,"change over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,11,2,scored,answer,DRVADM.DVADM01,,,Ivy League group
-log,11,3,trend,decline|answer,DRVADM.DVADM01,,,"change since 10 years ago; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,11,3,trend,trend,DRVADM.DVADM01,,,"change since 10 years ago; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,13,1,scored,answer,*cost of attendance,166027,,
 log,14,1,scored,decline,,,,return on investment is not in IPEDS
 log,14,2,scored,decline,,,,composite ranking over two years
@@ -29,7 +29,7 @@ log,16,1,scored,answer|decline,*award levels offered,167835;166939;168218,,
 log,16,2,scored,answer|decline,*student services,167835,,
 log,17,1,scored,decline|answer,,,,data on institutional AI policies: outside IPEDS
 log,17,2,scored,decline|answer|clarify,,,,yes
-log,22,2,trend,decline|answer,*grant aid percent,130794,,"2014-15 through 2023-24; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,22,2,trend,trend,*grant aid percent,130794,,"2014-15 through 2023-24; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,23,1,scored,decline,,,,PhD economics enrollment by field is not in the slice
 log,24,1,scored,answer|clarify,*dual enrollment,,,
 log,24,2,scored,answer|clarify,*dual enrollment,,,
@@ -57,17 +57,17 @@ log,41,1,scored,clarify|answer|decline,*applicants;admission rate,,,data extract
 log,42,1,greeting,,,,,
 log,44,1,test,,,,,
 log,44,2,test,,,,,
-log,45,1,trend,decline|answer,,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
-log,45,2,trend,decline|answer,,,,"longitudinal trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
-log,48,1,trend,decline|answer,,196413,,"change 2015 to 2023; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,45,1,trend,trend,,,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,45,2,trend,trend,,,,"longitudinal trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,48,1,trend,trend,,196413,,"change 2015 to 2023; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,50,1,scored,answer|clarify,EFD.RET_PCP,,,part-time retention
-log,55,1,trend,decline|answer,,127200,,"trends over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,55,1,trend,trend,,127200,,"trends over time; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,55,2,scored,answer,*graduation rate,,,All public 2-year colleges
-log,58,2,trend,decline|answer,*graduation rate,195003,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,58,2,trend,trend,*graduation rate,195003,,"10-year trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,58,3,scored,answer|clarify,*graduation rate,195003,,peers of RIT
 log,58,5,scored,answer,*graduation rate,168421;201645;186867;212054;167358,,the named comparison schools
 log,58,6,scored,answer|clarify|decline,*graduation rate,,,use the institutions in the example set
-log,58,7,trend,decline|answer,*expenses per FTE,,,"ten-year trends; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+log,58,7,trend,trend,*expenses per FTE,,,"ten-year trends; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 log,60,1,scored,decline,,,,economic mobility is outside IPEDS
 log,60,2,scored,decline,,,,income after graduation is outside IPEDS
 log,60,3,scored,decline|answer,,,,what College Scorecard is: outside IPEDS
@@ -80,14 +80,14 @@ log,62,3,scored,answer|clarify,*completions by field and race; fall enrollment b
 log,62,4,context,,,,,"added 2026-11-22; ""1 ALL / 2 trend / 3 yes / 4 broad"": context only, not scored"
 log,63,1,scored,clarify|answer,*fall enrollment,156107,,"added 2026-11-22; ""wsu tehc"": clarify which WSU, or WSU Tech; Texas Tech (229115) is a wrong reading"
 log,63,2,scored,answer,*fall enrollment,156107,,added 2026-11-22; WSU Tech; Wichita State main campus (156125) is a wrong reading
-log,64,1,trend,decline|answer,*graduation rate,156107,,"added 2026-11-22; five-year trend against Kansas community colleges; until trends exist, the latest year with a note"
+log,64,1,trend,trend,*graduation rate,156107,,"added 2026-11-22; five-year trend against Kansas community colleges; until trends exist, the latest year with a note; 2026-11-23 (owner): expects a trend"
 log,64,2,display,,,,,"added 2026-11-22; table pivot and title request: display request, not scored"
 eval,fu_netprice_narrow,1,scored,answer|clarify,*net price,130794,,net price lags a year: caveat or clarify
 eval,fu_netprice_narrow,2,scored,answer,*net price,,,2023-24 grant-aided net price
 eval,fu_swap_institution,1,scored,answer,DRVADM.DVADM01,130794,,
 eval,fu_swap_institution,2,scored,answer,DRVADM.DVADM01,,,
 eval,fu_add_year,1,scored,decline|answer,*12-month headcount,130794,,2022-23 is not in the slice (12-month data in the 2024-25 release is 2023-24)
-eval,fu_add_year,2,trend,decline|answer,,130794,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+eval,fu_add_year,2,trend,trend,,130794,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 eval,fu_resort,1,scored,answer,*net price,,,
 eval,fu_resort,2,scored,answer,*net price,,,sort
 eval,fu_rechart,1,scored,answer,*net price,,,
@@ -102,7 +102,7 @@ eval,fu_add_institution,2,scored,answer,DRVADM.DVADM01,130794;166027;186131,,
 eval,faq_admrate_yale,1,scored,answer,DRVADM.DVADM01,130794,,
 eval,faq_cost_harvard,1,scored,answer,*cost of attendance,166027,,
 eval,faq_grant_pct_ivies,1,scored,answer,*grant aid percent,,,
-eval,faq_bach_yale_1415,1,scored,decline,*bachelor's degrees,130794,,2014-15 not in the slice
+eval,faq_bach_yale_1415,1,scored,answer,*bachelor's degrees,130794,,"2014-15 not in the slice; 2026-11-23 (owner decision 3): the year is now loaded, so it is answered as a one-year table"
 eval,faq_instr_staff_yale,1,scored,answer|clarify,*instructional staff,130794,,
 eval,faq_services_smith,1,scored,answer|decline,*student services,167835,,
 eval,faq_ma_distance,1,scored,answer|decline,*distance education,,,
@@ -142,7 +142,7 @@ eval,probe_agg_instcount,1,scored,answer|decline,,,,count of public four-year in
 eval,probe_agg_totalenr,1,scored,answer|decline,DRVEF.ENRTOT,,,fall 2023 not in the slice
 eval,probe_def_retention,1,scored,answer,,,,definition
 eval,probe_disc_finance,1,scored,answer,,,,what data exists on finance
-eval,probe_trend_effy_yale,1,trend,decline|answer,*12-month headcount,130794,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist"
+eval,probe_trend_effy_yale,1,trend,trend,*12-month headcount,130794,,"trend; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
 eval,probe_cat_housing_smith,1,scored,answer|decline,*on-campus housing,167835,,
 eval,probe_cat_city_smith,1,scored,answer|decline,*city,167835,,
 owner,o44_fte,1,scored,answer,,,5f,Explains full-time equivalent and how IPEDS calculates it for enrollment
@@ -171,6 +171,6 @@ owner,o49_hsi,1,scored,decline,*graduation rate,,5.0,No IPEDS flag for Hispanic-
 owner,o49_hsi,2,scored,answer|decline,,,5.0,Explains that IPEDS has no flag for this group
 owner,o49_yale_1990,1,scored,decline,DRVEF.ENRTOT,130794,5.0,1990 is outside the years held
 owner,o49_yale_1990,2,scored,answer|clarify,DRVEF.ENRTOT,130794,5.0,Offers the closest alternatives: the years available
-owner,o50_yale_pell_trend,1,scored,answer,SFA.UPGRNTP,130794,5c,"All undergraduates, all ten years (2015-16 to 2024-25 releases); the default Pell measure for trends"
+owner,o50_yale_pell_trend,1,scored,answer,SFA.UPGRNTP,130794,5c,"All undergraduates, nine years (aid years 2015-16 to 2023-24, the 2016-17 to 2024-25 releases): periods that start in 2015 or later (owner decision 2026-11-23); the default Pell measure for trends"
 owner,o50_cc_dgs_pell_trend,1,scored,answer,SFA.UDGPGRNTP,127200,5c,Degree-seeking undergraduates: starts in the 2022-23 release (aid year 2021-22); 2015-16 to 2021-22 named as not collected; never mixed with the all-undergraduate measure
 owner,o51_negative_net_worth,1,scored,answer,F_F1A.F1A18|F_F2.F2A06|F_F3.F3A03,,5b2,"A list of schools meeting a condition (below zero), each form's own measure: net position (public, F1A18), total net assets (private nonprofit, F2A06), total equity (for-profit, F3A03); grouped by form, naming each measure, with the statement that the three are not strictly comparable; system offices left out (outside the national universe), and said so; the pension note on the public rows; fiscal 2024 stated. Data: 147 public, 28 private nonprofit and 50 for-profit report a negative figure; 123, 26 and 50 (199) inside the national universe."

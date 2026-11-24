@@ -392,3 +392,19 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Which years "since 2015" covers (draft, from the owner's expectation for the Yale Pell question):** a trend takes every release whose figure's period reaches the years asked. So "since 2015" for Pell includes the 2015-16 release (aid year 2014-15), giving all ten releases, as the expectation says. To confirm.
 - **Trend operations:** a school, several schools, a group, a school beside a group, a group split by sector, level or control, and a breakdown for one school or one group. Ranking, lists and counts over several years are declined with the latest year offered.
 - **The chart's palette, font and axis colours** are taken from version 1 (read only) and kept in `config.py`, since they are presentation, not an IPEDS convention.
+
+## 2026-11-23: Part 5c approved; decisions on its report
+
+- **1. Which periods a trend covers.** "Since 2015" means periods that start in 2015 or later (fall 2015, aid year 2015-16, fiscal year 2015). The answer states the first and last periods shown. The Yale Pell expectation is nine years (aid years 2015-16 to 2023-24).
+- **2. Trend expectations.** The 17 trend expectations marked "acceptable until trends exist", and log 4.5, now expect a trend.
+- **3. A single earlier year** ("Yale's enrollment in 2018") is answered as a one-year table.
+- **4. The 13 Part 5c messages** are approved as written.
+- **5. Ranking and listing by the change between two years** ("which schools grew enrollment the most since 2015?"), built from the trend pieces, with the same rules: each year's own schools by default, gaps never zero, notes on breaks, and the ranking guard. Ranking by a single earlier year comes with it. Counts over several years wait.
+- **6. Plain names.**
+  - The six finance pairs: the second of each pair is named "(financial health section)", the codebook's own section name.
+  - F1C19IN and F1C197 are one series (F1C197 is the approved predecessor): they keep the same name, and the retired one shows its years, "(until 2015-16)".
+  - The GR200 still-enrolled pair and the EFA level pair are approved as drafted.
+  - IC TUITVRY1-3 stay unnamed and not set up.
+- **7. Questions wholly outside IPEDS.** When the question as a whole is about a topic in `outside_ipeds.csv`, the request names no measure. When only part of a question is outside IPEDS, the rest is still answered, as decided in Part 5.0.
+- **Standing rule:** before every full question-set run, one cheap trial call confirms the API accepts the reply format.
+- **Push:** Part 5c is pushed to GitHub (the full rebuild has run).

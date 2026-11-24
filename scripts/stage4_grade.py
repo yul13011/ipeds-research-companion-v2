@@ -12,6 +12,7 @@ whether the measure and schools were right.
 """
 import csv
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -41,6 +42,15 @@ def kind_of(page):
         kinds = {kind_of(p) for p in page["parts"]}
         return "answer" if "answer" in kinds else sorted(kinds)[0]
     return {"picker": "clarify", "wrong_reading": "wrong"}.get(k, k)
+
+
+def trend_page(page):
+    """An answer over several years: a table by year, or a ranking or list by the change between two years."""
+    for p in page.get("parts") or [page]:
+        cols = (p.get("table") or {}).get("columns") or []
+        if cols and (cols[0] == "Year" or sum(1 for c in cols if re.search(r"(19|20)\d\d-\d\d", str(c))) >= 2):
+            return True
+    return False
 
 
 def ids(t):
@@ -95,7 +105,7 @@ def grade(model):
             score = got
         elif got == "clarify":
             score = "clarifying question"
-        elif got == "answer" and "answer" in expect and m_ok is not False and s_ok:
+        elif got == "answer" and ("answer" in expect or ("trend" in expect and trend_page(t["page"]))) and m_ok is not False and s_ok:
             score = "correct answer" if m_ok else "needs review"
         elif got == "decline" and "decline" in expect:
             score = "correct decline"

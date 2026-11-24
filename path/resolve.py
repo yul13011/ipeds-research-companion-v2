@@ -17,7 +17,7 @@ import re
 
 from path import shortlist as sl
 from path import trend
-from path.request import apply_edit, fill_years, is_trend, used_ids
+from path.request import apply_edit, by_year, fill_years, used_ids
 
 CLOSEST_MATCHES = 3                 # how many of the best shortlisted measures a "not found" answer names
 
@@ -290,7 +290,7 @@ def resolve_request(request, d, short, new_question=False):
             return stop
     not_set_up, no_years, gone = [], [], []
     for m in request["measures"]:
-        got = measure(m, d, request["year"], trend=is_trend(request["year"]))
+        got = measure(m, d, request["year"], trend=by_year(request["year"]))
         if got["kind"] == "need_row":
             return row_question(request, m, got)
         if got["kind"] == "not_set_up":
@@ -398,11 +398,7 @@ def resolve_request(request, d, short, new_question=False):
         threshold = int(re.findall(r"\d+", d.setting("ranking guard")[0])[0])
         plan["small_cohort"] = dict(threshold=threshold, text=d.setting("small cohort")[1])
     plan["campus_notes"] = dict(d.q("SELECT condition, statement FROM dict_terms WHERE term='related campus'"))
-    if is_trend(request["year"]):                       # over several years: choose them, and how a group counts schools
-        if op not in trend.OPERATIONS or (op == "breakdown" and len(plan["schools"]) > 1):
-            return decline(d, "trend operation", request, closest=dict(
-                text=say(d, "trend operation instead"), request=without(request, year=dict(request["year"], start=None,
-                                                                                           end=None, last=None, change=False))))
+    if by_year(request["year"]):                        # years chosen release by release: a trend, or one named year
         stop = trend.plan(request, plan, d, lambda key, **f: say(d, key, **f))
         if stop:
             return stop
@@ -857,7 +853,7 @@ def measure(m, d, year, trend=False):
                 period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
                 parent_child=[c.strip().partition(".")[2] for c in flag.split(";")] if flag else None)
     info["years"] = dict(held=True, missing=[])        # which of the years asked for are held
-    if year and year.get("stated") and year.get("kind") != "latest" and not is_trend(year):
+    if year and year.get("stated") and year.get("kind") != "latest" and not by_year(year):
         stated = set(re.findall(r"(?:19|20)\d\d", year["stated"]))
         shown = set(re.findall(r"(?:19|20)\d\d", info["period"] or "")) | {str(d.year)}
         if not stated & shown:

@@ -698,7 +698,8 @@ class RealDictionary(unittest.TestCase):
         for measure, cell, set_up in rows:
             years = [y for (y,) in self.db.execute("SELECT year FROM main.measure_years WHERE measure = ? ORDER BY year",
                                                    (measure,))]
-            self.assertEqual((cell, set_up), (spans(years), "yes"), measure)   # set up like the rest (part 5b2)
+            not_set_up = ("IC.TUITVRY1", "IC.TUITVRY2", "IC.TUITVRY3")       # no codebook entry: owner, 2026-11-23
+            self.assertEqual((cell, set_up), (spans(years), "no" if measure in not_set_up else "yes"), measure)
             self.assertNotIn(2024, years, measure)
 
     def test_breakdown_sets_stored_as_columns(self):

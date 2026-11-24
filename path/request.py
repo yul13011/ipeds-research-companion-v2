@@ -194,7 +194,8 @@ def to_wire(r, tags):
 
 
 def no_year():
-    return {"stated": None, "kind": None, "start": None, "end": None, "last": None, "change": False, "membership": None}
+    return {"stated": None, "kind": None, "span": None, "start": None, "end": None, "last": None, "change": False,
+            "membership": None}
 
 
 def year_from_wire(y):
@@ -204,7 +205,7 @@ def year_from_wire(y):
     out.update({k: (y.get(k) or (False if k == "change" else None)) for k in out})
     span = y.get("span")
     if span:                                            # the span the model named decides; the rest is cleared
-        keep = {"one year": (), "from a year on": ("start",), "a range of years": ("start", "end"),
+        keep = {"one year": ("start", "end"), "from a year on": ("start",), "a range of years": ("start", "end"),
                 "the last N years": ("last",), "the change between two years": ("start", "end")}[span]
         for k in ("start", "end", "last"):
             if k not in keep:
@@ -214,8 +215,18 @@ def year_from_wire(y):
 
 
 def is_trend(year):
-    """A request over several years: a first year, a range, the last N years, or the change between two years."""
-    return bool(year and (year.get("start") or year.get("last") or year.get("change")))
+    """A request over several years: from a year on, a range, the last N years, or the change between two years."""
+    if not year:
+        return False
+    if year.get("span"):
+        return year["span"] != "one year"
+    return bool(year.get("start") or year.get("last") or year.get("change"))
+
+
+def by_year(year):
+    """Does the request need its years chosen release by release: a trend, or one named year (which may be earlier
+    than the latest release)?"""
+    return is_trend(year) or bool(year and year.get("span") == "one year" and year.get("start"))
 
 
 def covers(cell, year):
