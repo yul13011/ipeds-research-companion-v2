@@ -1,17 +1,17 @@
-topic,example_wording,in_ipeds,what_to_say,pointer
-Earnings after graduation; return on investment; economic mobility,"""best return on investment""; ""income after graduation""; ""ROI""",No,"IPEDS does not collect earnings. Cost, net price and graduation rates are in IPEDS and can be shown.",College Scorecard (U.S. Department of Education)
-Student loan debt at graduation; loan repayment,"""average student loan debt of Yale graduates""",No,"IPEDS has loan amounts awarded in a year, not debt at graduation or repayment.",College Scorecard
-Loan default rates,"""default rate""",No,Not collected in IPEDS.,Federal Student Aid cohort default rates
-Institutional AI policies,"""variables on institutions' AI policies""",No,IPEDS has no data on AI policies.,
-Campus crime and safety,"""crime on campus""",No,Not collected in IPEDS.,Campus Safety and Security survey (U.S. Department of Education)
-Athletics participation and spending,"""athletics budget""; ""number of athletes""",No,Not collected in IPEDS.,Equity in Athletics Data Analysis (EADA)
-Research and development spending by field,"""research expenditures by field""",Partly,"IPEDS finance has total research expenses, not detail by field or funding source.",NSF Higher Education Research and Development (HERD) survey
-Faculty salary by academic field,"""faculty salary by academic field""",No,"IPEDS has salaries by rank and gender, not by field.",
-SAT or ACT 10th and 90th percentiles,"""90th percentile SAT""",No,"IPEDS collects the 25th, 50th and 75th percentiles only.",
-Individual student records,"""list every student's name and GPA""",No,IPEDS is institution-level data. No individual records exist.,
-Rankings and reputation,"""best colleges""",No,IPEDS has no rankings. The app can rank schools on a named IPEDS measure.,
-Years outside 2015-16 to 2024-25,"""graduation rate in 2030""; ""admissions in 1976""",Not in this app,The app holds ten releases. Earlier years exist in IPEDS but are not loaded.,NCES IPEDS Data Center for earlier years
-Underrepresented minority (URM) students,"""URM""; ""underrepresented minority""",No,"IPEDS reports race and ethnicity categories, not an underrepresented-minority group. Combining categories into such a group is planned for a later stage; the categories themselves can be shown now.",
-Graduation rates by major,"""graduation rate for STEM majors""; ""completion by program""",No,"IPEDS reports graduation rates for each school's whole entering cohort and some subgroups (race, gender, Pell), not by major. Degrees awarded by field of study can be shown.","The institution's own records, or a state longitudinal data system"
-High school of graduation,"""students by high school""; ""feeder high schools""",No,"IPEDS does not record which high school students came from. It reports first-time students by state of residence, which can be shown.",State longitudinal data systems; National Student Clearinghouse
-Linking individual student records,"""follow students from enrollment to graduation""; ""connect SAT to graduation""",No,"IPEDS holds totals for each school, not records of individual students, so it cannot link one student's enrollment, test scores and graduation. The app can show these as separate school-level figures.",The institution's own student records; National Student Clearinghouse; state longitudinal data systems
+topic,example_wording,in_ipeds,what_to_say,pointer,instead
+Earnings after graduation; return on investment; economic mobility,"""best return on investment""; ""income after graduation""; ""ROI""",No,"IPEDS does not collect earnings. Cost, net price and graduation rates are in IPEDS and can be shown.",College Scorecard (U.S. Department of Education),
+Student loan debt at graduation; loan repayment,"""average student loan debt of Yale graduates""",No,"IPEDS has loan amounts awarded in a year, not debt at graduation or repayment.",College Scorecard,
+Loan default rates,"""default rate""",No,Not collected in IPEDS.,Federal Student Aid cohort default rates,
+Institutional AI policies,"""variables on institutions' AI policies""",No,IPEDS has no data on AI policies.,,
+Campus crime and safety,"""crime on campus""",No,Not collected in IPEDS.,Campus Safety and Security survey (U.S. Department of Education),
+Athletics participation and spending,"""athletics budget""; ""number of athletes""",No,Not collected in IPEDS.,Equity in Athletics Data Analysis (EADA),
+Research and development spending by field,"""research expenditures by field""",Partly,"IPEDS finance has total research expenses, not detail by field or funding source.",NSF Higher Education Research and Development (HERD) survey,
+Faculty salary by academic field,"""faculty salary by academic field""",No,"IPEDS has salaries by rank and gender, not by field.",,
+SAT or ACT 10th and 90th percentiles,"""90th percentile SAT""",No,"IPEDS collects the 25th, 50th and 75th percentiles only.",,
+Individual student records,"""list every student's name and GPA""",No,IPEDS is institution-level data. No individual records exist.,,
+Rankings and reputation,"""best colleges""",No,IPEDS has no rankings. The app can rank schools on a named IPEDS measure.,,
+Years outside 2015-16 to 2024-25,"""graduation rate in 2030""; ""admissions in 1976""",Not in this app,The app holds ten releases. Earlier years exist in IPEDS but are not loaded.,NCES IPEDS Data Center for earlier years,the same figure for the years this app holds
+Underrepresented minority (URM) students,"""URM""; ""underrepresented minority""",No,"IPEDS reports race and ethnicity categories, not an underrepresented-minority group. Combining categories into such a group is planned for a later stage; the categories themselves can be shown now.",,
+Graduation rates by major,"""graduation rate for STEM majors""; ""completion by program""",No,"IPEDS reports graduation rates for each school's whole entering cohort and some subgroups (race, gender, Pell), not by major. Degrees awarded by field of study can be shown.","The institution's own records, or a state longitudinal data system",
+High school of graduation,"""students by high school""; ""feeder high schools""",No,"IPEDS does not record which high school students came from. It reports first-time students by state of residence, which can be shown.",State longitudinal data systems; National Student Clearinghouse,
+Linking individual student records,"""follow students from enrollment to graduation""; ""connect SAT to graduation""",No,"IPEDS holds totals for each school, not records of individual students, so it cannot link one student's enrollment, test scores and graduation. The app can show these as separate school-level figures.",The institution's own student records; National Student Clearinghouse; state longitudinal data systems,

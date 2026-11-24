@@ -168,7 +168,12 @@ def model_decline(reply, short, d):
         if got["kind"] == "ready":
             return dict(got, log=log)
     if outside:
-        return decline(d, "not collected", request, say=outside[0], pointer=outside[1], log=log)
+        instead = d.one("SELECT instead FROM dict_outside_ipeds WHERE topic=?", topic)
+        closest = None
+        if instead and instead[0] and request and request["measures"]:      # the row offers an alternative (years held)
+            latest = dict(request["year"], span=None, start=None, end=None, last=None, change=False, kind="latest", stated=None)
+            closest = dict(text=instead[0], request=without(request, year=latest, topic=None))
+        return decline(d, "not collected", request, say=outside[0], pointer=outside[1], log=log, closest=closest)
     if request and missing == "group" and request["groups"]:
         got = resolve_request(request, d, short)        # the group's own entry says why it is not available
         if got["kind"] == "decline":

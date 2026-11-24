@@ -18,7 +18,7 @@ import hashlib
 import sqlite3
 from pathlib import Path
 
-WORDING_FILES = {"terms", "outside_ipeds", "school_nicknames", "comparability_breaks"}
+WORDING_FILES = {"terms", "outside_ipeds", "school_nicknames", "comparability_breaks", "word_abbreviations"}
 MEASURE_STRUCTURE = ("table", "variable", "format", "data_type", "rows_per_school", "unit", "reporting_form",
                      "in_first_version", "detailed_measure", "breakdown_set", "set_total")
 CODE_WORDING = ("synonyms", "statement", "in_latest")          # category rows: changes here retest nothing
@@ -55,7 +55,10 @@ def mark(db, status, fresh=None, only=None):
 
 
 def rows_of(db, name):
-    cur = db.execute(f"SELECT * FROM dict_{name}")
+    try:
+        cur = db.execute(f"SELECT * FROM dict_{name}")
+    except sqlite3.OperationalError:                    # a table new to the dictionary: no earlier rows
+        return []
     cols = [d[0] for d in cur.description]
     return [dict(zip(cols, r)) for r in cur.fetchall()]
 

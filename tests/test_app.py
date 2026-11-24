@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import config
-from path import interpret, log
+from path import interpret, log, summary
 
 ROOT = Path(__file__).resolve().parents[1]
 REPLIES = Path(__file__).with_name("replies")
@@ -23,10 +23,14 @@ class App(unittest.TestCase):
         self.saved_call = interpret.call_api
         self.replies = []
         interpret.call_api = lambda system, user, model, schema=None: (json.dumps(self.replies.pop(0)), {"input_tokens": 1, "output_tokens": 1})
+        self.saved_summary = summary.call_api           # the written summary: a saved reply, never the API
+        self.summary_text = "The table shows the figure asked for."
+        summary.call_api = lambda system, user, model, on_text=None: (self.summary_text, {"input_tokens": 1, "output_tokens": 1})
         self.at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=60)
 
     def tearDown(self):
         interpret.call_api = self.saved_call
+        summary.call_api = self.saved_summary
         config.LOG_DIR = self.saved_log_dir
         self.dir.cleanup()
 
@@ -80,6 +84,20 @@ class App(unittest.TestCase):
         self.assertFalse(self.at.exception)
         self.assertEqual(list(self.at.dataframe[-1].value.columns[:2]), ["Year", "Period"])
         self.assertEqual(len(self.at.get("vega_lite_chart")), 1)
+
+    def test_one_figure_shows_a_tile_and_a_summary(self):
+        """Part 5e: one figure is shown large above the table, and the summary is written under it."""
+        self.at.run()
+        self.ask("a_yale_admission")
+        self.assertFalse(self.at.exception)
+        self.assertEqual(len(self.at.metric), 1)
+        self.assertIn("The table shows the figure asked for.", " ".join(m.value for m in self.at.markdown))
+
+    def test_a_summary_with_a_wrong_number_is_not_shown(self):
+        self.summary_text = "The admission rate was 99.9%."
+        self.at.run()
+        self.ask("a_yale_admission")
+        self.assertNotIn("99.9%", " ".join(m.value for m in self.at.markdown))
 
 
 if __name__ == "__main__":

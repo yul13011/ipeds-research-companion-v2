@@ -1,6 +1,8 @@
 """Runs the steps in order for one question. The only thing the page calls.
 
     ask()          a typed question: shortlist, interpret (the model call), resolve, fetch, show
+    summarize()    the written summary of an answer (a second model call), checked against its table
+    status()       the status line's words for a step (terms.csv message rows "status ...")
     choose()       an option button: runs that option's request directly, with no model call
     take_offer()   a button offered under an answer ("Today's schools only"): runs its request, with no model call
     pick_school()  the school picker: fills in the school and runs the request, with no model call
@@ -14,7 +16,7 @@ import time
 import uuid
 
 import config
-from path import fetch, interpret, resolve, show, shortlist
+from path import fetch, interpret, resolve, show, shortlist, summary
 
 
 def connect(db_path):
@@ -89,9 +91,21 @@ def finish(out, state, db, log, row):
     return page
 
 
-def ask(question, state, log, db_path=None, call=None, model=None):
+def status(step, db_path=None):
+    """The status line's words for a step: finding, reading, searching, getting, writing."""
+    db = connect(db_path or config.LOCAL_DB.as_posix())
+    try:
+        return fetch.say(db, f"status {step}") or step
+    finally:
+        db.close()
+
+
+def ask(question, state, log, db_path=None, call=None, model=None, progress=None):
+    """`progress(step)`, if given, is told each step as it starts, for the status line."""
     db_path = db_path or config.LOCAL_DB.as_posix()
+    progress = progress or (lambda step: None)
     start = time.time()
+    progress("finding")
     history = state.get("history") or []
     pending = state.get("pending") or []
     carried = history[-1:] + [o["request"] for o in pending]
@@ -100,11 +114,14 @@ def ask(question, state, log, db_path=None, call=None, model=None):
     short_now = {"short": short}
 
     def searched(words):                            # the model's own search, on the latest shortlist
+        progress("searching")
         short_now["short"], added = shortlist.extend(short_now["short"], words, db_path)
         return short_now["short"], added
+    progress("reading")
     reply, meta = interpret.interpret(question, short, history[-1] if history else None, pending, call=call, model=model,
                                       declined=declined, search=searched if config.AI_SEARCH else None)
     short = meta.get("short") or short
+    progress("getting")
     db = connect(db_path)
     try:
         out = resolve.resolve(reply, short, state, db, db_path)
@@ -121,6 +138,18 @@ def ask(question, state, log, db_path=None, call=None, model=None):
     log.question(row)
     page["seconds"] = row["seconds"]
     return page
+
+
+def summarize(page, state, log, call=None, model=None, on_text=None):
+    """The written summary of an answer, or None (no table, the call failed, or a number was not in the table: then
+    it is dropped and logged). Every call is logged with its time and cost."""
+    text, meta = summary.summarize(page, call=call, model=model, on_text=on_text)
+    if meta.get("text") is not None or meta.get("error"):
+        log.summary(dict(conversation=state.get("conversation_id"), turn=state.get("turns"), kept=meta["kept"],
+                         text=meta.get("text"), missing=meta["missing"], error=meta["error"], model=meta["model"],
+                         seconds=meta["seconds"], tokens_in=meta["input_tokens"], tokens_out=meta["output_tokens"],
+                         cost_usd=meta["cost_usd"]))
+    return text
 
 
 def run_direct(request, state, log, db_path, question):

@@ -1673,5 +1673,132 @@ class Part5dSearch(unittest.TestCase):
         self.assertNotIn("DRVGR.GRRTM", ids)
 
 
+class Part5dDecisions(unittest.TestCase):
+    """The owner's decisions on the Part 5d report: word abbreviations, finance pairings, LSTUDY, years outside."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def names(self, name):
+        return [c["name"] for c in shortlist.search_schools(name, DB)][:5]
+
+    def test_abbreviated_words_in_school_names(self):
+        self.assertIn("Wayne State University", self.names("wayne st"))
+        self.assertTrue(all(n.startswith("Pennsylvania State University") for n in self.names("penn st")))   # campuses
+                                                # (the main campus's name lacks "penn": it is not first; see the report)
+        self.assertEqual(self.names("st. olaf")[0], "St Olaf College")
+
+    def test_finance_concepts_are_paired_by_form(self):
+        """Yale reports on the FASB form: whichever form's line the model names, Yale gets its own form's figure."""
+        db = sqlite3.connect(DB)
+        cases = {"F_F1A.F1B01": "F2D01", "F_F3.F3D01": "F2D01", "F_F1A.F1D02": "F2B02", "F_F1A.F1D01": "F2B01"}
+        for named, own in cases.items():
+            page = answer.run_direct(req("schools", measures=[M(named)], schools=[S("Yale", 130794)]), {}, self.log, DB, "[t]")
+            yale = db.execute(f"SELECT {own} FROM F_F2 WHERE UNITID = 130794 AND year = 2024").fetchone()[0]
+            self.assertEqual(page["table"]["rows"][0][1], show.fmt((yale, "dollars")), named)
+
+    def test_level_of_student_is_a_row_choice(self):
+        page = answer.run_direct(req("schools", measures=[M("EFA.LSTUDY")], schools=[S("Yale", 130794)]), {}, self.log, DB, "[t]")
+        self.assertEqual(page["kind"], "clarify")
+        self.assertNotIn("EFA.LSTUDY", [m["id"] for m in shortlist.shortlist("level of student at yale", DB)["measures"]])
+
+    def test_years_outside_offer_the_years_held(self):
+        q = "Enrollment at Yale in 1990"
+        short = shortlist.shortlist(q, DB)
+        user = interpret.render(short, None, None, q)[0]
+        outside = next(o["tag"] for o in short["outside"] if o["topic"].startswith("Years outside"))
+        reply = dict(wire_reply("decline", dict(measures=[dict(measure=tag_of(user, "Total  enrollment"), row=[])],
+                                                schools=[dict(name="Yale", school=tag_of(user, "Yale University"))],
+                                                outside=outside, year=dict(stated="1990", kind=None, span="one year",
+                                                                           start=1990, end=0, last=0, membership="each year"))),
+                     decline=dict(reason="1990", wanted="1990", missing="not in IPEDS", closest="", about=None))
+        state = {}
+        page = answer.ask(q, state, self.log, DB, call=AISearch.scripted(None, [lambda u: reply])[0])
+        self.assertEqual(page["kind"], "decline")
+        self.assertIn("the same figure for the years this app holds", page["message"])
+        self.assertIsNotNone(state["last_decline"]["closest"]["request"])
+
+
+class Part5e(unittest.TestCase):
+    """Part 5e: the written summary and its number check, the status line, the single-number tile."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.page = answer.run_direct(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794), S("Harvard", 166027)]),
+                                     {}, cls.log, DB, "[t]")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def test_the_number_check(self):
+        from path.summary import numbers_check
+        table = ["Yale University", "15,564", "Harvard University", "30,259", "Fall 2024", "12.3%", "$22,408", "1,234,567"]
+        self.assertEqual(numbers_check("Yale enrolled 15,564 students in fall 2024; Harvard 30,259.", table), [])
+        self.assertEqual(numbers_check("About 12% were awarded aid; the price was $22,408; about 1.2 million in all.", table), [])
+        self.assertEqual(numbers_check("Harvard enrolled 14,695 more students than Yale.", table), ["14,695"])
+        self.assertEqual(numbers_check("The share was 13%.", table), ["13%"])
+
+    def summarize(self, text):
+        return answer.summarize(self.page, {"conversation_id": "t", "turns": 1}, self.log,
+                                call=lambda system, user, model, on_text=None: (text, {"input_tokens": 300, "output_tokens": 40}))
+
+    def last_logged(self):
+        return json.loads(Path(self.dir.name, "summaries.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+
+    def test_a_summary_whose_numbers_check_out_is_kept(self):
+        rows = self.page["table"]["rows"]
+        self.assertIsNotNone(self.summarize(f"Fall 2024 enrollment was {rows[0][1]} at Yale and {rows[1][1]} at Harvard."))
+        self.assertTrue(self.last_logged()["kept"])
+        self.assertGreater(self.last_logged()["cost_usd"], 0)
+
+    def test_a_summary_with_a_number_not_in_the_table_is_dropped_and_logged(self):
+        self.assertIsNone(self.summarize("Harvard enrolled 14,695 more students than Yale."))
+        self.assertFalse(self.last_logged()["kept"])
+        self.assertEqual(self.last_logged()["missing"], ["14,695"])
+
+    def test_an_empty_summary_is_not_kept(self):
+        self.assertIsNone(self.summarize("   "))
+
+    def test_the_summary_sees_only_the_result(self):
+        seen = []
+        answer.summarize(self.page, {}, self.log,
+                         call=lambda system, user, model, on_text=None: (seen.append(user) or "x", {"input_tokens": 1, "output_tokens": 1}))
+        self.assertTrue(seen[0].startswith("WHAT THE TABLE SHOWS:"))
+        self.assertIn("Yale University", seen[0])
+
+    def test_status_line_steps(self):
+        self.assertEqual(answer.status("searching"), "Searching for more matching data\u2026")
+        steps = []
+        def step(u):
+            if "YOUR SEARCH" not in u:
+                return wire_reply("search", words="University of Missouri")
+            return wire_reply("request", dict(measures=[dict(measure=tag_of(u, "Total  enrollment"), row=[])],
+                                              schools=[dict(name="Mizzou", school=tag_of(u, "University of Missouri-Columbia"))]))
+        answer.ask("Mizzou enrollment", {}, self.log, DB, call=AISearch.scripted(None, [step])[0], progress=steps.append)
+        self.assertEqual(steps, ["finding", "reading", "searching", "getting"])
+
+    def test_the_single_number_tile(self):
+        one = answer.run_direct(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)]), {}, self.log, DB, "[t]")
+        self.assertEqual(one["tile"]["label"], one["table"]["columns"][1])
+        self.assertEqual(one["tile"]["value"], one["table"]["rows"][0][1])
+        self.assertEqual(one["tile"]["who"], "Yale University")
+        self.assertEqual(one["tile"]["period"], "Fall 2024")
+        self.assertIsNone(self.page["tile"])                                     # two schools: no tile
+        group = answer.run_direct(req("group", measures=[M("DRVEF.ENRTOT")], groups=["Ivy League"]), {}, self.log, DB, "[t]")
+        self.assertEqual(group["tile"]["value"], group["table"]["rows"][0][1])
+        trend = answer.run_direct(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)],
+                                      year=dict(rq.no_year(), stated="since 2020", start=2020)), {}, self.log, DB, "[t]")
+        self.assertIsNone(trend["tile"])
+
+
 if __name__ == "__main__":
     unittest.main()

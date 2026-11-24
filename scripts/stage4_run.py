@@ -83,8 +83,15 @@ with open(folder / "turns.jsonl", "a", encoding="utf-8") as out:
             try:
                 page = answer.ask(question, state, log, model=model)
                 error = None
+                written = []                            # Part 5e: the written summary of each answer, checked
+                for part in page.get("pages") or [page]:
+                    if config.SUMMARY and part.get("kind") == "answer":
+                        before = (folder / "summaries.jsonl").read_text(encoding="utf-8").splitlines()                             if (folder / "summaries.jsonl").exists() else []
+                        answer.summarize(part, state, log, model=model)
+                        after = (folder / "summaries.jsonl").read_text(encoding="utf-8").splitlines()
+                        written += [json.loads(x) for x in after[len(before):]]
             except Exception as e:                       # recorded, and the run goes on
-                page, error = dict(kind="error", message=repr(e)), repr(e)
+                page, error, written = dict(kind="error", message=repr(e)), repr(e), []
             lines = (folder / "questions.jsonl").read_text(encoding="utf-8").splitlines()[n:] if (folder / "questions.jsonl").exists() else []
             rows = [json.loads(x) for x in lines]
             first = rows[0] if rows else {}
@@ -95,7 +102,9 @@ with open(folder / "turns.jsonl", "a", encoding="utf-8") as out:
                        shortlist=first.get("shortlist"), tokens_in=first.get("tokens_in"), tokens_out=first.get("tokens_out"),
                        cache_write=first.get("cache_write"), cache_read=first.get("cache_read"), cost_usd=first.get("cost_usd"),
                        model_seconds=first.get("model_seconds"), model_error=first.get("model_error"),
-                       calls=first.get("calls"), searches=first.get("searches"), search_seconds=first.get("search_seconds"))
+                       calls=first.get("calls"), searches=first.get("searches"), search_seconds=first.get("search_seconds"),
+                       summaries=[dict(kept=w["kept"], missing=w["missing"], text=w.get("text"), seconds=w["seconds"],
+                                       cost_usd=w["cost_usd"], error=w.get("error")) for w in written])
             out.write(json.dumps(rec, default=str) + "\n")
             out.flush()
             print(f"{source} {case}.{turn} {page['kind']:<13} {rec['seconds']:>5}s  {question[:70]}", flush=True)

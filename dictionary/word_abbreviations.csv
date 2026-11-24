@@ -1,0 +1,18 @@
+abbreviation,means,note
+st,state,Owner decision 2026-11-24: "wayne st"
+st,saint,Owner decision 2026-11-24: "st. olaf"
+u,university,Owner decision 2026-11-24
+univ,university,Owner decision 2026-11-24
+coll,college,Owner decision 2026-11-24
+cc,community college,common in school names
+comm,community,common in school names
+cmty,community,common in school names
+inst,institute,common in school names
+tech,technology,common in school names
+tech,technical,common in school names
+mt,mount,"""mt holyoke"", ""mt st mary's"""
+ft,fort,"""ft lewis college"""
+intl,international,common in school names
+med,medical,"""med school"""
+sch,school,common in school names
+penn,pennsylvania,"""penn st""; Penn alone (UPenn) still resolves through school_nicknames.csv"

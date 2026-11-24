@@ -444,3 +444,14 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Near-duplicates (drafted for review):** in one table, measures whose names are the same once the words of the person-subgroup labels (terms.csv "near-duplicate subgroups": By gender, By race and ethnicity, Outcome measures by Pell status) and the total words ("subgroup total words") are taken out. The shortlist lists the best one and names the others beside it; the model can search for one.
 - **Two misreadings that recurred across runs, fixed generally (Part 5d, before the end-of-part runs):** "revenue from tuition and fees" was read as the per-student figure in three runs, because the synonym "tuition revenue" was on the per-FTE measure (DRVF.F2TUFEFT) and the three totals had none; the totals (F1B01, F2D01, F3D01) now carry "tuition revenue; revenue from tuition and fees" and the per-FTE measure "tuition revenue per student". And "2023-24" was written as 2022 to 2023 for net price in three runs; one instruction line says the years are copied as the user named them, never shifted for a measure reported a year behind.
 - **The school-name instruction was first worded too strongly:** in the first end-of-part run Haiku left clear nicknames (UConn, UMich, Purdue) without a school, and the picker had nothing to offer. That run was set aside (`haiku_5d_overcautious`); the line now says a nickname that means one school is that school, and the picker uses the nickname table's phrases.
+
+## 2026-11-24: Part 5d approved; decisions on its report
+
+- **1. fastembed: closed.** Meaning search is not added to the app; word search plus the dictionary covers the group cases.
+- **2. Word abbreviations for the school search:** a dictionary table (`word_abbreviations.csv`): "st" = state or saint, "u" and "univ" = university, "coll" = college, and others. An ambiguous abbreviation produces every candidate, and the picker or the model chooses. Tested with "wayne st", "penn st" and "st. olaf".
+- **3. Finance measures by form:** tuition and fees revenue, total expenses and total revenues are paired by finance form, as net worth is. Other finance concepts reported on more than one form are listed, each with a proposed pairing, for the owner's review.
+- **4. EFA "Level of student" (LSTUDY)** gets its category rows, so it is a row choice, never a figure.
+- **5. The outside-IPEDS row for years outside 2015-16 to 2024-25** offers the same figure for the years held.
+- **6. The near-duplicate subgroup sets** (gender, race and ethnicity, Pell status) are approved.
+- **Push:** Part 5d is pushed to GitHub after the full rebuild.
+- **Go: Part 5e** (written summary, status line, single-number tile), with its report. In Part 5g, report which modules of the question path grew most during Stage 5.

@@ -44,6 +44,7 @@ DICTIONARY = {
     "dict_special_codes": ("How IPEDS's special codes (-1, -2, ...) are read", "code"),
     "dict_measure_history": ("Earlier names of each measure, so a trend continues across a renaming", "measure, earlier_table, earlier_variable"),
     "dict_comparability_breaks": ("Definition changes and context notes shown on trends that cross them", "kind, tables, first_release"),
+    "dict_word_abbreviations": ("Abbreviated words in school names and what they mean (st: state or saint)", "abbreviation, means"),
     "dict_breakdown_exceptions": ("Schools whose breakdown is shown despite parts not adding up, by owner decision",
                                   "breakdown_set, table, year, unitid"),
 }

@@ -259,6 +259,12 @@ def build_index(db):
     index["row_keys"] = {}                       # each multi-row table's category columns and their default rows
     for t, column, label in q('SELECT "table", "column", default_label FROM row_keys'):
         index["row_keys"].setdefault(t, []).append((column, label))
+    try:                                        # word abbreviations in school names ("st": state or saint)
+        index["abbreviations"] = {}
+        for a, m in q("SELECT abbreviation, means FROM dict_word_abbreviations"):
+            index["abbreviations"].setdefault(a.lower(), []).append(m)
+    except sqlite3.OperationalError:            # a dictionary without the table
+        index["abbreviations"] = {}
     index["picker_phrases"] = q("SELECT nickname, search_phrase FROM dict_school_nicknames WHERE search_phrase IS NOT NULL "
                                 "AND kind = 'picker'")   # 'ambiguous' names are for the picker only
     index["either"] = q("SELECT nickname, CAST(unitid AS INTEGER), search_phrase FROM dict_school_nicknames "
@@ -301,6 +307,7 @@ def shortlist(question, db_path, carried=()):
         if kind == "schools":                   # a nickname that only seeds the picker adds its search phrase
             low = " " + " ".join(words(question)) + " "
             text += " " + " ".join(p for n, p in index["picker_phrases"] if f" {' '.join(words(n))} " in low)
+            text = expanded(text, index)
         found[kind] = {key: entries[key] for key in bm25.search(text, limit)}
     either = []
     asked = set(words(question))
@@ -494,10 +501,19 @@ def extend(short, words, db_path):
     return merged, {k: v for k, v in added.items() if v}
 
 
+def expanded(text, index):
+    """School names with their abbreviated words written out (word_abbreviations.csv), every meaning added beside
+    the word itself: "wayne st" also searches "wayne state saint"; the picker or the model chooses."""
+    extra = [m for w in re.findall(r"[a-z]+", (text or "").lower()) for m in index["abbreviations"].get(w, [])]
+    return text + (" " + " ".join(extra) if extra else "")
+
+
 def search_schools(name, db_path, limit=8):
-    """Candidates for the school picker: the schools whose names best match what the user wrote."""
-    bm25, entries = get_index(db_path)["schools"]
-    return [public(entries[k]) for k in bm25.search(name, limit)]
+    """Candidates for the school picker: the schools whose names best match what the user wrote, abbreviated words
+    written out."""
+    index = get_index(db_path)
+    bm25, entries = index["schools"]
+    return [public(entries[k]) for k in bm25.search(expanded(name, index), limit)]
 
 
 def ids(short):

@@ -70,6 +70,7 @@ GOOD = {
         dict(table="ENR", column="LEVEL", code="6", label="Online", role="part", breakdown_set="By mode", set_total="sum of parts"),
         dict(table="ENR", column="LEVEL", code="7", label="In person", role="part", breakdown_set="By mode", set_total="sum of parts")],
     "outside_ipeds": [], "special_codes": [], "measure_history": [], "comparability_breaks": [], "breakdown_exceptions": [],
+    "word_abbreviations": [],
     "year_meaning": [dict(table=t, years="2024", kind="fall", period="Fall {Y}") for t in ("HD", "IC", "DRVADM", "ENR")],
 }
 

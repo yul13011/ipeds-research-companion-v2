@@ -1,0 +1,130 @@
+concept (IPEDS title),"public (GASB, F_F1A)","private nonprofit (FASB, F_F2)",for-profit (F_F3),proposed pairing,note
+academic support all other,F1C055,F2E047,F3E03A7,pair by form,
+academic support benefits,,F2E043,F3E03A3,pair by form,reported on two forms only
+academic support depreciation,F1C054,F2E045,F3E03A5,pair by form,
+academic support interest,F1C057,F2E046,F3E03A6,pair by form,
+academic support operation and maintenance of plant,,F2E044,F3E03A4,pair by form,reported on two forms only
+academic support salaries and wages,F1C052,F2E042,F3E03A2,pair by form,
+academic support total amount,,F2E041,F3E03A1,pair by form,reported on two forms only
+accumulated depreciation,,F2A18,F3A11,pair by form,reported on two forms only
+auxiliary enterprises all other,F1C115,F2E077,F3E047,pair by form,
+auxiliary enterprises benefits,,F2E073,F3E043,pair by form,reported on two forms only
+auxiliary enterprises depreciation,F1C114,F2E075,F3E045,pair by form,
+auxiliary enterprises interest,F1C117,F2E076,F3E046,pair by form,
+auxiliary enterprises operation and maintenance of plant,,F2E074,F3E044,pair by form,reported on two forms only
+auxiliary enterprises salaries and wages,F1C112,F2E072,F3E042,pair by form,
+auxiliary enterprises total amount,,F2E071,F3E041,pair by form,reported on two forms only
+change in value of endowment net assets,F1H03,F2H03,,pair by form,reported on two forms only
+construction in progress,,F2A15,F3A08,pair by form,reported on two forms only
+debt related to property plant and equipment,,F2A03A,F3A02A,pair by form,reported on two forms only
+discounts and allowances applied to tuition and fees,F1E08,,F3C06,pair by form,reported on two forms only
+discounts and allowances from endowments and gifts applied to auxiliary enterprises,F1E162,F2C162,F3C162,pair by form,
+discounts and allowances from endowments and gifts applied to tuition and fees,F1E161,F2C161,F3C161,pair by form,
+discounts and allowances from local government grants,F1E15,F2C15,,pair by form,reported on two forms only
+discounts and allowances from local government grants applied to auxiliary enterprises,F1E152,F2C152,F3C152,pair by form,
+discounts and allowances from local government grants applied to tuition and fees,F1E151,F2C151,F3C151,pair by form,
+discounts and allowances from other federal grants applied to auxiliary enterprises,F1E132,F2C132,F3C132,pair by form,
+discounts and allowances from other federal grants applied to tuition and fees,F1E131,F2C131,F3C131,pair by form,
+discounts and allowances from other institutional sources applied to auxiliary enterprises,F1E172,F2C172,F3C172,pair by form,
+discounts and allowances from other institutional sources applied to tuition and fees,F1E171,F2C171,F3C171,pair by form,
+discounts and allowances from pell grants applied to auxiliary enterprises,F1E122,F2C122,F3C122,pair by form,
+discounts and allowances from pell grants applied to tuition and fees,F1E121,F2C121,F3C121,pair by form,
+discounts and allowances from state government grants applied to auxiliary enterprises,F1E142,F2C142,F3C142,pair by form,
+discounts and allowances from state government grants applied to tuition and fees,F1E141,F2C141,F3C141,pair by form,
+does this institution or any of its foundations or other affiliated organizations own endowment assets,F1FHA,F2FHA,,pair by form,reported on two forms only
+endowment net investment return,F1H03B,F2H03B,,pair by form,reported on two forms only
+expendable net assets,F1N05,F2I05,,pair by form,reported on two forms only
+federal appropriations,F1B10,,F3D02A,pair by form,reported on two forms only
+hospital services all other,F1C125,F2E097,F3E107,pair by form,
+hospital services benefits,,F2E093,F3E103,pair by form,reported on two forms only
+hospital services depreciation,F1C124,F2E095,F3E105,pair by form,
+hospital services interest,F1C127,F2E096,F3E106,pair by form,
+hospital services operation and maintenance of plant,,F2E094,F3E104,pair by form,reported on two forms only
+hospital services salaries and wages,F1C122,F2E092,F3E102,pair by form,
+hospital services total amount,,F2E091,F3E101,pair by form,reported on two forms only
+independent operations all other,F1C135,F2E107,,pair by form,reported on two forms only
+independent operations depreciation,F1C134,F2E105,,pair by form,reported on two forms only
+independent operations interest,F1C137,F2E106,,pair by form,reported on two forms only
+independent operations salaries and wages,F1C132,F2E102,,pair by form,reported on two forms only
+institutional support all other,F1C075,F2E067,F3E03C7,pair by form,
+institutional support benefits,,F2E063,F3E03C3,pair by form,reported on two forms only
+institutional support depreciation,F1C074,F2E065,F3E03C5,pair by form,
+institutional support interest,F1C077,F2E066,F3E03C6,pair by form,
+institutional support operation and maintenance of plant,,F2E064,F3E03C4,pair by form,reported on two forms only
+institutional support salaries and wages,F1C072,F2E062,F3E03C2,pair by form,
+institutional support total amount,,F2E061,F3E03C1,pair by form,reported on two forms only
+instruction all other,F1C015,F2E017,F3E017,pair by form,
+instruction benefits,,F2E013,F3E013,pair by form,reported on two forms only
+instruction depreciation,F1C014,F2E015,F3E015,pair by form,
+instruction interest,F1C017,F2E016,F3E016,pair by form,
+instruction operation and maintenance of plant,,F2E014,F3E014,pair by form,reported on two forms only
+instruction salaries and wages,F1C012,F2E012,F3E012,pair by form,
+instruction total amount,,F2E011,F3E011,pair by form,reported on two forms only
+intangible assets net of accumulated amortization,,F2A20,F3A01C,pair by form,reported on two forms only
+long term investments,,F2A01,F3A01A,pair by form,reported on two forms only
+net grant aid to students all other,,F2E087,F3E057,pair by form,reported on two forms only
+net grant aid to students total amount,,F2E081,F3E051,pair by form,reported on two forms only
+new gifts and additions,F1H03A,F2H03A,,pair by form,reported on two forms only
+operation and maintenance of plant all other,,F2E117,F3E117,pair by form,reported on two forms only
+operation and maintenance of plant benefits,,F2E113,F3E113,pair by form,reported on two forms only
+operation and maintenance of plant depreciation,,F2E115,F3E115,pair by form,reported on two forms only
+operation and maintenance of plant interest,,F2E116,F3E116,pair by form,reported on two forms only
+operation and maintenance of plant operation and maintenance of plant,,F2E114,F3E114,pair by form,reported on two forms only
+operation and maintenance of plant salaries and wages,,F2E112,F3E112,pair by form,reported on two forms only
+operation and maintenance of plant total amount,,F2E111,F3E111,pair by form,reported on two forms only
+other changes in value of endowment net assets,F1H03D,F2H03D,,pair by form,reported on two forms only
+other expenses all other,,F2E127,F3E067,pair by form,reported on two forms only
+other expenses benefits,,F2E123,F3E063,pair by form,reported on two forms only
+other expenses depreciation,,F2E125,F3E065,pair by form,reported on two forms only
+other expenses interest,,F2E126,F3E066,pair by form,reported on two forms only
+other expenses operation and maintenance of plant,,F2E124,F3E064,pair by form,reported on two forms only
+other expenses salaries and wages,,F2E122,F3E062,pair by form,reported on two forms only
+other expenses total amount,,F2E121,F3E061,pair by form,reported on two forms only
+other federal grants,F1E02,F2C02,F3C02,pair by form,
+other plant property and equipment,,F2A16,F3A09,pair by form,reported on two forms only
+pell grants,F1E01,F2C01,F3C01,pair by form,
+plant related debt,F1N06,F2I06,F3G06,pair by form,
+property plant and equipment net of accumulated depreciation,,F2A19,F3A01B,pair by form,reported on two forms only
+public service all other,F1C035,F2E037,F3E02B7,pair by form,
+public service benefits,,F2E033,F3E02B3,pair by form,reported on two forms only
+public service depreciation,F1C034,F2E035,F3E02B5,pair by form,
+public service interest,F1C037,F2E036,F3E02B6,pair by form,
+public service operation and maintenance of plant,,F2E034,F3E02B4,pair by form,reported on two forms only
+public service salaries and wages,F1C032,F2E032,F3E02B2,pair by form,
+public service total amount,,F2E031,F3E02B1,pair by form,reported on two forms only
+research all other,F1C025,F2E027,F3E02A7,pair by form,
+research benefits,,F2E023,F3E02A3,pair by form,reported on two forms only
+research depreciation,F1C024,F2E025,F3E02A5,pair by form,
+research interest,F1C027,F2E026,F3E02A6,pair by form,
+research operation and maintenance of plant,,F2E024,F3E02A4,pair by form,reported on two forms only
+research salaries and wages,F1C022,F2E022,F3E02A2,pair by form,
+research total amount,,F2E021,F3E02A1,pair by form,reported on two forms only
+sales and services of auxiliary enterprises,F1B05,,F3D07,pair by form,reported on two forms only
+sales and services of educational activities,F1B26,,F3D06,pair by form,reported on two forms only
+spending distribution for current use,F1H03C,F2H03C,,pair by form,reported on two forms only
+state appropriations,F1B11,,F3D03A,pair by form,reported on two forms only
+state grants,,F2C03,F3C03A,pair by form,reported on two forms only
+student service all other,,F2E057,F3E03B7,pair by form,reported on two forms only
+student service benefits,,F2E053,F3E03B3,pair by form,reported on two forms only
+student service depreciation,,F2E055,F3E03B5,pair by form,reported on two forms only
+student service interest,,F2E056,F3E03B6,pair by form,reported on two forms only
+student service operation and maintenance of plant,,F2E054,F3E03B4,pair by form,reported on two forms only
+student service salaries and wages,,F2E052,F3E03B2,pair by form,reported on two forms only
+student service total amount,,F2E051,F3E03B1,pair by form,reported on two forms only
+total assets,F1A06,F2A02,F3A01;F3G04,check: more than one line on a form,
+total discounts and allowances,F1E10,F2C10,F3C08,pair by form,
+total discounts and allowances from endowments and gifts,F1E16,F2C16,F3C16,pair by form,
+total discounts and allowances from other federal grants,F1E13,F2C13,F3C13,pair by form,
+total discounts and allowances from other institutional sources,F1E17,F2C17,F3C17,pair by form,
+total discounts and allowances from pell grants,F1E12,F2C12,F3C12,pair by form,
+total discounts and allowances from state government grants,F1E14,F2C14,F3C14,pair by form,
+total expenses benefits,,F2E133,F3E073,pair by form,reported on two forms only
+total expenses depreciation,,F2E135,F3E075,pair by form,reported on two forms only
+total expenses interest,,F2E136,F3E076,pair by form,reported on two forms only
+total expenses salaries and wages,,F2E132,F3E072,pair by form,reported on two forms only
+total expenses total amount,,F2E131,F3E071,pair by form,reported on two forms only
+total liabilities,F1A13,F2A03,F3A02,pair by form,
+total plant property and equipment,,F2A17,F3A10,pair by form,reported on two forms only
+total student grants,,F2C07,F3C05,pair by form,reported on two forms only
+value of endowment assets at the beginning of the fiscal year,F1H01,F2H01,,pair by form,reported on two forms only
+value of endowment assets at the end of the fiscal year,F1H02,F2H02,,pair by form,reported on two forms only

@@ -24,6 +24,8 @@ with st.sidebar:
     names = list(config.MODELS)
     default = next((n for n, m in config.MODELS.items() if m == config.INTERPRET_MODEL), names[0])
     s.model = config.MODELS[st.selectbox("Model for reading questions", names, index=names.index(default))]
+    s.summary_on = st.toggle("Written summary", value=config.SUMMARY,
+                             help="Two or three sentences under each answer, checked against its table.")
     if st.button("Clear conversation"):
         s.conversation, s.turns = {}, []
         st.rerun()
@@ -59,13 +61,41 @@ def chart(spec):
     st.altair_chart(graph, width="stretch")
 
 
+def number_tile(t):
+    """The single-number tile: the figure large, with its label, school or group, and period."""
+    if t:
+        st.metric(label=t["label"], value=t["value"])
+        st.caption(" · ".join(x for x in (t["who"], t["period"]) if x))
+
+
+def written_summary(page):
+    """The summary under the table: streamed as it is written, then kept only if every number checks out."""
+    if page.get("summary_pending"):
+        page["summary_pending"] = False
+        box = st.empty()
+        box.caption(answer.status("writing"))
+        so_far = []
+        def show_piece(piece):
+            so_far.append(piece)
+            box.markdown("".join(so_far))
+        page["summary"] = answer.summarize(page, s.conversation, log, model=s.model, on_text=show_piece)
+        if page["summary"]:
+            box.markdown(page["summary"])
+        else:                                           # dropped: a number was not in the table (logged)
+            box.empty()
+    elif page.get("summary"):
+        st.markdown(page["summary"])
+
+
 def show_answer(page, key, latest=False):
     st.markdown(f"**Interpreted as:** {page['interpreted']}")
     for w in page["warnings"]:
         st.warning(w)
     if page.get("message"):
         st.markdown(page["message"])
+    number_tile(page.get("tile"))
     table(page["table"])
+    written_summary(page)
     chart(page.get("chart"))
     for n in page["notes"]:
         st.caption(n)
@@ -121,6 +151,11 @@ for i, (question, page) in enumerate(s.turns):
 
 question = st.chat_input("Ask a question about U.S. colleges")
 if question:
-    with st.spinner("Reading the question"):
-        s.turns.append((question, answer.ask(question, s.conversation, log, model=s.model)))
+    with st.status(answer.status("finding")) as box:     # the status line: each step in plain words
+        page = answer.ask(question, s.conversation, log, model=s.model,
+                          progress=lambda step: box.update(label=answer.status(step)))
+        box.update(state="complete")
+    for p in page.get("pages") or [page]:               # the summary is written under the table, once
+        p["summary_pending"] = s.summary_on and p["kind"] == "answer" and bool((p.get("table") or {}).get("rows"))
+    s.turns.append((question, page))
     st.rerun()

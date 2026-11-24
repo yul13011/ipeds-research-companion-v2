@@ -42,7 +42,7 @@ import config
 
 TABLES = ["measures", "terms", "school_groups", "group_members", "school_nicknames",
           "rates", "category_codes", "year_meaning", "outside_ipeds", "special_codes", "measure_history",
-          "comparability_breaks", "breakdown_exceptions"]
+          "comparability_breaks", "breakdown_exceptions", "word_abbreviations"]
 BREAK_KINDS = ("definition change", "context")              # comparability_breaks.csv `kind`
 BREAK_STATUS = ("draft", "approved")                        # only approved rows may be shown
 HISTORY_STATUS = ("in use", "to review", "rejected")       # measure_history.csv; only rows in use are used

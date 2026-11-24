@@ -6,8 +6,8 @@ Written by `scripts/database_inventory.py` after each full rebuild. Do not edit 
 
 | | |
 | --- | ---: |
-| Tables | 103 |
-| Rows | 40,379,202 |
+| Tables | 104 |
+| Rows | 40,379,268 |
 | File size | 3.27 GB (3,267,764,224 bytes) |
 | Releases | 10 (2015-16 to 2024-25) |
 
@@ -17,9 +17,9 @@ Tables and rows by layer:
 | --- | ---: | ---: |
 | survey data | 59 | 33,333,458 |
 | IPEDS codebook | 7 | 150,853 |
-| dictionary | 13 | 5,784 |
-| build result | 17 | 6,858,765 |
-| housekeeping | 7 | 30,342 |
+| dictionary | 14 | 5,850 |
+| build result | 17 | 6,858,764 |
+| housekeeping | 7 | 30,343 |
 
 Releases loaded:
 
@@ -119,25 +119,26 @@ The layers:
 | `VALUESETS` | The codebooks' code labels for every coded variable | year, TableName, varName, Codevalue | 14 | 124,493 | 10 (2015-16 to 2024-25) | 12,382 | 12,712 | 12,468 | 12,749 | 12,495 | 11,890 | 11,593 | 13,038 | 13,023 | 12,143 |
 | `VARTABLE` | Every variable of every table, with its title and format | year, TableName, varName | 24 | 23,991 | 10 (2015-16 to 2024-25) | 2,185 | 2,159 | 2,210 | 2,246 | 2,211 | 2,439 | 2,561 | 2,685 | 2,696 | 2,599 |
 
-## Dictionary (13 tables, 5,784 rows)
+## Dictionary (14 tables, 5,850 rows)
 
 | Table | What it holds | Key columns | Columns | Rows |
 | --- | --- | --- | ---: | ---: |
 | `dict_breakdown_exceptions` | Schools whose breakdown is shown despite parts not adding up, by owner decision | breakdown_set, table, year, unitid | 6 | 2 |
-| `dict_category_codes` | The category rows of multi-row tables, with labels, defaults and the years each applies | table, column, code | 15 | 1,166 |
+| `dict_category_codes` | The category rows of multi-row tables, with labels, defaults and the years each applies | table, column, code | 15 | 1,169 |
 | `dict_comparability_breaks` | Definition changes and context notes shown on trends that cross them | kind, tables, first_release | 11 | 14 |
 | `dict_group_members` | Groups defined by a list of schools | group, unitid | 3 | 79 |
 | `dict_measure_history` | Earlier names of each measure, so a trend continues across a renaming | measure, earlier_table, earlier_variable | 6 | 608 |
 | `dict_measures` | Every measure: table, variable, title, unit, period, plain name and set-up status | table, variable | 21 | 3,073 |
-| `dict_outside_ipeds` | Topics IPEDS does not collect, and where to look instead | topic | 5 | 16 |
+| `dict_outside_ipeds` | Topics IPEDS does not collect, and where to look instead | topic | 6 | 16 |
 | `dict_rates` | Rates and averages computed from counts: numerator, denominator and method | rate, applies_to | 13 | 28 |
-| `dict_school_groups` | Named school groups and how each is defined | group | 14 | 167 |
-| `dict_school_nicknames` | Nicknames and abbreviations for schools | nickname | 5 | 23 |
+| `dict_school_groups` | Named school groups and how each is defined | group | 14 | 187 |
+| `dict_school_nicknames` | Nicknames and abbreviations for schools | nickname | 5 | 36 |
 | `dict_special_codes` | How IPEDS's special codes (-1, -2, ...) are read | code | 8 | 36 |
-| `dict_terms` | Words people use, their readings and the measures each reading names; settings and messages | term, reading, measure | 15 | 513 |
+| `dict_terms` | Words people use, their readings and the measures each reading names; settings and messages | term, reading, measure | 15 | 527 |
+| `dict_word_abbreviations` | Dictionary table (not yet described here) |  | 3 | 16 |
 | `dict_year_meaning` | What the year of each table means: its period, cohort rule, subject and title | table | 9 | 59 |
 
-## Build result (17 tables, 6,858,765 rows)
+## Build result (17 tables, 6,858,764 rows)
 
 | Table | What it holds | Key columns | Columns | Rows |
 | --- | --- | --- | ---: | ---: |
@@ -152,23 +153,23 @@ The layers:
 | `group_membership` | Which schools belong to each group in each year | group_name, year, unitid | 3 | 1,435,335 |
 | `measure_checks` | Measures flagged by the build: never a value, codes without labels, no way to pick one row | measure, check | 3 | 111 |
 | `measure_years` | Where each measure is stored in each year, and how many schools have a value | measure, year | 5 | 24,099 |
-| `name_clashes` | Shown names still shared by more than one measure | name | 3 | 2 |
+| `name_clashes` | Shown names still shared by more than one measure | name | 3 | 1 |
 | `rate_years` | Whether each rate's counts exist in each year | rate, applies_to, year | 9 | 280 |
 | `row_keys` | For each multi-row table, the columns that pick one row and their default codes (latest year) | table, column | 5 | 23 |
 | `value_labels` | Code labels for coded columns, from the codebooks, by year | local_table, column, code, year | 5 | 124,440 |
 | `year_checks` | Row keys, detail links and breakdown sets tested in every year | year, kind, name, table, measure | 8 | 3,623 |
 | `year_titles` | Each measure's title in each year's codebook | measure, year | 3 | 4,161 |
 
-## Housekeeping (7 tables, 30,342 rows)
+## Housekeeping (7 tables, 30,343 rows)
 
 | Table | What it holds | Key columns | Columns | Rows |
 | --- | --- | --- | ---: | ---: |
 | `_columns` | Every column loaded from each release, with its types and what cleaning did to it | local_table, release, column | 14 | 25,245 |
 | `_conversion_failures` | Values that failed to convert during cleaning (expected to be empty) | local_table, release, column, value | 6 | 0 |
-| `_dictionary_state` | Fingerprints of the dictionary files and data, so the fast build knows what changed | item | 2 | 24 |
+| `_dictionary_state` | Fingerprints of the dictionary files and data, so the fast build knows what changed | item | 2 | 25 |
 | `_releases` | The releases loaded, provisional or final, and when | year | 6 | 10 |
 | `_special_codes` | The special codes found in each column of each release, and how each was treated | local_table, release, column, code | 10 | 4,439 |
 | `_tables` | Every table loaded from each release: source name, kind, rows read and loaded | local_table, year | 10 | 554 |
 | `sqlite_stat1` | SQLite's own statistics for its query planner | tbl, idx | 3 | 70 |
 
-Counted in 14 seconds.
+Counted in 23 seconds.

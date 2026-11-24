@@ -93,6 +93,13 @@ Short names users type for a school.
 - `kind` `system or school`: a name that can mean a system or one of its schools ("unc"). `unitid` and `name` are the school, `search_phrase` the system group's full name. Both go on the shortlist and the app asks which, unless the question names the school in full (its own words beyond the system's name, such as "chapel hill").
 - `kind` `ambiguous`: an abbreviation several schools share ("bu", "u of m"). `search_phrase` lists their names, separated by semicolons. A school written as this abbreviation always goes to the school picker, which offers those names; it is never replaced by one of them silently.
 
+## word_abbreviations.csv
+
+Abbreviated words people use in school names. The school search adds every meaning beside the word itself, so "wayne st" also searches "wayne state" and "wayne saint"; the school picker or the model chooses.
+
+- `abbreviation`: the short word, as typed (without a full stop).
+- `means`: one meaning; an abbreviation with several meanings has one row for each.
+
 ## rates.csv
 
 The counts behind each rate, so a group rate is computed by summing counts, never by averaging school rates.
@@ -185,6 +192,8 @@ Topics users ask about that IPEDS does not hold.
 - `in_ipeds`: `No`, `Partly`, or `Not in this app`.
 - `what_to_say`: the app's reply.
 - `pointer`: where to send the user. Blank means no pointer is given.
+
+- `instead`: an alternative the decline offers, such as "the same figure for the years this app holds" for years outside the ten releases; blank for none.
 
 ## special_codes.csv
 

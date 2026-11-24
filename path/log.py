@@ -25,3 +25,6 @@ class Log:
 
     def decline(self, row):
         self.write("declines.jsonl", row)
+
+    def summary(self, row):
+        self.write("summaries.jsonl", row)

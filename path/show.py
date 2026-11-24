@@ -119,6 +119,28 @@ def bars(plan, result):
                 unit=cells[0][1][1], points=[(n, result["columns"][figure], c[0]) for n, c in cells])
 
 
+def tile(plan, result, page):
+    """The single-number tile: when the answer is one figure, the figure, its label, the school or group, and the
+    period, shown large above the table. None otherwise."""
+    rows, columns = result["rows"], result["columns"]
+    if len(rows) != 1 or (plan.get("trend") and not plan["trend"]["single"]):
+        return None
+    op = plan["operation"]
+    if op in ("schools",) and len(columns) == 2:
+        label, value, who = columns[1], rows[0][1], rows[0][0]
+    elif op == "group" and len(plan["measures"]) == 1:
+        label, value, who = rows[0][0], rows[0][1], plan["scope"]
+    elif op == "count_schools":
+        label, value, who = columns[1], rows[0][1], rows[0][0]
+    else:
+        return None
+    if not isinstance(value, tuple):                    # a missing value or a word is not a tile
+        return None
+    m = plan["measures"][0] if plan["measures"] else None
+    period = (plan["trend"]["periods"].get(plan["trend"]["years"][0]) if plan.get("trend") else (m or {}).get("period")) or ""
+    return dict(value=fmt(value), label=str(label), who=str(who or ""), period=period)
+
+
 def release_label(release):
     """'IPEDS 2024-25 release (provisional)' from {release, status}."""
     name = release["release"].rsplit("_", 1)[0].replace("_", " ")
@@ -141,6 +163,7 @@ def render(plan, result, release):
                 status=result["missing"], definitions=definitions(plan), message=None,
                 data_release=f"Figures from the {release_label(release)}.", chart=result.get("chart") or bars(plan, result),
                 offers=[o["label"] for o in plan.get("offers") or []])
+    page["tile"] = tile(plan, result, page)
     if plan.get("trend") and plan["trend"]["single"]:   # one earlier year: its own release
         y = plan["trend"]["years"][0]
         page["data_release"] = f"Figures from the IPEDS {y}-{(y + 1) % 100:02d} release."
