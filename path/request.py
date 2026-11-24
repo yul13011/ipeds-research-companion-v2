@@ -13,7 +13,10 @@ measure and any group; no part is specific to one kind of question.
     breakdown   a breakdown set from the shortlist, and any fixed value the user changed
     split_by    sector, level or control
     sort        highest or lowest, and how many
-    year        the year as the user stated it, and the kind of year if they said
+    year        the year as the user stated it, and the kind of year if they said; for a trend, the first and
+                last calendar years named (start, end), or the last N years (last), whether only the change between
+                two years is wanted (change), and whose schools a group counts (membership: each year, or today).
+                The model names the kind of span (SPANS); code keeps only the fields that span uses
     topic       for define and data_exists: an ID from the shortlist, or the user's topic in plain words
     readings    the reading the user chose for a term with several readings: {"term", "reading"}
 
@@ -41,6 +44,8 @@ SCALAR_FIELDS = ("operation", "peers_of", "breakdown", "split_by", "sort", "year
 COMPARISONS = (">", ">=", "<", "<=", "=", "!=")
 YEAR_KINDS = ("fall", "fiscal year", "academic year", "aid year", "entering cohort", "class year", "calendar year", "latest")
 MISSING = ("measure", "group", "calculation", "breakdown", "years", "not in IPEDS", "not a data question", "other")
+MEMBERSHIP = ("each year", "today")         # a group over time: each year's own schools (default), or today's schools
+SPANS = ("one year", "from a year on", "a range of years", "the last N years", "the change between two years")
 
 
 def obj(**props):
@@ -82,7 +87,10 @@ def reply_schema():
         breakdown=maybe(obj(set=of("sets"), fixed={"type": "array", "items": of("rows")})),
         split_by=maybe({"type": "string", "enum": ["sector", "level", "control"]}),
         sort=maybe(obj(order={"type": "string", "enum": ["highest", "lowest"]}, limit=maybe(INTEGER))),
-        year=obj(stated=maybe(STRING), kind=maybe({"type": "string", "enum": list(YEAR_KINDS)})),
+        year=obj(stated=maybe(STRING), kind=maybe({"type": "string", "enum": list(YEAR_KINDS)}),
+                 span={"type": "string", "enum": list(SPANS)}, start=INTEGER, end=INTEGER, last=INTEGER,
+                 membership={"type": "string", "enum": list(MEMBERSHIP)}),   # 0: not given (nullable fields made the
+                                                                             # API's grammar too large)
         topic=maybe(STRING),
         outside=maybe(of("outside")),
         readings={"type": "array", "items": of("readings")},
@@ -130,7 +138,7 @@ def request_from_wire(r, tags, unknown=None):
         breakdown=dict(set=set_key[0], fixed=rows_for(set_key[1], breakdown.get("fixed"))) if set_key else None,
         split_by=r.get("split_by") or None,
         sort=dict(order=sort["order"], limit=sort.get("limit") or None) if sort else None,
-        year=dict(stated=(r.get("year") or {}).get("stated") or None, kind=(r.get("year") or {}).get("kind") or None),
+        year=year_from_wire(r.get("year") or {}),
         topic=outside or r.get("topic") or None,
         readings=[dict(term=x[0], reading=x[1]) for x in (look(t, "readings") for t in r.get("readings") or []) if x],
     )
@@ -185,10 +193,46 @@ def to_wire(r, tags):
     )
 
 
+def no_year():
+    return {"stated": None, "kind": None, "start": None, "end": None, "last": None, "change": False, "membership": None}
+
+
+def year_from_wire(y):
+    """The year part of a request as the model wrote it, with every field present. The model names the kind of span
+    (SPANS) and writes 0 for a year it was not given; the span decides which of start, end and last count."""
+    out = no_year()
+    out.update({k: (y.get(k) or (False if k == "change" else None)) for k in out})
+    span = y.get("span")
+    if span:                                            # the span the model named decides; the rest is cleared
+        keep = {"one year": (), "from a year on": ("start",), "a range of years": ("start", "end"),
+                "the last N years": ("last",), "the change between two years": ("start", "end")}[span]
+        for k in ("start", "end", "last"):
+            if k not in keep:
+                out[k] = None
+        out["change"] = span == "the change between two years"
+    return out
+
+
+def is_trend(year):
+    """A request over several years: a first year, a range, the last N years, or the change between two years."""
+    return bool(year and (year.get("start") or year.get("last") or year.get("change")))
+
+
+def covers(cell, year):
+    """Does a dictionary `years` cell ('2015-2019', '2015-2017, 2020', or blank for every year) cover this year?"""
+    if not cell:
+        return True
+    for part in (x.strip() for x in cell.split(",") if x.strip()):
+        first, _, last = part.partition("-")
+        if int(first) <= year <= int(last or first):
+            return True
+    return False
+
+
 def empty(operation="schools"):
     """A request with every part present and empty."""
     return {"operation": operation, "measures": [], "schools": [], "groups": [], "peers_of": None, "conditions": [],
-            "breakdown": None, "split_by": None, "sort": None, "year": {"stated": None, "kind": None}, "topic": None,
+            "breakdown": None, "split_by": None, "sort": None, "year": no_year(), "topic": None,
             "readings": []}
 
 

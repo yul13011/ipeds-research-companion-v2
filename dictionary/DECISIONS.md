@@ -375,3 +375,20 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **4. The 6 S_SIS rank headcounts:** unit `count`.
 - **Built now:** category rows for programs by field (CDEP); the message "IPEDS gives no label for this code"; the message "IPEDS has no values for this measure".
 - **Working cadence.** The fast build path is used for routine changes. A full rebuild runs only before a push to GitHub, at the end of each stage, and for yearly updates; its result must match the fast path, as tested. The question set runs once per change order, and twice only at the end of a part, when the scorecard is judged.
+
+## 2026-11-23: decisions on the second change-order report; Part 5c begins
+
+- **Shared names:** the distinguishing words come from the approved pairings ("by academic year", "by program", and the public/private pairing). The public/private pairing is added to the aid-by-income measures. Plain names for the roughly 10 left over are drafted for the owner's review in the next report.
+- **Recurring wrong readings,** each fixed by a general instruction or dictionary line, never a special case:
+  - "the example set" and similar references mean the schools in the previous request;
+  - "both" after the app has offered options resolves against those options (the cause in the dual-enrollment follow-up is found and the general rule fixed);
+  - "the universe with the lowest net cost": no reading is forced; the expectation accepts a clarifying question, since "universe" is also a dictionary term.
+- **The review list is settled:** unlabelled codes shown raw with the note, empty measures with their message, comparison groups per school.
+- **Go: Part 5c,** as the work order describes, including the trend rules recorded there. Stop after it with the report.
+
+## 2026-11-23: Part 5c built (trends); drafts for the owner's review
+
+- **Messages drafted** in `terms.csv` (kind `message`, note "Part 5c (trends), drafted 2026-11-23"): how a group counts schools in a trend (each year's own, today's only, peers), the "Today's schools only" button, earlier names "(then: …)", mergers, the detailed-table note for graduate 12-month headcount, the decline for trend questions not yet supported (ranking, lists and counts over several years), and the three reasons a breakdown is missing in one year. Wording to review.
+- **Which years "since 2015" covers (draft, from the owner's expectation for the Yale Pell question):** a trend takes every release whose figure's period reaches the years asked. So "since 2015" for Pell includes the 2015-16 release (aid year 2014-15), giving all ten releases, as the expectation says. To confirm.
+- **Trend operations:** a school, several schools, a group, a school beside a group, a group split by sector, level or control, and a breakdown for one school or one group. Ranking, lists and counts over several years are declined with the latest year offered.
+- **The chart's palette, font and axis colours** are taken from version 1 (read only) and kept in `config.py`, since they are presentation, not an IPEDS convention.

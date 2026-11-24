@@ -39,3 +39,8 @@ PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)} 
 
 # Local logs. Tests pass their own folder, so they never write here.
 LOG_DIR = Path(os.environ.get("IPEDS_LOG_DIR", ROOT / "logs"))
+
+# The automatic chart (Part 5c): palette, font and axis colours taken from version 1's chart settings
+# (agent-redesign/prototype/charts.py, read only). No formatting panel in this stage.
+CHART = dict(palette=["#24658A", "#C47A28", "#78649B", "#398278", "#A24B4B", "#5E8C3A", "#C96E9C", "#4E9DB5", "#9C7A3C", "#6B6FA8"],
+             font="Arial", font_size=13, text="#263746", grid="#E7EBED", domain="#AAB4B9", line_width=2.5, point_size=32)

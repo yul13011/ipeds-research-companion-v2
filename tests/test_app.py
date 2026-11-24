@@ -69,6 +69,18 @@ class App(unittest.TestCase):
         self.assertFalse(self.at.exception)
         self.assertEqual(self.at.dataframe[-1].value.iloc[0, 1], "3,800")
 
+    def test_a_trend_draws_a_line_chart(self):
+        """Part 5c: a question over several years shows the table by year and a chart beneath it."""
+        self.at.run()
+        reply = json.loads((REPLIES / "a_yale_admission.json").read_text())["reply"]
+        reply["request"]["year"] = dict(stated="since 2015", kind=None, start=2015, end=None, last=None, change=False,
+                                        membership=None)
+        self.replies.append(reply)
+        self.at.chat_input[0].set_value("Yale's admission rate since 2015").run()
+        self.assertFalse(self.at.exception)
+        self.assertEqual(list(self.at.dataframe[-1].value.columns[:2]), ["Year", "Period"])
+        self.assertEqual(len(self.at.get("vega_lite_chart")), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

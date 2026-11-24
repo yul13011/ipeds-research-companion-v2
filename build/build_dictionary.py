@@ -159,13 +159,23 @@ def name_measures(db):
         db.execute("ALTER TABLE dict_measures ADD COLUMN shown_name TEXT")
     subject = dict(db.execute('SELECT "table", subject FROM dict_year_meaning'))
     rows = db.execute('SELECT rowid, "table", COALESCE(plain_name, title) FROM dict_measures').fetchall()
+    key = lambda name: " ".join((name or "").lower().split())
     shared = {}
     for _, _, name in rows:
-        key = " ".join((name or "").lower().split())
-        shared[key] = shared.get(key, 0) + 1
+        shared[key(name)] = shared.get(key(name), 0) + 1
+    named = [(rid, f"{subject[t]}: {name}" if shared[key(name)] > 1 and subject.get(t) else name) for rid, t, name in rows]
+    again = {}                                          # still shared after the subject: the approved pairing's words
+    for _, shown in named:
+        again[key(shown)] = again.get(key(shown), 0) + 1
+    try:
+        label = dict(db.execute('SELECT UPPER(t.measure), MAX(g.pair_label) FROM dict_terms t JOIN dict_school_groups g '
+                                "ON g.\"group\" = t.applies_to WHERE COALESCE(g.pair_label, '') <> '' GROUP BY 1"))
+    except sqlite3.OperationalError:                    # a dictionary without pairing labels
+        label = {}
+    measure_of = dict(db.execute("SELECT rowid, UPPER(\"table\" || '.' || variable) FROM dict_measures"))
     db.executemany("UPDATE dict_measures SET shown_name = ? WHERE rowid = ?",
-                   [((f"{subject[t]}: {name}" if shared[" ".join((name or "").lower().split())] > 1 and subject.get(t)
-                      else name), rid) for rid, t, name in rows])
+                   [((f"{shown} ({label[measure_of[rid]]})" if again[key(shown)] > 1 and label.get(measure_of[rid])
+                      else shown), rid) for rid, shown in named])
 
 
 def check(db, wording_only=False):

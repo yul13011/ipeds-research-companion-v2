@@ -38,6 +38,11 @@ def interpreted(plan):
         school=", ".join(s["name"] for s in plan["schools"]), topic=(plan["topic"] or {}).get("asked") or "the topic")
     periods = list(dict.fromkeys(m["period"] for m in plan["measures"] + [c["measure"] for c in plan["conditions"]]
                                  if m.get("period")))                   # a measure used only in a condition too
+    if plan.get("trend"):                               # over several years: the first and last figure's periods
+        years, by_year = plan["trend"]["years"], plan["trend"]["periods"]
+        ends = [by_year.get(years[0]), by_year.get(years[-1])]
+        if all(ends):
+            periods = [(" and " if plan["trend"]["change"] else " to ").join(dict.fromkeys(ends))]
     if periods:
         text += f" ({'; '.join(periods)})"
     for c in plan["conditions"]:
@@ -87,6 +92,27 @@ def topic_message(plan):
     return " ".join(["IPEDS collects this, but it is not set up in this app yet: " + still + "."] + gone)
 
 
+def bars(plan, result):
+    """A bar chart for a comparison in one year: one bar per row, for the first column of figures."""
+    if plan.get("trend") or plan["operation"] not in ("schools", "rank", "split", "school_vs_group", "breakdown"):
+        return None
+    if plan["operation"] == "schools" and len(result["rows"]) < 2:
+        return None
+    rows = result["rows"]
+    if plan["operation"] == "breakdown":                # the categories, without the total
+        rows = [r for r in rows if r[0] != "Total"]
+    figure = next((i for i in range(1, len(result["columns"])) if any(isinstance(r[i], tuple) for r in rows)), None)
+    if figure is None or len(rows) < 2:
+        return None
+    name = 1 if plan["operation"] == "rank" else 0
+    cells = [(str(r[name]) + (f", {r[1]}" if plan["operation"] in ("split", "school_vs_group") and len(plan["measures"]) > 1 else ""),
+              r[figure]) for r in rows if isinstance(r[figure], tuple)]
+    if len(cells) < 2:
+        return None
+    return dict(kind="bar", x=result["columns"][name] or "Name", series=[result["columns"][figure]],
+                unit=cells[0][1][1], points=[(n, result["columns"][figure], c[0]) for n, c in cells])
+
+
 def release_label(release):
     """'IPEDS 2024-25 release (provisional)' from {release, status}."""
     name = release["release"].rsplit("_", 1)[0].replace("_", " ")
@@ -107,7 +133,13 @@ def render(plan, result, release):
                 table=dict(columns=result["columns"], rows=[[fmt(c) for c in row] for row in result["rows"]]),
                 counts=dict(columns=result["counts_columns"], rows=[[fmt(c) for c in row] for row in result["counts"]]),
                 status=result["missing"], definitions=definitions(plan), message=None,
-                data_release=f"Figures from the {release_label(release)}.")
+                data_release=f"Figures from the {release_label(release)}.", chart=result.get("chart") or bars(plan, result),
+                offers=[o["label"] for o in plan.get("offers") or []])
+    if plan.get("trend"):                               # each year's figure comes from its own release
+        years = plan["trend"]["years"]
+        page["data_release"] = (f"Figures from the IPEDS releases {years[0]}-{(years[0] + 1) % 100:02d} to "
+                                f"{years[-1]}-{(years[-1] + 1) % 100:02d}; each year's figure comes from the release in "
+                                "which it is the current year.")
     if plan["operation"] in ("define", "data_exists"):
         page["message"] = topic_message(plan)
     return page

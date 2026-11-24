@@ -3,6 +3,7 @@
 The page only displays what path/answer.py returns. It holds the conversation in the session:
 the requests answered so far, any options or school picker waiting for the user.
 """
+import altair as alt
 import pandas as pd
 import streamlit as st
 
@@ -18,8 +19,8 @@ log = Log()
 
 with st.sidebar:
     st.header("IPEDS Research Companion")
-    st.caption("Version 2. Ten IPEDS releases are loaded (2015-16 to 2024-25); answers use the latest year until "
-               "trend questions are added.")
+    st.caption("Version 2. Ten IPEDS releases are loaded (2015-16 to 2024-25). Answers use the latest year unless "
+               "you ask about a period, such as \"since 2015\" or \"the last five years\".")
     names = list(config.MODELS)
     default = next((n for n, m in config.MODELS.items() if m == config.INTERPRET_MODEL), names[0])
     s.model = config.MODELS[st.selectbox("Model for reading questions", names, index=names.index(default))]
@@ -33,15 +34,46 @@ def table(part):
         st.dataframe(pd.DataFrame(part["rows"], columns=part["columns"]), hide_index=True, width="stretch")
 
 
-def show_answer(page, key):
+def chart(spec):
+    """The automatic chart: a line over the years for a trend, bars for a comparison in one year."""
+    if not spec or not any(v is not None for _, _, v in spec["points"]):
+        return
+    c = config.CHART
+    data = pd.DataFrame(spec["points"], columns=[spec["x"], "Series", "Value"])
+    pct = spec.get("unit") == "percent"
+    fmt = ".1f" if pct else "$,.0f" if spec.get("unit") in ("dollars", "average") else ",.0f"
+    color = alt.Color("Series:N", scale=alt.Scale(range=c["palette"]), legend=alt.Legend(title=None, orient="bottom"))
+    order = list(dict.fromkeys(data[spec["x"]]))
+    if spec["kind"] == "line":                          # a gap stays a gap: missing years break the line
+        graph = alt.Chart(data).mark_line(point=alt.OverlayMarkDef(size=c["point_size"]), strokeWidth=c["line_width"],
+                                          invalid="break-paths-show-domains").encode(
+            x=alt.X(f"{spec['x']}:O", sort=order, title=None), y=alt.Y("Value:Q", title=None, axis=alt.Axis(format=fmt)),
+            color=color, tooltip=[spec["x"], "Series", alt.Tooltip("Value:Q", format=fmt)])
+    else:
+        graph = alt.Chart(data.dropna()).mark_bar(color=c["palette"][0]).encode(
+            y=alt.Y(f"{spec['x']}:N", sort=order, title=None), x=alt.X("Value:Q", title=None, axis=alt.Axis(format=fmt)),
+            tooltip=[spec["x"], alt.Tooltip("Value:Q", format=fmt)])
+    graph = graph.properties(width="container").configure(font=c["font"]).configure_axis(
+        labelFontSize=c["font_size"], titleFontSize=c["font_size"], labelColor=c["text"], titleColor=c["text"],
+        gridColor=c["grid"], domainColor=c["domain"]).configure_legend(labelFontSize=c["font_size"]).configure_view(stroke=None)
+    st.altair_chart(graph, width="stretch")
+
+
+def show_answer(page, key, latest=False):
     st.markdown(f"**Interpreted as:** {page['interpreted']}")
     for w in page["warnings"]:
         st.warning(w)
     if page.get("message"):
         st.markdown(page["message"])
     table(page["table"])
+    chart(page.get("chart"))
     for n in page["notes"]:
         st.caption(n)
+    if latest:
+        for i, label in enumerate(page.get("offers") or []):
+            if st.button(label, key=f"f{key}.{i}"):
+                s.turns.append((f"[{label}]", answer.take_offer(i, s.conversation, log)))
+                st.rerun()
     if page.get("data_release"):
         st.caption(page["data_release"])
     if (page["counts"]["rows"] or page["status"]) and st.checkbox("Show underlying counts and data status", key=f"c{key}"):
@@ -59,9 +91,9 @@ def show_answer(page, key):
 def show(page, key, latest):
     if page["kind"] == "many":
         for i, p in enumerate(page["pages"]):
-            show(p, f"{key}.{i}", False)
+            show(p, f"{key}.{i}", latest and i == len(page["pages"]) - 1)
     elif page["kind"] == "answer":
-        show_answer(page, key)
+        show_answer(page, key, latest)
     elif page["kind"] == "clarify":
         st.markdown(page["message"])
         if latest:

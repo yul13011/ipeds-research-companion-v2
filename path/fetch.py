@@ -4,13 +4,14 @@ Every figure comes from here. Missing values stay missing: they are never counte
 each table says how many schools had no value. Group rates and averages add up the counts
 across schools first and divide once (rates.csv), never averaging school figures.
 """
+import sys
 from collections import defaultdict
 
 
 class Data:
-    def __init__(self, db):
+    def __init__(self, db, year=None):                 # the latest year, unless a trend asks for another
         self.db = db
-        self.year = db.execute("SELECT MAX(year) FROM directory").fetchone()[0]
+        self.year = year or db.execute("SELECT MAX(year) FROM directory").fetchone()[0]
 
     def q(self, sql, *args):
         return self.db.execute(sql, args).fetchall()
@@ -42,6 +43,17 @@ class Data:
     def names(self, ids):
         return {u: (n, s) for u, n, s in self.q(f"SELECT UNITID, INSTNM, STABBR FROM directory WHERE year = ? AND "
                                                   f"UNITID IN ({','.join('?' * len(ids))})", self.year, *ids)} if ids else {}
+
+
+class _Blank(dict):
+    def __missing__(self, key):
+        return ""
+
+
+def say(db, key, **fields):
+    """A message to the user, from the "message" rows of terms.csv."""
+    row = db.execute("SELECT statement FROM dict_terms WHERE term = 'message' AND reading = ?", (key,)).fetchone()
+    return ((row[0] if row else "") or "").format_map(_Blank(fields)).strip()
 
 
 def cell(value, unit):
@@ -163,18 +175,20 @@ def shown_schools(plan, result):
 
 
 def fetch(plan, db):
+    result = dict(columns=[], rows=[], counts_columns=[], counts=[], notes=[], missing=[], warnings=[])
+    if plan.get("trend"):                               # several years: path/trend.py, one year at a time
+        from path import trend
+        trend.run(plan, db, result, sys.modules[__name__])
+        return result
     data = Data(db)
     op = plan["operation"]
     run = {"schools": schools, "rank": rank, "list": listing, "count_schools": count_schools, "group": group,
            "split": split, "school_vs_group": school_vs_group, "breakdown": breakdown,
            "define": topic, "data_exists": topic}[op]
-    result = dict(columns=[], rows=[], counts_columns=[], counts=[], notes=[], missing=[], warnings=[])
     run(plan, data, result)
     campus_notes(plan, data, result, shown_schools(plan, result))
     if getattr(data, "unlabelled", False):              # a coded answer the codebook gives no label for
-        said = data.q("SELECT statement FROM dict_terms WHERE term = 'message' AND reading = 'no label'")
-        if said:
-            result["notes"].append(said[0][0])
+        result["notes"].append(say(db, "no label"))
     return result
 
 

@@ -29,6 +29,8 @@ Rules:
         the new values in one item of `requests`. Leave everything else to the previous request.
         "Go back", "as before", "back to all eight": one change with action back (any field). The app restores
         the whole earlier request, operation included; do not rebuild it field by field.
+        A reference to schools already named ("the example set", "those schools", "the same institutions", "them")
+        means the schools in the PREVIOUS REQUEST: keep them; never pick new schools for it.
   options: the question has two or three reasonable readings. Give each as a complete request with a short label.
   choose: the user is answering the PENDING OPTIONS ("the first one", "B", "both"). Give their 0-based numbers.
         If PENDING OPTIONS are open and the user changes something without choosing ("show 2023-24"), return an
@@ -61,8 +63,16 @@ Rules:
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
 - year: copy the year as the user stated it, or leave it empty. Set kind only if the user said (fall, fiscal year, ...).
-  For "the latest" or "the most recent year", leave stated empty and set kind to latest. For a period or a trend
-  ("since 2015", "the last ten years", "2015 through 2024"), copy the period into stated as written.
+  For "the latest" or "the most recent year", leave stated empty and set kind to latest.
+  span says whether the question is about one year or a period:
+    one year: a single year, however written ("2023", "2022-23", "fall 2024", "the 2016 entering cohort"), or none;
+    from a year on: "since 2015", "from 2018 on" (start);
+    a range of years: "2015 through 2024", "between 2016 and 2020", "2014-15 to 2023-24" (start and end);
+    the last N years: "the last five years", "a 10-year trend" (last);
+    the change between two years: "how did it change from 2015 to 2024" (start and end).
+  start and end are calendar years as the user named them (the first year of "2014-15" is 2014). Write 0 for any of
+  start, end and last the span does not use. For a group over time, membership is "each year" unless the user asks
+  for today's schools only ("today").
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
   For a broad topic ("admissions", "finance", "faculty"), list every shortlist measure that belongs to it, up to 15.
   Only if no listed measure belongs to the topic, put the user's topic in plain words in topic.

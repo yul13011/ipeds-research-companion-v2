@@ -16,7 +16,8 @@ import json
 import re
 
 from path import shortlist as sl
-from path.request import apply_edit, fill_years, used_ids
+from path import trend
+from path.request import apply_edit, fill_years, is_trend, used_ids
 
 CLOSEST_MATCHES = 3                 # how many of the best shortlisted measures a "not found" answer names
 
@@ -44,7 +45,8 @@ class Dictionary:
         return {u for (u,) in self.q("SELECT unitid FROM group_membership WHERE group_name=? AND year=?", group, self.year)}
 
     def name(self, unitid):
-        row = self.one("SELECT INSTNM FROM directory WHERE UNITID=? AND year=?", unitid, self.year)
+        """Today's name; for a school no longer in IPEDS, its last name."""
+        row = self.one("SELECT INSTNM FROM directory WHERE UNITID=? AND year<=? ORDER BY year DESC", unitid, self.year)
         return row[0] if row else str(unitid)
 
 
@@ -288,7 +290,7 @@ def resolve_request(request, d, short, new_question=False):
             return stop
     not_set_up, no_years, gone = [], [], []
     for m in request["measures"]:
-        got = measure(m, d, request["year"])
+        got = measure(m, d, request["year"], trend=is_trend(request["year"]))
         if got["kind"] == "need_row":
             return row_question(request, m, got)
         if got["kind"] == "not_set_up":
@@ -307,6 +309,10 @@ def resolve_request(request, d, short, new_question=False):
             no_years.append(got["measure"])
             continue
         plan["measures"].append(got["measure"])
+        gone_too = got["measure"].get("retired")       # in a trend: read in the years IPEDS collected it, and say so
+        if gone_too:
+            plan["statements"].append(say(d, "retired" + gone_too["one"], what=got["measure"]["name"],
+                                          **{k: v for k, v in gone_too.items() if k != "one"}))
         for said in got["measure"].get("row_statements", []):
             if said not in plan["statements"]:
                 plan["statements"].append(said)
@@ -392,6 +398,14 @@ def resolve_request(request, d, short, new_question=False):
         threshold = int(re.findall(r"\d+", d.setting("ranking guard")[0])[0])
         plan["small_cohort"] = dict(threshold=threshold, text=d.setting("small cohort")[1])
     plan["campus_notes"] = dict(d.q("SELECT condition, statement FROM dict_terms WHERE term='related campus'"))
+    if is_trend(request["year"]):                       # over several years: choose them, and how a group counts schools
+        if op not in trend.OPERATIONS or (op == "breakdown" and len(plan["schools"]) > 1):
+            return decline(d, "trend operation", request, closest=dict(
+                text=say(d, "trend operation instead"), request=without(request, year=dict(request["year"], start=None,
+                                                                                           end=None, last=None, change=False))))
+        stop = trend.plan(request, plan, d, lambda key, **f: say(d, key, **f))
+        if stop:
+            return stop
     outside = d.one("SELECT what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"]) \
         if request.get("topic") else None
     if outside:                                         # a part of the question IPEDS lacks, named beside the answer
@@ -487,11 +501,27 @@ def pair_measures(plan, d, year):
     plan["measures"] = out
 
 
-def cohort_period(m, covered, d):
+def cohort_rule(m, covered, d):
+    """The entering-cohort rule for a measure, as (kind, offset from the release year): the measure's own, otherwise its
+    table's, for the first school level the schools cover (year_meaning.csv entering_cohort). None if it has none."""
+    own = d.one("SELECT entering_cohort FROM dict_measures WHERE \"table\" || '.' || variable = ?", m["id"])
+    table_rule = d.one('SELECT entering_cohort FROM dict_year_meaning WHERE "table"=?', m.get("period_table"))
+    rule = (own and own[0]) or (table_rule and table_rule[0])
+    if not rule:
+        return None
+    parts = [p.strip().partition(" for ") for p in rule.split(";")]
+    pick = next((t for t, _, g in parts if not g or covered & d.members(g)), parts[0][0])
+    kind, offset = pick.rsplit(" ", 1)
+    return kind, int(offset)
+
+
+def cohort_period(m, covered, d, year=None):
     """'students who entered in fall 2018, status as of August 31, 2024', from offsets to the release year.
 
     The measure's own entering_cohort wins; otherwise the table's, which may differ by school level.
-    Where the schools asked about span levels, each cohort is named with its level."""
+    Where the schools asked about span levels, each cohort is named with its level. `year`: the release year (default
+    the latest), for a trend."""
+    year_ = year or d.year
     own = d.one('SELECT entering_cohort FROM dict_measures WHERE "table" || \'.\' || variable = ?', m["id"])
     table_rule = d.one('SELECT entering_cohort, period FROM dict_year_meaning WHERE "table"=?', m["period_table"])
     rule = (own and own[0]) or (table_rule and table_rule[0])
@@ -501,15 +531,15 @@ def cohort_period(m, covered, d):
     for part in rule.split(";"):
         text, _, group = part.strip().partition(" for ")
         kind, offset = text.rsplit(" ", 1)
-        year = d.year + int(offset)
-        label = f"fall {year}" if kind == "fall" else f"{year}-{str(year + 1)[2:]}"
+        entered = year_ + int(offset)
+        label = f"fall {entered}" if kind == "fall" else f"{entered}-{str(entered + 1)[2:]}"
         if not group or covered & d.members(group):
             cohorts.append((label, group))
     if not cohorts:
         return None
     named = cohorts[0][0] if len(cohorts) == 1 or len({c for c, _ in cohorts}) == 1 else \
         " or ".join(f"{c} ({g.lower()} schools)" for c, g in dict.fromkeys(cohorts))
-    status = fill_years(table_rule[1], d.year)
+    status = fill_years(table_rule[1], year_)
     status = status[0].lower() + status[1:] if status else ""
     status = status.replace("status of student as of", "status as of")
     return d.setting("cohort period")[1].format(cohort=named, status=status)
@@ -703,6 +733,7 @@ def scope(request, d, plan):
         names = [d.setting("no group stated")[0]]
         plan["statements"].append(d.setting("no group stated")[1])
         plan["group_defaulted"] = True
+    plan["group_names"] = list(names) + ([universe] if universe != "all" and universe not in names else [])
     members, parts = None, []
     for name in names:
         row = d.one("SELECT statement, caveat, status, word_note FROM group_list WHERE group_name=?", name)
@@ -748,11 +779,13 @@ def peers(request, d, plan):
         plan["members"] = {u for (u,) in d.q("SELECT CGUNITID FROM CUSTOMCGIDS WHERE UNITID=? AND year=?", school, d.year)}
         plan["scope"] = f"{d.name(school)}'s own IPEDS comparison group ({len(plan['members'])} schools)"
         plan["statements"].append(pick[3])
+        plan["peer_members"] = set(plan["members"])     # in a trend, today's comparison group for every year
     elif pick[1] == "same state and sector":
         state, sector = d.one("SELECT STABBR, SECTOR FROM directory WHERE UNITID=? AND year=?", school, d.year)
         plan["members"] = {u for (u,) in d.q("SELECT UNITID FROM directory WHERE year=? AND STABBR=? AND SECTOR=? AND UNITID<>?", d.year,
                                               state, sector, school)}
         plan["scope"] = f"schools in the same state and sector as {d.name(school)}"
+        plan["peer_members"] = set(plan["members"])
     else:
         return decline(d, "needs a comparison group", request)
     if not plan["schools"]:
@@ -761,8 +794,9 @@ def peers(request, d, plan):
 
 
 # ---------------------------------------------------------------- measures
-def measure(m, d, year):
-    """One measure: its table, column, rows, period, unit, form, and the rate rows behind it."""
+def measure(m, d, year, trend=False):
+    """One measure: its table, column, rows, period, unit, form, and the rate rows behind it. In a trend (`trend`), a
+    measure IPEDS no longer collects is still read for the years it was collected."""
     if m["id"].startswith("rate:"):
         name = m["id"][5:]
         numerator, unit = d.one("SELECT numerator, unit FROM dict_rates WHERE rate=?", name)
@@ -784,21 +818,24 @@ def measure(m, d, year):
         if not d.one("SELECT 1 FROM measure_years WHERE measure = ? AND n_values > 0", m["id"]):
             return decline(d, "no values", what=name)   # in no year has any school a value: never "not found" or zero
         gone = retired(d, m["id"])
-        if gone:                                        # IPEDS collected it once: say when, and what replaced it
+        if gone and not trend:                          # IPEDS collected it once: say when, and what replaced it
             return outcome("retired", id=m["id"], name=name, **gone)
         if set_up != "yes":                             # the nearest set-up measure of the same table, as an alternative
             near = d.one('SELECT "table" || \'.\' || variable, shown_name FROM dict_measures '
                          'WHERE "table"=? AND in_first_version=\'yes\' ORDER BY rowid LIMIT 1', table)
             return outcome("not_set_up", id=m["id"], name=name,
                            closest=dict(text=near[1], request=None, measure=near[0]) if near else None)
-        source = d.one("SELECT source_table FROM _tables WHERE local_table=? AND year=?", table, d.year)[0]
+        source = d.one("SELECT source_table FROM _tables WHERE local_table=? AND year<=? ORDER BY year DESC", table, d.year)[0]
         info = dict(id=m["id"], name=name, table=table, column=column, rows={}, unit=unit, form=form,
                     definition=definition, source=source, own_period=own_period, period_table=table)
+        if gone:
+            info["retired"] = gone
         if said:                                        # a measure's own statement, shown whenever it is used
             info.setdefault("row_statements", []).append(said)
         given = rows_of(m)
         info["given"] = given
-        keys = d.q('SELECT "column", default_code, default_label FROM row_keys WHERE "table"=?', table)
+        keys = d.q('SELECT "column", default_code, default_label FROM row_keys WHERE "table"=?', table) if not gone else \
+            [(c, v, None) for c, v in given.items()]    # a table no longer collected has no row keys today: the rows asked for
         decided = first_present(given, {k: v for k, v, _ in keys if v is not None})
         for column_, default, _ in keys:
             code = decided.get(column_.upper())
@@ -816,10 +853,11 @@ def measure(m, d, year):
     info["shown_as"] = m.get("shown_as")
     kind, period, caveat, flag = d.one('SELECT kind, period, caveat, parent_child_flag FROM dict_year_meaning WHERE "table"=?',
                                        info["period_table"])
-    info.update(period=fill_years(info["own_period"] or period, d.year), period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
+    info.update(period=fill_years(info["own_period"] or period, d.year), period_pattern=info["own_period"] or period,
+                period_kind=kind, caveat=caveat, rates=rate_rows(d, info),
                 parent_child=[c.strip().partition(".")[2] for c in flag.split(";")] if flag else None)
     info["years"] = dict(held=True, missing=[])        # which of the years asked for are held
-    if year and year.get("stated") and year.get("kind") != "latest":
+    if year and year.get("stated") and year.get("kind") != "latest" and not is_trend(year):
         stated = set(re.findall(r"(?:19|20)\d\d", year["stated"]))
         shown = set(re.findall(r"(?:19|20)\d\d", info["period"] or "")) | {str(d.year)}
         if not stated & shown:

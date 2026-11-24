@@ -1049,6 +1049,16 @@ class Retired(unittest.TestCase):
         self.assertEqual(page["kind"], "decline")
         self.assertTrue(page["message"].startswith("IPEDS has no values for this measure"))
 
+    def test_both_after_options_runs_every_option(self):
+        """Decision of 2026-11-23: "both" after the app has offered options resolves against those options."""
+        base = req("schools", measures=[M("DRVADM.DVADM01")])
+        state = {"pending": [dict(label="Yale University", request=dict(base, schools=[S("Yale", 130794)])),
+                             dict(label="Harvard University", request=dict(base, schools=[S("Harvard", 166027)]))]}
+        reply = dict(kind="choose", request=None, edit=None, options=[], chosen=[0, 1], decline=None)
+        page = answer.ask("both", state, self.log, call=saved(reply))
+        self.assertEqual(page["kind"], "many")                               # one answer per option chosen
+        self.assertEqual([p["kind"] for p in page["pages"]], ["answer", "answer"])
+
     def test_a_breakdown_with_no_school_and_no_group_takes_the_default_group(self):
         """Part 5b2 Haiku run, conversation 62: a breakdown naming no school and no group stopped with an error."""
         page = self.run_request(req("breakdown", measures=[M("DRVEF.ENRTOT")], breakdown=dict(set="By gender", fixed=[])))
@@ -1064,6 +1074,260 @@ class Retired(unittest.TestCase):
         self.assertIn(True, kinds)                                  # found, so never "not found" ...
         self.assertLessEqual(sum(kinds), shortlist.RETIRED)          # ... at most two ...
         self.assertEqual(kinds, sorted(kinds))                       # ... and all after the current measures
+
+
+def Y(**parts):
+    y = rq.no_year()
+    y.update(parts)
+    return y
+
+
+class Trends(unittest.TestCase):
+    """Part 5c: a school, several schools or a group over time, with the trend rules decided in Part 5b."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.db = sqlite3.connect(DB)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.db.close()
+        cls.dir.cleanup()
+
+    def run_request(self, request, state=None):
+        return answer.run_direct(request, {} if state is None else state, self.log, DB, question="[test]")
+
+    def column(self, page, i=2):
+        return [row[i] for row in page["table"]["rows"]]
+
+    # ---- choosing the years
+    def test_years_are_chosen_by_the_period_each_figure_covers(self):
+        from path.trend import choose
+        years = list(range(2015, 2025))
+        self.assertEqual(choose(Y(start=2015), "Fall {Y}", years), years)
+        self.assertEqual(choose(Y(start=2020), "Fall {Y}", years), list(range(2020, 2025)))
+        self.assertEqual(choose(Y(last=5), "Fall {Y}", years), list(range(2020, 2025)))
+        self.assertEqual(choose(Y(start=2016, end=2018), "Fall {Y}", years), [2016, 2017, 2018])
+        self.assertEqual(choose(Y(start=2015, end=2024, change=True), "Fall {Y}", years), [2015, 2024])
+        # aid figures cover the year before their release: 2018 reaches back to the 2017-18 aid year (2018 release)
+        self.assertEqual(choose(Y(start=2018), "July 1, {Y-1} - June 30, {Y}", years)[0], 2018)
+        self.assertEqual(choose(Y(start=2030), "Fall {Y}", years), [])
+
+    def test_entering_cohorts_are_matched_by_cohort(self):
+        """Log 4.3: "cohorts 2009 through 2018" for the bachelor's six-year rate are the 2015 to 2024 releases (fall -6,
+        year_meaning.csv entering_cohort), and each row names its cohort."""
+        page = self.run_request(req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="2009 through 2018", kind="entering cohort", start=2009, end=2018)))
+        rows = page["table"]["rows"]
+        self.assertEqual([r[0][:7] for r in rows], [f"{y}-{(y + 1) % 100:02d}" for y in range(2015, 2025)])
+        self.assertEqual(rows[0][1], "students who entered in fall 2009, status as of August 31, 2015")
+        self.assertIn("fall 2009", page["interpreted"])
+        self.assertIn("fall 2018", page["interpreted"])
+
+    def test_a_rate_computed_from_counts_over_time(self):
+        """Log 58.7: a rate with no table of its own (core expenses per FTE student, counts from DRVF and DRVEF12)
+        crashed the break notes. Each year divides that year's counts, and the breaks of the counts' tables apply."""
+        page = self.run_request(req("schools", measures=[M("rate:Core expenses per FTE student")],
+                                    schools=[S("RIT", 195003), S("WPI", 168421)], year=Y(stated="ten years", last=10)))
+        self.assertEqual(page["kind"], "answer")
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        self.assertTrue(all(c.startswith("$") for r in page["table"]["rows"] for c in r[2:]), page["table"]["rows"][:2])
+
+    def test_earlier_codes_are_read_through_same_as(self):
+        """Graduate students are EFFYALEV 12 from 2020-21 and EFFYLEV 4 before (category_codes.csv same_as)."""
+        from path.trend import year_rows
+        self.assertEqual(year_rows(self.db, "EFFY", {"EFFYALEV": "12"}, 2024), {"EFFYALEV": "12"})
+        self.assertEqual(year_rows(self.db, "EFFY", {"EFFYALEV": "12"}, 2017), {"EFFYLEV": "4"})
+        self.assertIsNone(year_rows(self.db, "EFFY", {"EFFYALEV": "3"}, 2017))     # no such row before 2020-21
+
+    # ---- the owner's two test questions
+    def test_yale_pell_since_2015_has_all_ten_years(self):
+        """o50: the all-undergraduate Pell measure, the trend default, covers all ten releases."""
+        page = self.run_request(req("schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="since 2015", start=2015)))
+        self.assertEqual(page["kind"], "answer")
+        self.assertEqual(page["table"]["columns"][:2], ["Year", "Period"])
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        self.assertNotIn("not collected", self.column(page))
+        latest = self.db.execute("SELECT UPGRNTP FROM SFA WHERE UNITID = 130794 AND year = 2024").fetchone()[0]
+        self.assertEqual(self.column(page)[-1], show.fmt((latest, "percent")))
+        self.assertEqual(page["chart"]["kind"], "line")
+        self.assertIn("releases 2015-16 to 2024-25", page["data_release"])
+
+    def test_degree_seeking_pell_starts_in_its_own_first_year(self):
+        """o50: the degree-seeking split starts in the 2022-23 release; the earlier years are named as not collected,
+        never zero, and never filled from the all-undergraduate measure."""
+        page = self.run_request(req("schools", measures=[M("SFA.UDGPGRNTP")], schools=[S("Front Range", 127200)],
+                                    year=Y(stated="since 2015", start=2015)))
+        values = self.column(page)
+        self.assertEqual(values[:7], ["not collected"] * 7)
+        self.assertTrue(all(v.endswith("%") for v in values[7:]), values)
+        self.assertIn("IPEDS did not collect", " ".join(page["notes"]))
+        self.assertIn("2015-16 to 2021-22", " ".join(page["notes"]))
+        self.assertEqual(len(page["table"]["columns"]), 3)                   # one measure, never mixed
+
+    # ---- groups
+    def test_group_counts_each_years_own_schools_and_offers_todays(self):
+        state = {}
+        page = self.run_request(req("group", measures=[M("DRVEF.ENRTOT")], groups=["State: Connecticut"],
+                                    year=Y(stated="2015 to 2024", start=2015, end=2024, change=True)), state)
+        self.assertIn("belonged to it that year", page["interpreted"])
+        self.assertEqual(page["offers"], ["Today's schools only"])
+        each = self.column(page)
+        today = answer.take_offer(0, state, self.log, DB)
+        self.assertIn("only the schools that belong to it today", today["interpreted"])
+        self.assertEqual(self.column(today)[1], each[1])                     # 2024-25: the same schools
+        self.assertNotEqual(self.column(today)[0], each[0])                  # 2015-16: schools that closed or merged
+        self.assertEqual(page["table"]["rows"][-1][0], "Change")
+
+    def test_group_counts_match_each_years_own_membership(self):
+        page = self.run_request(req("group", measures=[M("DRVEF.ENRTOT")], groups=["State: Connecticut"],
+                                    year=Y(stated="2016 to 2017", start=2016, end=2017)))
+        for y, shown in zip((2016, 2017), self.column(page)):
+            total = self.db.execute("SELECT SUM(e.ENRTOT) FROM DRVEF e WHERE e.year = ? AND e.UNITID IN (SELECT unitid FROM "
+                                    "group_membership WHERE year = ? AND group_name = 'State: Connecticut') AND e.UNITID IN "
+                                    "(SELECT unitid FROM group_membership g WHERE year = ? AND group_name = "
+                                    "(SELECT condition FROM dict_terms WHERE term = 'national universe' AND is_default = 'yes'))",
+                                    (y, y, y)).fetchone()[0]
+            self.assertEqual(shown, show.fmt((total, "count")))
+
+    def test_national_retention_trend_matches_nces(self):
+        """A rate computed from counts, year by year, matches the NCES Trend Generator figures (rates_by_year.csv)."""
+        import csv
+        with open(Path(__file__).resolve().parents[1] / "docs" / "reports" / "stage5b" / "rates_by_year.csv", encoding="utf-8") as f:
+            nces = {int(r["release_year"]): float(r["nces"]) for r in csv.DictReader(f)
+                    if r["rate"] == "Full-time retention rate" and not r["applies_to"] and r["status"] == "match"}
+        page = self.run_request(req("group", measures=[M("EFD.RET_PCF")], year=Y(stated="since 2015", start=2015)))
+        got = dict(zip([int(r[0][:4]) for r in page["table"]["rows"]], self.column(page)))
+        self.assertGreaterEqual(len(nces), 5)
+        for y, figure in nces.items():
+            self.assertAlmostEqual(float(got[y].rstrip("%")), figure, delta=0.051, msg=y)
+
+    def test_peers_are_todays_comparison_group_in_every_year(self):
+        page = self.run_request(req("school_vs_group", measures=[M("COST2_NETPRICE.NPGRN2")], schools=[S("Yale", 130794)],
+                                    peers_of=130794, year=Y(stated="since 2020", start=2020)))
+        self.assertIn("today's comparison group, used for every year", page["interpreted"])
+        self.assertEqual(page["offers"], [])
+        self.assertEqual(len(page["table"]["columns"]), 4)                   # Year, Period, Yale, its peers
+
+    # ---- gaps, breaks and notes
+    def test_pandemic_note_goes_by_the_period_a_figure_covers(self):
+        page = self.run_request(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="since 2019", start=2019)))
+        marked = {r[0].split()[0]: "*" in r[0] for r in page["table"]["rows"]}
+        self.assertEqual(marked, {"2019-20": False, "2020-21": True, "2021-22": True, "2022-23": False, "2023-24": False,
+                                  "2024-25": False})                         # fall 2020 and fall 2021 only
+        self.assertTrue(any("pandemic" in n for n in page["notes"]))
+
+    def test_a_break_is_noted_only_when_the_trend_crosses_it(self):
+        crossing = self.run_request(req("schools", measures=[M("DRVEF12.E12GRAD")], schools=[S("Yale", 130794)],
+                                        year=Y(stated="2018 to 2021", start=2018, end=2021)))
+        self.assertTrue(any("12-month enrollment" in n for n in crossing["notes"]), crossing["notes"])
+        after = self.run_request(req("schools", measures=[M("DRVEF12.E12GRAD")], schools=[S("Yale", 130794)],
+                                     year=Y(stated="the last two years", last=2)))
+        self.assertFalse(any("12-month enrollment" in n for n in after["notes"]), after["notes"])
+
+    def test_graduate_headcount_before_2020_comes_from_the_detailed_table(self):
+        page = self.run_request(req("schools", measures=[M("DRVEF12.E12GRAD")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="since 2015", start=2015)))
+        self.assertNotIn("not collected", self.column(page))
+        detail = [n for n in page["notes"] if "detailed table" in n]
+        self.assertEqual(len(detail), 1)
+        self.assertIn("2015-16 to 2019-20", detail[0])
+        graduate_2017 = self.db.execute("SELECT EFYTOTLT FROM EFFY WHERE UNITID = 130794 AND year = 2017 AND EFFYLEV = 4").fetchone()[0]
+        self.assertEqual(self.column(page)[2], show.fmt((graduate_2017, "count")))
+
+    def test_a_retired_measure_is_read_in_the_years_ipeds_collected_it(self):
+        page = self.run_request(req("schools", measures=[M("IC_PCCAMPUSES.CAMPUSID")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="since 2015", start=2015)))
+        self.assertEqual(page["kind"], "answer")
+        self.assertIn("IPEDS collected", page["interpreted"])
+        self.assertEqual(self.column(page)[-1], "not collected")             # a gap, never zero
+        self.assertNotIn("0", self.column(page))
+
+    def test_school_names_today_with_earlier_names_and_mergers(self):
+        page = self.run_request(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("ASU", 104151)],
+                                    year=Y(stated="since 2015", start=2015)))
+        self.assertEqual(page["table"]["columns"][2], "Arizona State University Campus Immersion")
+        self.assertTrue(any("(then: Arizona State University-Tempe" in n for n in page["notes"]), page["notes"])
+        page = self.run_request(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Lyme", 129686)],
+                                    year=Y(stated="since 2015", start=2015)))
+        self.assertIn("Lyme Academy College of Fine Arts merged into University of New Haven in 2016-17.", page["notes"])
+
+    def test_change_between_two_years_in_points_and_percent(self):
+        page = self.run_request(req("schools", measures=[M("SFA.UPGRNTP"), M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)],
+                                    year=Y(stated="2015 to 2024", start=2015, end=2024, change=True)))
+        change = page["table"]["rows"][-1]
+        self.assertEqual(change[0], "Change")
+        self.assertRegex(change[2], r"^[+-]\d+\.\d points$")
+        self.assertRegex(change[3], r"^[+-][\d,]+ \([+-]\d+\.\d%\)$")
+
+    def test_breakdown_over_time_and_a_year_without_it(self):
+        page = self.run_request(req("breakdown", measures=[M("EFFY.EFYTOTLT")], schools=[S("Yale", 130794)],
+                                    breakdown=dict(set="By race and ethnicity", fixed=[]), year=Y(stated="since 2022", start=2022)))
+        self.assertEqual(page["table"]["columns"][-1], "Total")
+        self.assertTrue(all(r[-1] != "no value" for r in page["table"]["rows"]))
+        # a year whose breakdown check failed: the total only, with the message (the real data has no such year for a
+        # set loaded today, so the check's answer is replaced for one year)
+        from path import fetch, resolve, trend
+
+        class OneYearFails:
+            def __init__(self, db):
+                self.db = db
+
+            def execute(self, sql, args=()):
+                if "FROM year_checks" in sql and args[2] == 2023:
+                    return self.db.execute("SELECT 'failed'")
+                return self.db.execute(sql, args)
+
+        d = resolve.Dictionary(self.db, DB)
+        out = resolve.resolve_request(req("breakdown", measures=[M("EFFY.EFYTOTLT")], schools=[S("Yale", 130794)],
+                                          breakdown=dict(set="By race and ethnicity", fixed=[]),
+                                          year=Y(stated="since 2022", start=2022)), d, None)
+        result = fetch.fetch(out["plan"], OneYearFails(self.db))
+        row_2023 = next(r for r in result["rows"] if r[0].startswith("2023-24"))
+        self.assertTrue(all(c == "not collected" for c in row_2023[2:-1]), row_2023)
+        self.assertIsNotNone(row_2023[-1])
+        self.assertTrue(any(n.startswith('The breakdown "By race and ethnicity" isn\'t available for 2023-24') and
+                            n.endswith("The total is shown.") for n in result["notes"]), result["notes"])
+
+    def test_questions_a_trend_cannot_answer_yet_are_declined_with_the_latest_year_offered(self):
+        page = self.run_request(req("rank", measures=[M("DRVEF.ENRTOT")], groups=["State: Connecticut"],
+                                    year=Y(stated="since 2018", start=2018)))
+        self.assertEqual(page["kind"], "decline")
+        self.assertIn("over several years", page["message"])
+        self.assertIn("the latest year", page["message"])
+
+    def test_a_follow_up_changes_the_period(self):
+        first = req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)], year=Y(stated="since 2015", start=2015))
+        edited = rq.apply_edit(first, dict(changes=[dict(field="year", action="replace")],
+                                           values=dict(rq.empty(), year=Y(stated="the last three years", last=3))), [first])
+        page = self.run_request(edited)
+        self.assertEqual([r[0][:7] for r in page["table"]["rows"]], ["2022-23", "2023-24", "2024-25"])
+        self.assertEqual(edited["schools"], first["schools"])
+
+    def test_the_trend_fields_come_through_from_the_model(self):
+        y = rq.year_from_wire({"stated": "since 2015", "start": 2015, "kind": None})
+        self.assertTrue(rq.is_trend(y))
+        self.assertEqual((y["end"], y["last"], y["change"], y["membership"]), (None, None, False, None))
+        self.assertFalse(rq.is_trend(rq.year_from_wire({"stated": "2023-24"})))
+        year = rq.REPLY_SCHEMA["properties"]["requests"]["items"]["properties"]["year"]["properties"]
+        for field in ("span", "start", "end", "last", "membership"):     # no nullable trend fields: with them the API
+            self.assertNotIn("anyOf", year[field])                      # refused the reply shape as too large
+        self.assertIsNone(rq.year_from_wire({"start": 0, "end": 0, "last": 0})["start"])
+        one = rq.year_from_wire({"stated": "2022-23", "span": "one year", "start": 2022, "end": 2023, "last": 0})
+        self.assertFalse(rq.is_trend(one))                                   # a single year, even with years written
+        since = rq.year_from_wire({"span": "from a year on", "start": 2015, "end": 2024})
+        self.assertEqual((since["start"], since["end"]), (2015, None))
+        self.assertTrue(rq.year_from_wire({"span": "the change between two years", "start": 2015, "end": 2024})["change"])
+
+    def test_a_single_year_question_is_unchanged(self):
+        page = self.run_request(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794), S("Harvard", 166027)]))
+        self.assertEqual(page["table"]["columns"][0], "School")
+        self.assertEqual(page["chart"]["kind"], "bar")                       # a comparison: bars
+        self.assertEqual(len(page["chart"]["points"]), 2)
 
 
 if __name__ == "__main__":

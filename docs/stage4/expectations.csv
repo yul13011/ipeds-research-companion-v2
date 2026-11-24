@@ -71,7 +71,7 @@ log,58,7,trend,decline|answer,*expenses per FTE,,,"ten-year trends; 2026-11-22 (
 log,60,1,scored,decline,,,,economic mobility is outside IPEDS
 log,60,2,scored,decline,,,,income after graduation is outside IPEDS
 log,60,3,scored,decline|answer,,,,what College Scorecard is: outside IPEDS
-log,60,4,scored,answer|clarify,*net price,,,lowest net price
+log,60,4,scored,answer|clarify,*net price,,,"lowest net price; 2026-11-23 (owner decision): a clarifying question is acceptable, since universe is also a dictionary term"
 log,60,5,scored,decline,,,,income data is not in IPEDS
 log,61,1,scored,answer,DRVEF.EFGRAD,130794,,"added 2026-11-22; a repeat of conversations 25 and 49, so the runner skips it unless repeats are run"
 log,62,1,scored,clarify,,,,"added 2026-11-22; ""hawaii"": schools in Hawaii, the University of Hawaii system, or a measure"

@@ -2,6 +2,7 @@
 
     ask()          a typed question: shortlist, interpret (the model call), resolve, fetch, show
     choose()       an option button: runs that option's request directly, with no model call
+    take_offer()   a button offered under an answer ("Today's schools only"): runs its request, with no model call
     pick_school()  the school picker: fills in the school and runs the request, with no model call
 
 `state` is the conversation, kept by the page: "history" (requests answered, oldest first),
@@ -58,6 +59,7 @@ def finish(out, state, db, log, row):
         page = show.render(plan, result, release(db))
         state.setdefault("history", []).append(out["request"])
         state["pending"], state["picker"], state["last_decline"] = None, None, None
+        state["offers"] = plan.get("offers") or None    # a button under the answer, such as "Today's schools only"
         if out.get("instead"):
             page["message"] = out["instead"]
         row.update(request=out["request"], rows=len(result["rows"]))
@@ -134,6 +136,13 @@ def choose(index, state, log, db_path=None):
     option = state["pending"][index]
     state["pending"] = None                             # choosing an option answers the open question
     return run_direct(option["request"], state, log, db_path, question=f"[option] {option['label']}")
+
+
+def take_offer(index, state, log, db_path=None):
+    """A button offered under an answer: runs its request directly, with no model call."""
+    offer = state["offers"][index]
+    state["offers"] = None
+    return run_direct(offer["request"], state, log, db_path, question=f"[offer] {offer['label']}")
 
 
 def pick_school(unitid, state, log, db_path=None):
