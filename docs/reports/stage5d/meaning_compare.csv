@@ -1,0 +1,70 @@
+set,source,case,turn,question,expected measures,expected groups,word: measure,meaning: measure,merged: measure,meaning rank of the measure,word: group,meaning: group,merged: group,name-only meaning: measure,name-only merged: measure
+badly written,bad,bw01,1,whats the acceptence rate at yale,DRVADM.DVADM01,,yes,no,yes,157,,,,yes,yes
+badly written,bad,bw02,1,graduaton rate harvrd,DRVGR.GBA6RTT,,yes,no,yes,30,,,,no,yes
+badly written,bad,bw03,1,UConn enrollment,DRVEF.ENRTOT,,yes,no,yes,60,,,,no,yes
+badly written,bad,bw04,1,how many kids go to umich,DRVEF.ENRTOT,,no,no,no,1049,,,,no,no
+badly written,bad,bw05,1,Mizzou tuition,DRVCOST.TUFEYR3,,yes,no,yes,351,,,,no,yes
+badly written,bad,bw06,1,WSU Tech grad rate,DRVGR.GRRTTOT,,yes,no,yes,48,,,,no,yes
+badly written,bad,bw07,1,WSU enrollment,DRVEF.ENRTOT,,yes,no,yes,34,,,,no,yes
+badly written,bad,bw08,1,RTI graduation rate,DRVGR.GBA6RTT,,yes,no,yes,28,,,,no,yes
+badly written,bad,bw10,1,how many students at CUNY,DRVEF.ENRTOT,System: City University of New York,no,no,no,812,no,yes,yes,no,no
+badly written,bad,bw11,1,cuny schools grad rates,DRVGR.GRRTTOT|DRVGR.GBA6RTT,System: City University of New York,yes,yes,yes,13,no,yes,no,yes,yes
+badly written,bad,bw12,1,UCLA vs USC admit rate,DRVADM.DVADM01,,yes,yes,yes,13,,,,yes,yes
+badly written,bad,bw13,1,georgia tech net price,COST2_NETPRICE.NPIST2,,yes,no,yes,42,,,,no,yes
+badly written,bad,bw14,1,MIT student faculty ratio,EFD.STUFACR,,yes,yes,yes,1,,,,yes,yes
+badly written,bad,bw16,1,penn state undergrads,DRVEF.EFUG,,no,yes,no,13,,,,yes,yes
+badly written,bad,bw17,1,UT austin pell %,SFA.UPGRNTP,,yes,yes,yes,1,,,,yes,yes
+badly written,bad,bw18,1,virgina tech retention,EFD.RET_PCF,,yes,yes,yes,10,,,,yes,yes
+badly written,bad,bw20,1,lsu endowment,F_F1A.F1H02,,yes,no,yes,51,,,,yes,yes
+badly written,bad,bw21,1,tamu enrollment,DRVEF.ENRTOT,,yes,no,yes,22,,,,no,yes
+badly written,bad,bw22,1,ASU how big is it,DRVEF.ENRTOT,,no,no,no,709,,,,no,no
+badly written,bad,bw23,1,uw madison room and board,COST1.chg5ay2,,yes,no,yes,178,,,,no,yes
+badly written,bad,bw24,1,purdue out of state tuition,COST1.chg3ay3,,yes,yes,yes,11,,,,no,yes
+badly written,bad,bw25,1,BU graduation rate,DRVGR.GBA6RTT,,yes,yes,yes,5,,,,yes,yes
+badly written,bad,bw26,1,UF and FSU enrollment compare,DRVEF.ENRTOT,,yes,no,yes,100,,,,no,yes
+badly written,bad,bw27,1,uw seattle number of faculty,EAP.EAPTOT|EAP.EAPFT,,yes,yes,yes,12,,,,no,yes
+badly written,bad,bw29,1,frcc how many students,DRVEF.ENRTOT,,no,no,no,845,,,,no,no
+badly written,bad,bw30,1,is miami dade the biggest community college,DRVEF.ENRTOT,,no,no,no,1168,,,,no,no
+badly written,bad,bw31,1,yale tution 2019,DRVCOST.TUFEYR3,,yes,no,yes,426,,,,no,yes
+badly written,bad,bw32,1,harvard enrolment since 2015,DRVEF.ENRTOT,,no,no,no,1090,,,,no,no
+badly written,bad,bw33,1,michigan state grad rat,DRVGR.GBA6RTT,,no,no,no,497,,,,no,no
+badly written,bad,bw34,1,which ivys have the lowest admit rate,DRVADM.DVADM01,Ivy League,yes,no,yes,46,yes,yes,yes,yes,yes
+badly written,bad,bw35,1,schools in ohio w/ highest pell %,SFA.UPGRNTP,State: Ohio,yes,yes,yes,1,yes,yes,yes,yes,yes
+badly written,bad,bw36,1,how many collages in vermont,,State: Vermont,,,,,yes,yes,yes,,
+badly written,bad,bw40,1,salary of profs at wayne st,DRVHR.SalProf|DRVHR.SALTOTL,,yes,yes,yes,2,,,,yes,yes
+badly written,bad,bw43,1,mizou vs umich vs uconn grad rates,DRVGR.GBA6RTT,,yes,no,yes,250,,,,no,yes
+badly written,bad,bw46,1,CUNY enrollment,DRVEF.ENRTOT,System: City University of New York,yes,yes,yes,14,no,yes,yes,no,yes
+badly written,bad,bw47,1,SUNY graduation rates,DRVGR.GRRTTOT|DRVGR.GBA6RTT,System: State University of New York System,yes,no,yes,30,no,no,no,no,yes
+badly written,bad,bw48,1,cal state tuition,DRVCOST.TUFEYR3,System: California State University,yes,no,yes,186,no,yes,yes,no,yes
+badly written,bad,bw49,1,UC system admit rate,DRVADM.DVADM01,System: University of California,yes,no,yes,133,no,yes,yes,yes,yes
+badly written,bad,bw50,1,UNC enrollment,DRVEF.ENRTOT,System: University of North Carolina,yes,no,yes,103,no,yes,yes,no,yes
+badly written,bad,bw51,1,U of M graduation rate,DRVGR.GBA6RTT,,yes,no,yes,23,,,,yes,yes
+badly written,bad,bw52,1,comunity colleges in texs retention,EFD.RET_PCF,"Public, 2-year;State: Texas",yes,yes,yes,9,no,no,no,no,yes
+badly written,bad,bw53,1,privat nonprofits in new england net price,COST2_NETPRICE.NPGRN2,Private not-for-profit;New England,yes,yes,yes,4,yes,no,yes,yes,yes
+badly written,bad,bw54,1,hbcus graduation rate,DRVGR.GRRTTOT|DRVGR.GBA6RTT,HBCUs,yes,yes,yes,8,yes,yes,yes,yes,yes
+badly written,bad,bw55,1,ivy leage enrolment,DRVEF.ENRTOT,Ivy League,no,no,no,394,yes,yes,yes,no,no
+full set,log,1,1,Which years are available for Ivy League admission rates? Compare the latest available year.,DRVADM.DVADM01,,yes,no,yes,960,,,,yes,yes
+full set,log,3,1,What was Yale’s admission rate in fall 2024?,DRVADM.DVADM01,,yes,no,yes,972,,,,no,yes
+full set,log,4,2,Compare Ivy League six-year bachelor graduation rates for the 2015 outcome year.,DRVGR.GBA6RTT,,yes,yes,yes,4,,,,yes,yes
+full set,log,4,3,Show Yale’s six-year bachelor graduation rate for entering cohorts 2009 through 2018.,DRVGR.GBA6RTT,,yes,yes,yes,3,,,,yes,yes
+full set,log,4,4,How does this trend compare to a the average among Phd-enrolling universities nationally?,DRVGR.GBA6RTT,,no,no,no,213,,,,no,no
+full set,log,6,1,"Show Yale, Harvard, and Princeton admission rates from 2015 through 2024.",DRVADM.DVADM01,,yes,no,yes,1142,,,,no,yes
+full set,log,11,2,Compare Ivy League admission rates in fall 2024.,DRVADM.DVADM01,,yes,no,yes,1134,,,,no,yes
+full set,log,11,3,how has this changed since 10 years ago?,DRVADM.DVADM01,,no,no,no,2522,,,,no,no
+full set,log,25,1,How many graduate students did Yale enroll in fall 2024?,DRVEF.EFGRAD,,yes,yes,yes,1,,,,yes,yes
+full set,log,50,1,What about part time student persistence,EFD.RET_PCP,,yes,yes,yes,1,,,,yes,yes
+full set,eval,fu_swap_institution,1,Show Yale's admission rate for fall 2024.,DRVADM.DVADM01,,yes,no,yes,587,,,,no,yes
+full set,eval,fu_swap_institution,2,What about Harvard?,DRVADM.DVADM01,,no,no,no,2938,,,,no,no
+full set,eval,fu_change_measure,1,What was Yale's six-year bachelor's graduation rate for the 2016 entering cohort?,DRVGR.GBA6RTT,,yes,yes,yes,3,,,,yes,yes
+full set,eval,fu_add_institution,1,Compare Yale and Harvard admission rates in fall 2024.,DRVADM.DVADM01,,yes,no,yes,1008,,,,no,yes
+full set,eval,fu_add_institution,2,Add Princeton.,DRVADM.DVADM01,,no,no,no,1813,,,,no,no
+full set,eval,faq_admrate_yale,1,What was Yale's admission rate in fall 2024?,DRVADM.DVADM01,,yes,no,yes,984,,,,no,yes
+full set,eval,probe_agg_gradrate,1,What was the overall six-year graduation rate for four-year institutions in the United States for the 2016 entering cohort?,DRVGR.GBA6RTT,,yes,yes,yes,18,,,,yes,yes
+full set,eval,probe_agg_totalenr,1,What was the total fall enrollment across all U.S. degree-granting institutions in 2023?,DRVEF.ENRTOT,,yes,yes,yes,13,,,,no,yes
+full set,owner,o46_grad_vs_om,1,Should I use the graduation rate or the Outcome Measures award rate?,DRVGR.GRRTTOT|DRVGR.GBA6RTT|rate:Award within eight years (Outcome Measures),,yes,yes,yes,3,,,,yes,yes
+full set,owner,o46_fall_vs_12month,1,Fall enrollment or 12-month enrollment?,DRVEF.ENRTOT|DRVEF12.UNDUP,,yes,yes,yes,10,,,,yes,yes
+full set,owner,o49_yale_1990,1,Enrollment at Yale in 1990,DRVEF.ENRTOT,,yes,no,yes,170,,,,no,yes
+full set,owner,o49_yale_1990,2,What can you show me instead?,DRVEF.ENRTOT,,no,no,no,482,,,,no,no
+full set,owner,o50_yale_pell_trend,1,Pell grant percentage at Yale since 2015,SFA.UPGRNTP,,yes,yes,yes,1,,,,yes,yes
+full set,owner,o50_cc_dgs_pell_trend,1,Share of degree-seeking undergraduates with Pell grants at Front Range Community College since 2015,SFA.UDGPGRNTP,,yes,yes,yes,1,,,,yes,yes
+full set,owner,o51_negative_net_worth,1,How many schools have negative net worth and which are they?,F_F1A.F1A18|F_F2.F2A06|F_F3.F3A03,,yes,no,yes,22,,,,yes,yes
