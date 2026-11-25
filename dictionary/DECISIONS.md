@@ -515,3 +515,11 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Two proposals,** to be the first change order of Stage 6, before the beta: (a) listing the years a measure is held in "what data exists" answers, and answering "which years do you have?"; (b) trends from the ten releases, using earlier-year columns in one table only for years the releases do not cover. Proposals only.
 - **Every scorecard** reports the score on real users' questions (those taken from version 1's log) as its own row, beside the full set, the same-118 comparison and the badly written set.
 - **Then stop:** the owner reorganises the plan before Stage 6 starts.
+
+## 2026-11-25: Stage 6 begins (Part 6.0)
+
+- **Work order:** `docs/STAGE_6_WORK_ORDER.md`, part by part; each part stops with a report and waits.
+- **Part 6.0** builds change order 1 as proposed: (a) the years held in "what data exists" answers, with figures asked for alongside offered as a button (this also covers follow-up item 31); (b) a trend reads each release's own column; earlier-year columns are used only for years before the ten releases, labelled "as reported in the 2015-16 release"; a year inside the ten releases is the figure its own release published, with no note about later revisions.
+- **Review point:** the draft of the two new measures.csv columns for the earlier-year measures is shown to the owner before the build uses it.
+- **"The four new trend-gap questions"** are the two on which years are held and the two on earlier-year columns; the two group-plus-schools questions wait for Part 6a.
+- **Grader stages:** "6.0" is added between 5g and 6. The owner questions for items 46 and 47 (comparing and suggesting measures) are re-marked stage 7, so they count nowhere in Stage 6, including Part 6g.

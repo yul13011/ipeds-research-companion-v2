@@ -9,14 +9,14 @@ o44_provisional,1,44,5f,"What does ""provisional"" mean in IPEDS?"
 o44_title_iv,1,44,5f,What is a Title IV institution?
 o44_comparison_group,1,44,5f,What is the IPEDS comparison group?
 o44_summer_melt,1,44,5f,"What is ""summer melt""?"
-o46_grad_vs_om,1,46,6,Should I use the graduation rate or the Outcome Measures award rate?
-o46_total_vs_net,1,46,6,"Total price or net price, which should I use to compare affordability?"
-o46_fall_vs_12month,1,46,6,Fall enrollment or 12-month enrollment?
-o46_instr_vs_faculty,1,46,6,Instructional staff or faculty with faculty status?
-o47_low_income,1,47,6,How can I tell how well a college serves low-income students?
-o47_cc_success,1,47,6,What should I look at to judge student success at community colleges?
-o47_financial_health,1,47,6,How do I measure a college's financial health?
-o47_selectivity,1,47,6,What's a good measure of how selective a school is?
+o46_grad_vs_om,1,46,7,Should I use the graduation rate or the Outcome Measures award rate?
+o46_total_vs_net,1,46,7,"Total price or net price, which should I use to compare affordability?"
+o46_fall_vs_12month,1,46,7,Fall enrollment or 12-month enrollment?
+o46_instr_vs_faculty,1,46,7,Instructional staff or faculty with faculty status?
+o47_low_income,1,47,7,How can I tell how well a college serves low-income students?
+o47_cc_success,1,47,7,What should I look at to judge student success at community colleges?
+o47_financial_health,1,47,7,How do I measure a college's financial health?
+o47_selectivity,1,47,7,What's a good measure of how selective a school is?
 o48_marian,1,48,5.0,How many degrees did Marian University award over the last ten years?
 o48_marian,2,48,5.0,show 2023-24
 o48_roi,1,48,5.0,What's the ROI for Yale?

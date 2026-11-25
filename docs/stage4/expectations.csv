@@ -72,7 +72,7 @@ log,60,1,scored,decline,,,,,economic mobility is outside IPEDS
 log,60,2,scored,decline,,,,,income after graduation is outside IPEDS
 log,60,3,scored,decline|answer,,,,,what College Scorecard is: outside IPEDS
 log,60,4,scored,answer|clarify,*net price,,,,"lowest net price; 2026-11-23 (owner decision): a clarifying question is acceptable, since universe is also a dictionary term"
-log,60,5,scored,answer,,,,,"answered from the concepts table: IPEDS reports net price by family income for students awarded federal aid; the Pell share is the proxy for all students (owner decision 2026-11-25)"
+log,60,5,scored,answer,,,,,answered from the concepts table: IPEDS reports net price by family income for students awarded federal aid; the Pell share is the proxy for all students (owner decision 2026-11-25)
 log,61,1,scored,answer,DRVEF.EFGRAD,130794,,,"added 2026-11-22; a repeat of conversations 25 and 49, so the runner skips it unless repeats are run"
 log,62,1,scored,clarify,,,,,"added 2026-11-22; ""hawaii"": schools in Hawaii, the University of Hawaii system, or a measure"
 log,62,2,scored,answer|clarify,*entering and graduating students,,,,added 2026-11-22; the University of Hawaii system (System: University of Hawaii Board of Regents) recognised as the group
@@ -155,14 +155,14 @@ owner,o44_provisional,1,scored,answer,,,,5f,Provisional versus final release
 owner,o44_title_iv,1,scored,answer,,,,5f,Federal aid eligibility; it defines the national universe
 owner,o44_comparison_group,1,scored,answer,,,,5f,The custom comparison group; not all schools have one
 owner,o44_summer_melt,1,scored,answer,,,,5f,"Not in the concepts table: a general explanation labelled as such, and logged"
-owner,o46_grad_vs_om,1,scored,answer,DRVGR.GRRTTOT|DRVGR.GBA6RTT|rate:Award within eight years (Outcome Measures),,,6,"Who each covers, when to use which; offers both"
-owner,o46_total_vs_net,1,scored,answer,*total price; net price,,,6,Recommends net price; offers both
-owner,o46_fall_vs_12month,1,scored,answer,DRVEF.ENRTOT|DRVEF12.UNDUP,,,6,Snapshot versus unduplicated count
-owner,o46_instr_vs_faculty,1,scored,answer,*instructional staff; faculty status,130794,,6,"Both definitions, with Yale's two figures"
-owner,o47_low_income,1,scored,answer,*Pell share; Pell graduation rate; net price,,,6,Two to four measures with their limits; offers to run them
-owner,o47_cc_success,1,scored,answer,*Outcome Measures; 150% graduation rate; retention,,,6,"Outcome Measures, 150% graduation rate, retention, with limits"
-owner,o47_financial_health,1,scored,answer,*equity ratio; expenses per student; endowment,,,6,Available measures; IPEDS has no single financial-health score
-owner,o47_selectivity,1,scored,answer,*admission rate; yield; test scores,,,6,"Admission rate, yield, test scores, noting test-optional limits"
+owner,o46_grad_vs_om,1,scored,answer,DRVGR.GRRTTOT|DRVGR.GBA6RTT|rate:Award within eight years (Outcome Measures),,,7,"Who each covers, when to use which; offers both"
+owner,o46_total_vs_net,1,scored,answer,*total price; net price,,,7,Recommends net price; offers both
+owner,o46_fall_vs_12month,1,scored,answer,DRVEF.ENRTOT|DRVEF12.UNDUP,,,7,Snapshot versus unduplicated count
+owner,o46_instr_vs_faculty,1,scored,answer,*instructional staff; faculty status,130794,,7,"Both definitions, with Yale's two figures"
+owner,o47_low_income,1,scored,answer,*Pell share; Pell graduation rate; net price,,,7,Two to four measures with their limits; offers to run them
+owner,o47_cc_success,1,scored,answer,*Outcome Measures; 150% graduation rate; retention,,,7,"Outcome Measures, 150% graduation rate, retention, with limits"
+owner,o47_financial_health,1,scored,answer,*equity ratio; expenses per student; endowment,,,7,Available measures; IPEDS has no single financial-health score
+owner,o47_selectivity,1,scored,answer,*admission rate; yield; test scores,,,7,"Admission rate, yield, test scores, noting test-optional limits"
 owner,o48_marian,1,scored,decline|clarify,*degrees,151786,,5.0,Ten years against the one-year data: declined for years (or which Marian)
 owner,o48_marian,2,scored,clarify,*degrees awarded,151786,,5.0,"Owner decision 2026-11-22: asks again which Marian, with 2023-24 applied"
 owner,o48_roi,1,scored,decline,,130794,,5.0,Return on investment is not in IPEDS
