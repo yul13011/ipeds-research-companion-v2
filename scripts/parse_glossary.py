@@ -4,7 +4,7 @@
 
 Writes dictionary/glossary.csv (term, definition, edition) and prints the entries it could not separate cleanly.
 The definitions are NCES's wording: nothing in them is changed, apart from joining the lines a definition wraps over
-and taking out page headers and page numbers.
+and taking out page headers and page numbers (printed outside the table).
 
 The PDF is a browser printout of a two-column table. Two text extractions are used together (pdftotext, which comes
 with Git for Windows):
@@ -13,6 +13,13 @@ with Git for Windows):
 A line of the first that appears in the right-hand column of the second is definition text; anything else is a term
 (a long term wraps over two lines). A line holding both ("25th percentile The score at or below...") is split where
 the definition's own line begins.
+
+That first pass gives the list of terms. The owner-approved corrections (docs/sources/glossary_corrections.csv) fix
+the terms it got wrong. Then every definition is cut out of the file's own text, from the end of one term to the start
+of the next, so no definition is ever typed in by hand.
+
+Carnegie entries describe the 2000 and 2005 classifications: they are marked historical (owner decision, 2026-11-24),
+and the app never shows them as the definition of its 2021 Carnegie groups.
 """
 import csv
 import re
@@ -24,7 +31,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PDF = ROOT / "docs" / "sources" / "ipeds_glossary_2025-26.pdf"
-OUT = ROOT / "docs" / "reports" / "stage5f" / "glossary_parsed.csv"   # dictionary/glossary.csv once the owner approves the parse
+OUT = ROOT / "dictionary" / "glossary.csv"
+CORRECTIONS = ROOT / "docs" / "sources" / "glossary_corrections.csv"
 EDITION = "2025-26"
 HEADERS = {"2025-26", "Data Collection System", "IPEDS HELP DESK", "(877) 225-2568 | ipedshelp@rti.org",
            "OMB NO. 1850-0582 v.33 : Approval Expires 8/31/2027", "View Glossary", "Term Definition", "Term", "Definition"}
@@ -66,8 +74,7 @@ def definition_lines(layout):
     return found
 
 
-def parse():
-    raw, layout = text("-raw"), text("-layout")
+def first_pass(raw, layout):
     right = definition_lines(layout)
     entries, problems, long_terms = [], [], []
     term, definition, last = [], [], None
@@ -116,11 +123,80 @@ def parse():
             definition.append(line)
         last = kind
     close()
+    return entries, problems
+
+
+def corrected_terms(entries):
+    """The first pass's terms, with the owner-approved corrections: a parsed term is replaced by the terms the PDF
+    really has there (none, one or two). Rows with the same parsed term apply to its occurrences in order."""
+    with open(CORRECTIONS, encoding="utf-8") as f:
+        fixes = list(csv.DictReader(f))
+    left = Counter(r["parsed term"] for r in fixes)
+    terms, used = [], Counter()
+    for e in entries:                  # each term with the first words of its definition, where the first pass has them
+        rows = [r for r in fixes if r["parsed term"] == e["term"]]
+        if rows:
+            row = rows[used[e["term"]]] if used[e["term"]] < len(rows) else None
+            used[e["term"]] += 1
+            if row is not None:
+                terms += [(t.strip(), None) for t in row["terms in the PDF"].split("|") if t.strip()]
+                continue
+        terms.append((e["term"], " ".join(e["definition"].split()[:3]) or None))
+    unused = [t for t, n in left.items() if used[t] < n]
+    return terms, unused
+
+
+def segment(raw, terms):
+    """Every definition cut out of the file's own text, between its term and the next one. A term is looked for at
+    the start of a line first (where the file puts terms), then anywhere; where the first pass found the start of its
+    definition, the term must be followed by it, so a term's words inside an earlier definition are not taken."""
+    lines = [squeeze(l) for l in raw.replace("\f", "\n").splitlines()]
+    heads = {squeeze(h) for h in HEADERS}
+    stream = "\n".join(l for l in lines if l and l not in heads)
+    found, problems, at = [], [], 0
+    for term, anchor in terms:
+        words = [re.escape(w) for w in term.split()]
+        follow = r"(?=\s*" + r"\s*".join(re.escape(w) for w in anchor.split()) + ")" if anchor else ""
+        start = None
+        joined = "".join(w + ("" if i == len(words) - 1 else r"\s*" if len(w) > 2 and w.endswith(r"\-") else r"\s+")
+                         for i, w in enumerate(words))     # "for-" at a line end, then "profit"
+        for line_start, pattern in ((True, r"(?:^|(?<=\n))" + joined + follow),
+                                    (False, r"\s*".join(words) + follow)):
+            m = re.compile(pattern).search(stream, at)
+            if m:
+                start, end = m.start(), m.end()
+                if not line_start:
+                    problems.append(f"term found mid-line (check): {term}")
+                break
+        if start is None:
+            problems.append(f"term not found in the text after the previous one: {term}")
+            continue
+        term = " ".join(re.sub(r"(?<=\S)-\n(?=\S)", "-", stream[start:end]).split())   # the term as the file has it
+        found.append([term, start, end])
+        at = end
+    entries = []
+    for i, (term, start, end) in enumerate(found):
+        stop = found[i + 1][1] if i + 1 < len(found) else len(stream)
+        text_ = re.sub(r"(?<=\S)-\n(?=\S)", "-", stream[end:stop])   # a hyphen at a line end joins, with no space
+        entries.append(dict(term=term, definition=" ".join(text_.split()), edition=EDITION))
+    return entries, problems
+
+
+def parse():
+    raw, layout = text("-raw"), text("-layout")
+    first, problems = first_pass(raw, layout)
+    terms, unused = corrected_terms(first)
+    problems = [f"correction not used: {t}" for t in unused]
+    entries, more = segment(raw, terms)
+    problems += more
+    long_terms = []
     for e in entries:
-        page = re.search(r"\.\s(\d{1,2})$", e["definition"])
-        if page:                                       # a page number printed at the end of a page's last line
-            e["definition"] = e["definition"][:page.start() + 1]
-            e["note"] = f"page number {page.group(1)} taken off the end"
+        if "carnegie" in e["term"].lower():
+            e["historical"] = "yes"
+            e["note"] = "Carnegie 2000 or 2005 classification; not the 2021 classification the app's groups use"
+        stray = re.search(r"\.\s(\d{1,2})$", e["definition"])
+        if stray:                       # kept as printed: it is inside the definition's cell on the page, not a page number
+            e["note"] = "; ".join(x for x in (e.get("note"), f"ends with a stray \"{stray.group(1)}\" as printed") if x)
         if not e["definition"]:
             problems.append(f"no definition: {e['term']}")
         elif len(e["term"]) > 70 and re.search(r"[.!?] [A-Z]", e["term"]):
@@ -133,13 +209,13 @@ def parse():
     for e in entries:
         seen[e["term"].lower()] = seen.get(e["term"].lower(), 0) + 1
     problems += [f"term appears {n} times: {t}" for t, n in seen.items() if n > 1]
-    return entries, problems, long_terms
+    return entries, problems, long_terms, first
 
 
 if __name__ == "__main__":
-    entries, problems, long_terms = parse()
+    entries, problems, long_terms, first = parse()
     with open(OUT, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["term", "definition", "edition", "note"], lineterminator="\n", restval="")
+        w = csv.DictWriter(f, fieldnames=["term", "definition", "edition", "historical", "note"], lineterminator="\n", restval="")
         w.writeheader()
         w.writerows(entries)
     print(f"{len(entries)} terms written to {OUT}")
@@ -148,5 +224,10 @@ if __name__ == "__main__":
         print("  " + p)
     print(f"{len(long_terms)} long terms, kept as they are (check):")
     for t in long_terms:
+        print("  " + t)
+    before = {e["term"]: e["definition"] for e in first}
+    changed = [e["term"] for e in entries if e["term"] in before and before[e["term"]] != e["definition"]]
+    print(f"{len(changed)} definitions differ from the first pass (the corrected entries' neighbours are expected):")
+    for t in changed:
         print("  " + t)
     sys.exit(0)

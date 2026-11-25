@@ -42,7 +42,7 @@ import config
 
 TABLES = ["measures", "terms", "school_groups", "group_members", "school_nicknames",
           "rates", "category_codes", "year_meaning", "outside_ipeds", "special_codes", "measure_history",
-          "comparability_breaks", "breakdown_exceptions", "word_abbreviations"]
+          "comparability_breaks", "breakdown_exceptions", "word_abbreviations", "glossary", "concepts"]
 BREAK_KINDS = ("definition change", "context")              # comparability_breaks.csv `kind`
 BREAK_STATUS = ("draft", "approved")                        # only approved rows may be shown
 HISTORY_STATUS = ("in use", "to review", "rejected")       # measure_history.csv; only rows in use are used
@@ -321,6 +321,16 @@ def check(db, wording_only=False):
     for name, membership in db.execute('SELECT "group", membership FROM dict_school_groups'):
         if (membership or "") not in MEMBERSHIP:
             problems.append(f"school_groups.csv '{name}': membership must be blank or '{MEMBERSHIP[1]}'")
+    for term, definition, edition, historical in db.execute("SELECT term, definition, edition, historical FROM dict_glossary"):
+        if not definition or not edition:
+            problems.append(f"glossary.csv: '{term}' needs a definition and an edition")
+        if (historical or "") not in ("", "yes"):
+            problems.append(f"glossary.csv: '{term}' has historical '{historical}'; it must be blank or 'yes'")
+    for concept, explanation, source, own in db.execute("SELECT concept, explanation, source, own_wording FROM dict_concepts"):
+        if not explanation or not source:
+            problems.append(f"concepts.csv: '{concept}' needs an explanation and a source")
+        if own not in ("yes", "no"):
+            problems.append(f"concepts.csv: '{concept}' has own_wording '{own}'; it must be 'yes' or 'no'")
     return problems
 
 

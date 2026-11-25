@@ -195,6 +195,26 @@ Topics users ask about that IPEDS does not hold.
 
 - `instead`: an alternative the decline offers, such as "the same figure for the years this app holds" for years outside the ten releases; blank for none.
 
+## glossary.csv
+
+The official IPEDS glossary, edition 2025-26, one row per entry, read from `docs/sources/ipeds_glossary_2025-26.pdf` by `scripts/parse_glossary.py`. The definitions are NCES's wording and are never edited; a term the reading got wrong is corrected in `docs/sources/glossary_corrections.csv` and the script is run again. Used only when a user asks what a word means, and always cited with its edition; for a given year's data, that year's codebook (the measure's own description) comes first.
+
+- `term`, `definition`: as printed.
+- `edition`: the glossary edition, `2025-26`.
+- `historical`: `yes` for entries that describe an older classification (the Carnegie 2000 and 2005 entries). They are never shown as the definition of the app's own groups.
+- `note`: anything about the reading, such as a stray character printed in the definition.
+
+## concepts.csv
+
+Reviewed plain-English explanations of the ideas users ask about ("what is an adjusted cohort?"). The first source for a "what does X mean" question.
+
+- `concept`: the idea's name.
+- `words`: the words people use for it, separated by semicolons.
+- `explanation`: the plain-English explanation shown to the user.
+- `source`: where the explanation comes from (glossary entries, the IPEDS overview, the app's own tables).
+- `app_convention`: the app's own rule that goes with it, shown after the explanation; blank for none.
+- `own_wording`: `yes` where the explanation is the app's own wording rather than IPEDS documentation (approved by the owner).
+
 ## special_codes.csv
 
 Which special codes become missing values.

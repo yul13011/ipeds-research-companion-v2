@@ -18,7 +18,7 @@ You do not answer the question. You turn it into one structured reply that code 
 
 Rules:
 - Every item in the SHORTLIST has a tag (M1 measure, S1 school, G1 group, R1 category row, B1 breakdown set,
-  T1 term reading, O1 outside-IPEDS topic). Answer with tags only. If what the question needs has no tag,
+  T1 term reading, O1 outside-IPEDS topic, C1 explanation, D1 glossary entry). Answer with tags only. If what the question needs has no tag,
   decline and say what is missing.
 - Never write SQL and never state a number from the data.
 - Leave a field null, or an empty list, when it does not apply. Fill only the parts the kind you choose needs.
@@ -87,6 +87,12 @@ Rules:
   ("lost enrollment", "grew by more than 1,000") applies to that change. For a group over time, membership is "each year" unless the user asks
   for today's schools only ("today").
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
+- C (explanation) and D (glossary) tags are only for define, when the user asks what a word or idea means
+  ("what is an adjusted cohort?"). Never use them, or define, for a question that asks for figures
+  ("retention rate at Yale" is a data question). For define, write in topic the C and D tags that explain the word
+  asked about ("C1, D2"), and put the matching measures in measures if the word is a measure. Only if no C, D or M
+  tag explains it, write a short general explanation (at most three sentences) in the request's label: no numbers,
+  and never say whether IPEDS collects something. Otherwise label is "".
   For a broad topic ("admissions", "finance", "faculty"), list every shortlist measure that belongs to it, up to 15.
   Only if no listed measure belongs to the topic, put the user's topic in plain words in topic.
 """
@@ -130,6 +136,9 @@ def render(short, previous, pending, question, declined=None, searches=None, sea
             [f"  {s['tag']} | {s['set']} | {', '.join(s['for'])} | {s.get('held') or 'the measure row chosen'}"
              for s in short["sets"]])
     section("outside", ["Outside IPEDS (tag | topic):"] + [f"  {o['tag']} | {o['topic']}" for o in short["outside"]])
+    section("explain", ["Explanations, for define only (tag | concept or glossary term | start of the text):"] +
+            [f"  {c['tag']} | {c['concept']} | {c['explanation'][:100]}" for c in short.get("concepts", [])] +
+            [f"  {g['tag']} | {g['term']} | {g['definition'][:100]}" for g in short.get("glossary", [])])
     convo = ["PREVIOUS REQUEST" + (f" (the app declined it: {declined})" if declined else "") + ": " +
              (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
     for s in searches or []:
@@ -140,7 +149,7 @@ def render(short, previous, pending, question, declined=None, searches=None, sea
         convo += ["PENDING OPTIONS:"] + [f"  {i}: {o['label']}" for i, o in enumerate(pending)]
     section("conversation", convo)
     section("question", ["QUESTION: " + question])
-    order = ["measures", "terms", "schools", "groups", "rows", "sets", "outside", "conversation", "question"]
+    order = ["measures", "terms", "schools", "groups", "rows", "sets", "outside", "explain", "conversation", "question"]
     text = "\n".join(["SHORTLIST"] + [line for name in order for line in parts[name]])
     return text, {name: len(" ".join(parts[name]).split()) for name in order}
 

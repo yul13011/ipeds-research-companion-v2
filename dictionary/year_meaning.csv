@@ -7,7 +7,7 @@ C_B,2015-2024,"12 months, July to June","July 1, {Y-1} - June 30, {Y}",,"Number 
 C_C,2015-2024,"12 months, July to June","July 1, {Y-1} - June 30, {Y}",,"Number of students receiving awards/degrees, by award level and by gender, race/ethnicity and age categories: July 1, 2023 to June 30, 2024",FLAGS.PRCH_C; FLAGS.IDX_C,,Award recipients by level
 COST1,2024,academic year,Academic year {Y}-{Y+1:yy},,"Application fees, tuition and required fees, food and housing for undergraduate and graduate students",FLAGS.PRCH_COS; FLAGS.IDX_COS,,Published charges
 COST2_FINANCIALAID,2024,academic year,Academic year {Y}-{Y+1:yy},,"Financial aid for full-time, first-time degree/certificate-seeking undergraduate students, 2021-22 to 2024-25",FLAGS.PRCH_COS; FLAGS.IDX_COS,,"Financial aid, full-time first-time students"
-COST2_NETPRICE,2024,academic year,Academic year {Y}-{Y+1:yy},,"Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2021-22 to 2024-25",FLAGS.PRCH_COS; FLAGS.IDX_COS,,Net price
+COST2_NETPRICE,2024,academic year,Academic year {Y-1}-{Y:yy},,"Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2021-22 to 2024-25",FLAGS.PRCH_COS; FLAGS.IDX_COS,,Net price
 CUSTOMCGIDS,2015-2024,academic year,Academic year {Y}-{Y+1:yy},,Custom comparison groups,,,Custom comparison groups
 DRVADM,2015-2024,fall,Academic year Fall {Y},,Frequently used derived variables for admissions. Selectivity and admissions yield,FLAGS.PRCH_ADM; FLAGS.IDX_ADM,,Admissions (derived)
 DRVAL,2015-2024,fiscal year,Fiscal year {Y},,Frequently used/derived variables Academic library indicators: Fiscal year 2024,FLAGS.PRCH_AL; FLAGS.IDX_AL,,Library indicators

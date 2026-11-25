@@ -18,7 +18,8 @@ import hashlib
 import sqlite3
 from pathlib import Path
 
-WORDING_FILES = {"terms", "outside_ipeds", "school_nicknames", "comparability_breaks", "word_abbreviations"}
+WORDING_FILES = {"terms", "outside_ipeds", "school_nicknames", "comparability_breaks", "word_abbreviations", "glossary",
+                 "concepts"}
 MEASURE_STRUCTURE = ("table", "variable", "format", "data_type", "rows_per_school", "unit", "reporting_form",
                      "in_first_version", "detailed_measure", "breakdown_set", "set_total")
 CODE_WORDING = ("synonyms", "statement", "in_latest")          # category rows: changes here retest nothing

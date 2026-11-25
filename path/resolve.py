@@ -651,17 +651,28 @@ def topic_plan(plan, request, d, short=None):
     found = []
     for m in request["measures"]:
         row = d.one('SELECT m."table", m.variable, m.shown_name, m.long_description, m.in_first_version, '
-                    'm.unit, COALESCE(m.period, y.period) FROM dict_measures m JOIN dict_year_meaning y ON y."table" = m."table" '
-                    'WHERE m."table" || \'.\' || m.variable = ?', m["id"])
+                    'm.unit, COALESCE(m.period, y.period), y.caveat FROM dict_measures m JOIN dict_year_meaning y '
+                    'ON y."table" = m."table" WHERE m."table" || \'.\' || m.variable = ?', m["id"])
         if row:
-            found.append(dict(zip(("table", "variable", "name", "definition", "set_up", "unit", "period"), row)))
+            found.append(dict(zip(("table", "variable", "name", "definition", "set_up", "unit", "period", "caveat"), row)))
             found[-1]["period"] = fill_years(found[-1]["period"], d.year)
+            found[-1]["breaks"] = [note for tables, note in d.q("SELECT tables, note_shown FROM dict_comparability_breaks "
+                                                                "WHERE status = 'approved'")
+                                   if row[0] in [t.strip() for t in (tables or "").split(",")]]   # years a definition changed
             gone = retired(d, m["id"])
             if gone:                                    # data that existed is never "not found"
                 found[-1]["retired"] = say(d, "retired" + gone["one"], what=found[-1]["name"], **gone)
     outside = d.one("SELECT topic, what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"] or "")
     plan["topic"] = dict(asked=request["topic"], measures=found,
                          outside=dict(zip(("topic", "say", "pointer"), outside)) if outside else None)
+    if request["operation"] == "define":
+        plan["topic"]["explained"] = explanations(request, d)
+        if plan["topic"]["explained"] or found:
+            return outcome("ready", plan=plan, request=request)
+        if request.get("general") and not outside and not any(c.isdigit() for c in request["general"]):
+            plan["topic"]["explained"] = [say(d, "explanation general", text=request["general"])]
+            plan["general_explanation"] = True          # logged: a word the dictionary does not explain yet
+            return outcome("ready", plan=plan, request=request)
     if not found and not outside:                       # nothing matched: "not found", never "IPEDS does not collect"
         matches = closest_matches(short)
         plan["topic"]["not_found"] = say(d, "not found topic", topic=request["topic"] or "that") + \
@@ -671,6 +682,27 @@ def topic_plan(plan, request, d, short=None):
         plan["topic"]["say"] = say(d, "not collected", say=outside[1]) + \
             (" " + say(d, "not collected source", pointer=outside[2]) if outside[2] else "")
     return outcome("ready", plan=plan, request=request)
+
+
+def explanations(request, d):
+    """define: the texts that explain a word, in the order of sources (owner, Part 5f): the reviewed concepts table,
+    then the official glossary (labelled with its edition, followed by the app's own convention for the same word in
+    terms.csv). Measures come after these, from their own descriptions."""
+    out = []
+    for x in sorted(request.get("explain") or [], key=lambda x: x["kind"] != "concepts"):
+        if x["kind"] == "concepts":
+            row = d.one("SELECT explanation, source, app_convention FROM dict_concepts WHERE concept=?", x["key"])
+            if row:
+                out.append(say(d, "explanation concept", name=x["key"], text=row[0], source=row[1]) +
+                           (" " + say(d, "explanation convention", text=row[2]) if row[2] else ""))
+        else:
+            row = d.one("SELECT definition, edition FROM dict_glossary WHERE term=? AND historical IS NULL", x["key"])
+            if row:
+                plain = " ".join(re.sub(r"\(.*?\)", "", x["key"]).lower().split())   # "Net price (NP)" -> "net price"
+                own = d.one("SELECT statement FROM dict_terms WHERE term=? AND statement IS NOT NULL AND status='in use'", plain)
+                out.append(say(d, "explanation glossary", name=x["key"], text=row[0], edition=row[1]) +
+                           (" " + say(d, "explanation convention", text=own[0]) if own else ""))
+    return out
 
 
 # ---------------------------------------------------------------- terms

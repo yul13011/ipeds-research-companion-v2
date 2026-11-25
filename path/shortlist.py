@@ -19,7 +19,8 @@ PER_TABLE = 5                       # at most this many of the set-up measures f
 SOFT_CAP = 2                        # ... a further one scores at least this many times the next measure from another table
 NAME_WEIGHT = 3                     # a match in a measure's name or synonyms counts this many times one in its table title
                                     # or description
-LIMITS = {"measures": 60, "terms": 5, "schools": 10, "groups": 15, "rows": 15, "sets": 8, "outside": 3}
+LIMITS = {"measures": 60, "terms": 5, "schools": 10, "groups": 15, "rows": 15, "sets": 8, "outside": 3,
+          "concepts": 3, "glossary": 3}
 ROWS_PER_TABLE = 6                  # category rows searched within each shortlisted multi-row table
 CUTOFF = 0.25                       # keep entries scoring at least this share of the best entry of their kind
 SWAP_ONLY_UP_TO, ONE_OFF_UP_TO = 4, 7   # misspellings: words of up to 4 letters may only swap two neighbouring letters;
@@ -237,12 +238,24 @@ def build_index(db):
                for t, ex, say, p in q("SELECT topic, example_wording, what_to_say, pointer FROM dict_outside_ipeds")}
     kinds = [("measures", measures), ("terms", terms), ("schools", schools), ("groups", groups),
              ("rows", rows), ("sets", sets), ("outside", outside)]
+    try:                                        # for "what does X mean" only: searched on their own word weights, so
+        concepts = {c: dict(concept=c, explanation=e, source=s, convention=conv, text=f"{c} {w or ''}")   # they never
+                    for c, w, e, s, conv in q("SELECT concept, words, explanation, source, app_convention "   # change how
+                                              "FROM dict_concepts")}                    # a data question's measures rank
+        glossary = {t: dict(term=t, definition=d, edition=ed, text=t)
+                    for t, d, ed in q("SELECT term, definition, edition FROM dict_glossary WHERE historical IS NULL")}
+    except sqlite3.OperationalError:            # a dictionary without the two tables
+        concepts, glossary = {}, {}
+    explain = [("concepts", concepts), ("glossary", glossary)]
     idf = rarity([e["text"] for _, entries in kinds for e in entries.values()])
     index["vocabulary"] = {}
     for w in idf:                               # the index's own words, by length, for misspelling tolerance
         index["vocabulary"].setdefault(len(w), set()).add(w)
     for kind, entries in kinds:
         index[kind] = (BM25([(k, e["text"]) for k, e in entries.items()], idf), entries)
+    own_idf = rarity([e["text"] for _, entries in explain for e in entries.values()])
+    for kind, entries in explain:
+        index[kind] = (BM25([(k, e["text"]) for k, e in entries.items()], own_idf), entries)
     index["measures"] = (FieldBM25([(k, e["main"], e["context"]) for k, e in measures.items()], idf), measures)
     index["groups"] = (GroupSearch([(k, e["main"], e["context"]) for k, e in groups.items()], idf), groups)
     families(measures, q)
@@ -429,11 +442,12 @@ def families(measures, q):
             m["subgroup"] = " ".join(w for w in name if w in label_words) or None
 
 
-PREFIX = {"measures": "M", "schools": "S", "groups": "G", "rows": "R", "sets": "B", "outside": "O"}
+PREFIX = {"measures": "M", "schools": "S", "groups": "G", "rows": "R", "sets": "B", "outside": "O", "concepts": "C",
+          "glossary": "D"}
 
 
 def tag(short, index):
-    """Give every shortlist item a short tag (M1, S1, G1, R1, B1, T1, O1). The model answers in tags only;
+    """Give every shortlist item a short tag (M1, S1, G1, R1, B1, T1, O1, C1, D1). The model answers in tags only;
     short["tags"] maps each tag back to what it stands for."""
     for kind, (_, most) in TAG_RANGES.items():          # the reply shape has a fixed number of tags of each kind
         if kind in short:
@@ -442,11 +456,12 @@ def tag(short, index):
     short["rows"] = [r for r in short["rows"] if r["table"] in tables]   # a row is only useful with its measure
     tags = {}
     for kind, prefix in PREFIX.items():
-        for i, item in enumerate(short[kind], 1):
+        for i, item in enumerate(short.setdefault(kind, []), 1):
             item["tag"] = f"{prefix}{i}"
             key = {"measures": item.get("id"), "schools": item.get("id"), "groups": item.get("name"),
                    "rows": (item.get("table"), item.get("column"), item.get("code")),
-                   "sets": (item.get("set"), item.get("table")), "outside": item.get("topic")}[kind]
+                   "sets": (item.get("set"), item.get("table")), "outside": item.get("topic"),
+                   "concepts": item.get("concept"), "glossary": item.get("term")}[kind]
             tags[item["tag"]] = (kind, key)
     n = 0
     for t in short["terms"]:
@@ -487,7 +502,8 @@ def extend(short, words, db_path):
     found = shortlist(words, db_path)
     keys = {"measures": lambda e: e["id"], "schools": lambda e: e["id"], "groups": lambda e: e["name"],
             "rows": lambda e: (e["table"], e["column"], e["code"]), "sets": lambda e: (e["set"], e["table"]),
-            "outside": lambda e: e["topic"], "terms": lambda e: e["term"]}
+            "outside": lambda e: e["topic"], "terms": lambda e: e["term"], "concepts": lambda e: e["concept"],
+            "glossary": lambda e: e["term"]}
     merged, added = {}, {}
     for kind, key in keys.items():
         before = {key(e) for e in short[kind]}
@@ -523,4 +539,6 @@ def ids(short):
             "group": {g["name"] for g in short["groups"]},
             "row": {(r["table"], r["column"].upper(), r["code"]) for r in short["rows"]},
             "set": {s["set"] for s in short["sets"]},
-            "reading": {(t["term"], r["reading"]) for t in short["terms"] for r in t["readings"]}}
+            "reading": {(t["term"], r["reading"]) for t in short["terms"] for r in t["readings"]},
+            "explanation": {("concepts", c["concept"]) for c in short.get("concepts", [])} |
+                           {("glossary", g["term"]) for g in short.get("glossary", [])}}

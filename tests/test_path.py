@@ -709,7 +709,7 @@ class ChangeOrder1121(unittest.TestCase):
         page = self.ask("Share of low-income students at Yale", reply_request(req(
             "schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)],
             readings=[dict(term="low-income", reading="Percent of undergraduates awarded Pell grants")])))
-        self.assertIn("IPEDS does not measure income", page["interpreted"])
+        self.assertIn("For all students, the Pell share is the usual proxy", page["interpreted"])   # owner wording, 2026-11-24
         page = self.ask("Percent of undergraduates awarded Pell grants at Yale", reply_request(req(
             "schools", measures=[M("SFA.UPGRNTP")], schools=[S("Yale", 130794)])))
         self.assertNotIn("IPEDS does not measure income", page["interpreted"])   # only when the reading was chosen
@@ -1810,6 +1810,136 @@ class Part5e(unittest.TestCase):
         trend = answer.run_direct(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)],
                                       year=dict(rq.no_year(), stated="since 2020", start=2020)), {}, self.log, DB, "[t]")
         self.assertIsNone(trend["tile"])
+
+
+
+def explain_tag(user, name):
+    """The C or D tag the shortlist shown to the model gives a concept or glossary entry, read from the prompt text."""
+    import re
+    found = re.search(r"([CD]\d+) \| " + re.escape(name) + r" \|", user)
+    return found.group(1) if found else None
+
+
+class Explanations(unittest.TestCase):
+    """Part 5f: "what does X mean" from the concepts table, then the glossary (with its edition and the app's own
+    convention), then the measures; general knowledge only when none of these explains the word, labelled and logged.
+    Data questions whose words match glossary entries still return data."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def define(self, question, pick):
+        """Ask, with a model reply that puts in `explain` the tags `pick` chooses from the prompt."""
+        def call(system, user, model, schema=None):         # as the model writes it: tags in topic, a general
+            got = pick(user)                                    # explanation in the request's label
+            tags = ", ".join(t for t in got.get("explain", []) if t)
+            return json.dumps(wire_reply("request", dict(operation="define", topic=tags or question,
+                                                         label=got.get("general", "")))),                 {"input_tokens": 100, "output_tokens": 10}
+        return answer.ask(question, {}, self.log, DB, call=call)
+
+    def last_row(self):
+        return json.loads((Path(self.dir.name) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+
+    def test_data_questions_that_match_glossary_words_keep_their_measures(self):
+        for q, mid in (("retention rate at Yale", "EFD.RET_PCF"), ("net price for Harvard", "COST2_NETPRICE.NPIST2"),
+                       ("graduation rate for public universities in Texas", "DRVGR.GBA6RTT")):
+            s = shortlist.shortlist(q, DB)
+            self.assertIn(mid, [m["id"] for m in s["measures"]], q)
+            self.assertLessEqual(len(s["glossary"]), 3)
+            self.assertLessEqual(len(s["concepts"]), 3)
+        page = answer.run_direct(req("schools", measures=[M("EFD.RET_PCF")], schools=[S("Yale", 130794)]), {}, self.log, DB, "[t]")
+        self.assertEqual(page["kind"], "answer")
+        self.assertTrue(page["table"]["rows"])
+
+    def test_the_explanation_sections_do_not_change_a_data_questions_measures(self):
+        """The two new sections are searched on their own word weights: the measures and their order are the same as
+        with an index built without them."""
+        index = shortlist.get_index(DB)
+        saved_kinds = {k: index[k] for k in ("concepts", "glossary")}
+        q = "retention rate at Yale"
+        with_them = [m["id"] for m in shortlist.shortlist(q, DB)["measures"]]
+        try:
+            for k in saved_kinds:
+                index[k] = (shortlist.BM25([], {}), {})
+            without = [m["id"] for m in shortlist.shortlist(q, DB)["measures"]]
+        finally:
+            index.update(saved_kinds)
+        self.assertEqual(with_them, without)
+
+    def test_concept_comes_first_then_the_glossary_with_its_edition(self):
+        q = "what is an adjusted cohort?"
+        page = self.define(q, lambda u: dict(explain=[explain_tag(u, "Adjusted cohort")]))     # the concept's tag
+        self.assertEqual(page["kind"], "answer")
+        self.assertTrue(page["message"].startswith("**Adjusted cohort**: The group of students a rate is calculated on"))
+        self.assertIn("*Source: IPEDS glossary 2025-26", page["message"])
+        s = shortlist.shortlist(q, DB)
+        u = interpret.render(s, None, None, q)[0]
+        c, d = explain_tag(u, "Adjusted cohort"), next(g["tag"] for g in s["glossary"] if g["term"] == "Adjusted cohort")
+        page = self.define(q, lambda u: dict(explain=[d, c]))          # the concept still comes first
+        self.assertLess(page["message"].index("The group of students"), page["message"].index("(IPEDS glossary, 2025-26 edition)"))
+        self.assertIn("**Adjusted cohort** (IPEDS glossary, 2025-26 edition): The result of removing any allowable exclusions",
+                      page["message"])
+        self.assertIsNone(page.get("summary"))
+
+    def test_glossary_entry_is_followed_by_the_apps_convention(self):
+        q = "what does net price mean?"
+        page = self.define(q, lambda u: dict(explain=[explain_tag(u, "Net price")]))
+        self.assertIn("**Net price** (IPEDS glossary, 2025-26 edition): The Higher Education Act", page["message"])
+        self.assertIn("In this app: Net price is reported one year behind the rest of the release", page["message"])
+        self.assertLess(page["message"].index("Higher Education Act"), page["message"].index("In this app:"))
+
+    def test_historical_carnegie_entries_are_never_offered(self):
+        for q in ("what is a Carnegie liberal arts baccalaureate college?", "what does R1 Carnegie classification mean?",
+                  "what is a doctoral research university extensive"):
+            s = shortlist.shortlist(q, DB)
+            self.assertFalse([g for g in s["glossary"] if "carnegie" in g["term"].lower()], q)
+        db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        self.assertEqual(db.execute("SELECT COUNT(*) FROM dict_glossary WHERE term LIKE '%(Carnegie)%' AND historical IS NULL").fetchone()[0], 0)
+        db.close()
+
+    def test_a_general_explanation_is_labelled_and_logged(self):
+        page = self.define("what is a bursar?", lambda u: dict(explain=[], general="The office that handles student bills."))
+        self.assertEqual(page["message"], "General explanation, not from IPEDS documentation: The office that handles student bills.")
+        self.assertTrue(self.last_row()["general_explanation"])
+
+    def test_a_general_explanation_with_a_number_is_not_shown(self):
+        page = self.define("what is a bursar?", lambda u: dict(explain=[], general="About 90% of colleges have one."))
+        self.assertNotIn("90", page["message"])
+        self.assertIn("I couldn't find data on", page["message"])
+
+    def test_a_measure_is_explained_with_its_period_year_rule_and_breaks(self):
+        page = answer.run_direct(req("define", measures=[M("DRVOM.OM1TotlAwdp6")]), {}, self.log, DB, "[t]")
+        self.assertIn("Outcome Measures cohorts changed in 2017-18", page["message"])     # the comparability break
+        page = answer.run_direct(req("define", measures=[M("EFB.EFBAGE")]), {}, self.log, DB, "[t]")
+        self.assertIn("Enrollment by age is optional for schools to report in even-numbered years", page["message"])
+
+    def test_tags_in_topic_and_a_label_are_read_only_for_define(self):
+        tags = {"C1": ("concepts", "Adjusted cohort"), "D2": ("glossary", "Cohort")}
+        wire = wire_reply("request", dict(operation="define", topic="C1, D2", label="An idea."))["requests"][0]
+        r = rq.request_from_wire(wire, tags)
+        self.assertEqual(r["explain"], [dict(kind="concepts", key="Adjusted cohort"), dict(kind="glossary", key="Cohort")])
+        self.assertIsNone(r["topic"])
+        self.assertEqual(r["general"], "An idea.")
+        r = rq.request_from_wire(dict(wire, operation="schools", topic=None), tags)
+        self.assertEqual((r["explain"], r["general"]), ([], None))   # a data question's label is never an explanation
+        self.assertEqual(rq.to_wire(rq.request_from_wire(wire, tags), {t: k for t, k in tags.items()})["topic"], "C1, D2")
+
+    def test_explanations_name_no_internal_files(self):
+        db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        for row in db.execute("SELECT concept, explanation, source, app_convention FROM dict_concepts"):
+            for text in row[1:]:
+                self.assertNotRegex(text or "", r"\.csv|\.md|_[a-z]+|dict_", row[0])
+        db.close()
+
+    def test_explanation_tags_must_be_on_the_shortlist(self):
+        page = self.define("what is a widget?", lambda u: dict(explain=["C4"]))
+        self.assertNotEqual(page["kind"], "answer")                     # C4 is not on this question's shortlist
 
 
 if __name__ == "__main__":

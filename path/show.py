@@ -82,10 +82,14 @@ def topic_message(plan):
     t = plan["topic"]
     if t["outside"]:                                    # "IPEDS does not collect this": only from the outside-IPEDS table
         return t.get("say") or t["outside"]["say"]
+    if plan["operation"] == "define" and t.get("explained") and not t["measures"]:
+        return "\n\n".join(t["explained"])
     if not t["measures"]:                               # nothing matched: "not found", with the closest matches
         return t.get("not_found") or ""
-    if plan["operation"] == "define":
-        return "\n\n".join(f"**{m['name']}** ({m['period']}): {m['definition']}" for m in t["measures"])
+    if plan["operation"] == "define":                   # the order of sources: concepts, glossary, then measures
+        return "\n\n".join(t.get("explained", []) +       # a measure: its definition, period, year rule and breaks
+                           [" ".join([f"**{m['name']}** ({m['period']}): {m['definition']}", m.get("caveat") or ""] +
+                                     m.get("breaks", [])).strip() for m in t["measures"]])
     ready = [m for m in t["measures"] if m["set_up"] == "yes" and not m.get("retired")]
     if ready:
         return ("Yes. This app has: " + "; ".join(f"{m['name']} ({m['period']})" for m in ready)

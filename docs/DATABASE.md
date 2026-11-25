@@ -6,9 +6,9 @@ Written by `scripts/database_inventory.py` after each full rebuild. Do not edit 
 
 | | |
 | --- | ---: |
-| Tables | 104 |
-| Rows | 40,379,583 |
-| File size | 3.27 GB (3,267,891,200 bytes) |
+| Tables | 106 |
+| Rows | 40,380,290 |
+| File size | 3.27 GB (3,268,206,592 bytes) |
 | Releases | 10 (2015-16 to 2024-25) |
 
 Tables and rows by layer:
@@ -17,9 +17,9 @@ Tables and rows by layer:
 | --- | ---: | ---: |
 | survey data | 59 | 33,333,458 |
 | IPEDS codebook | 7 | 150,853 |
-| dictionary | 14 | 6,165 |
+| dictionary | 16 | 6,870 |
 | build result | 17 | 6,858,764 |
-| housekeeping | 7 | 30,343 |
+| housekeeping | 7 | 30,345 |
 
 Releases loaded:
 
@@ -119,13 +119,15 @@ The layers:
 | `VALUESETS` | The codebooks' code labels for every coded variable | year, TableName, varName, Codevalue | 14 | 124,493 | 10 (2015-16 to 2024-25) | 12,382 | 12,712 | 12,468 | 12,749 | 12,495 | 11,890 | 11,593 | 13,038 | 13,023 | 12,143 |
 | `VARTABLE` | Every variable of every table, with its title and format | year, TableName, varName | 24 | 23,991 | 10 (2015-16 to 2024-25) | 2,185 | 2,159 | 2,210 | 2,246 | 2,211 | 2,439 | 2,561 | 2,685 | 2,696 | 2,599 |
 
-## Dictionary (14 tables, 6,165 rows)
+## Dictionary (16 tables, 6,870 rows)
 
 | Table | What it holds | Key columns | Columns | Rows |
 | --- | --- | --- | ---: | ---: |
 | `dict_breakdown_exceptions` | Schools whose breakdown is shown despite parts not adding up, by owner decision | breakdown_set, table, year, unitid | 6 | 2 |
 | `dict_category_codes` | The category rows of multi-row tables, with labels, defaults and the years each applies | table, column, code | 15 | 1,169 |
 | `dict_comparability_breaks` | Definition changes and context notes shown on trends that cross them | kind, tables, first_release | 11 | 14 |
+| `dict_concepts` | Reviewed plain-English explanations of IPEDS ideas; the first source for what-does-it-mean questions | concept | 6 | 26 |
+| `dict_glossary` | The official IPEDS glossary, 2025-26 edition; used only for what-does-it-mean questions | term | 5 | 612 |
 | `dict_group_members` | Groups defined by a list of schools | group, unitid | 3 | 79 |
 | `dict_measure_history` | Earlier names of each measure, so a trend continues across a renaming | measure, earlier_table, earlier_variable | 6 | 608 |
 | `dict_measures` | Every measure: table, variable, title, unit, period, plain name and set-up status | table, variable | 21 | 3,073 |
@@ -134,7 +136,7 @@ The layers:
 | `dict_school_groups` | Named school groups and how each is defined | group | 14 | 187 |
 | `dict_school_nicknames` | Nicknames and abbreviations for schools | nickname | 5 | 36 |
 | `dict_special_codes` | How IPEDS's special codes (-1, -2, ...) are read | code | 8 | 36 |
-| `dict_terms` | Words people use, their readings and the measures each reading names; settings and messages | term, reading, measure | 15 | 841 |
+| `dict_terms` | Words people use, their readings and the measures each reading names; settings and messages | term, reading, measure | 15 | 908 |
 | `dict_word_abbreviations` | Abbreviated words in school names and what they mean (st: state or saint) | abbreviation, means | 3 | 17 |
 | `dict_year_meaning` | What the year of each table means: its period, cohort rule, subject and title | table | 9 | 59 |
 
@@ -160,16 +162,16 @@ The layers:
 | `year_checks` | Row keys, detail links and breakdown sets tested in every year | year, kind, name, table, measure | 8 | 3,623 |
 | `year_titles` | Each measure's title in each year's codebook | measure, year | 3 | 4,161 |
 
-## Housekeeping (7 tables, 30,343 rows)
+## Housekeeping (7 tables, 30,345 rows)
 
 | Table | What it holds | Key columns | Columns | Rows |
 | --- | --- | --- | ---: | ---: |
 | `_columns` | Every column loaded from each release, with its types and what cleaning did to it | local_table, release, column | 14 | 25,245 |
 | `_conversion_failures` | Values that failed to convert during cleaning (expected to be empty) | local_table, release, column, value | 6 | 0 |
-| `_dictionary_state` | Fingerprints of the dictionary files and data, so the fast build knows what changed | item | 2 | 25 |
+| `_dictionary_state` | Fingerprints of the dictionary files and data, so the fast build knows what changed | item | 2 | 27 |
 | `_releases` | The releases loaded, provisional or final, and when | year | 6 | 10 |
 | `_special_codes` | The special codes found in each column of each release, and how each was treated | local_table, release, column, code | 10 | 4,439 |
 | `_tables` | Every table loaded from each release: source name, kind, rows read and loaded | local_table, year | 10 | 554 |
 | `sqlite_stat1` | SQLite's own statistics for its query planner | tbl, idx | 3 | 70 |
 
-Counted in 35 seconds.
+Counted in 23 seconds.

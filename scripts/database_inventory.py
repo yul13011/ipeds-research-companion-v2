@@ -45,6 +45,8 @@ DICTIONARY = {
     "dict_measure_history": ("Earlier names of each measure, so a trend continues across a renaming", "measure, earlier_table, earlier_variable"),
     "dict_comparability_breaks": ("Definition changes and context notes shown on trends that cross them", "kind, tables, first_release"),
     "dict_word_abbreviations": ("Abbreviated words in school names and what they mean (st: state or saint)", "abbreviation, means"),
+    "dict_glossary": ("The official IPEDS glossary, 2025-26 edition; used only for what-does-it-mean questions", "term"),
+    "dict_concepts": ("Reviewed plain-English explanations of IPEDS ideas; the first source for what-does-it-mean questions", "concept"),
     "dict_breakdown_exceptions": ("Schools whose breakdown is shown despite parts not adding up, by owner decision",
                                   "breakdown_set, table, year, unitid"),
 }

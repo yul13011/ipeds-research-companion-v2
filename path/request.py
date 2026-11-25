@@ -18,6 +18,12 @@ measure and any group; no part is specific to one kind of question.
                 two years is wanted (change), and whose schools a group counts (membership: each year, or today).
                 The model names the kind of span (SPANS); code keeps only the fields that span uses
     topic       for define and data_exists: an ID from the shortlist, or the user's topic in plain words
+    explain     for define: the concepts (reviewed explanations) and glossary entries that explain the word asked about.
+                The model writes their tags (C1, D2) in `topic`, which already takes "an ID from the shortlist"
+    general     for define, only when nothing on the shortlist explains it: the model's own short explanation, shown
+                labelled as general knowledge, not IPEDS documentation. The model writes it in the request's `label`
+                (otherwise used only for option labels). Neither part adds a field to the reply shape: any new field
+                made the API's grammar too large (trial calls, 2026-11-24)
     readings    the reading the user chose for a term with several readings: {"term", "reading"}
 
 Reserved for the next stage, not built: `formula` (ratio, difference, percent change, share of
@@ -59,7 +65,7 @@ def obj(**props):
 # a new question, one holding an edit's new values, or two or three options with labels. from_wire() maps tags
 # back to real IDs.
 TAG_RANGES = {"measures": ("M", 64), "schools": ("S", 16), "groups": ("G", 20), "rows": ("R", 64), "sets": ("B", 32),
-              "readings": ("T", 24), "outside": ("O", 4)}
+              "readings": ("T", 24), "outside": ("O", 4), "concepts": ("C", 4), "glossary": ("D", 4)}
 STRING, INTEGER = {"type": "string"}, {"type": "integer"}
 
 
@@ -129,6 +135,11 @@ def request_from_wire(r, tags, unknown=None):
     set_key = look(breakdown["set"], "sets") if breakdown and breakdown.get("set") else None
     sort = r.get("sort")
     outside = look(r.get("outside"), "outside") if r.get("outside") else None
+    def explained(t):                                   # a concept (C) or glossary (D) tag
+        if t in tags and tags[t][0] in ("concepts", "glossary"):
+            return dict(kind=tags[t][0], key=tags[t][1])
+        if unknown is not None:
+            unknown.append(t)
     return dict(
         operation=r["operation"], measures=measures,
         schools=[dict(name=s["name"], id=look(s.get("school"), "schools")) for s in r.get("schools") or []],
@@ -140,8 +151,11 @@ def request_from_wire(r, tags, unknown=None):
         split_by=r.get("split_by") or None,
         sort=dict(order=sort["order"], limit=sort.get("limit") or None) if sort else None,
         year=year_from_wire(r.get("year") or {}),
-        topic=outside or r.get("topic") or None,
+        topic=outside or (re.sub(r"\b[CD]\d{1,2}\b[,; ]*", "", r.get("topic") or "").strip() or None),
         readings=[dict(term=x[0], reading=x[1]) for x in (look(t, "readings") for t in r.get("readings") or []) if x],
+        explain=[x for x in map(explained, re.findall(r"\b[CD]\d{1,2}\b", r.get("topic") or "")) if x]
+        if r["operation"] == "define" else [],
+        general=(r.get("label") or "").strip() or None if r["operation"] == "define" else None,
     )
 
 
@@ -166,7 +180,7 @@ def from_wire(reply, tags=None):
 
 def no_tags(label):
     """An option label as the user sees it: the model's tags (M7, S4) are taken out."""
-    return re.sub(r"\s*\(?\b[MSGRBTO]\d{1,2}\b\)?", "", label or "").strip()
+    return re.sub(r"\s*\(?\b[MSGRBTOCD]\d{1,2}\b\)?", "", label or "").strip()
 
 
 REPLY_SCHEMA = reply_schema()
@@ -189,7 +203,8 @@ def to_wire(r, tags):
         conditions=[dict(measure=t("measures", c["measure"]), comparison=c["comparison"], value=c["value"]) for c in r["conditions"]],
         breakdown=dict(set=r["breakdown"]["set"], fixed=[f"{p['column']} = {p['code']}" for p in r["breakdown"]["fixed"]])
         if r["breakdown"] else None,
-        split_by=r["split_by"], sort=r["sort"], year=r["year"], topic=r["topic"],
+        split_by=r["split_by"], sort=r["sort"], year=r["year"],
+        topic=", ".join([t(x["kind"], x["key"]) for x in r.get("explain") or []] + ([r["topic"]] if r["topic"] else [])) or None,
         readings=[t("readings", (x["term"], x["reading"])) for x in r["readings"]],
     )
 
@@ -245,7 +260,7 @@ def empty(operation="schools"):
     """A request with every part present and empty."""
     return {"operation": operation, "measures": [], "schools": [], "groups": [], "peers_of": None, "conditions": [],
             "breakdown": None, "split_by": None, "sort": None, "year": no_year(), "topic": None,
-            "readings": []}
+            "readings": [], "explain": [], "general": None}
 
 
 def same(a, b):
@@ -283,7 +298,8 @@ def apply_edit(previous, edit, history):
 
 def used_ids(request):
     """Every dictionary ID a request names, by kind, for the check that each was on the shortlist."""
-    ids = {"measure": set(), "school": set(), "group": set(), "row": set(), "set": set(), "reading": set()}
+    ids = {"measure": set(), "school": set(), "group": set(), "row": set(), "set": set(), "reading": set(),
+           "explanation": {(x["kind"], x["key"]) for x in request.get("explain") or []}}
     for m in request["measures"]:
         ids["measure"].add(m["id"])
         for pair in m["row"]:

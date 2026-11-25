@@ -53,6 +53,8 @@ def finish(out, state, db, log, row):
         row["model_explanation"] = out["log"]
     if out.get("search_miss") or (out.get("plan") or {}).get("search_miss"):
         row["search_miss"] = True
+    if (out.get("plan") or {}).get("general_explanation"):   # a word the dictionary does not explain yet
+        row["general_explanation"] = True
     if out["kind"] == "about":                          # a question about the last decline, answered from it
         return dict(kind="decline", message=out["message"])
     if out["kind"] == "ready":
