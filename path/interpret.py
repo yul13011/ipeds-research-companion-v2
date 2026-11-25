@@ -80,8 +80,8 @@ Rules:
     a range of years: "2015 through 2024", "between 2016 and 2020", "2014-15 to 2023-24" (start and end);
     the last N years: "the last five years", "a 10-year trend" (last);
     the change between two years: "how did it change from 2015 to 2024" (start and end).
-  start and end are calendar years exactly as the user named them (the first year of "2014-15" is 2014), never
-  shifted for a measure that is reported a year behind: the app handles that; for one year, start
+  start and end are calendar years exactly as the user named them, never shifted for a measure that is reported a
+  year behind: the app handles that. Example: "2023-24" means start 2023 and end 2024, for every measure; for one year, start
   is that year, or 0 if no year was named; a year written as two ("2022-23") gives start 2022 and end 2023. Write 0 for any of start, end and last the span does not use.
   For a ranking or a list over a period, the figure is the change between the first and last year, and a condition
   ("lost enrollment", "grew by more than 1,000") applies to that change. For a group over time, membership is "each year" unless the user asks

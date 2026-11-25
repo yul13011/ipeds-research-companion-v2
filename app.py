@@ -156,6 +156,6 @@ if question:
                           progress=lambda step: box.update(label=answer.status(step)))
         box.update(state="complete")
     for p in page.get("pages") or [page]:               # the summary is written under the table, once
-        p["summary_pending"] = s.summary_on and p["kind"] == "answer" and bool((p.get("table") or {}).get("rows"))
+        p["summary_pending"] = s.summary_on and p["kind"] == "answer" and bool((p.get("table") or {}).get("rows"))             and p.get("operation") not in ("define", "data_exists")
     s.turns.append((question, page))
     st.rerun()

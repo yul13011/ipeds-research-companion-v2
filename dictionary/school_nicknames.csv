@@ -21,7 +21,7 @@ ut austin,picker,,,university of texas austin
 georgia tech,picker,,,georgia institute of technology
 virginia tech,picker,,,virginia polytechnic institute
 ole miss,picker,,,university of mississippi
-penn state,picker,,,pennsylvania state university
+penn state,alias,214777,Pennsylvania State University-Main Campus,pennsylvania state university
 unc,system or school,199120,University of North Carolina at Chapel Hill,System: University of North Carolina
 university of north carolina,system or school,199120,University of North Carolina at Chapel Hill,System: University of North Carolina
 texas a&m,system or school,228723,Texas A&M University-College Station,System: Texas A&M University System

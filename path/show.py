@@ -164,6 +164,7 @@ def render(plan, result, release):
                 data_release=f"Figures from the {release_label(release)}.", chart=result.get("chart") or bars(plan, result),
                 offers=[o["label"] for o in plan.get("offers") or []])
     page["tile"] = tile(plan, result, page)
+    page["operation"] = plan["operation"]
     if plan.get("trend") and plan["trend"]["single"]:   # one earlier year: its own release
         y = plan["trend"]["years"][0]
         page["data_release"] = f"Figures from the IPEDS {y}-{(y + 1) % 100:02d} release."

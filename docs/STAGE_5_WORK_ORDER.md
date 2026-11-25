@@ -116,6 +116,8 @@ PART 5d. UNDERSTANDING ANY PHRASING
 - Measure the shortlist-miss rate and the number of wrong readings before and after each layer. Speed limits: typical questions under 5 seconds, hard ones under 10.
 - The search now has to work for every measure set up in Part 5b2 (about 3,000, including retired ones). Fix the three shortlist tests marked for this part, and keep retired variables ranked below current measures (at most two on the shortlist).
 
+Outcome of Part 5d (recorded Nov 24, 2026): meaning search was compared (fastembed and sentence-transformers with bge-small-en-v1.5) and not adopted. It helped groups but not measures on real questions; the AI's own search, plus system abbreviations and system-or-school rows in the dictionary, brought groups to 14 of 14 on the badly written set. The AI's own search is in the app, with a 20-second limit for searched turns.
+
 PART 5e. WRITTEN SUMMARY
 
 - A second model call writes two or three neutral sentences about the result, given only the table and its notes. No interpretation beyond the numbers.

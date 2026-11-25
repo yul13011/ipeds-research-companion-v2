@@ -87,8 +87,8 @@ def summarize(page, call=None, model=None, on_text=None):
     summary is not in the result (meta["missing"] lists them)."""
     model = model or config.SUMMARY_MODEL
     meta = dict(model=model, seconds=0.0, input_tokens=0, output_tokens=0, cost_usd=0.0, missing=[], error=None, kept=False)
-    if page.get("kind") != "answer" or not (page.get("table") or {}).get("rows"):
-        return None, meta
+    if page.get("kind") != "answer" or not (page.get("table") or {}).get("rows") or             page.get("operation") in ("define", "data_exists"):   # no summary for "what data exists" or a definition
+        return None, meta                               # (owner, 2026-11-24); declines and questions have no table
     start = time.time()
     try:
         text, usage = (call or call_api)(INSTRUCTIONS, result_text(page), model, on_text)

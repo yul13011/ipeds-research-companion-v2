@@ -455,3 +455,12 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **6. The near-duplicate subgroup sets** (gender, race and ethnicity, Pell status) are approved.
 - **Push:** Part 5d is pushed to GitHub after the full rebuild.
 - **Go: Part 5e** (written summary, status line, single-number tile), with its report. In Part 5g, report which modules of the question path grew most during Stage 5.
+
+## 2026-11-24: Part 5e approved; decisions on its report
+
+- **1. Finance pairings:** the 129 drafted pairings are approved and applied (terms.csv rows "finance by form: …", pairing only, no search words), except total assets on the for-profit form, which uses the balance-sheet line (F3A01), not the financial-health-section line (F3G04). A second pass for concepts worded differently on each form (for example public total expenses, and state and federal appropriations on the private nonprofit form) is drafted in `docs/reports/stage5e/finance_pairing_check.csv`: 61 matches marked "check" (42 that would complete an approved pair, 19 new pairs; the financial-health-section lines are matched only with each other). They are not paired until the owner approves.
+- **2. "penn state"** is an alias row for the main campus (214777): suggested first, with the other campuses still in the picker.
+- **3. The year instruction** has the worked example ("2023-24" means start 2023, end 2024). If the misreading still recurs, the owner is told rather than more lines added.
+- **4. No summary** for "what data exists" answers, definitions, declines or clarifying questions.
+- **5. Push:** Part 5e after the full rebuild and history check, with the owner's note on the outcome of Part 5d in `docs/STAGE_5_WORK_ORDER.md`.
+- **Go: Part 5f** (explaining terms and concepts), stopping at its review points: the glossary parse (number of terms, entries not separated cleanly) and the draft concepts table, before the app uses it.

@@ -1765,6 +1765,18 @@ class Part5e(unittest.TestCase):
         self.assertFalse(self.last_logged()["kept"])
         self.assertEqual(self.last_logged()["missing"], ["14,695"])
 
+    def test_no_summary_for_what_data_exists(self):
+        topic = answer.run_direct(req("data_exists", measures=[M("DRVADM.DVADM01")]), {}, self.log, DB, "[t]")
+        self.assertIsNone(answer.summarize(topic, {}, self.log, call=lambda *a, **k: ("x", {"input_tokens": 1, "output_tokens": 1})))
+
+    def test_penn_state_points_to_the_main_campus_first(self):
+        reply = wire_reply("request", dict(schools=[dict(name="penn state", school=None)]))
+        page = answer.ask("penn state enrollment", {}, self.log, DB, call=AISearch.scripted(None, [lambda u: dict(
+            reply, requests=[dict(reply["requests"][0], measures=[dict(measure=tag_of(u, "Total  enrollment"), row=[])])])])[0])
+        self.assertEqual(page["kind"], "picker")
+        self.assertEqual(page["candidates"][0][0], 214777)
+        self.assertGreater(len(page["candidates"]), 3)                   # the other campuses still show
+
     def test_an_empty_summary_is_not_kept(self):
         self.assertIsNone(self.summarize("   "))
 
