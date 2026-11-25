@@ -9,6 +9,10 @@ For each year:
     comparison group; Carnegie groups hold the stated classification in every year (the build does that);
   - a year IPEDS did not collect is a gap, with "IPEDS did not collect {what} in {year}", never zero; a breakdown
     not available in a year gets its own message, and the total is still shown.
+A figure IPEDS holds for several years in one table (net price for this year and the two before: measures.csv
+`own_column`) is read from each release's own column. The years no loaded release's own column covers come from the
+earlier-year columns of the earliest release that holds the figure, labelled "as reported in the ... release" (owner
+decision 2026-11-25).
 Approved comparability breaks and context notes (comparability_breaks.csv) are shown, and the years marked, when the
 trend crosses them; the pandemic note goes by the period each figure covers. Schools keep today's name, with
 "(then: ...)" and "merged into ..." notes where the directory says so. Every sentence comes from a "message" row.
@@ -70,7 +74,7 @@ def plan(request, plan_, d, say):
     """Choose the years and record how the trend counts schools. Returns a decline, or None."""
     from path.resolve import cohort_period, cohort_rule, decline, without
     year = request["year"]
-    years = releases(d.db)
+    years = sorted(set(releases(d.db)) | extra_years(d.db, plan_["measures"]))   # and the years only earlier-year columns hold
     m0 = plan_["measures"][0] if plan_["measures"] else None
     covered = plan_["members"] if plan_["members"] is not None else {s["id"] for s in plan_["schools"]}
     pattern = (m0 or {}).get("period_pattern") or "{Y}"
@@ -146,6 +150,36 @@ def year_rows(db, table, rows, y):
     return out
 
 
+def family(db, mid):
+    """{years_back: member measure} for the figure whose own column is `mid`; empty if it has no earlier-year columns."""
+    return {int(b): f"{t}.{v}" for t, v, b in db.execute('SELECT "table", variable, years_back FROM dict_measures '
+                                                          "WHERE UPPER(own_column) = UPPER(?)", (mid,))}
+
+
+def held_years(db, mid):
+    return [y for (y,) in db.execute("SELECT year FROM measure_years WHERE UPPER(measure) = UPPER(?) AND n_values > 0 "
+                                     "ORDER BY year", (mid,))]
+
+
+def borrowed(db, mid, y):
+    """For a year whose release holds no own column for `mid`: (earlier-year column, the release it is read from), from
+    the earliest later release that holds the figure; None if there is none."""
+    later = [r for r in held_years(db, mid) if r > y]
+    member = family(db, mid).get(later[0] - y) if later else None
+    return (member, later[0]) if member and where(db, member, later[0]) else None
+
+
+def extra_years(db, measures):
+    """Years before a figure's first own column that its earlier-year columns cover (net price 2012-13 and 2013-14)."""
+    out = set()
+    for m in measures:
+        for mid in [p["id"] for p in m.get("parts") or []] or [m["id"]]:
+            fam, held = family(db, mid), held_years(db, mid)
+            if fam and held:
+                out |= {held[0] - k for k in fam if k > 0}
+    return out
+
+
 def members_of(db, group, y):
     return {u for (u,) in db.execute("SELECT unitid FROM group_membership WHERE group_name = ? AND year = ?", (group, y))}
 
@@ -158,18 +192,25 @@ def at_year(m, y, db, notes):
         for p in m["parts"]:
             p2 = at_year(p, y, db, notes)
             if p2:
-                p2["members"] = members_of(db, p["applies_to"], y)
+                p2["members"] = members_of(db, p["applies_to"], p2.get("from_release") or y)   # the release read
                 parts.append(p2)
         if not parts:
             return None
         mm["parts"] = parts
+        mm["from_release"] = next((p["from_release"] for p in parts if p.get("from_release")), None)
         mm.update({k: parts[0][k] for k in ("table", "column", "rows")})
         mm["rates"] = [r for p in parts for r in p["rates"]]
         return mm
     if m["column"]:
         loc = where(db, m["id"], y)
         rows = year_rows(db, loc[0], m["rows"], y) if loc and loc[2] else None
-        if rows is not None:
+        early = borrowed(db, m["id"], y) if rows is None else None
+        if early:                                       # a year no release's own column covers: an earlier-year column
+            r_loc = where(db, early[0], early[1])
+            mm["table"], mm["column"], mm["rows"] = r_loc[0], r_loc[1], year_rows(db, r_loc[0], m["rows"], early[1]) or {}
+            mm["from_release"] = early[1]
+            notes.setdefault("earlier", {}).setdefault(early[1], set()).add(y)
+        elif rows is not None:
             mm["table"], mm["column"], mm["rows"] = loc[0], loc[1], rows
         else:                                           # missing that year: its detailed equivalent, where loaded
             link = db.execute("SELECT detailed, rows FROM detail_links WHERE measure = ? AND status = 'loaded'",
@@ -293,10 +334,14 @@ def run(plan_, db, result, fetch):
             values[key][y] = value
 
     for y in years:
-        data = fetch.Data(db, year=y)
-        members = group_members(plan_, db, y) if plan_["members"] is not None else None
+        here = fetch.Data(db, year=y)
+        members_here = group_members(plan_, db, y) if plan_["members"] is not None else None
         for m in plan_["measures"]:
             mm = at_year(m, y, db, notes)
+            data, members = here, members_here
+            if mm and mm.get("from_release"):           # read from the later release that holds the earlier-year column
+                data = fetch.Data(db, year=mm["from_release"])
+                members = group_members(plan_, db, mm["from_release"]) if plan_["members"] is not None else None
             if mm is None:
                 missing.setdefault(m["name"], set()).add(y)
             else:
@@ -327,7 +372,9 @@ def run(plan_, db, result, fetch):
                         extra = g["label"][len(m["name"]):] if g["label"].startswith(m["name"]) else ""
                         put(("group", name, m["id"], extra), name + extra + suffix, unit, y, g["value"], mm is not None)
     marks = {}
-    for i, (note, marked) in enumerate(break_notes(db, years, tables, periods), 1):
+    earlier = [(say("as reported", years=", ".join(t["periods"].get(y) or label(y) for y in sorted(ys)), release=label(r)), ys)
+               for r, ys in sorted(notes.get("earlier", {}).items())]
+    for i, (note, marked) in enumerate(list(break_notes(db, years, tables, periods)) + earlier, 1):
         for y in marked:
             marks.setdefault(y, []).append(f"{MARK}{i}")
         result["notes"].append(f"{MARK}{i} {note}")

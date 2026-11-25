@@ -321,6 +321,14 @@ def check(db, wording_only=False):
     for name, membership in db.execute('SELECT "group", membership FROM dict_school_groups'):
         if (membership or "") not in MEMBERSHIP:
             problems.append(f"school_groups.csv '{name}': membership must be blank or '{MEMBERSHIP[1]}'")
+    own_of = {f"{t}.{v}".upper(): (o, b) for t, v, o, b in db.execute('SELECT "table", variable, own_column, years_back FROM dict_measures')}
+    for mid, (own, back) in own_of.items():             # earlier-year columns: each names its family's own column
+        if not own:
+            continue
+        if own.upper() not in own_of or (own_of[own.upper()][0] or "").upper() != own.upper():
+            problems.append(f"measures.csv: {mid} names own column {own}, which is not a measure that names itself")
+        if not (back or "").isdigit() or (own.upper() == mid) != (back == "0"):
+            problems.append(f"measures.csv: {mid} has years_back '{back}'; it must be 0 for the own column, a positive whole number otherwise")
     for topic, checked in db.execute("SELECT topic, checked_by_code FROM dict_outside_ipeds"):
         if (checked or "") not in ("", "years"):
             problems.append(f"outside_ipeds.csv: '{topic}' has checked_by_code '{checked}'; it must be blank or 'years'")

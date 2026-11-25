@@ -92,7 +92,7 @@ def topic_message(plan):
                                      m.get("breaks", [])).strip() for m in t["measures"]])
     ready = [m for m in t["measures"] if m["set_up"] == "yes" and not m.get("retired")]
     if ready:
-        return ("Yes. This app has: " + "; ".join(f"{m['name']} ({m['period']})" for m in ready)
+        return ("Yes. This app has: " + "; ".join(f"{m['name']} ({m.get('years_held') or m['period']})" for m in ready)
                 + ".")
     gone = [m["retired"] for m in t["measures"] if m.get("retired")]   # collected once, no longer: the "retired" message
     if gone and len(gone) == len(t["measures"]):

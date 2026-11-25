@@ -88,6 +88,8 @@ Rules:
   ("lost enrollment", "grew by more than 1,000") applies to that change. For a group over time, membership is "each year" unless the user asks
   for today's schools only ("today").
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
+  A question about which years are held ("which years do you have for net price?") is data_exists, with its schools
+  or group if it names them.
 - C (explanation) and D (glossary) tags are only for define, when the user asks what a word or idea means
   ("what is an adjusted cohort?"). Never use them, or define, for a question that asks for figures
   ("retention rate at Yale" is a data question). For define, put in explain the C and D tags that explain the word

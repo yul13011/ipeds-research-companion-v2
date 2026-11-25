@@ -1045,8 +1045,8 @@ class Retired(unittest.TestCase):
         self.assertFalse(getattr(data, "unlabelled", False))
         self.assertEqual(data.label("HD", "SECTOR", 987), 987)                            # no label: the code itself
         self.assertTrue(data.unlabelled)
-        page = self.run_request(req("schools", measures=[M("COST1.CHG10AY0")], schools=[S("Yale", 130794)]))
-        self.assertEqual(page["kind"], "decline")
+        page = self.run_request(req("schools", measures=[M("IC_PCCAMPUSES.PCCHG5PY3")], schools=[S("Yale", 130794)]))
+        self.assertEqual(page["kind"], "decline")      # (2026-11-25: COST1.CHG10AY0 now reads its own column's release)
         self.assertTrue(page["message"].startswith("IPEDS has no values for this measure"))
 
     def test_both_after_options_runs_every_option(self):
@@ -2070,6 +2070,89 @@ class YearsHeldByCode(unittest.TestCase):
         self.assertEqual(page["kind"], "decline")
         self.assertIn("so I can't show 2009-10", page["message"])
         self.assertIn("NCES IPEDS Data Center", page["message"])
+
+
+
+class ChangeOrder1(unittest.TestCase):
+    """Stage 6, Part 6.0 (owner decisions 2026-11-25): (a) the years a measure is held; (b) a figure held for several
+    years in one table is read from each release's own column, with earlier-year columns only for the years no loaded
+    release covers, labelled with the release they came from."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.db = latest_only(sqlite3.connect(f"file:{DB}?mode=ro", uri=True))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.db.close()
+        cls.dir.cleanup()
+
+    def run_(self, r):
+        return answer.run_direct(r, {}, self.log, DB, "[t]")
+
+    def raw(self, table, column, unitid, year):
+        con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+        try:
+            return con.execute(f'SELECT "{column}" FROM "{table}" WHERE UNITID=? AND year=?', (unitid, year)).fetchone()[0]
+        finally:
+            con.close()
+
+    def test_an_earlier_year_column_is_its_own_release_figure(self):
+        """Done-when check: Yale's net price for 2022-23 is $26,044, read from the 2023-24 release."""
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.NPGRN1")], schools=[S("Yale", 130794)]))
+        self.assertEqual(page["table"]["rows"][0][1], "$26,044")
+        self.assertIn("2022-23", page["interpreted"])
+        self.assertEqual(self.raw("SFA_P2", "NPGRN2", 130794, 2023), 26044)
+
+    def test_a_trend_reads_each_releases_own_column(self):
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.NPGRN2")], schools=[S("Harvard", 166027)],
+                             year=dict(rq.no_year(), span="a range of years", start=2014, end=2023)))
+        for row in page["table"]["rows"]:
+            release = int(row[0][:4])
+            table = "COST2_NETPRICE" if release == 2024 else "SFA_P2"
+            self.assertEqual(row[2], f"${self.raw(table, 'NPGRN2', 166027, release):,.0f}", row)
+
+    def test_years_before_the_releases_come_from_the_earliest_release_labelled(self):
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.NPGRN2")], schools=[S("Harvard", 166027)],
+                             year=dict(rq.no_year(), span="a range of years", start=2012, end=2016)))
+        rows = {r[1]: r for r in page["table"]["rows"]}
+        self.assertEqual(rows["2012-13"][2], f"${self.raw('SFA_P2', 'NPGRN0', 166027, 2015):,.0f}")   # $16,445
+        self.assertEqual(rows["2013-14"][2], f"${self.raw('SFA_P2', 'NPGRN1', 166027, 2015):,.0f}")
+        self.assertIn("2012-13, 2013-14: as reported in the 2015-16 release.", " ".join(page["notes"]))
+        self.assertIn("*", rows["2012-13"][0])
+        self.assertNotIn("*", rows["2015-16"][0].replace("*1", ""))
+
+    def test_several_earlier_columns_named_together_become_one_trend(self):
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.COAIST40"), M("COST2_NETPRICE.COAIST41"),
+                                                  M("COST2_NETPRICE.COAIST42")], schools=[S("Ohio State", 204796)]))
+        self.assertEqual([r[1] for r in page["table"]["rows"]], ["2021-22", "2022-23", "2023-24"])
+        self.assertEqual(page["chart"]["kind"], "line")
+
+    def test_years_held_in_what_data_exists(self):
+        r = req("data_exists", measures=[M("COST2_NETPRICE.NPGRN2"), M("DRVGR.GBA6RTT"), M("IC_PCCAMPUSES.PCCHG1AY2")])
+        page = self.run_(r)
+        held = {row[0]: row[2] for row in page["table"]["rows"]}
+        self.assertEqual(page["table"]["columns"], ["Measure", "Latest period", "Years held", "Set up in this app"])
+        self.assertIn("2014-15 to 2023-24 (10 releases); 2012-13, 2013-14 as reported in the 2015-16 release",
+                      [v for k, v in held.items() if "net price" in k.lower()][0])
+        self.assertIn("students who entered in fall 2009 to fall 2018 (10 releases)", held.values())
+        self.assertIn("2018-19, 2019-20 as reported in the 2021-22 release", [v for k, v in held.items() if "Branch" in k][0])
+        self.assertFalse(page.get("offers"))            # no schools or group named: nothing to offer
+
+    def test_figures_asked_beside_the_years_are_offered_as_a_button(self):
+        state = {}
+        r = req("data_exists", measures=[M("DRVADM.DVADM01")], groups=["Ivy League"])
+        page = answer.ask("Which years are available for Ivy League admission rates? Compare the latest available year.",
+                          state, self.log, DB, call=saved(reply_request(r)))
+        self.assertIn("Fall 2015 to Academic year Fall 2024 (10 releases)", page["message"])
+        self.assertEqual(len(page["offers"]), 1)
+        figures = answer.take_offer(0, state, self.log, DB)
+        self.assertEqual((figures["kind"], len(figures["table"]["rows"])), ("answer", 8))   # the eight schools, ranked
+
+    def test_which_years_reads_as_data_exists(self):
+        self.assertIn("which years are held", interpret.INSTRUCTIONS)
 
 
 if __name__ == "__main__":

@@ -523,3 +523,14 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Review point:** the draft of the two new measures.csv columns for the earlier-year measures is shown to the owner before the build uses it.
 - **"The four new trend-gap questions"** are the two on which years are held and the two on earlier-year columns; the two group-plus-schools questions wait for Part 6a.
 - **Grader stages:** "6.0" is added between 5g and 6. The owner questions for items 46 and 47 (comparing and suggesting measures) are re-marked stage 7, so they count nowhere in Stage 6, including Part 6g.
+
+## 2026-11-25: Part 6.0 draft approved
+
+- **Earlier-year columns:** the draft is approved as it is: 430 measures in 135 families, with the new measures.csv columns `own_column` and `years_back`. A trend reads each release's own column; a year inside the ten releases is the figure its own release published.
+- **GRN4G0 (grant aid recipients, all income levels, three years back):** the IPEDS codebook titles in the 2018-19 to 2021-22 releases give it the year of GRN4G1. The figures match the own column published three years earlier for 95-96% of schools (4-5% match GRN4G1), so the titles are a codebook error and the period is three years back. Noted on its row (new measures.csv column `note`, never shown to users).
+- **Years no loaded release covers:** filled from the earlier-year columns of the earliest release that holds the figure, labelled "as reported in the … release": tuition and charges 2012-13 to 2014-15, net price and grant aid 2012-13 and 2013-14 (2015-16 release); other-campus charges 2018-19 and 2019-20 (2021-22 release). The "Years held" column shows those years with the same label.
+
+## 2026-11-25: log 1.1 and follow-up item 31
+
+- **Log 1.1** ("Which years are available for Ivy League admission rates? Compare the latest available year"): "compare the latest available year" asks for one year across the Ivies, not a trend. Its expectation becomes a scored answer. Right: the years held and the Ivy League admission rates for the latest year, both shown. Acceptable: the years held, with the latest-year comparison offered as a button (the behaviour built in Part 6.0).
+- **Part 6a's proposal** adds follow-up item 31 (two requests in one message, answered together) to its three gaps: a group plus named schools, a trend that names no measure, and follow-ups that refer to schools named several turns earlier.

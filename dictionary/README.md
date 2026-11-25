@@ -36,6 +36,9 @@ One row per IPEDS variable in any of the ten releases: the 2,599 of the 2024-25 
 - `breakdown_set`: filled when this column is one part of a breakdown stored as columns, such as "By race and ethnicity" or "By gender". All the columns of one table with the same name form the set.
 - `years_available`: for a retired variable, the releases it appeared in. The build works out every measure's years from the data (table `measure_years`); this column is for reading.
 - `set_total`: the column that the parts add up to, or `sum of parts` when the data has no total column. The build tests that the parts add up on every row; a set that fails is not loaded.
+- `own_column`: for a column that is one year of a figure held for several years in the same table (net price for this year and the two before, tuition for four years), the release's own column for that figure, `TABLE.VARIABLE`; the own column names itself. Blank for every other measure. A trend reads each release's own column; the other columns supply only the years no loaded release's own column covers, labelled with the release they came from (owner decision 2026-11-25).
+- `years_back`: how many years before the own column's period this column's period starts; 0 for the own column.
+- `note`: anything about the row for the owner, never shown to users (for example a codebook title error).
 
 ## terms.csv
 

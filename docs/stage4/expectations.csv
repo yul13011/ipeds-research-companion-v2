@@ -1,5 +1,5 @@
 source,case,turn,category,expect,measures,schools,groups,stage,note
-log,1,1,trend,trend,DRVADM.DVADM01,,,,"asks which years: one year only in the slice; the latest-year comparison could be answered; 2026-11-22 (part 5.0, answer what can be answered): the year held, with the missing years named, is acceptable until trends exist; 2026-11-23 (owner): expects a trend"
+log,1,1,scored,answer,DRVADM.DVADM01,,,,"which years are held, and the latest year compared across the Ivies (one year, not a trend); owner decision 2026-11-25: right = the years held and the Ivy League admission rates for the latest year, both shown; acceptable = the years held, with the latest-year comparison offered as a button"
 log,2,1,greeting,,,,,,
 log,3,1,scored,answer,DRVADM.DVADM01,130794,,,
 log,3,2,scored,answer,*race,130794,,,undergraduate enrollment by race and ethnicity (a tested breakdown set)

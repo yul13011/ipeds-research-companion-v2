@@ -71,6 +71,8 @@ def summary(page):
         out["options"] = page["options"]
     if page.get("candidates"):
         out["candidates"] = page["candidates"][:8]
+    if page.get("offers"):                              # buttons offered under the answer (Part 6.0)
+        out["offers"] = page["offers"]
     return out
 
 

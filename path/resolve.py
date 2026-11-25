@@ -302,6 +302,7 @@ def resolve_request(request, d, short, new_question=False):
     stop = apply_readings(request, d, plan)              # 1 and 2: stated values, then chosen readings
     if stop:
         return stop
+    own_columns(request, d)                             # an earlier-year column: its own column, in its year
     if request["breakdown"]:
         switch_to_detail(request, d, plan)              # 3: carries over every row, level and reading decided
     for step in (scope, level_defaults):                # 4: defaults fill what is still empty
@@ -665,6 +666,7 @@ def topic_plan(plan, request, d, short=None):
             gone = retired(d, m["id"])
             if gone:                                    # data that existed is never "not found"
                 found[-1]["retired"] = say(d, "retired" + gone["one"], what=found[-1]["name"], **gone)
+            found[-1]["years_held"] = years_held(d, m["id"], row[6])
     outside = d.one("SELECT topic, what_to_say, pointer FROM dict_outside_ipeds WHERE topic=?", request["topic"] or "")
     plan["topic"] = dict(asked=request["topic"], measures=found,
                          outside=dict(zip(("topic", "say", "pointer"), outside)) if outside else None)
@@ -684,7 +686,45 @@ def topic_plan(plan, request, d, short=None):
     elif outside:
         plan["topic"]["say"] = say(d, "not collected", say=outside[1]) + \
             (" " + say(d, "not collected source", pointer=outside[2]) if outside[2] else "")
+    ready = [m for m in request["measures"] if any(f["set_up"] == "yes" and f"{f['table']}.{f['variable']}" == m["id"]
+                                                    for f in found)]
+    if request["operation"] == "data_exists" and ready and (request["schools"] or request["groups"]):
+        figures = without(request, operation="schools" if request["schools"] and not request["groups"] else "rank",
+                          measures=ready, topic=None)  # the figures asked for beside the years: offered, not shown unasked
+        who = ", ".join([s["name"] for s in request["schools"]] + request["groups"])
+        plan["offers"] = [dict(label=say(d, "years held offer", what=found[0]["name"], who=who), request=figures)]
     return outcome("ready", plan=plan, request=request)
+
+
+def years_held(d, mid, pattern):
+    """The years a measure is held, from the releases that hold it (measure_years): first to last, how many releases,
+    any release in between without it, and the years only earlier-year columns hold, labelled with their release."""
+    own = (d.one("SELECT own_column FROM dict_measures WHERE UPPER(\"table\" || '.' || variable) = UPPER(?)", mid) or ("",))[0]
+    if own and own.upper() != mid.upper():              # an earlier-year column: the years of its figure
+        mid = own
+        pattern = d.one("SELECT period FROM dict_measures WHERE UPPER(\"table\" || '.' || variable) = UPPER(?)", own)[0]
+    held = [y for (y,) in d.q("SELECT year FROM measure_years WHERE UPPER(measure) = UPPER(?) AND n_values > 0 ORDER BY year",
+                              mid)]
+    if not held:
+        return ""
+    rule = (d.one("SELECT COALESCE(m.entering_cohort, y.entering_cohort) FROM dict_measures m JOIN dict_year_meaning y "
+                  "ON y.\"table\" = m.\"table\" WHERE UPPER(m.\"table\" || '.' || m.variable) = UPPER(?)", mid) or ("",))[0]
+    if rule:                                            # a cohort measure: the entering cohorts, as in a trend
+        kind, offset = rule.split(";")[0].partition(" for ")[0].strip().rsplit(" ", 1)
+        when = lambda y: f"{kind} {y + int(offset)}"
+    else:
+        when = lambda y: fill_years(pattern, y) or f"{y}-{(y + 1) % 100:02d}"
+    key = ("years held cohorts" if rule else "years held") if len(held) > 1 else "years held one"
+    text = say(d, key, first=when(held[0]), last=when(held[-1]), n=len(held))
+    gaps = [y for y in range(held[0], held[-1]) if y not in held]
+    if gaps:
+        text += "; " + say(d, "years held gap", years=", ".join(when(y) for y in gaps))
+    backs = sorted(int(b) for (b,) in d.q("SELECT years_back FROM dict_measures WHERE UPPER(own_column) = UPPER(?) "
+                                          "AND years_back <> '0'", mid))
+    if backs:                                           # owner decision 2026-11-25: shown with the release they came from
+        text += "; " + say(d, "years held earlier", years=", ".join(when(held[0] - k) for k in reversed(backs)),
+                           release=f"{held[0]}-{(held[0] + 1) % 100:02d}")
+    return text
 
 
 def explanations(request, d):
@@ -706,6 +746,35 @@ def explanations(request, d):
                 out.append(say(d, "explanation glossary", name=x["key"], text=row[0], edition=row[1]) +
                            (" " + say(d, "explanation convention", text=own[0]) if own else ""))
     return out
+
+
+def own_columns(request, d):
+    """Owner decision 2026-11-25: a figure held for several years in one table is read from each release's own column.
+    An earlier-year column in the request becomes its own column (measures.csv `own_column`). With no year of its own,
+    the request asks for the year that column holds, from the release that published it; several earlier years of one
+    figure named together become a trend over those years. Changes the request in place."""
+    rows = [d.one('SELECT own_column, years_back, period FROM dict_measures WHERE UPPER("table" || \'.\' || variable) '
+                  "= UPPER(?)", m["id"]) for m in request["measures"]]
+    if not any(r and r[0] and r[1] != "0" for r in rows):
+        return
+    named = []                                          # the years asked for: every member named, the own column too
+    for m, row in zip(request["measures"], rows):
+        if row and row[0]:
+            named.append(int(re.search(r"(?:19|20)\d\d", fill_years(row[2], d.year)).group()))
+            m["id"] = row[0]
+    seen, kept = set(), []
+    for m in request["measures"]:                      # the same own column named twice is one measure
+        key = (m["id"].upper(), json.dumps(m["row"], sort_keys=True))
+        if key not in seen:
+            seen.add(key)
+            kept.append(m)
+    request["measures"] = kept
+    if by_year(request["year"]):
+        return                                          # the user's own years: kept
+    first, last = min(named), max(named)
+    span = "one year" if first == last else "a range of years"
+    request["year"] = dict(request["year"], span=span, start=first, end=last + 1 if span == "one year" else last,
+                           last=None, change=False, kind=None)
 
 
 # ---------------------------------------------------------------- terms

@@ -389,9 +389,9 @@ def breakdown(plan, data, result):
 
 def topic(plan, data, result):
     t = plan["topic"]
-    result["columns"] = ["Measure", "Period", "Set up in this app"] if t["measures"] else []
+    result["columns"] = ["Measure", "Latest period", "Years held", "Set up in this app"] if t["measures"] else []
     for m in t["measures"]:
-        result["rows"].append([m["name"], m["period"], "yes" if m["set_up"] == "yes" else "not yet"])
+        result["rows"].append([m["name"], m["period"], m.get("years_held") or "", "yes" if m["set_up"] == "yes" else "not yet"])
 
 
 OPS = {"schools": schools, "rank": rank, "list": listing, "count_schools": count_schools, "group": group, "split": split,
