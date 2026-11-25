@@ -1,0 +1,10 @@
+measure,column in release Y,years back,compared with,school-years,identical,within 1%,more than 10% apart,median gap (%)
+"Net price, grant-aided students, private (NPGRN)",NPGRN1,1,NPGRN2 of release Y-1,31915,27677,28252,1850,0.0
+"Net price, grant-aided students, private (NPGRN)",NPGRN0,2,NPGRN2 of release Y-2,27194,21515,22240,2628,0.0
+"Net price, grant-aided students, public (NPIST)",NPIST1,1,NPIST2 of release Y-1,16595,15351,15514,606,0.0
+"Net price, grant-aided students, public (NPIST)",NPIST0,2,NPIST2 of release Y-2,14601,12951,13149,867,0.0
+"Students awarded grant aid, full-time first-time (GISTN)",GISTN1,1,GISTN2 of release Y-1,16613,16290,16312,201,0.0
+Published in-district tuition and fees (CHG1AY),CHG1AY2,1,CHG1AY3 of release Y-1,31599,29800,30315,399,0.0
+Published in-district tuition and fees (CHG1AY),CHG1AY1,2,CHG1AY3 of release Y-2,27505,25618,26157,429,0.0
+"Tuition and fees, derived (TUFEYR)",TUFEYR2,1,TUFEYR3 of release Y-1,31599,29800,30315,399,0.0
+"Tuition and fees, derived (TUFEYR)",TUFEYR1,2,TUFEYR3 of release Y-2,27505,25618,26157,429,0.0

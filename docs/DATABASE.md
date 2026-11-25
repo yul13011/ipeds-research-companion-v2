@@ -131,7 +131,7 @@ The layers:
 | `dict_group_members` | Groups defined by a list of schools | group, unitid | 3 | 79 |
 | `dict_measure_history` | Earlier names of each measure, so a trend continues across a renaming | measure, earlier_table, earlier_variable | 6 | 608 |
 | `dict_measures` | Every measure: table, variable, title, unit, period, plain name and set-up status | table, variable | 21 | 3,073 |
-| `dict_outside_ipeds` | Topics IPEDS does not collect, and where to look instead | topic | 6 | 16 |
+| `dict_outside_ipeds` | Topics IPEDS does not collect, and where to look instead | topic | 7 | 16 |
 | `dict_rates` | Rates and averages computed from counts: numerator, denominator and method | rate, applies_to | 13 | 28 |
 | `dict_school_groups` | Named school groups and how each is defined | group | 14 | 187 |
 | `dict_school_nicknames` | Nicknames and abbreviations for schools | nickname | 5 | 36 |
@@ -174,4 +174,4 @@ The layers:
 | `_tables` | Every table loaded from each release: source name, kind, rows read and loaded | local_table, year | 10 | 554 |
 | `sqlite_stat1` | SQLite's own statistics for its query planner | tbl, idx | 3 | 70 |
 
-Counted in 44 seconds.
+Counted in 29 seconds.

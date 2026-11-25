@@ -507,3 +507,11 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 2. **Years held:** only the code decides whether years are held; the model must not decline, or add notes, on that basis. Tests include the Yale "2014–15" bachelor's degrees question.
 3. **Speed:** the plan's "typical questions under 5 seconds" is replaced by the owner's limits: 10 seconds a turn, 20 seconds when the AI searches. Each run reports the median turn time.
 4. **Then:** explain version 2's handling of the 12 trend questions it did not answer right, build 1 and 2, run the question set twice and report. Stage 5 is pushed after the owner's review.
+
+## 2026-11-25: Stage 5 approved
+
+- **Push** Stage 5 after the history check.
+- **Six test questions** are added, two for each thin trend gap (which years are held; earlier years kept as columns in one table; a group plus named schools), with expectations. They count from the next run.
+- **Two proposals,** to be the first change order of Stage 6, before the beta: (a) listing the years a measure is held in "what data exists" answers, and answering "which years do you have?"; (b) trends from the ten releases, using earlier-year columns in one table only for years the releases do not cover. Proposals only.
+- **Every scorecard** reports the score on real users' questions (those taken from version 1's log) as its own row, beside the full set, the same-118 comparison and the badly written set.
+- **Then stop:** the owner reorganises the plan before Stage 6 starts.

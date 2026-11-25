@@ -28,3 +28,9 @@ o49_yale_1990,2,49,5.0,What can you show me instead?
 o50_yale_pell_trend,1,50,5c,Pell grant percentage at Yale since 2015
 o50_cc_dgs_pell_trend,1,50,5c,Share of degree-seeking undergraduates with Pell grants at Front Range Community College since 2015
 o51_negative_net_worth,1,51,5b2,How many schools have negative net worth and which are they?
+o52_years_grad_yale,1,52,5g,Which years of graduation rates do you have for Yale?
+o52_years_netprice,1,52,5g,What years of net price data are available?
+o52_netprice_trend_harvard,1,52,5g,How has net price at Harvard changed over the last ten years?
+o52_coa_trend_mit,1,52,5g,How has the total cost of attendance at MIT changed since 2015?
+o52_bigten_plus_nd,1,52,5g,Show fall enrollment for the Big Ten plus Notre Dame
+o52_ivy_mit_stanford_trend,1,52,5g,Graduation rate trend for the Ivy League plus MIT and Stanford

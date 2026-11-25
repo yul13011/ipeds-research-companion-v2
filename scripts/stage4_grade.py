@@ -24,7 +24,7 @@ import config
 import os
 
 MODELS = tuple(a for a in sys.argv[1:] if a != "dump") or ("haiku_before", "sonnet")   # run folders under logs/stage4
-STAGES = ["4", "5.0", "5b2", "5c", "5d", "5f", "6"]                        # an owner question counts from the stage it is due in
+STAGES = ["4", "5.0", "5b2", "5c", "5d", "5f", "5g", "6"]                        # an owner question counts from the stage it is due in
 STAGE = os.environ.get("IPEDS_STAGE", "4")              # the stage being measured; earlier-due questions are counted
 EXP = {(r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(ROOT / "docs" / "stage4" / "expectations.csv", encoding="utf-8"))}
 REVIEW_FILE = ROOT / "docs" / "stage4" / "review.csv"
@@ -169,6 +169,16 @@ def report():
     for model in MODELS:
         g = [r for r in rows if r["model"] == model]
         print(f"\n## {model}")
+        ok = lambda rs: (f"{sum(r['score'] != 'wrong reading' for r in rs)} of {len(rs)} "
+                         f"({100 * sum(r['score'] != 'wrong reading' for r in rs) / max(len(rs), 1):.1f}%)")
+        due = lambda r: STAGES.index((EXP.get((r["source"], str(r["case"]), str(r["turn"]))) or {}).get("stage") or "4")
+        full = [r for r in g if r["category"] in ("scored", "trend")]
+        print("  right or acceptable (owner decision 2026-11-25: these rows in every scorecard):")
+        print("    full set, scored and trend:", ok(full))
+        print("    real users' questions (from version 1's log), scored and trend:", ok([r for r in full if r["source"] == "log"]))
+        print("    questions due by Part 5d (the same 118 as Part 5e), scored:",
+              ok([r for r in g if r["category"] == "scored" and due(r) <= STAGES.index("5d")]))
+        print("    badly written set:", ok([r for r in g if r["category"] == "badly written"]))
         for cat in ("scored", "trend", "badly written"):
             c = Counter(r["score"] for r in g if r["category"] == cat)
             print(f"  {cat}: n={sum(c.values())}", dict(c))
@@ -183,6 +193,7 @@ def report():
         print(f"  time: total {sum(t['seconds'] for t in all_t):.0f}s, mean {sum(t['seconds'] for t in all_t) / len(all_t):.2f}s per turn;"
               f" cost ${sum(t.get('cost_usd') or 0 for t in all_t):.4f} for {len(all_t)} turns")
         times = sorted(t["seconds"] for t in all_t)
+        print(f"  median turn: {times[len(times) // 2]:.2f}s (owner decision 2026-11-25: reported for every run)")
         slow = times[int(len(times) * 0.9):]                # the slowest tenth of questions (owner decision 2026-11-22)
         print(f"  slowest tenth: {len(slow)} turns from {slow[0]:.2f}s to {slow[-1]:.2f}s, mean {sum(slow) / len(slow):.2f}s;"
               f" 90th percentile {times[int(len(times) * 0.9)]:.2f}s")
