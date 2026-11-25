@@ -196,7 +196,7 @@ def main():
                        status=f"app {kind}" if kind != "answer" else ("match" if diff is not None and abs(diff) <= tolerance else "differs"))
         rows.append(row)
 
-    # The test table in V2_PLAN.md: the checks not already covered by the NCES files above
+    # The test table in the plan (docs/archive/V2_PLAN_2026-11-25.md): the checks not already covered by the NCES files above
     def plan(case, request, expected, read):
         kind, message, result = run(request, db)
         actual = read(result) if kind == "answer" else None

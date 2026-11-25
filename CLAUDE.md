@@ -30,7 +30,7 @@ Owner decisions are in `dictionary/DECISIONS.md`.
 
 ## Read first, in this order
 
-1. `docs/V2_PLAN.md`: why we are rebuilding, the version 2 structure, the 43 question types, the test results, the version 1 feature list, and the decisions that need the owner's input.
+1. `docs/V2_PLAN.md`: the principles (section 1), how the app understands a question (4), the data and dictionary (5), the question types (6), what Stages 1 to 5 built (8), Stage 6 with the version 1 features (9 and 9.4), and why version 2 was a rebuild (13). Reorganised 2026-11-25; the earlier version is `docs/archive/V2_PLAN_2026-11-25.md`.
 2. `docs/V1_ASSESSMENT.md`: what was wrong with version 1. Do not repeat those patterns.
 3. `dictionary/README.md` and `dictionary/DECISIONS.md`: the conventions and the decisions behind them.
 4. `docs/test_questions.csv`: real user questions, with conversation number and turn order. Part of the test set.

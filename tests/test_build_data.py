@@ -408,7 +408,7 @@ class RealDatabase(unittest.TestCase):
             self.assertEqual(bad, 0, release)
 
     def test_known_values_from_the_plan(self):
-        """Three figures from the test table in V2_PLAN.md, straight from the stacked tables."""
+        """Three figures from the test table in the plan (docs/archive/V2_PLAN_2026-11-25.md), straight from the stacked tables."""
         q = lambda sql: self.db.execute(sql).fetchone()[0]
         self.assertEqual(q("SELECT COUNT(*) FROM HD WHERE year=2024"), 6072)
         self.assertEqual(q("SELECT COUNT(*) FROM HD WHERE year=2024 AND FIPS BETWEEN 1 AND 56 "

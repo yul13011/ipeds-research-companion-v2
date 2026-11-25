@@ -17,7 +17,7 @@ HOW WE WORK
 - First task before Stage 1: create CLAUDE.md in this folder containing these working rules and the RULES section below, so every later session starts with them.
 
 READ FIRST, IN THIS ORDER
-1. docs/V2_PLAN.md: why we are rebuilding, the version 2 structure, the 43 question types, the test results, the version 1 feature list with what belongs in this slice, and the decisions that need my input.
+1. docs/V2_PLAN.md (the plan as it was then is now docs/archive/V2_PLAN_2026-11-25.md; in the reorganised plan, the question types are section 6 and the version 1 features section 9.4): why we are rebuilding, the version 2 structure, the 43 question types, the test results, the version 1 feature list with what belongs in this slice, and the decisions that need my input.
 2. docs/V1_ASSESSMENT.md: what was wrong with version 1. Read it so you do not repeat those patterns.
 3. docs/dictionary_review.xlsx: my reviewed decisions. This is the source of truth for names, defaults, rates, category totals, year meanings, the national universe, topics outside IPEDS, and school groups.
 4. docs/question_log.csv: real user questions. These are part of the test set.
@@ -54,7 +54,7 @@ Stage 2. Dictionary and directory.
 - Build the school directory from the HD table: name, state, sector, level, control, Carnegie class, plus nicknames and named groups carried over from version 1 (prototype/catalog.py) and each school's comparison group from the CUSTOMCGIDS table. Add the grouping columns listed in the workbook's "School groups" tab (region, sector, control, level, locale, size, HBCU, tribal, land-grant, Carnegie classes, system, religious affiliation, open admission, athletic conference), so a user can name a group such as "public two-year colleges in the Southeast" and the app filters on those columns. Use my decisions in that tab for words with no exact IPEDS category, such as "the Northeast" or "liberal arts colleges".
 - Where the workbook is missing a decision you need, do not guess. List the gaps and ask me.
 
-Stage 3. The question path. Steps 2 to 6 of the flow in V2_PLAN.md.
+Stage 3. The question path. Steps 2 to 6 of the flow in V2_PLAN.md (section 4.2 of the reorganised plan).
 - Shortlist: a text search over the measure dictionary and school directory. Code only.
 - Interpret: ONE model call that picks from the shortlist and returns one structured request: operation, measures, schools or a group filter, years as the user stated them plus the kind of year, and any edit to the previous request. If the question is ambiguous it returns two or three complete options.
 - The structured request is made of independent parts (operation, measure, schools or group, breakdown, year). Any operation must work with any measure and any group. Never write a template for one whole question.
@@ -71,7 +71,7 @@ Questions about what data exists ("do you have data on X?"). Give one of three a
 The full measure list in the workbook covers every IPEDS variable in the release, so a topic with no match in it is case 3, not case 2.
 
 Stage 4. Measure it.
-- Tests against known answers: reproduce the 2024 values in the NCES benchmark files and the test table in V2_PLAN.md, and the 2024 Yale benchmark values.
+- Tests against known answers: reproduce the 2024 values in the NCES benchmark files and the test table in V2_PLAN.md (now in docs/archive/V2_PLAN_2026-11-25.md), and the 2024 Yale benchmark values.
 - Run every question in docs/question_log.csv and the single-year questions in version 1's eval_set.py through the path. For each, record: the structured request the model produced, whether the measure and schools were right, the answer, and the time taken.
 - Give me a scorecard: how many got a correct answer, a correct decline, a clarifying question, or a wrong reading. List every wrong reading with the question and what went wrong.
 - Summarise the decline log: declines grouped by what was missing, so I can see which additions would unlock the most questions.

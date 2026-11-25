@@ -8,7 +8,7 @@ This is the work order for Stage 5 of version 2. Work through it one part at a t
 
 READ FIRST
 - `CLAUDE.md`: the working rules. They all still apply.
-- `docs/V2_PLAN.md`, especially "How the app understands a question", "Stage 5 plan" and "Stage 6 and later". The plan is the design. Build to it; do not redesign it. If something in it does not work against the real data, stop and tell me before changing the design.
+- `docs/V2_PLAN.md`, especially "How the app understands a question", "Stage 5 plan" and "Stage 6 and later" (sections of the plan as it was then, now `docs/archive/V2_PLAN_2026-11-25.md`; in the reorganised plan: sections 4, 8.2, and 9 to 10). The plan is the design. Build to it; do not redesign it. If something in it does not work against the real data, stop and tell me before changing the design.
 - `docs/reports/STAGE_4.md` and `STAGE_4_FOLLOWUP.md`: where the first slice stands.
 
 HOW EACH PART ENDS
