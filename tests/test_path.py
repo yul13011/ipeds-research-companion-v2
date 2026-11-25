@@ -1712,16 +1712,16 @@ class Part5dDecisions(unittest.TestCase):
         q = "Enrollment at Yale in 1990"
         short = shortlist.shortlist(q, DB)
         user = interpret.render(short, None, None, q)[0]
-        outside = next(o["tag"] for o in short["outside"] if o["topic"].startswith("Years outside"))
-        reply = dict(wire_reply("decline", dict(measures=[dict(measure=tag_of(user, "Total  enrollment"), row=[])],
-                                                schools=[dict(name="Yale", school=tag_of(user, "Yale University"))],
-                                                outside=outside, year=dict(stated="1990", kind=None, span="one year",
-                                                                           start=1990, end=0, last=0, membership="each year"))),
-                     decline=dict(reason="1990", wanted="1990", missing="not in IPEDS", closest="", about=None))
+        self.assertFalse([o for o in short["outside"] if o["topic"].startswith("Years outside")])   # 2026-11-25: the code
+        reply = wire_reply("request", dict(measures=[dict(measure=tag_of(user, "Total  enrollment"), row=[])],  # decides
+                                           schools=[dict(name="Yale", school=tag_of(user, "Yale University"))],
+                                           year=dict(stated="1990", kind="", span="one year", start=1990, end=0, last=0,
+                                                     membership="each year")))
         state = {}
         page = answer.ask(q, state, self.log, DB, call=AISearch.scripted(None, [lambda u: reply])[0])
         self.assertEqual(page["kind"], "decline")
-        self.assertIn("the same figure for the years this app holds", page["message"])
+        self.assertIn("so I can't show 1990", page["message"])
+        self.assertIn("NCES IPEDS Data Center for earlier years", page["message"])   # the row's pointer
         self.assertIsNotNone(state["last_decline"]["closest"]["request"])
 
 
@@ -1836,11 +1836,11 @@ class Explanations(unittest.TestCase):
 
     def define(self, question, pick):
         """Ask, with a model reply that puts in `explain` the tags `pick` chooses from the prompt."""
-        def call(system, user, model, schema=None):         # as the model writes it: tags in topic, a general
-            got = pick(user)                                    # explanation in the request's label
-            tags = ", ".join(t for t in got.get("explain", []) if t)
-            return json.dumps(wire_reply("request", dict(operation="define", topic=tags or question,
-                                                         label=got.get("general", "")))),                 {"input_tokens": 100, "output_tokens": 10}
+        def call(system, user, model, schema=None):
+            got = pick(user)
+            return json.dumps(wire_reply("request", dict(operation="define", topic=question,
+                                                         explain=[t for t in got.get("explain", []) if t],
+                                                         general=got.get("general", "")))),                 {"input_tokens": 100, "output_tokens": 10}
         return answer.ask(question, {}, self.log, DB, call=call)
 
     def last_row(self):
@@ -1919,16 +1919,16 @@ class Explanations(unittest.TestCase):
         page = answer.run_direct(req("define", measures=[M("EFB.EFBAGE")]), {}, self.log, DB, "[t]")
         self.assertIn("Enrollment by age is optional for schools to report in even-numbered years", page["message"])
 
-    def test_tags_in_topic_and_a_label_are_read_only_for_define(self):
+    def test_explain_and_general_are_read_only_for_define(self):
         tags = {"C1": ("concepts", "Adjusted cohort"), "D2": ("glossary", "Cohort")}
-        wire = wire_reply("request", dict(operation="define", topic="C1, D2", label="An idea."))["requests"][0]
+        wire = wire_reply("request", dict(operation="define", topic="", explain=["C1", "D2"], general="An idea."))["requests"][0]
         r = rq.request_from_wire(wire, tags)
         self.assertEqual(r["explain"], [dict(kind="concepts", key="Adjusted cohort"), dict(kind="glossary", key="Cohort")])
         self.assertIsNone(r["topic"])
         self.assertEqual(r["general"], "An idea.")
-        r = rq.request_from_wire(dict(wire, operation="schools", topic=None), tags)
-        self.assertEqual((r["explain"], r["general"]), ([], None))   # a data question's label is never an explanation
-        self.assertEqual(rq.to_wire(rq.request_from_wire(wire, tags), {t: k for t, k in tags.items()})["topic"], "C1, D2")
+        r = rq.request_from_wire(dict(wire, operation="schools"), tags)
+        self.assertEqual((r["explain"], r["general"]), ([], None))   # never read for a data question
+        self.assertEqual(rq.to_wire(rq.request_from_wire(wire, tags), tags)["explain"], ["C1", "D2"])
 
     def test_explanations_name_no_internal_files(self):
         db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
@@ -2022,6 +2022,54 @@ class ConventionSentences(unittest.TestCase):
     def test_a_group_finance_figure_is_shown_for_each_form(self):
         page = self.run_(req("group", measures=[M("rate:Core expenses per FTE student")]))   # and test_finance_is_split_by_reporting_form
         self.assertEqual(len(page["table"]["rows"]), 3)
+
+
+
+class YearsHeldByCode(unittest.TestCase):
+    """Owner decision 2026-11-25: only the code decides whether the years asked for are held; the model never declines,
+    or adds a note, on that basis. The question is the logged one: "How many bachelor's degrees did Yale award in
+    2014–15?" (held: the 2015-16 release covers July 2014 to June 2015; 1,327)."""
+    Q = "How many bachelor’s degrees did Yale award in 2014–15?"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def request(self):
+        return req("schools", measures=[M("DRVC.BASDEG")], schools=[S("Yale", 130794)],
+                   year=dict(rq.no_year(), stated="2014-15", span="one year", start=2014, end=2015))
+
+    def test_the_model_cannot_decline_or_add_a_note_for_years(self):
+        self.assertNotIn("years", rq.REPLY_SCHEMA["properties"]["decline"]["properties"]["missing"]["enum"])
+        s = shortlist.shortlist(self.Q, DB)
+        self.assertFalse([o for o in s["outside"] if o["topic"].startswith("Years outside")])
+        self.assertIn("app checks which years it holds", interpret.INSTRUCTIONS)
+
+    def test_2014_15_is_answered_without_a_note_on_earlier_years(self):
+        page = answer.ask(self.Q, {}, self.log, DB, call=saved(reply_request(self.request())))
+        self.assertEqual(page["kind"], "answer")
+        self.assertEqual(page["table"]["rows"][0][1], "1,327")
+        self.assertIn("July 1, 2014 - June 30, 2015", page["interpreted"])
+        self.assertNotIn("Earlier years", page["interpreted"] + (page.get("message") or ""))
+
+    def test_a_years_decline_from_an_older_reply_is_checked_by_the_code(self):
+        reply = dict(kind="decline", request=self.request(), edit=None, options=[], chosen=[],
+                     decline=dict(reason="", wanted="", missing="years", closest="", about=None))
+        page = answer.ask(self.Q, {}, self.log, DB, call=saved(reply))
+        self.assertEqual((page["kind"], page["table"]["rows"][0][1]), ("answer", "1,327"))
+
+    def test_years_not_held_are_declined_by_the_code_with_the_pointer(self):
+        r = req("schools", measures=[M("DRVC.BASDEG")], schools=[S("Yale", 130794)],
+                year=dict(rq.no_year(), stated="2009-10", span="one year", start=2009, end=2010))
+        page = answer.ask("Yale bachelor's degrees in 2009-10", {}, self.log, DB, call=saved(reply_request(r)))
+        self.assertEqual(page["kind"], "decline")
+        self.assertIn("so I can't show 2009-10", page["message"])
+        self.assertIn("NCES IPEDS Data Center", page["message"])
 
 
 if __name__ == "__main__":

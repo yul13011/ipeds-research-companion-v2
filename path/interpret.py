@@ -21,7 +21,7 @@ Rules:
   T1 term reading, O1 outside-IPEDS topic, C1 explanation, D1 glossary entry). Answer with tags only. If what the question needs has no tag,
   decline and say what is missing.
 - Never write SQL and never state a number from the data.
-- Leave a field null, or an empty list, when it does not apply. Fill only the parts the kind you choose needs.
+- Leave a field empty when it does not apply: "" for a tag, a choice or text, 0 for a number, an empty list. Fill only the parts the kind you choose needs.
 - Choose kind, and fill `requests` to match:
   request: one complete request for a new question (its label can be empty).
   edit: a follow-up that changes the PREVIOUS REQUEST ("add Northeastern", "now for Texas", "rank them",
@@ -37,8 +37,9 @@ Rules:
         edit with that change; the app applies it to every option and asks again.
   decline: the question cannot be run as asked. Put in `requests` the one request you would have made, as far as
         the question allows (its school, group, measure and year), so a follow-up can change it. Set `missing`:
-        years (years not held), measure (no listed measure fits), group, calculation, breakdown,
-        not a data question, other. Use "not in IPEDS" only with an outside-IPEDS topic (O tag) in the request;
+        measure (no listed measure fits), group, calculation, breakdown, not a data question, other.
+        Never decline, or add a note or an outside topic, because of the years asked for: write the years as the user
+        named them, and the app checks which years it holds. Use "not in IPEDS" only with an outside-IPEDS topic (O tag) in the request;
         never decide on your own that IPEDS lacks something: if nothing listed fits, use measure.
         If the question as a whole is about an outside-IPEDS topic (O tag), the request names no measure.
         If only one part of the question is outside IPEDS and another part can be answered, do not decline:
@@ -65,9 +66,9 @@ Rules:
   If the term says "always ask" and the user did not say, return options, one per reading.
   Otherwise use the reading marked default.
 - schools: write each name as the user wrote it, with its S tag if the shortlist clearly has that school,
-  or null if it does not or several schools could be meant. A nickname or short name that means one school (UConn,
+  or "" if it does not or several schools could be meant. A nickname or short name that means one school (UConn,
   UMich, Mizzou, Purdue, Northeastern) is that school: give its tag. Only for a name several schools share (such as
-  "BU" or "U of M") or a name no listed school has (such as "RTI"), give null, never another school's tag; the app
+  "BU" or "U of M") or a name no listed school has (such as "RTI"), give "", never another school's tag; the app
   then offers the nearest names. This holds in a decline too.
 - groups: G tags. A school must be in every group named.
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
@@ -89,10 +90,10 @@ Rules:
 - define and data_exists: put the matching measures in measures, or the outside-IPEDS topic (O tag) in outside.
 - C (explanation) and D (glossary) tags are only for define, when the user asks what a word or idea means
   ("what is an adjusted cohort?"). Never use them, or define, for a question that asks for figures
-  ("retention rate at Yale" is a data question). For define, write in topic the C and D tags that explain the word
-  asked about ("C1, D2"), and put the matching measures in measures if the word is a measure. Only if no C, D or M
-  tag explains it, write a short general explanation (at most three sentences) in the request's label: no numbers,
-  and never say whether IPEDS collects something. Otherwise label is "".
+  ("retention rate at Yale" is a data question). For define, put in explain the C and D tags that explain the word
+  asked about, and the matching measures in measures if the word is a measure. Only if no C, D or M tag explains it,
+  write a short general explanation (at most three sentences) in general: no numbers, and never say whether IPEDS
+  collects something. Otherwise general is "".
   For a broad topic ("admissions", "finance", "faculty"), list every shortlist measure that belongs to it, up to 15.
   Only if no listed measure belongs to the topic, put the user's topic in plain words in topic.
 """

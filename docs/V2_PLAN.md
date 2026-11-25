@@ -432,7 +432,7 @@ Agreed Nov 22, 2026. The owner accepted the recommended answers to the six decis
 2. **Comparability breaks:** show the trend with a note and mark the year. Data is never hidden.
 3. **Charts:** a basic automatic chart in the owner's palette: a line for trends, bars for comparisons. The formatting panel comes later.
 4. **Summary:** two or three sentences, neutral, no interpretation beyond the numbers. It can be switched off.
-5. **Speed:** typical questions under 5 seconds, hard ones under 10.
+5. **Speed:** at most 10 seconds a turn, and 20 seconds for a turn where the AI searches (owner decision, 2026-11-25, replacing "typical questions under 5 seconds, hard ones under 10"). Each question-set run reports the median turn time.
 6. **Meaning search setup:** a small local model, so there is no outside service or second provider. Claude Code compares two local packages, fastembed and sentence-transformers (accuracy, time added, install size, hosting on Render), and proposes one before building.
 
 **Success test.**

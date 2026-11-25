@@ -194,6 +194,7 @@ Topics users ask about that IPEDS does not hold.
 - `pointer`: where to send the user. Blank means no pointer is given.
 
 - `instead`: an alternative the decline offers, such as "the same figure for the years this app holds" for years outside the ten releases; blank for none.
+- `checked_by_code`: `years` for the row about years outside the ten releases. The app's code alone decides whether the years asked for are held (owner decision, 2026-11-25), so this row is never shown to the model; the code's own "years" message adds its pointer. Blank for every other row.
 
 ## glossary.csv
 

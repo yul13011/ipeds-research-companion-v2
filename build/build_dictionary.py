@@ -321,6 +321,9 @@ def check(db, wording_only=False):
     for name, membership in db.execute('SELECT "group", membership FROM dict_school_groups'):
         if (membership or "") not in MEMBERSHIP:
             problems.append(f"school_groups.csv '{name}': membership must be blank or '{MEMBERSHIP[1]}'")
+    for topic, checked in db.execute("SELECT topic, checked_by_code FROM dict_outside_ipeds"):
+        if (checked or "") not in ("", "years"):
+            problems.append(f"outside_ipeds.csv: '{topic}' has checked_by_code '{checked}'; it must be blank or 'years'")
     for term, definition, edition, historical in db.execute("SELECT term, definition, edition, historical FROM dict_glossary"):
         if not definition or not edition:
             problems.append(f"glossary.csv: '{term}' needs a definition and an edition")

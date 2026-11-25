@@ -18,12 +18,9 @@ measure and any group; no part is specific to one kind of question.
                 two years is wanted (change), and whose schools a group counts (membership: each year, or today).
                 The model names the kind of span (SPANS); code keeps only the fields that span uses
     topic       for define and data_exists: an ID from the shortlist, or the user's topic in plain words
-    explain     for define: the concepts (reviewed explanations) and glossary entries that explain the word asked about.
-                The model writes their tags (C1, D2) in `topic`, which already takes "an ID from the shortlist"
+    explain     for define: the concepts (reviewed explanations) and glossary entries that explain the word asked about
     general     for define, only when nothing on the shortlist explains it: the model's own short explanation, shown
-                labelled as general knowledge, not IPEDS documentation. The model writes it in the request's `label`
-                (otherwise used only for option labels). Neither part adds a field to the reply shape: any new field
-                made the API's grammar too large (trial calls, 2026-11-24)
+                labelled as general knowledge, not IPEDS documentation
     readings    the reading the user chose for a term with several readings: {"term", "reading"}
 
 Reserved for the next stage, not built: `formula` (ratio, difference, percent change, share of
@@ -49,7 +46,8 @@ LIST_FIELDS = ("measures", "schools", "groups", "conditions", "readings")
 SCALAR_FIELDS = ("operation", "peers_of", "breakdown", "split_by", "sort", "year", "topic")
 COMPARISONS = (">", ">=", "<", "<=", "=", "!=")
 YEAR_KINDS = ("fall", "fiscal year", "academic year", "aid year", "entering cohort", "class year", "calendar year", "latest")
-MISSING = ("measure", "group", "calculation", "breakdown", "years", "not in IPEDS", "not a data question", "other")
+MISSING = ("measure", "group", "calculation", "breakdown", "not in IPEDS", "not a data question", "other")   # never
+                                                # "years": the code alone decides which years are held (2026-11-25)
 MEMBERSHIP = ("each year", "today")         # a group over time: each year's own schools (default), or today's schools
 SPANS = ("one year", "from a year on", "a range of years", "the last N years", "the change between two years")
 
@@ -61,45 +59,50 @@ def obj(**props):
 # The shape the model must reply in. The model answers in tags (M1, S1, G1, R1, B1, T1, O1), so it cannot type
 # an ID wrongly. The tag ranges are the same for every question, so the shape never changes and the API can cache
 # it with the instructions; a tag that is not on the question's shortlist is rejected by resolve as a wrong reading.
-# Unused fields are null or empty lists. The request shape appears once, as the items of `requests`: one item for
-# a new question, one holding an edit's new values, or two or three options with labels. from_wire() maps tags
-# back to real IDs.
+# Unused fields are empty: "" for a tag, a fixed choice or text, 0 for a number, an empty list. None of these can be
+# a real value (checked field by field, 2026-11-25). The shape has no "value or null" choices: those, not its length
+# or its lists of tags, are what made the API's grammar too large (Part 5g, scripts/reply_format_size.py). The request
+# shape appears once, as the items of `requests`: one item for a new question, one holding an edit's new values, or
+# two or three options with labels. from_wire() maps tags back to real IDs and "" or 0 to None.
 TAG_RANGES = {"measures": ("M", 64), "schools": ("S", 16), "groups": ("G", 20), "rows": ("R", 64), "sets": ("B", 32),
               "readings": ("T", 24), "outside": ("O", 4), "concepts": ("C", 4), "glossary": ("D", 4)}
 STRING, INTEGER = {"type": "string"}, {"type": "integer"}
 
 
 def one_of(tags):
-    """A field that takes one tag from the list; with no tags of that kind, it can only be null."""
-    return {"type": "string", "enum": tags} if tags else {"type": "null"}
+    """A field that takes one tag from the list."""
+    return {"type": "string", "enum": tags}
 
 
-def maybe(schema):
-    return schema if schema == {"type": "null"} else {"anyOf": [schema, {"type": "null"}]}
+def or_none(choice):
+    """A tag or fixed choice that may be left empty: "" means none."""
+    return {"type": "string", "enum": [""] + choice["enum"]}
 
 
 def reply_schema():
     """The structured-output schema, the same for every question."""
     of = lambda kind: one_of([f"{TAG_RANGES[kind][0]}{i}" for i in range(1, TAG_RANGES[kind][1] + 1)])
+    of_explain = one_of([f"{TAG_RANGES[k][0]}{i}" for k in ("concepts", "glossary") for i in range(1, TAG_RANGES[k][1] + 1)])
     request = obj(
         label=STRING,
         operation={"type": "string", "enum": list(OPERATIONS)},
         measures={"type": "array", "items": obj(measure=of("measures"), row={"type": "array", "items": of("rows")})},
-        schools={"type": "array", "items": obj(name=STRING, school=maybe(of("schools")))},
+        schools={"type": "array", "items": obj(name=STRING, school=or_none(of("schools")))},
         groups={"type": "array", "items": of("groups")},
-        peers_of=maybe(of("schools")),
+        peers_of=or_none(of("schools")),
         conditions={"type": "array", "items": obj(measure=of("measures"), comparison={"type": "string", "enum": list(COMPARISONS)},
                                                   value=STRING)},
-        breakdown=maybe(obj(set=of("sets"), fixed={"type": "array", "items": of("rows")})),
-        split_by=maybe({"type": "string", "enum": ["sector", "level", "control"]}),
-        sort=maybe(obj(order={"type": "string", "enum": ["highest", "lowest"]}, limit=maybe(INTEGER))),
-        year=obj(stated=maybe(STRING), kind=maybe({"type": "string", "enum": list(YEAR_KINDS)}),
+        breakdown=obj(set=or_none(of("sets")), fixed={"type": "array", "items": of("rows")}),   # set "": none
+        split_by=or_none({"enum": ["sector", "level", "control"]}),
+        sort=obj(order=or_none({"enum": ["highest", "lowest"]}), limit=INTEGER),          # order "": none; limit 0: all
+        year=obj(stated=STRING, kind=or_none({"enum": list(YEAR_KINDS)}),
                  span={"type": "string", "enum": list(SPANS)}, start=INTEGER, end=INTEGER, last=INTEGER,
-                 membership={"type": "string", "enum": list(MEMBERSHIP)}),   # 0: not given (nullable fields made the
-                                                                             # API's grammar too large)
-        topic=maybe(STRING),
-        outside=maybe(of("outside")),
+                 membership={"type": "string", "enum": list(MEMBERSHIP)}),   # 0: not given
+        topic=STRING,
+        outside=or_none(of("outside")),
         readings={"type": "array", "items": of("readings")},
+        explain={"type": "array", "items": of_explain},          # define: the C and D tags that explain the word
+        general=STRING,                                          # define, as a last resort: a short explanation
     )
     return obj(
         kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline", "about_decline", "search"]},
@@ -109,8 +112,8 @@ def reply_schema():
             field={"type": "string", "enum": list(LIST_FIELDS + SCALAR_FIELDS)},
             action={"type": "string", "enum": ["add", "remove", "replace", "back"]})},
         chosen={"type": "array", "items": INTEGER},
-        decline=maybe(obj(reason=STRING, wanted=STRING, missing={"type": "string", "enum": list(MISSING)}, closest=STRING,
-                          about=maybe({"type": "string", "enum": ["why", "where", "instead"]}))),
+        decline=obj(reason=STRING, wanted=STRING, missing=or_none({"enum": list(MISSING)}), closest=STRING,   # read only
+                    about=or_none({"enum": ["why", "where", "instead"]})),                      # for kind decline
     )
 
 
@@ -149,13 +152,12 @@ def request_from_wire(r, tags, unknown=None):
                     for c in r.get("conditions") or [] if look(c["measure"], "measures")],
         breakdown=dict(set=set_key[0], fixed=rows_for(set_key[1], breakdown.get("fixed"))) if set_key else None,
         split_by=r.get("split_by") or None,
-        sort=dict(order=sort["order"], limit=sort.get("limit") or None) if sort else None,
+        sort=dict(order=sort["order"], limit=sort.get("limit") or None) if sort and sort.get("order") else None,
         year=year_from_wire(r.get("year") or {}),
-        topic=outside or (re.sub(r"\b[CD]\d{1,2}\b[,; ]*", "", r.get("topic") or "").strip() or None),
+        topic=outside or (r.get("topic") or "").strip() or None,
         readings=[dict(term=x[0], reading=x[1]) for x in (look(t, "readings") for t in r.get("readings") or []) if x],
-        explain=[x for x in map(explained, re.findall(r"\b[CD]\d{1,2}\b", r.get("topic") or "")) if x]
-        if r["operation"] == "define" else [],
-        general=(r.get("label") or "").strip() or None if r["operation"] == "define" else None,
+        explain=[x for x in map(explained, r.get("explain") or []) if x] if r["operation"] == "define" else [],
+        general=(r.get("general") or "").strip() or None if r["operation"] == "define" else None,
     )
 
 
@@ -174,7 +176,8 @@ def from_wire(reply, tags=None):
                 edit=dict(changes=reply["changes"], values=items[0] if items else None) if kind == "edit" else None,
                 options=[dict(label=l, request=r) for l, r in zip(labels, items)] if kind == "options" else [],
                 chosen=reply.get("chosen") or [],
-                decline=reply.get("decline") if kind in ("decline", "about_decline") else None,
+                decline=({k: (v or None) if k in ("missing", "about") else v for k, v in reply["decline"].items()}
+                         if reply.get("decline") else None) if kind in ("decline", "about_decline") else None,
                 unknown_tags=sorted(set(unknown)))
 
 
@@ -203,8 +206,8 @@ def to_wire(r, tags):
         conditions=[dict(measure=t("measures", c["measure"]), comparison=c["comparison"], value=c["value"]) for c in r["conditions"]],
         breakdown=dict(set=r["breakdown"]["set"], fixed=[f"{p['column']} = {p['code']}" for p in r["breakdown"]["fixed"]])
         if r["breakdown"] else None,
-        split_by=r["split_by"], sort=r["sort"], year=r["year"],
-        topic=", ".join([t(x["kind"], x["key"]) for x in r.get("explain") or []] + ([r["topic"]] if r["topic"] else [])) or None,
+        split_by=r["split_by"], sort=r["sort"], year=r["year"], topic=r["topic"],
+        explain=[t(x["kind"], x["key"]) for x in r.get("explain") or []], general=r.get("general") or "",
         readings=[t("readings", (x["term"], x["reading"])) for x in r["readings"]],
     )
 

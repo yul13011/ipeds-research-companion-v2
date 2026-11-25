@@ -91,6 +91,9 @@ def decline(d, key, request=None, wanted="", closest=None, pointer=None, log=Non
     request in hand, offered after the message and stored for "what can you show instead?". The model's own words,
     if any, go to `log` and are never shown."""
     message = say(d, key, **fields)
+    if key == "years" and not pointer:                  # where other years can be found: the outside-IPEDS row the
+        row = d.one("SELECT pointer FROM dict_outside_ipeds WHERE checked_by_code = 'years'")   # code checks itself
+        pointer = row[0] if row else None
     if pointer:
         message += " " + say(d, "not collected source", pointer=pointer)
     if closest and closest.get("text"):

@@ -235,7 +235,8 @@ def build_index(db):
                                           if t in defaults else "")
         sets[(s, t)] = dict(set=s, table=t, stored_as=how, held=level, text=f"{s} {titles.get(t, '')}")
     outside = {t: dict(topic=t, what_to_say=say, pointer=p, text=f"{t} {ex or ''}")
-               for t, ex, say, p in q("SELECT topic, example_wording, what_to_say, pointer FROM dict_outside_ipeds")}
+               for t, ex, say, p in q("SELECT topic, example_wording, what_to_say, pointer FROM dict_outside_ipeds "
+                                      "WHERE COALESCE(checked_by_code, '') = ''")}   # years: the code decides, never the model
     kinds = [("measures", measures), ("terms", terms), ("schools", schools), ("groups", groups),
              ("rows", rows), ("sets", sets), ("outside", outside)]
     try:                                        # for "what does X mean" only: searched on their own word weights, so

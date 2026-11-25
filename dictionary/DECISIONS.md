@@ -500,3 +500,10 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Convention sentences** in concepts.csv: approved, provided each describes what the app actually does; each is checked against a test or a dictionary row, any that does not hold is fixed, and the Carnegie sentence gets its full stop.
 - **Dashes:** before a question reaches the model, en and em dashes are replaced with ordinary hyphens. This is a character cleanup, not a wording rule.
 - **Then Part 5g,** with the reply-format measuring and restructure proposal. The end-of-stage runs compare the same 118 questions with Part 5e; if they stay clearly below, investigate before reporting.
+
+## 2026-11-25: Part 5g decisions
+
+1. **Reply-format restructure, built in Stage 5:** every "value or null" field in the reply shape is written as a value that means "none". For each of the 12 fields, "" or 0 is first confirmed never to be a real value; where it can be, a different "none" value is used. The explanation tags and the general explanation move into their own fields, out of `topic` and `label`.
+2. **Years held:** only the code decides whether years are held; the model must not decline, or add notes, on that basis. Tests include the Yale "2014–15" bachelor's degrees question.
+3. **Speed:** the plan's "typical questions under 5 seconds" is replaced by the owner's limits: 10 seconds a turn, 20 seconds when the AI searches. Each run reports the median turn time.
+4. **Then:** explain version 2's handling of the 12 trend questions it did not answer right, build 1 and 2, run the question set twice and report. Stage 5 is pushed after the owner's review.
