@@ -1,6 +1,8 @@
 """Version 1 beside version 2 on the logged questions, graded against the same expectations file.
 
     python scripts/v1_grade.py [v2 run folder name, default haiku]
+    python scripts/v1_grade.py <run> --trends    Part 5g: the trend questions too, now that version 2 holds ten years;
+                                                  writes docs/reports/stage5g/v1_vs_v2.csv
 
 Version 1 is not rerun. Its recorded outcome comes from docs/question_log.csv: the outcome class, which route served
 it, the interpretation it wrote (for some rows), and how many rows it returned. No session IDs or times are read
@@ -20,7 +22,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import config
 
-RUN = sys.argv[1] if len(sys.argv) > 1 else "haiku"
+TRENDS = "--trends" in sys.argv
+RUN = next((a for a in sys.argv[1:] if not a.startswith("--")), "haiku")
 V1_CLASS = {"answered": "answer", "needs_clarification": "clarify", "refused": "decline", "error_app": "error", "error_api": "error"}
 
 
@@ -51,7 +54,7 @@ def main():
             continue
         got = V1_CLASS.get(row["outcome"], row["outcome"])
         expect = set(e["expect"].split("|")) - {""}
-        years = e["category"] == "trend" or ("not in the slice" in e["note"] and re.search(r"(?:19|20)\d\d", e["note"]))
+        years = not TRENDS and (e["category"] == "trend" or ("not in the slice" in e["note"] and re.search(r"(?:19|20)\d\d", e["note"])))
         if e["category"] in ("greeting", "test", "chart", "context", "display"):
             grade = "not scored"
         elif years:
@@ -60,6 +63,8 @@ def main():
             grade = "error"
         elif got == "answer" and row["n_rows"] in ("", "0") and row["served_by"] not in ("conversation", "data discovery", "curated FAQ"):
             grade = "answered with no rows"
+        elif got == "answer" and "trend" in expect and row["n_rows"].isdigit() and int(row["n_rows"]) > 1:
+            grade = "answered over several years (figures not checkable)"   # the log keeps rows, not years or values
         elif got in expect:
             grade = {"answer": "answered as expected (figures not checkable)", "decline": "declined as expected",
                      "clarify": "clarifying question"}[got]
@@ -74,7 +79,7 @@ def main():
                         v1_outcome=row["outcome"], v1_route=row["served_by"], v1_rows=row["n_rows"],
                         v1_interpreted=row["interpreted_as"], v1_grade=grade, v1_why=review.get(key, {}).get("why", ""),
                         v2_outcome=s.get("got", ""), v2_grade=s.get("score", ""), v2_why=s.get("why", "")))
-    path = ROOT / "docs" / "reports" / "stage4" / "v1_vs_v2.csv"
+    path = ROOT / "docs" / "reports" / ("stage5g" if TRENDS else "stage4") / "v1_vs_v2.csv"
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(out[0]))
         w.writeheader()
