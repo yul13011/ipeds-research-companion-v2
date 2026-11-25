@@ -194,3 +194,17 @@ The reply-format workaround is accepted for now. Part 5g will report what takes 
 1. Log 60.5 ("Where does income data come from in IPEDS?"): change the expectation from decline to answer or decline, given your new low-income wording?
 2. The concepts' convention sentences (section 7): approve the wording, or edit it in `dictionary/concepts.csv`?
 3. Push Part 5f after your review?
+
+## 11. After your approval (2026-11-25)
+
+- **Income question:** its expectation is now "answer".
+- **Convention sentences:** each is now tied to a test (`ConventionSentences` in tests/test_path.py), and a test fails if a sentence is added without a check. All held except one, which exposed a real bug:
+  - **Carnegie groups in a trend.** The figures were right: R1 has the same 187 schools in every year, its 2024-25 list. But the answer said "In each year, the group counts the schools that belonged to it that year", the opposite of your decision 6d, which says the rule is to be stated in the answer. It also offered a "Today's schools only" button that changed nothing.
+  - **Fixed:** a group whose `membership` is "as of latest year" now gets a new message row ("…every year counts the schools in the group in 2024-25, by its classification as of that year") and no button. Groups with each year's own list are unchanged.
+  - The Carnegie sentence has its full stop.
+- **Dashes:** en and em dashes become hyphens before the shortlist and the model see the question (answer.py, with a test).
+- **The "2014–15" question** (log 4.1: "How many bachelor's degrees did Yale award in 2014–15?"):
+  - **The right answer:** 1,327. It comes from the 2015-16 release, whose completions cover July 1, 2014 to June 30, 2015. Run 2 gave exactly that.
+  - **What run 1 did:** it read the year the same way (2014 to 2015). The model then declined on its own ("missing: years"), judging those years not held, before the code could check.
+  - **What this means:** this is the same pattern as the earlier year misreadings, but the cause is not the reading. The model is allowed to decline for years, and it guesses which years are held.
+  - **A general fix to consider (not built):** the code alone decides whether years are held. The model would never decline for years, and the instruction would lose its "years" decline reason. This changes one instruction line and the decline choices.

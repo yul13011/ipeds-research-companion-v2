@@ -492,3 +492,11 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 
 - **Imputed figures:** not labelled; the proposal stays in `docs/reports/STAGE_5F_PROPOSAL_IMPUTATION.md` as a record. Imputed figures are shown as IPEDS publishes them, without a label; the imputation concept explains this. Revisit if the question log shows users confused by it.
 - **Reply format:** the workaround is accepted for now: concept and glossary tags go in `topic`, the general explanation in `label`, both read only for definition questions. In Part 5g, as part of measuring, report what takes up the reply format's size (which fields, unions or lists, with numbers), and propose one restructure that frees enough room for the explanation to have its own fields and for the planned formula field. Proposal only: the format is not changed until the owner approves.
+
+## 2026-11-25: Part 5f approved
+
+- **Push** Part 5f after the history check.
+- **Income question** (log 60.5, "Where does income data come from in IPEDS?"): the expectation is now an answer. IPEDS reports net price by family income for students awarded federal aid; the Pell share is the proxy for all students.
+- **Convention sentences** in concepts.csv: approved, provided each describes what the app actually does; each is checked against a test or a dictionary row, any that does not hold is fixed, and the Carnegie sentence gets its full stop.
+- **Dashes:** before a question reaches the model, en and em dashes are replaced with ordinary hyphens. This is a character cleanup, not a wording rule.
+- **Then Part 5g,** with the reply-format measuring and restructure proposal. The end-of-stage runs compare the same 118 questions with Part 5e; if they stay clearly below, investigate before reporting.

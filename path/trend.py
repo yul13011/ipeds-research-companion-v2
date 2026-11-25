@@ -103,11 +103,16 @@ def plan(request, plan_, d, say):
     if plan_["members"] is not None and plan_["operation"] != "schools":
         if plan_.get("peer_members") is not None:
             plan_["statements"].append(say("trend peers"))
-        else:
-            plan_["statements"].append(say("trend today" if membership == "today" else "trend each year"))
-            if membership != "today":                   # offered as a button: the same request, today's schools only
-                plan_["offers"] = [dict(label=say("trend today offer"),
-                                        request=without(request, year=dict(year, membership="today")))]
+        else:                                           # groups whose latest list is used for every year (school_groups.csv
+            fixed = [g for g in request["groups"]       # `membership`, the Carnegie groups): said, and no "today" button
+                     if d.one('SELECT 1 FROM dict_school_groups WHERE "group"=? AND membership=?', g, 'as of latest year')]
+            if fixed:
+                plan_["statements"].append(say("trend latest list", groups=", ".join(fixed), latest=label(years[-1])))
+            if len(fixed) < len(request["groups"]) or not request["groups"]:
+                plan_["statements"].append(say("trend today" if membership == "today" else "trend each year"))
+                if membership != "today":               # offered as a button: the same request, today's schools only
+                    plan_["offers"] = [dict(label=say("trend today offer"),
+                                            request=without(request, year=dict(year, membership="today")))]
     return None
 
 

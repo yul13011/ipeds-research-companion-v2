@@ -107,7 +107,8 @@ def ask(question, state, log, db_path=None, call=None, model=None, progress=None
     db_path = db_path or config.LOCAL_DB.as_posix()
     progress = progress or (lambda step: None)
     start = time.time()
-    progress("finding")
+    question = question.replace("–", "-").replace("—", "-")   # en and em dashes as hyphens ("2014-15"):
+    progress("finding")                                                    # a character cleanup, not a wording rule
     history = state.get("history") or []
     pending = state.get("pending") or []
     carried = history[-1:] + [o["request"] for o in pending]

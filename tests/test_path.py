@@ -1937,9 +1937,91 @@ class Explanations(unittest.TestCase):
                 self.assertNotRegex(text or "", r"\.csv|\.md|_[a-z]+|dict_", row[0])
         db.close()
 
+    def test_dashes_reach_the_model_as_hyphens(self):
+        seen = []
+        def call(system, user, model, schema=None):
+            seen.append(user)
+            return json.dumps(wire_reply("request", dict(operation="define", topic="dashes"))), {"input_tokens": 1, "output_tokens": 1}
+        answer.ask("bachelor’s degrees in 2014–15 and 2015—16", {}, self.log, DB, call=call)
+        self.assertIn("2014-15 and 2015-16", seen[0])
+        self.assertNotRegex(seen[0], "[–—]")
+
     def test_explanation_tags_must_be_on_the_shortlist(self):
         page = self.define("what is a widget?", lambda u: dict(explain=["C4"]))
         self.assertNotEqual(page["kind"], "answer")                     # C4 is not on this question's shortlist
+
+
+
+class ConventionSentences(unittest.TestCase):
+    """Owner decision 2026-11-25: each convention sentence in concepts.csv describes what the app does. Each sentence
+    is checked here against the app's behaviour or the dictionary row it rests on; a sentence with no check fails."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+        cls.db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.db.close()
+        cls.dir.cleanup()
+
+    def run_(self, r):
+        return answer.run_direct(r, {}, self.log, DB, "[t]")
+
+    def default(self, term):
+        return self.db.execute("SELECT reading, measure FROM dict_terms WHERE term=? AND is_default='yes' AND status='in use'",
+                               (term,)).fetchone()
+
+    def trend(self, group):
+        return self.run_(req("group", measures=[M("DRVEF.ENRTOT")], groups=[group],
+                             year=dict(rq.no_year(), span="a range of years", start=2020, end=2024)))
+
+    def test_every_convention_sentence_has_a_check(self):
+        checked = {"Published price versus net price", "Provisional versus final data", "Title IV institution", "Imputation",
+                   "Fall enrollment versus 12-month enrollment", "Instructional staff versus faculty status",
+                   "Pell grants as an income measure", "Carnegie classification", "GASB and FASB finance forms"}
+        have = {c for c, conv in self.db.execute("SELECT concept, app_convention FROM dict_concepts") if conv}
+        self.assertEqual(have, checked)
+
+    def test_net_price_defaults_to_grant_aided_students(self):
+        self.assertEqual(self.default("net price")[0], "Students awarded grant or scholarship aid")
+
+    def test_answers_from_the_provisional_release_say_so(self):
+        page = self.run_(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)]))
+        self.assertIn("provisional", " ".join(page["warnings"]))
+
+    def test_no_group_means_title_iv_schools_in_the_50_states_and_dc(self):
+        statement = self.db.execute("SELECT statement FROM group_list WHERE group_name='National universe'").fetchone()[0]
+        self.assertIn("50 states and DC, Title IV participating", statement)
+
+    def test_imputed_figures_are_not_labelled(self):
+        self.assertFalse([r for r in self.db.execute("SELECT term FROM dict_terms WHERE statement LIKE '%imputed%'")])
+
+    def test_enrollment_defaults_to_fall_headcount_and_12_month_can_be_asked(self):
+        self.assertEqual(self.default("enrollment")[1], "DRVEF.ENRTOT")
+        self.assertTrue(self.db.execute("SELECT 1 FROM dict_terms WHERE term='enrollment' AND reading LIKE '12-month%'").fetchone())
+
+    def test_faculty_asks_which_is_meant(self):
+        readings = {r for r, a in self.db.execute("SELECT reading, always_ask FROM dict_terms WHERE term='faculty'") if a == "yes"}
+        self.assertEqual(readings, {"Instructional staff", "All staff with faculty status"})   # and test_always_ask_term_and_option_buttons
+
+    def test_low_income_shows_the_pell_share(self):
+        self.assertEqual(self.default("low-income")[1], "SFA.UPGRNTP")
+
+    def test_carnegie_r1_is_2025_and_a_trend_uses_the_latest_list(self):
+        self.assertEqual(self.db.execute("SELECT \"column\" FROM dict_school_groups WHERE words LIKE 'R1%'").fetchone()[0], "CARNEGIERSCH")
+        page = self.trend("Research 1: Very High Spending and Doctorate Production")
+        self.assertIn("every year counts the schools in the group in 2024-25", page["interpreted"])
+        self.assertNotIn("belonged to it that year", page["interpreted"])
+        self.assertFalse(page.get("offers"))                    # no "today's schools" button: it would change nothing
+        page = self.trend("State: Texas")                       # a group with each year's own list: unchanged
+        self.assertIn("belonged to it that year", page["interpreted"])
+
+    def test_a_group_finance_figure_is_shown_for_each_form(self):
+        page = self.run_(req("group", measures=[M("rate:Core expenses per FTE student")]))   # and test_finance_is_split_by_reporting_form
+        self.assertEqual(len(page["table"]["rows"]), 3)
 
 
 if __name__ == "__main__":
