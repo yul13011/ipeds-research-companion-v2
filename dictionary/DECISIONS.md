@@ -534,3 +534,10 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 
 - **Log 1.1** ("Which years are available for Ivy League admission rates? Compare the latest available year"): "compare the latest available year" asks for one year across the Ivies, not a trend. Its expectation becomes a scored answer. Right: the years held and the Ivy League admission rates for the latest year, both shown. Acceptable: the years held, with the latest-year comparison offered as a button (the behaviour built in Part 6.0).
 - **Part 6a's proposal** adds follow-up item 31 (two requests in one message, answered together) to its three gaps: a group plus named schools, a trend that names no measure, and follow-ups that refer to schools named several turns earlier.
+
+## 2026-11-25: Part 6.0 approved; cost of attendance
+
+- **Part 6.0** is approved.
+- **"Cost of attendance" (and "cost", "COA")** defaults to the published total price for full-time, first-time undergraduates, which all ten releases hold: the total price for in-state students living on campus (DRVCOST.CINSON; for private schools the in-state and out-of-state prices are the same). terms.csv term `cost`: a new default reading "Published total price (on campus, in-state)", with a statement saying so; the cost profile stays as a reading, no longer the default; "COA" added to the words.
+- **The cost of attendance in the net price table** (COAISGS2 for public schools, COAGS2 for private, students awarded grant or scholarship aid) is a reading of its own, never the default, used only when the question asks for it specifically ("the cost used to calculate net price").
+- **Then:** run the question set once (IPEDS_STAGE=6.0) and report the MIT question and any other cost question that changes; if nothing else changes, push Part 6.0 after the history check, and write Part 6a's proposal, with item 31.

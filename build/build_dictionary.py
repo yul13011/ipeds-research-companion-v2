@@ -329,6 +329,11 @@ def check(db, wording_only=False):
             problems.append(f"measures.csv: {mid} names own column {own}, which is not a measure that names itself")
         if not (back or "").isdigit() or (own.upper() == mid) != (back == "0"):
             problems.append(f"measures.csv: {mid} has years_back '{back}'; it must be 0 for the own column, a positive whole number otherwise")
+    for term, reading, only in db.execute("SELECT term, reading, only_when_asked FROM dict_terms"):
+        if (only or "") not in ("", "yes"):
+            problems.append(f"terms.csv: '{term}' / '{reading}' has only_when_asked '{only}'; it must be blank or 'yes'")
+        elif only and not db.execute("SELECT 1 FROM dict_terms WHERE term = ? AND is_default = 'yes'", (term,)).fetchone():
+            problems.append(f"terms.csv: '{term}' has a reading used only when asked, but no default reading to use instead")
     for topic, checked in db.execute("SELECT topic, checked_by_code FROM dict_outside_ipeds"):
         if (checked or "") not in ("", "years"):
             problems.append(f"outside_ipeds.csv: '{topic}' has checked_by_code '{checked}'; it must be blank or 'years'")

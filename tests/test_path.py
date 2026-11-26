@@ -2125,8 +2125,8 @@ class ChangeOrder1(unittest.TestCase):
         self.assertNotIn("*", rows["2015-16"][0].replace("*1", ""))
 
     def test_several_earlier_columns_named_together_become_one_trend(self):
-        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.COAIST40"), M("COST2_NETPRICE.COAIST41"),
-                                                  M("COST2_NETPRICE.COAIST42")], schools=[S("Ohio State", 204796)]))
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.NPIST0"), M("COST2_NETPRICE.NPIST1"),
+                                                  M("COST2_NETPRICE.NPIST2")], schools=[S("Ohio State", 204796)]))
         self.assertEqual([r[1] for r in page["table"]["rows"]], ["2021-22", "2022-23", "2023-24"])
         self.assertEqual(page["chart"]["kind"], "line")
 
@@ -2150,6 +2150,37 @@ class ChangeOrder1(unittest.TestCase):
         self.assertEqual(len(page["offers"]), 1)
         figures = answer.take_offer(0, state, self.log, DB)
         self.assertEqual((figures["kind"], len(figures["table"]["rows"])), ("answer", 8))   # the eight schools, ranked
+
+    def test_cost_of_attendance_defaults_to_the_published_total_price(self):
+        """Owner decision 2026-11-25: "cost of attendance" is the published total price (held in all ten releases); the
+        net-price-table cost is a reading of its own, never the default."""
+        default = self.db.execute("SELECT measure FROM dict_terms WHERE term='cost' AND is_default='yes'").fetchall()
+        self.assertEqual(default, [("DRVCOST.CINSON",)])
+        page = self.run_(req("schools", measures=[M("DRVCOST.CINSON")], schools=[S("MIT", 166683)],
+                             readings=[dict(term="cost", reading="Published total price (on campus, in-state)")],
+                             year=dict(rq.no_year(), span="from a year on", start=2015)))
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        self.assertNotIn("not collected", [r[2] for r in page["table"]["rows"]])
+        self.assertEqual(self.db.execute("SELECT is_default FROM dict_terms WHERE term='cost' AND measure='COST2_NETPRICE.COAGS2'")
+                         .fetchone()[0], "no")
+
+    def test_a_cost_used_only_when_asked_gives_the_default_otherwise(self):
+        """terms.csv only_when_asked: the net-price-table cost named without its reading is read as the published total
+        price; with its reading chosen, it is kept, with that reading's own statement."""
+        mit = [S("MIT", 166683)]
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.COAT42")], schools=mit,
+                             year=dict(rq.no_year(), span="from a year on", start=2015)))
+        self.assertTrue(page["interpreted"].startswith("Total price, in-state students living on campus"))
+        self.assertIn("Cost of attendance is read as the published total price", page["interpreted"])
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.COAT40"), M("COST2_NETPRICE.COAT42")], schools=mit))
+        self.assertTrue(page["interpreted"].startswith("Total price, in-state students living on campus"))   # one measure
+        asked = req("schools", measures=[M("COST2_NETPRICE.COAT42")], schools=mit,
+                    readings=[dict(term="cost", reading="Cost of attendance for students awarded Title IV federal aid")])
+        page = self.run_(asked)
+        self.assertTrue(page["interpreted"].startswith("Total cost of attendance, students awarded Title IV"))
+        self.assertIn("calculate net price for students awarded Title IV", page["interpreted"])
+        self.assertNotIn("read as the published total price", page["interpreted"])
 
     def test_which_years_reads_as_data_exists(self):
         self.assertIn("which years are held", interpret.INSTRUCTIONS)

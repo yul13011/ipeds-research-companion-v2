@@ -115,3 +115,52 @@ New scripts: `earlier_year_draft.py` (the draft, kept for the record). `stage4_r
 
    A terms.csv row would settle it, and the MIT question would then pass.
 2. **Push Part 6.0 after your review?** Then Part 6a's proposal. It now has four gaps: a group plus named schools, a trend that names no measure, follow-ups that refer to schools named several turns earlier, and item 31, two requests answered together.
+
+## After your approval: cost of attendance (2026-11-25)
+
+**The convention, as built** (terms.csv, term `cost`; DECISIONS.md "Part 6.0 approved; cost of attendance"):
+
+| Reading | Measure | Default |
+| --- | --- | --- |
+| Published total price (on campus, in-state), new | DRVCOST.CINSON | yes |
+| Cost profile (total price, tuition, net price) | 5 rows, unchanged | no (was yes) |
+| Cost of attendance used to calculate net price, new | COAISGS2 (public), COAGS2 (private) | no; used only when asked |
+| Cost of attendance for students awarded Title IV aid, new | COAIST42 (public), COAT42 (private) | no; used only when asked |
+
+"COA" is added to the term's words. The default reading's statement is shown in "Interpreted as": "Cost of attendance is read as the published total price for full-time, first-time undergraduates living on campus, in-state for public schools."
+
+**What the default alone did not do.**
+- The model picks the net-price-table column directly, because its own title is "Total cost of attendance", and a term's default applies only when the model goes through the term.
+- A blanket rule ("a measure in a non-default reading becomes the default") would break other terms; "undergraduate enrollment", for example, is a deliberate reading of "enrollment".
+- **So terms.csv has a new column, `only_when_asked`,** set on the two net-price-table readings only. If the model names one of their measures without choosing that reading, the code uses the term's default instead, and shows the default's statement.
+- Choosing the reading is how the model says the question asked for it.
+- A build check makes sure such a term has a default.
+- A slip found on the way is also fixed: a chosen reading now shows its own statement, not the first reading's.
+
+**Tests:** 322, all passing. 2 are new: the default is the published total price, with MIT's ten years; and the net-price-table cost gives the default unless its reading is chosen, in which case it keeps it, with its own statement.
+
+**The run** (`haiku_60_cost`, IPEDS_STAGE=6.0):
+
+| Row | This run | First Part 6.0 run |
+| --- | --- | --- |
+| Full set, scored and trend | 146 of 155 (94.2%) | 91.6% |
+| Real users' questions | 59 of 66 (89.4%) | 86.4% |
+| The same as Part 5e (119; without log 1.1: 113 of 118, 95.8%) | 114 of 119 (95.8%) | 95.0% |
+| Badly written set | 55 of 56 (98.2%) | 96.4% |
+| Median turn | 6.7 s | 6.3 s |
+
+**The MIT question:** a wrong reading before, a clarifying question now, which its expectation accepts. But the two options it offered are the two net-price-table costs. The model took "total cost of attendance" as asking for that cost specifically, so it chose those readings, and the published total price wasn't among the options.
+
+So the convention is applied when the model names the measure alone, and not when it picks the reading itself. One way to close this, not built: the shortlist marks a reading used only when asked ("used only when the question asks for it specifically"), so the model sees the convention. That's one line in interpret.py.
+
+**The other cost questions that changed:**
+- "How much does it cost to attend Harvard College in 2024-25?" (log 13.1, and the same question in the eval set) and "nyu how much does it cost to go there" now give the published total price, $89,315 and $92,062, with the statement, where they gave the cost profile before. Right by the convention.
+- Of the other questions on cost, tuition, net price or price, none changed between right and wrong. "cal state tuition" went from a correct decline to a clarifying question; both are acceptable.
+
+**Changes not about cost:**
+- **Two went from right to wrong:**
+  - "What is college scorecard" (the model replied "choose an option" with none pending: a reply the app can't read);
+  - "How many of Yale's admitted students submitted ACT scores" (the model declined, reading "admitted" strictly against IPEDS's first-time students).
+- **Six went from wrong to right:** log 55.1, 58.7 and 62.3, "just Yale and Harvard", Smith's childcare, and "hi can u tell me abt stanford".
+
+All of these have gone both ways in earlier runs; none touches the cost rows.

@@ -832,6 +832,25 @@ def apply_readings(request, d, plan):
     """Apply the readings the user chose; ask where a measure term must ask; collect each term's statement."""
     for chosen in list(request["readings"]):
         fill_reading(request, d, chosen["term"], chosen["reading"])
+    asked = {(r["term"], r["reading"]) for r in request["readings"]}
+    for m in request["measures"]:                       # a reading used only when asked for (terms.csv only_when_asked):
+        own = (d.one("SELECT own_column FROM dict_measures WHERE UPPER(\"table\" || '.' || variable) = UPPER(?)",
+                     m["id"]) or ("",))[0] or m["id"]   # its measure, named without that reading, gives the term's default
+        for term, reading in d.q("SELECT term, reading FROM dict_terms WHERE UPPER(measure) = UPPER(?) AND "
+                                 "only_when_asked = 'yes' AND status = 'in use'", own):
+            if (term, reading) in asked:
+                continue
+            default = d.one("SELECT reading, measure FROM dict_terms WHERE term = ? AND kind = 'measure' AND is_default = 'yes' "
+                            "AND status = 'in use' ORDER BY rowid", term)
+            if default:
+                m["id"], m["row"] = default[1], []
+                if all(r["term"] != term for r in request["readings"]):
+                    request["readings"].append(dict(term=term, reading=default[0]))
+    kept = []
+    for m in request["measures"]:                       # two measures replaced by the same default are one
+        if all(k["id"] != m["id"] or k["row"] != m["row"] for k in kept):
+            kept.append(m)
+    request["measures"] = kept
     done = {r["term"] for r in request["readings"]}
     for m in request["measures"]:
         for (term,) in d.q("SELECT DISTINCT term FROM dict_terms WHERE measure=? AND kind='measure' AND status='in use'", m["id"]):
@@ -840,7 +859,8 @@ def apply_readings(request, d, plan):
                 readings = list(dict.fromkeys(x[0] for x in rows if x[1] == "measure"))
                 return outcome("clarify", question=f'"{term}" can mean different things. Which did you mean?',
                                options=[dict(label=r, request=with_reading(request, d, term, r)) for r in readings])
-            statement = rows[0][7]
+            chosen = next((r["reading"] for r in request["readings"] if r["term"] == term), None)
+            statement = next((x[7] for x in rows if x[0] == chosen and x[7]), rows[0][7])   # the chosen reading's own
             when = d.one("SELECT statement_when FROM dict_terms WHERE term=? AND kind='measure' LIMIT 1", term)
             if when and when[0] == "chosen" and term not in done:
                 statement = None                        # shown only when the model chose this term's reading

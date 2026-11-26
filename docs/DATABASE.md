@@ -7,8 +7,8 @@ Written by `scripts/database_inventory.py` after each full rebuild. Do not edit 
 | | |
 | --- | ---: |
 | Tables | 106 |
-| Rows | 40,380,293 |
-| File size | 3.27 GB (3,268,206,592 bytes) |
+| Rows | 40,380,305 |
+| File size | 3.27 GB (3,268,235,264 bytes) |
 | Releases | 10 (2015-16 to 2024-25) |
 
 Tables and rows by layer:
@@ -17,7 +17,7 @@ Tables and rows by layer:
 | --- | ---: | ---: |
 | survey data | 59 | 33,333,458 |
 | IPEDS codebook | 7 | 150,853 |
-| dictionary | 16 | 6,873 |
+| dictionary | 16 | 6,885 |
 | build result | 17 | 6,858,764 |
 | housekeeping | 7 | 30,345 |
 
@@ -119,7 +119,7 @@ The layers:
 | `VALUESETS` | The codebooks' code labels for every coded variable | year, TableName, varName, Codevalue | 14 | 124,493 | 10 (2015-16 to 2024-25) | 12,382 | 12,712 | 12,468 | 12,749 | 12,495 | 11,890 | 11,593 | 13,038 | 13,023 | 12,143 |
 | `VARTABLE` | Every variable of every table, with its title and format | year, TableName, varName | 24 | 23,991 | 10 (2015-16 to 2024-25) | 2,185 | 2,159 | 2,210 | 2,246 | 2,211 | 2,439 | 2,561 | 2,685 | 2,696 | 2,599 |
 
-## Dictionary (16 tables, 6,873 rows)
+## Dictionary (16 tables, 6,885 rows)
 
 | Table | What it holds | Key columns | Columns | Rows |
 | --- | --- | --- | ---: | ---: |
@@ -130,13 +130,13 @@ The layers:
 | `dict_glossary` | The official IPEDS glossary, 2025-26 edition; used only for what-does-it-mean questions | term | 5 | 612 |
 | `dict_group_members` | Groups defined by a list of schools | group, unitid | 3 | 79 |
 | `dict_measure_history` | Earlier names of each measure, so a trend continues across a renaming | measure, earlier_table, earlier_variable | 6 | 608 |
-| `dict_measures` | Every measure: table, variable, title, unit, period, plain name and set-up status | table, variable | 21 | 3,073 |
+| `dict_measures` | Every measure: table, variable, title, unit, period, plain name and set-up status | table, variable | 24 | 3,073 |
 | `dict_outside_ipeds` | Topics IPEDS does not collect, and where to look instead | topic | 7 | 16 |
 | `dict_rates` | Rates and averages computed from counts: numerator, denominator and method | rate, applies_to | 13 | 28 |
 | `dict_school_groups` | Named school groups and how each is defined | group | 14 | 187 |
 | `dict_school_nicknames` | Nicknames and abbreviations for schools | nickname | 5 | 36 |
 | `dict_special_codes` | How IPEDS's special codes (-1, -2, ...) are read | code | 8 | 36 |
-| `dict_terms` | Words people use, their readings and the measures each reading names; settings and messages | term, reading, measure | 15 | 911 |
+| `dict_terms` | Words people use, their readings and the measures each reading names; settings and messages | term, reading, measure | 16 | 923 |
 | `dict_word_abbreviations` | Abbreviated words in school names and what they mean (st: state or saint) | abbreviation, means | 3 | 17 |
 | `dict_year_meaning` | What the year of each table means: its period, cohort rule, subject and title | table | 9 | 59 |
 
@@ -174,4 +174,4 @@ The layers:
 | `_tables` | Every table loaded from each release: source name, kind, rows read and loaded | local_table, year | 10 | 554 |
 | `sqlite_stat1` | SQLite's own statistics for its query planner | tbl, idx | 3 | 70 |
 
-Counted in 29 seconds.
+Counted in 18 seconds.
