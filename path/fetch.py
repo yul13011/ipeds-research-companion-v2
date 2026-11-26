@@ -191,9 +191,12 @@ def fetch(plan, db):
 def schools(plan, data, result):
     ids = [s["id"] for s in plan["schools"]]
     columns, merged = [], {}                            # measures with the same heading share one column
-    for m in plan["measures"]:                          # a measure asked for at several category rows keeps one column each
-        key = m.get("shown_as") or m["name"]
-        if key in merged and merged[key][0]["rows"] != m["rows"]:
+    heading = lambda m: m.get("shown_as") or m["name"]
+    rows_by = defaultdict(list)                         # a measure asked for at several category rows keeps one column
+    [rows_by[heading(m)].append(m["rows"]) for m in plan["measures"] if m["rows"] not in rows_by[heading(m)]]
+    for m in plan["measures"]:                          # each, and every one of them names its row (owner decision 2026-11-26)
+        key = heading(m)
+        if len(rows_by[key]) > 1:
             key += "".join(f", {x}" for x in m.get("row_labels", []))
         if key not in merged:
             merged[key] = []

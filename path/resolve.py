@@ -255,6 +255,15 @@ def resolve(reply, short, state, db, db_path):
     return out
 
 
+def add_to_which(request, d, short):
+    """Schools added with no group or list to add them to: ask which group, offering the shortlist's groups."""
+    op = "list" if request["operation"] == "schools" else request["operation"]
+    names = " and ".join(d.name(u) for u in request["plus_schools"])
+    options = [dict(label=g["name"], request=without(request, operation=op, groups=[g["name"]]))
+               for g in (short or {}).get("groups") or []]
+    return outcome("clarify", question=say(d, "add to which group", schools=names), options=options, request=request)
+
+
 def with_default(options, d):
     """Owner decision 2026-11-25: when the app asks which reading of a term is meant, the term's default is always one
     of the options. Options that read one term (by their readings or their measures) without its default get it first."""
@@ -344,6 +353,8 @@ def resolve_request(request, d, short, new_question=False, earlier=()):
     bad = off_shortlist(request, short, earlier)
     if bad:
         return outcome("wrong_reading", message=say(d, "could not read"), detail=bad, request=request)
+    if request.get("plus_schools") and (not request["groups"] or (request["operation"] == "schools" and not request["schools"])):
+        return add_to_which(request, d, short)          # nothing to add the schools to (owner decision 2026-11-26)
     request = shared_abbreviations(request, d)
     direct = {tuple(sl.words(n)): int(u) for n, u in d.q("SELECT nickname, unitid FROM dict_school_nicknames WHERE kind = 'direct'")}
     if any(s["id"] is None and tuple(sl.words(s["name"])) in direct for s in request["schools"]):

@@ -18,6 +18,15 @@ Owner decisions are in `dictionary/DECISIONS.md`.
 - No special-case patches. If a question is answered wrongly, the fix belongs in a dictionary table or in the general step, with a test. Never add a rule for one phrasing.
 - After each stage, write a report to `docs/reports/STAGE_<n>.md`: what was built, test results, line counts, open questions. The owner takes that report away for review before work continues. Stop after each stage.
 
+## Token use (owner decision, 2026-11-26: token use is the main constraint)
+
+1. Manual review after a run: carry a grade over only when the answer is identical to the last graded run in operation, measures, schools, years and figures, and its expectation hasn't changed. Re-review everything else, and say how many were carried. At the end of each stage, review every turn once.
+2. Long jobs (question-set runs, full rebuilds): start them, tell the owner they're running, and stop. Don't poll; the owner says when to continue. If a check is needed, no more than every 15 minutes.
+3. Command output: send full logs to a file in the untracked `logs` folder; show only the summary lines, warnings and failures.
+4. Read the standing rules and the part about to be worked on, not the whole work order or plan.
+5. Keep progress messages to one line; the report is where details go.
+6. At the end of each part, write the report so a fresh session can start from it with CLAUDE.md and the work order alone. Every decision made during the part must be in `dictionary/DECISIONS.md` or the report.
+
 ## One home for conventions
 
 - The `dictionary` folder is the only source of conventions: measures and synonyms, terms, school groups, group members, nicknames, rates, category codes, year meaning, topics outside IPEDS, special codes. `dictionary/README.md` explains each table and column.

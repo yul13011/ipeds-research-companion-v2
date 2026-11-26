@@ -73,13 +73,14 @@ Rules:
   "BU" or "U of M") or a name no listed school has (such as "RTI"), give "", never another school's tag; the app
   then offers the nearest names. This holds in a decline too.
 - groups: G tags. A school must be in every group named.
+- A question naming its own schools or group replaces the previous ones, unless the user says to add them.
 - plus_schools: schools added to a group's list ("the Ivies plus MIT and Stanford"): the group in groups, the added
   schools' S tags in plus_schools.
-- Schools named in an earlier turn ("the same institutions", "the example set") are listed under SCHOOLS NAMED
+- Schools named in an earlier turn ("the same institutions", "the example set"): see SCHOOLS NAMED
   EARLIER; use their tags.
 - Figures over years that names no figure at all ("show a 10-year trend"): kind request, measures empty, with the years.
 - several: when one message asks two things ("which years do you have... and compare the latest year"), give kind
-  several with one complete request for each, in order.
+  several, one complete request each, in order.
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
 - year: copy the year as the user stated it, or leave it empty. Set kind only if the user said (fall, fiscal year, ...).

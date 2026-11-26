@@ -562,3 +562,12 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **The group's label when the schools compared are in the group** shows both counts: "{group}: 11 schools in the group; 6 reported this figure (the schools compared are not counted in the group figure)". In a trend: "{group} (the schools compared are not counted in the group figure)". Two message rows in terms.csv.
 - **Data extracts move to Stage 7.** Version 1's extract builder is not carried over to version 2 in Stage 6; its absence is an approved difference from version 1. The definitions browser moves into Part 6b. (Work order and plan updated by the owner.)
 - **The summary switch is removed from the sidebar** in Part 6b: the written summary is always on, as in version 1. An internal setting can turn it off for testing only, not shown to users.
+
+## 2026-11-26: Part 6a approved; standing rules for token use
+
+- **Added schools with nothing to add them to** (schools added, but no group, or a list of schools with none named): the app asks "Which group should {schools} be added to?", offering the shortlist's groups as buttons, instead of "Which school do you mean?". terms.csv message `add to which group`. A button lists the chosen group plus the added schools.
+- **A question naming its own schools or group replaces the previous ones**, unless the user says to add them (one instruction line, for log 4.6). If it still recurs, report it to the owner rather than adding more.
+- **Column headings:** when one measure is asked for at several category rows, every column names its row, the first one included (log 7.1).
+- **Push Part 6a** after the full rebuild and the history check. No question-set run now; Part 6b's runs check these three changes.
+- **Standing rules for token use** (added to CLAUDE.md): grades carried over only for identical answers; long jobs started, reported, and left until the owner says to continue; full logs to the untracked logs folder; read only the standing rules and the current part; one-line progress messages; each part's report written so a fresh session can start from it, with every decision in DECISIONS.md or the report.
+- **Running questions in parallel:** a proposal only (`docs/reports/STAGE_6_PARALLEL_RUNS_PROPOSAL.md`).

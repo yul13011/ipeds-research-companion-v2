@@ -304,3 +304,30 @@ None had a search, so all have the 10-second limit. Three are over on the model'
    - It happens when the same measure appears twice with different rows. It was there before Part 6a.
    - A general fix in show.py (each column names its row) is about 3 lines, on your go.
 4. **Part 6a is ready for your review.** Then Part 6b's review point (the version 1 feature list), as the updated work order says.
+
+## Part 6a approved: last changes and where things stand (2026-11-26)
+
+**Approved by the owner.** Three last changes, in DECISIONS.md under "2026-11-26: Part 6a approved; standing rules for token use":
+
+1. **Added schools with nothing to add them to** now get "Which group should {schools} be added to?", with the shortlist's groups as buttons. This replaces the Big Ten question's "Which school do you mean?". The code is `add_to_which` in resolve.py, with a terms.csv message.
+2. **One instruction line for log 4.6:** a question naming its own schools or group replaces the previous ones, unless the user says to add them. If it still recurs in Part 6b's runs, tell the owner; don't add more.
+3. **Column headings:** every column of a measure asked for at several category rows names its row (fetch.py). This fixes log 7.1.
+
+**Also done:**
+- Two instruction lines were trimmed to keep the prompt under the 2,500-word test.
+- **The carry-over script follows the owner's new rule.** It carries a grade over only when the answer is identical in operation, measures, schools, groups, years and every figure on the page.
+- **CLAUDE.md** has the owner's six token-use rules.
+- **A proposal for parallel runs** is in `docs/reports/STAGE_6_PARALLEL_RUNS_PROPOSAL.md`. It waits for the owner's decision.
+
+**Tests:** 342, all passing. 3 are new (`Part6aApproved`):
+- the group question and its button, for both shapes of request;
+- the instruction line;
+- both instructional-staff columns naming their row.
+
+**No question-set run was made for these three changes,** as the owner decided. Part 6b's runs check them, including logs 4.6 and 7.1 and the Big Ten question.
+
+**For the next session (Part 6b):**
+- Start from CLAUDE.md and Part 6b of `docs/STAGE_6_WORK_ORDER.md`. The page must match version 1 exactly.
+- The first stop is the review point: the list of version 1 features and how each works in version 2.
+- The latest end-of-part scorecard is runs `haiku_6a_second` and `haiku_6a_third` (above). Their reviews are in `docs/stage4/review.csv`.
+- **Question path:** 3,950 lines at the end-of-part runs, plus about 20 for these three changes.

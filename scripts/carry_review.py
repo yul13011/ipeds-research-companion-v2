@@ -2,11 +2,12 @@
 
     python scripts/carry_review.py haiku_5_0_third haiku_5b2_first haiku_5b2_second
 
-A turn that needs a person's judgement (its expected measure is written as a concept) is carried over only when the
-new run's answer used exactly the same measures, schools and groups as the reviewed run's answer to that turn. The
-carried row says so. Every other such turn is printed for review by hand.
+A turn is carried over only when its answer is identical to the reviewed run's: operation, measures, schools,
+groups, years and every figure on the page (owner rule, 2026-11-26). Every other turn that needs a person's
+judgement is printed for review by hand. Expectations changed since the review are checked by hand.
 """
 import csv
+import json
 import sys
 from pathlib import Path
 
@@ -30,11 +31,11 @@ for run in new_runs:
         if not e or (run,) + key in done:
             continue
         old = before.get(key)
-        text = lambda turn: ((turn.get("page") or {}).get("kind"), (turn.get("page") or {}).get("message"))
-        figures = lambda turn: ((turn.get("page") or {}).get("table") or {}).get("rows")
-        same = old is not None and (text(old) == text(t) and text(t)[1] or      # the same reading and the same figures
-                                    (g.ids(old) == g.ids(t) and text(old)[0] == text(t)[0] and t.get("requests")
-                                     and figures(old) == figures(t)))
+        # Owner rule 2026-11-26: carried only when the answer is identical: operation, measures, schools, years and
+        # figures (the whole page, every part of a several-part answer); expectations changed in a part are checked by hand
+        shape = lambda turn: [(r.get("operation"), json.dumps(r.get("year"), sort_keys=True)) for r in turn.get("requests") or []]
+        page = lambda turn: json.dumps({k: v for k, v in (turn.get("page") or {}).items() if k != "seconds"}, sort_keys=True)
+        same = old is not None and g.ids(old) == g.ids(t) and shape(old) == shape(t) and page(old) == page(t)
         if key in review and same:
             pass
         elif not e["measures"].startswith("*") or not t.get("requests"):

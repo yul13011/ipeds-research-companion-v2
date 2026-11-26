@@ -2391,5 +2391,46 @@ class Part6aDecisions(unittest.TestCase):
         self.assertTrue(any("(the schools compared are not counted in the group figure)" in c for c in trend_page["table"]["columns"]))
 
 
+
+class Part6aApproved(unittest.TestCase):
+    """Part 6a approved (owner decisions 2026-11-26): added schools with nothing to add them to; a question's own
+    schools replace the previous ones; every column of a measure asked at several rows names its row."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def test_added_schools_with_nothing_to_add_them_to_ask_which_group(self):
+        q = "Show fall enrollment for the Big Ten plus Notre Dame"
+        for r in (req("schools", measures=[M("DRVEF.ENRTOT")], groups=["Big Ten Conference"], plus_schools=[152080]),
+                  req("group", measures=[M("DRVEF.ENRTOT")], plus_schools=[152080])):
+            state = {}
+            page = answer.ask(q, state, self.log, DB, call=saved(reply_request(r)))
+            self.assertEqual(page["kind"], "clarify")
+            self.assertEqual(page["message"], "Which group should University of Notre Dame be added to?")
+            self.assertIn("Big Ten Conference", page["options"])
+            chosen = answer.choose(page["options"].index("Big Ten Conference"), state, self.log)
+            self.assertEqual(chosen["kind"], "answer")
+            self.assertIn("plus University of Notre Dame", chosen["interpreted"])
+
+    def test_a_question_naming_its_own_schools_replaces_the_previous_ones(self):
+        self.assertIn("A question naming its own schools or group replaces the previous ones, unless the user says to add them.",
+                      interpret.INSTRUCTIONS)
+
+    def test_every_column_of_a_measure_asked_at_several_rows_names_its_row(self):
+        r = req("schools", measures=[dict(id="S_OC.HRTOTLT", row=[dict(column="STAFFCAT", code="2210")]),
+                                     dict(id="S_OC.HRTOTLT", row=[dict(column="STAFFCAT", code="3210")])],
+                schools=[S("Yale", 130794)])
+        cols = answer.run_direct(r, {}, self.log, DB, "[t]")["table"]["columns"]
+        self.assertEqual(len(cols), 3)
+        self.assertTrue(all("Instructional staff" in c for c in cols[1:]), cols)
+        self.assertNotEqual(cols[1], cols[2])
+
+
 if __name__ == "__main__":
     unittest.main()
