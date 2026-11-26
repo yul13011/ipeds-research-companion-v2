@@ -299,8 +299,10 @@ def apply_edit(previous, edit, history):
             elif action == "remove":
                 new[field] = [y for y in new[field] if not any(same(x, y) for x in given)]
             else:
-                new[field] = copy.deepcopy(given)
-        else:
+                kept = [s for s in new[field] if field == "schools" and s.get("id") is not None and
+                        s["id"] == new["peers_of"] and not any(same(x, s) for x in given)]
+                new[field] = kept + copy.deepcopy(given)    # the school being compared stays unless removed
+        else:                                               # (owner decision 2026-11-25)
             new[field] = copy.deepcopy(values.get(field)) if action != "remove" else empty()[field]
     return new
 

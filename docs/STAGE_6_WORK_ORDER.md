@@ -26,7 +26,7 @@ STANDING RULES FOR THIS STAGE
 - No patterns that read the user's wording to decide meaning, in code or in the dictionary.
 - Ask me before installing any package, and before creating any account, service or dataset outside this computer.
 - Keep the default model as Haiku at its current effort setting.
-- Keep the five version 3 habits from Stage 5 (plan section 12.1). Page code stays out of the operations: the features in Parts 6b to 6d call the same operations and result objects the chat uses, so a chart, a download and an on-screen answer always agree.
+- Keep the five version 3 habits from Stage 5 (plan section 12.1). Page code stays out of the operations: the features in Parts 6b and 6c call the same operations and result objects the chat uses, so a chart, a download and an on-screen answer always agree.
 - Carrying over version 1 code: copy what is useful into version 2 and adapt it to version 2's result objects. Do not import from `..\agent-redesign`. Say in each report what was copied and how much was rewritten.
 - Names: official IPEDS titles, as in Stage 5.
 - Build and test cadence, judging wrong readings, and the trial call before every full question-set run: as in Stage 5. Speed limits: 10 seconds a turn, 20 with a search.
@@ -55,35 +55,39 @@ Done when: the follow-ups that failed in every run of Part 5g pass, with no new 
 
 PART 6b. THE PAGE: VERSION 1'S LAYOUT AND FEATURES
 
-Carry over from version 1, adapted to version 2 (plan section 9.4):
+The page must look exactly like version 1 (owner decision, Nov 25, 2026).
+
+What is carried over (plan section 9.4):
 - Explore IPEDS: the six topic cards with description, scope note and three example questions, and "Ask your own question about…". Every example question must pass in the question set; add them to it.
-- Ask & Analyze: version 1's panels and menu, beside the sidebar already built; the "Need ideas?" panel with a topic dropdown and example questions.
+- Ask & Analyze: version 1's panels and menu; the "Need ideas?" panel with a topic dropdown and example questions.
 - Results: the "Display table" switch.
+- Tools: the definitions browser. Version 1's extract builder is not carried over (Stage 7); its absence is an approved difference from version 1.
 - About: privacy note, AI switch, and benchmark match rates taken from the latest benchmark run, not typed in.
 - Friendly error messages for every failure the page can meet (API down, time limit, database missing).
 
+How it is carried over:
+1. Version 1 is the reference. Copy its page code, theme settings (.streamlit/config.toml), CSS, fonts, palette, spacing, labels and wording as they are; rewire only the data calls to version 2. Do not recreate the layout.
+2. Use the same Streamlit version as version 1. If version 2 needs a newer one for something it already does, tell me what and why before changing anything.
+3. Rebuild version 2's current sidebar (model selector, Clear conversation) to look like version 1's.
+4. Remove the summary switch from the sidebar; the summary is always on, as in version 1. Keep an internal setting to turn it off for testing only, not shown to users. Record this in DECISIONS.md.
+5. Elements version 2 has and version 1 doesn't (Years held, statements, provisional notes): use version 1's existing styles only, no new ones. List each one with a screenshot for my approval.
+
 Review point before building: a short list of each version 1 feature, what it does in version 1, and how it will work in version 2. Flag any feature that does not fit version 2's design, rather than forcing it.
 
-PART 6c. CHARTS AND DOWNLOADS
+The check: list every screen and state (Explore, empty chat, answer with table, chart, school picker, clarifying question, decline, About, sidebar open and closed). Run version 1 and version 2 side by side at the same window size, take a screenshot of each state in both, compare them pixel by pixel, and report every difference. Ask me before installing a screenshot tool such as Playwright.
 
-- Charts: the "Format chart" panel (layout, text, style and axes tabs, presentation preset, undo and reset); chart edits typed in chat, sharing settings with the panel (follow-up item 29, "make it a bar chart"); preview and download as PNG or SVG in slide layouts.
-- Downloads: Excel with a sources sheet, CSV, and the technical audit file. Every download carries the same figures, periods, notes and definitions as the answer on screen, from the same result object.
-- Chart edits in chat are read by the model into the request like any follow-up; no wording patterns.
+Done when: the only differences left are the version 2 elements I've approved, and the two approved absences (the extract builder and the chart formatting panel, both Stage 7).
 
-Tests: a download for a trend, a group figure and a breakdown matches the on-screen table cell for cell; a chart edit in chat and the same edit in the panel give the same chart.
+PART 6c. TABLE DOWNLOADS
 
-PART 6d. DATA EXTRACTS (propose first)
+- Downloads: Excel with a sources sheet, CSV, and the technical audit file, as in version 1. Every download carries the same figures, periods, notes and definitions as the answer on screen, from the same result object.
+- Chart formatting (the "Format chart" panel, chart edits typed in chat, PNG and SVG downloads) has moved to Stage 7 (owner decision, Nov 26, 2026). The automatic chart already built stays. Until Stage 7, "make it a bar chart" keeps its current decline, and the missing panel is an approved difference from version 1 in the Part 6b check.
 
-Item 50 and plan section 9.5. Propose first, then wait:
-- The layout for several years: one row per school and year, one column per year, or both. My starting preference is one row per school and year.
-- The format: Excel with the documentation sheet, CSV, or both.
-- Limits and warnings for very large requests, with the sizes behind them.
-- How a plain-language request and the builder panel produce the same extract request.
-- The definitions browser (version 1's Tools page): whether it belongs here or in Part 6b.
+Tests: a download for a trend, a group figure and a breakdown matches the on-screen table cell for cell.
 
-After my go, build it. The extract uses the same code that builds answers; missing values are blank, never zero; school characteristics come from the directory for the same year as the data; the documentation sheet lists each column's definition, period and source table, the notes, the group definition and the date produced.
+PART 6d. DATA EXTRACTS: MOVED TO STAGE 7
 
-Done when: an extract and an on-screen answer for the same request agree; four extract questions, added to the owner set with expectations (one school over several years, a group with chosen characteristics, a breakdown, a request large enough to trigger the warning), pass.
+Owner decision, Nov 25, 2026: data extracts are built after version 2 is published, in Stage 7 (plan section 10.1). Version 1's extract builder is not carried over. Go from Part 6c to Part 6e.
 
 PART 6e. A SELF-CONTAINED DATA PIPELINE
 
@@ -104,11 +108,11 @@ After my go, build what is needed, publish the dataset (ask me before creating i
 
 PART 6g. MEASURE IT AND THE SWITCH TEST
 
-- Two full runs of the question set, with the four-row scorecard, the Explore and "Need ideas?" examples, the extract questions and the owner questions due by Stage 6 (IPEDS_STAGE=6).
+- The question set (IPEDS_STAGE=6, with the four-row scorecard, the Explore and "Need ideas?" examples, and the owner questions due by Stage 6). Don't rerun it twice by default. If the question path (shortlist, interpret, request, resolve, fetch, trend, summary, dictionary) hasn't changed since the last two-run scorecard, reuse it and say which runs. If it has changed, run twice and say what changed. In either case, run the full set once on the host, to check that hosting changes no answer and to measure speed there.
 - The benchmarks across ten years, reusing earlier results where nothing they depend on has changed, and saying which.
 - Time and cost per question, locally and on the host.
 - Line counts: which modules grew most during Stage 6.
-- A scorecard against the switch test in plan section 9.7: the version 1 features in place; the success test met in two runs; real users' questions at least 90% right or acceptable in two runs; version 2 running on the host without unresolved errors.
+- A scorecard against the switch test in plan section 9.7: the version 1 features in place, except the extract builder and chart formatting; the success test met in two runs; real users' questions at least 90% right or acceptable in two runs; version 2 running on the host without unresolved errors.
 
 If any part of the switch test is not met, say what is missing and stop. If all of it is met, stop and wait: I switch the Render link myself, following the steps from Part 6f.
 

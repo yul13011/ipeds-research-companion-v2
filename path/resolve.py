@@ -213,9 +213,6 @@ def resolve(reply, short, state, db, db_path):
         bad = off_shortlist(reply["request"], short) if reply.get("request") else None
         if bad:
             return outcome("wrong_reading", message=say(d, "could not read"), detail=bad)
-        if (reply["decline"] or {}).get("missing") == "measure" and reply.get("request") and \
-                not reply["request"]["measures"] and is_trend(reply["request"]["year"]):
-            return no_measure(reply["request"], history, d, short)     # a trend that names no figure
         return model_decline(reply, short, d)
     if kind == "several":                               # two or three requests in one message, answered together
         bad = next((b for b in (off_shortlist(r, short) for r in reply["several"]) if b), None)
@@ -1045,7 +1042,8 @@ def peers(request, d, plan):
                                                            [dict(term="peers", reading=o)])) for o in others])
     if pick[1] == "comparison group":
         plan["members"] = {u for (u,) in d.q("SELECT CGUNITID FROM CUSTOMCGIDS WHERE UNITID=? AND year=?", school, d.year)}
-        plan["scope"] = f"{d.name(school)}'s own IPEDS comparison group ({len(plan['members'])} schools)"
+        plan["scope_name"] = f"{d.name(school)}'s own IPEDS comparison group"
+        plan["scope"] = f"{plan['scope_name']} ({len(plan['members'])} schools)"
         plan["statements"].append(pick[3])
         plan["peer_members"] = set(plan["members"])     # in a trend, today's comparison group for every year
     elif pick[1] == "same state and sector":

@@ -75,6 +75,14 @@ def plan(request, plan_, d, say):
     from path.resolve import cohort_period, cohort_rule, decline, without
     year = request["year"]
     years = sorted(set(releases(d.db)) | extra_years(d.db, plan_["measures"]))   # and the years only earlier-year columns hold
+    unnamed = not (year.get("start") or year.get("end") or year.get("last"))      # a trend with no years named:
+    rule, statement = d.setting("trend with no years stated") if unnamed else (None, None)   # terms.csv (owner
+    if rule == "releases held":                         # decision 2026-11-25): every release that holds the figure,
+        held = set()                                    # no years from a later release's earlier-year columns
+        for m in plan_["measures"]:
+            for mid in [p["id"] for p in m.get("parts") or []] or [m["id"]]:
+                held |= set(held_years(d.db, mid))
+        years = sorted(held & set(releases(d.db))) or releases(d.db)
     m0 = plan_["measures"][0] if plan_["measures"] else None
     covered = plan_["members"] if plan_["members"] is not None else {s["id"] for s in plan_["schools"]}
     pattern = (m0 or {}).get("period_pattern") or "{Y}"
@@ -100,6 +108,8 @@ def plan(request, plan_, d, say):
     if single and chosen == years[-1:] and not any(m.get("retired") for m in plan_["measures"]):
         return None                                     # the latest year: the usual one-year answer
     membership = year.get("membership") or "each year"
+    if statement:
+        plan_["statements"].append(statement)
     periods = {y: "; ".join(dict.fromkeys(cohort_period(m, covered, d, y) or fill_years(m.get("period_pattern") or "", y)
                                           for m in plan_["measures"])) for y in chosen}
     plan_["trend"] = dict(years=chosen, change=bool(year.get("change")), membership=membership, periods=periods, single=single,
@@ -360,7 +370,10 @@ def run(plan_, db, result, fetch):
                     put(("school", s["id"], m["id"]), s["name"] + suffix, unit, y, v, mm is not None)
             if op in ("group", "school_vs_group", "split"):
                 scope = members - {s["id"] for s in plan_["schools"]} if op == "school_vs_group" else members
-                parts = [(plan_["scope"] or "Group", scope)]
+                name = plan_["scope"] or "Group"
+                if op == "school_vs_group" and scope != members:     # schools compared are in the group
+                    name = say("group compared, trend", group=name)
+                parts = [(name, scope)]
                 if op == "split":
                     by = {}
                     for u, code in data.q(f'SELECT UNITID, "{plan_["split"]}" FROM directory WHERE year = ?', y):

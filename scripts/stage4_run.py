@@ -90,7 +90,8 @@ with open(folder / "turns.jsonl", "a", encoding="utf-8") as out:
                     if config.SUMMARY and part.get("kind") == "answer":
                         before = (folder / "summaries.jsonl").read_text(encoding="utf-8").splitlines()                             if (folder / "summaries.jsonl").exists() else []
                         answer.summarize(part, state, log, model=model)
-                        after = (folder / "summaries.jsonl").read_text(encoding="utf-8").splitlines()
+                        after = (folder / "summaries.jsonl").read_text(encoding="utf-8").splitlines() \
+                            if (folder / "summaries.jsonl").exists() else []   # no summary written yet in this run
                         written += [json.loads(x) for x in after[len(before):]]
             except Exception as e:                       # recorded, and the run goes on
                 page, error, written = dict(kind="error", message=repr(e)), repr(e), []

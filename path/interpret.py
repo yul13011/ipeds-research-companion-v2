@@ -77,6 +77,7 @@ Rules:
   schools' S tags in plus_schools.
 - Schools named in an earlier turn ("the same institutions", "the example set") are listed under SCHOOLS NAMED
   EARLIER; use their tags.
+- Figures over years that names no figure at all ("show a 10-year trend"): kind request, measures empty, with the years.
 - several: when one message asks two things ("which years do you have... and compare the latest year"), give kind
   several with one complete request for each, in order.
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
@@ -89,6 +90,7 @@ Rules:
     a range of years: "2015 through 2024", "between 2016 and 2020", "2014-15 to 2023-24" (start and end);
     the last N years: "the last five years", "a 10-year trend" (last);
     the change between two years: "how did it change from 2015 to 2024" (start and end).
+    A trend or change with no years named ("how has it changed", "over time"): a range of years, start 0 and end 0.
   start and end are calendar years exactly as the user named them, never shifted for a measure that is reported a
   year behind: the app handles that. Example: "2023-24" means start 2023 and end 2024, for every measure; for one year, start
   is that year, or 0 if no year was named; a year written as two ("2022-23") gives start 2022 and end 2023. Write 0 for any of start, end and last the span does not use.

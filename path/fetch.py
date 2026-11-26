@@ -345,7 +345,16 @@ def school_vs_group(plan, data, result):
             small = plan.get("small_cohort")
             if small and den is not None and den < small["threshold"]:
                 result["warnings"].append(small["text"].format(school=school["name"], count=f"{den:,}", threshold=small["threshold"]))
-    group_rows(plan, plan["members"] - {s["id"] for s in plan["schools"]}, data, result, prefix=(plan["scope"],))
+    compared = {s["id"] for s in plan["schools"]}
+    counted = plan["members"] - compared
+    if not plan["members"] & compared:
+        group_rows(plan, counted, data, result, prefix=(plan["scope"],))
+        return
+    for m in plan["measures"]:                          # schools compared are in the group: both counts in the label
+        reporting = sum(g["reporting"] for g in group_figure(m, counted, data))    # (owner decision 2026-11-25)
+        label = say(data.db, "group compared", group=plan.get("scope_name") or plan["scope"], total=f"{len(plan['members']):,}",
+                    reporting=f"{reporting:,}")
+        group_rows(dict(plan, measures=[m]), counted, data, result, prefix=(label,))
 
 
 def breakdown(plan, data, result):

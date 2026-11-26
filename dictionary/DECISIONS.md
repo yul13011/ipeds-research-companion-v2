@@ -553,3 +553,12 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
   3. Schools named several turns earlier: the shortlist carries the last five requests, with what they carry placed first so the shortlist's limits never drop it; the prompt lists the schools named earlier; an ID kept from an earlier request by an edit is not rejected.
   4. Two requests in one message, answered together: a new reply kind, `several`.
   5. The app never says "choose an option" when no options are pending: a reply that only makes sense as an answer to options ("both", "the second") gets a short question asking what the user means (log 24.3, and the College Scorecard failure).
+
+## 2026-11-25: Part 6a decisions after the first run; Stage 6 work order changes
+
+- **A trend that names no figure:** the model sends it as a request with no measures and the years (one instruction line). The code decides: the previous request's figure if there is one, otherwise the four buttons. The route that read the model's decline is removed, so a decline for a figure IPEDS does not have stays a decline (log 23.1).
+- **A trend with no years named** covers every release the measure is held in (the ten releases). Years from a later release's earlier-year columns are included only when the user asks for those years. terms.csv setting `trend with no years stated` (condition `releases held`, with its statement); one instruction line so a trend with no years is still read as a trend (a range of years, start 0 and end 0).
+- **Replacing the comparison schools:** the school being compared (the school whose peers are used, as RIT in log 58.5) stays unless the user removes it.
+- **The group's label when the schools compared are in the group** shows both counts: "{group}: 11 schools in the group; 6 reported this figure (the schools compared are not counted in the group figure)". In a trend: "{group} (the schools compared are not counted in the group figure)". Two message rows in terms.csv.
+- **Data extracts move to Stage 7.** Version 1's extract builder is not carried over to version 2 in Stage 6; its absence is an approved difference from version 1. The definitions browser moves into Part 6b. (Work order and plan updated by the owner.)
+- **The summary switch is removed from the sidebar** in Part 6b: the written summary is always on, as in version 1. An internal setting can turn it off for testing only, not shown to users.

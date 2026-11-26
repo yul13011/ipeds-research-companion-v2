@@ -148,3 +148,159 @@ The proposal estimated about +67 lines for 6a. The rest went to the cost correct
    - Your decision; nothing built.
 3. **Log 58.5:** when the user lists schools to compare with RIT, should RIT stay in the table? Today the list replaces RIT, which passes the expectation.
 4. **The comparison group's label:** say "(11 schools; the 5 compared are left out)" when the compared schools are in the group?
+
+## After your decisions: the end-of-part runs (2026-11-26)
+
+Your five decisions are built, and the two work-order changes are recorded. They are in DECISIONS.md, "2026-11-25: Part 6a decisions after the first run; Stage 6 work order changes". Then the two end-of-part runs, `haiku_6a_second` and `haiku_6a_third`. Committed locally with your updated work order and plan; not pushed.
+
+### What changed
+
+1. **A trend with no figure.**
+   - One instruction line: a request that names no figure is sent as a request with no measures and the years.
+   - The route that read the model's decline is gone. The code decides: the previous figure if there is one, otherwise the four buttons.
+2. **A trend with no years named** covers every release that holds the figure, starting at the first such release. Years from a later release's earlier-year columns come in only when the user asks for those years.
+   - A terms.csv setting, `trend with no years stated`, holds the rule. Its statement is shown: "No years were given, so the trend covers every release that holds the figure."
+   - One instruction line: "A trend or change with no years named ("how has it changed", "over time"): a range of years, start 0 and end 0."
+   - For example: Harvard's net price with no years gives 2014-15 to 2023-24, ten rows. "Since 2012" gives twelve, with the two earlier years labelled.
+3. **The school being compared stays** when the comparison schools are replaced (request.py, the edit step). Only removing it takes it out.
+4. **The group label shows both counts** when the schools compared are in the group:
+   - "Rochester Institute of Technology's own IPEDS comparison group: 11 schools in the group; 6 reported this figure (the schools compared are not counted in the group figure)";
+   - in a trend, "… (the schools compared are not counted in the group figure)".
+   - Two message rows.
+5. **The run script** no longer fails when no summary has been written yet in a run. That failure is the `FileNotFoundError` on log 1.1, the first question of each run. It happened after the app had answered, and the app's answer is in its own log.
+
+**Two instruction lines were shortened.** The test that keeps the prompt under 2,500 words failed by 5 words.
+
+### Tests
+
+- **339, all passing.** 6 are new (`Part6aDecisions`):
+  - log 23.1's decline stays a decline;
+  - the two instruction lines;
+  - a no-years trend of net price (ten releases, no earlier-column years, the statement), and "since 2012" (twelve);
+  - a no-years trend starts at the first release holding the figure: the Pell graduation rate, nine releases from 2016-17;
+  - replacing the comparison schools keeps RIT, and removing RIT takes it out;
+  - the label with both counts, one year and trend.
+- **One older Part 6a test** now sends a trend with no figure as a request with no measures, instead of a decline.
+- **Trial call:** accepted. "Graduation rate trend for the Ivy League plus MIT and Stanford" gave ten years.
+
+### The scorecard (two runs, IPEDS_STAGE=6.0)
+
+| Row | Run 1 (`haiku_6a_second`) | Run 2 (`haiku_6a_third`) | First 6a run |
+| --- | --- | --- | --- |
+| Full set, scored and trend | 148 of 155 (95.5%) | 146 of 155 (94.2%) | 94.2% |
+| Real users' questions | 59 of 66 (89.4%) | 60 of 66 (90.9%) | 89.4% |
+| The same as Part 5e (119) | 114 of 119 (95.8%) | 112 of 119 (94.1%) | 96.6% |
+| Badly written set | 55 of 56 (98.2%) | 54 of 56 (96.4%) | 96.4% |
+| Median turn | 6.3 s | 6.5 s | 6.6 s |
+| Turns over the limit (whole turn, with the summary) | 9 of 242 | 11 of 241 | 16 |
+| Cost | $0.27 | $0.27 | $0.27 |
+| Shortlist misses | 0 of 25 | 0 of 25 | 0 |
+
+**One turn of run 2 is left out of its timing.** "What is an adjusted cohort?" waited 10 hours for the API: the run went overnight, and the computer most likely slept. Its answer was right.
+
+**Manual review:**
+- 14 turns in run 1 and 11 in run 2 were read by hand. The rest were carried over where the reading was the same.
+- I also checked each trend question's carried review against the years its answer covers. The carry-over compares figures and schools, not years, and this change is about years.
+  - **One was wrong:** log 55.1 in run 2 carried "one year only", but the answer now covers every release. Corrected.
+  - **Log 4.6 in run 1** was scored right by the grader, because its expectation names no schools, but it showed Yale only. Corrected to wrong.
+
+### The questions these decisions were for
+
+| Question | Run 1 | Run 2 |
+| --- | --- | --- |
+| log 23.1 (PhD economics enrollment, past five years) | **right**: declined again | **right** |
+| log 45.1 "Show a 10-year trend." | **right**: asks which figure, with the four buttons | **right** |
+| log 45.2 "Show a longitudinal trend" | **right**: the four buttons | **right** |
+| log 11.1 (cost of attendance, five schools, "how has … changed") | **right**: total price, 2015-16 to 2024-25 | **right** |
+| log 55.1 (FRCC, "trends over time") | **right**: enrollment over ten years; the outcome measures part asked which category | **right**: both over every release held |
+| o52 Ivy League plus MIT and Stanford, graduation rate trend | **right**: ten schools, entering cohorts fall 2009 to fall 2018 | **right** |
+| log 58.5 to 58.7 (the five schools) | **right**: RIT kept with the five | **right**, with the new label |
+
+### Wrong readings in the two runs
+
+**Wrong in one or both runs, but right in the first 6a run (or every earlier run):**
+
+- **log 4.6, "Please create a trend for Ivies plus MIT and Stanford", both runs (model).**
+  - The model kept Yale and "Yale's peers" from the earlier turns of that conversation and chose a "schools" answer, so only Yale's trend was shown. "Interpreted as" says Yale only.
+  - It was right in the first 6a run. The same question asked on its own (the o52 owner question) is right in both runs.
+- **log 1.1, run 1 (model):** the years held, then the Ivy League's combined admission rate, not the eight schools compared. Run 2 had both parts right.
+- **log 8.2, run 1 (model):** bachelor's degrees only, for "how many degrees".
+- **Big Ten plus Notre Dame, run 2 (model).**
+  - The model chose a "schools" answer with Notre Dame only as an added school, so the app asked "Which school do you mean?". Right in run 1.
+  - The app's question there is unhelpful; see open question 1.
+- **log 60.5, "Where does income data come from in ipeds", run 2 (model):** declined as not a data question. Right in every earlier run.
+- **bw23, "uw madison room and board", run 2 (model):** the combined food and housing charge, which UW-Madison leaves blank, instead of the on-campus figure. Right in every earlier run.
+
+**Wrong before too, varying from run to run (model):** logs 14.3, 24.6, 60.4, 62.1 and 62.3, "just Yale and Harvard", the Yale ACT question, and "is miami dade the biggest community college".
+
+None of these comes from the code built in this part.
+
+### Speed: why the first 6a run had 16 turns over the limit
+
+**The comparison with Part 5g ("16 against 6") mixed two ways of counting.**
+- Part 5g's figures (6 and 5) and the first Part 6.0 run's (7) left out the written summary's time.
+- The last Part 6.0 run (15) and the first 6a run (16) included it.
+
+Counted the same way:
+
+| Run | Over the limit, whole turn | Without the summary | Median turn | Model's median time | Median prompt |
+| --- | --- | --- | --- | --- | --- |
+| Part 5g run 1 | 10 | 6 | 6.0 s | 5.0 s | 13,524 tokens |
+| Part 5g run 2 | 10 | 4 | 6.4 s | 5.1 s | 13,471 |
+| Part 6.0, last run | 15 | 9 | 6.7 s | 5.4 s | 13,410 |
+| Part 6a, first run | 16 | 8 | 6.6 s | 5.2 s | 13,672 |
+| Part 6a, run 1 | 9 | 3 | 6.3 s | 5.2 s | 13,788 |
+| Part 6a, run 2 | 11 | 6 | 6.5 s | 5.3 s | 13,722 |
+
+**What changed, and what didn't:**
+- The model's own time hasn't changed.
+- The prompt grew by about 250 tokens (2%), from the new instruction lines and the "schools named earlier" line.
+- **The extra slow turns in the first 6a run came mostly from the summary:**
+  - more answers get one (128, against 117 in Part 5g), as more questions are now answered rather than asked about;
+  - a two-part answer writes a summary for each part (log 1.1, 2.4 s; the negative net worth question, 4.8 s);
+  - trend tables take longer to summarize.
+- The table appears before the summary, so the user sees the answer within the time without the summary.
+- **The two new runs, at 9 and 11, are in line with Part 5g's 10.**
+
+The 16 turns over the limit in the first 6a run (whole turn; model and summary time):
+
+| Turn | Time | Model | Summary |
+| --- | --- | --- | --- |
+| log 58.7 (expenses per FTE, five schools, ten years) | 16.9 s | 8.1 s | 3.0 s |
+| owner: schools with negative net worth (two answers) | 15.1 s | 9.6 s | 4.8 s |
+| log 14.3 (rank by three measures) | 13.6 s | 10.8 s | 2.2 s |
+| log 55.1 (FRCC, two answers) | 13.2 s | 10.1 s | 2.8 s |
+| log 11.1 (cost of attendance, five schools) | 13.0 s | 9.6 s | 3.1 s |
+| log 64.1 (WSU Tech) | 11.9 s | 8.6 s | 2.5 s |
+| bw11 "cuny schools grad rates" | 11.9 s | 9.7 s | 1.8 s |
+| eval: Yale's admissions test score requirements | 11.9 s | 9.3 s | 2.2 s |
+| log 1.1 (two answers) | 11.3 s | 7.5 s | 2.4 s |
+| log 4.6 (Ivies plus MIT and Stanford trend) | 11.1 s | 8.1 s | 1.4 s |
+| log 8.2 (Marian degrees, ten years) | 11.0 s | 7.0 s | 2.7 s |
+| eval: does Smith provide on-campus housing | 10.9 s | 10.6 s | none |
+| log 13.1 (Harvard cost) | 10.6 s | 7.7 s | 2.4 s |
+| eval: Yale's net price, grant-aided students only | 10.5 s | 8.3 s | 1.9 s |
+| bw47 "SUNY graduation rates" | 10.4 s | 10.3 s | none |
+| bw41 "hi can u tell me abt stanford" | 10.1 s | 9.9 s | none |
+
+None had a search, so all have the 10-second limit. Three are over on the model's time alone.
+
+### Line counts
+
+| | At the last commit | Now |
+| --- | --- | --- |
+| The question path | 3,926 | 3,950 (+24: trend +13, fetch +9, request +2, interpret and resolve together 0) |
+| Tests (test_path.py) | | +71 |
+
+### Open questions
+
+1. **A "schools" request with no schools but added ones** (the Big Ten question in run 2) is declined with "Which school do you mean?", which reads oddly when the user named a group. Two options, neither built:
+   - the decline says what was missing;
+   - a general rule reads a request whose only schools are added ones as a group request.
+
+   Your call.
+2. **Log 4.6:** the model carries Yale and its peers into "a trend for Ivies plus MIT and Stanford", in a conversation about Yale. I didn't add a rule. If it stays wrong after Part 6b, the instruction on what a new question keeps from the previous one may need a look.
+3. **The first column heading in log 7.1** (instructional staff) reads "Staff headcount, from the occupation table", without "Full-time, Instructional staff".
+   - It happens when the same measure appears twice with different rows. It was there before Part 6a.
+   - A general fix in show.py (each column names its row) is about 3 lines, on your go.
+4. **Part 6a is ready for your review.** Then Part 6b's review point (the version 1 feature list), as the updated work order says.

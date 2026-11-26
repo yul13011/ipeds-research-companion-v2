@@ -30,8 +30,8 @@ This is the plan for version 2. It says what version 2 is, how it works, what it
 | --- | --- | --- |
 | 1–4 | The first slice: the question path on the 2024-25 release, the dictionary, tests and benchmarks | Done Nov 21, 2026 |
 | 5 | All ten years and trends; understanding badly written questions; written summary; explaining terms and concepts | Done Nov 25, 2026 |
-| 6 | Fixes found in Stage 5; follow-ups real users need; version 1 features; data extracts; hosting; then publishing version 2 at the existing Render link | Next |
-| 7 | Flexibility: groups from confirmed lists, the formula field and category sets, comparing and suggesting measures, web search | After the switch |
+| 6 | Fixes found in Stage 5; follow-ups real users need; version 1 features (without the extract builder and chart formatting); hosting; then publishing version 2 at the existing Render link | Next |
+| 7 | Flexibility: groups from confirmed lists, the formula field and category sets, comparing and suggesting measures, web search; data extracts; chart formatting | After the switch |
 | Version 3 | A conversational research companion built on version 2 | After version 2 |
 
 The order of stages 6 and 7 was swapped on Nov 24, 2026: users get version 2, with version 1's features, before the flexibility work, which is not needed to start using it.
@@ -195,7 +195,7 @@ Combined from the real question log, the version 1 evaluation set and example bu
 | 20 | Cohort and class-year framing | "Six-year graduation rate for the 2018 entering cohort" | Built, from the year-meaning table |
 | 21 | Custom grouping of categories | Graduation rate for a user-defined set of race and ethnicity categories | Stage 7 (category sets); needs an owner rule for unknown race |
 | 22 | Custom calculation across measures | "Rank using equal weighting for net price and graduation rate" | Stage 7 for ratios, differences, percent change and shares (formula field); weighted composites later |
-| 50 | Request a data extract | "A spreadsheet of graduation rates for Big Ten schools since 2015, with Carnegie class" | Stage 6 |
+| 50 | Request a data extract | "A spreadsheet of graduation rates for Big Ten schools since 2015, with Carnegie class" | Stage 7 |
 
 ### 6.2 Follow-ups
 
@@ -207,7 +207,7 @@ Combined from the real question log, the version 1 evaluation set and example bu
 | 26 | Swap the measure | "Show the number of bachelor's degrees it awarded instead" |
 | 27 | Narrow to one measure | "I only need the net price for grant-aided students" |
 | 28 | Change the period | "Now plot it from 2015 through 2024 as a trend" |
-| 29 | Change the display | "Sort them from lowest to highest" · "Make it a bar chart" (sorting built; chart edits typed in chat are declined until Stage 6, section 9.4) |
+| 29 | Change the display | "Sort them from lowest to highest" · "Make it a bar chart" (sorting built; chart edits typed in chat are declined until Stage 7, section 10) |
 | 30 | Answer a clarifying question | "A" · "yes" · "both" |
 | 31 | Two requests in one message | "Which years are available for Ivy League admission rates? Compare the latest available year" (not built: one part is answered; Stage 6, change order 1 (a)) |
 | 48 | Respond to a decline by changing the request | "Show 2023-24" · "Use the closest one, then" |
@@ -358,22 +358,16 @@ Found in Stage 5's real users' questions:
 | Results | "Display table" switch | Stage 6 |
 | Results | Downloads: Excel with sources, CSV, technical audit file | Stage 6 |
 | Charts | Automatic line or bar chart in the owner's palette and fonts | Built (5c): a line over the years for a trend, bars for a one-year comparison, in version 1's palette and font |
-| Charts | "Format chart" panel, chart edits typed in chat, preview and download as PNG or SVG | Stage 6 |
-| Tools | Extract builder and definitions browser | Stage 6, with data extracts |
+| Charts | "Format chart" panel, chart edits typed in chat, preview and download as PNG or SVG | Left out until Stage 7 (owner decision, Nov 26, 2026) |
+| Tools | Definitions browser | Stage 6 |
+| Tools | Extract builder | Left out until Stage 7, with data extracts (owner decision, Nov 25, 2026) |
 | About | Model selector, AI switch, privacy note, benchmark match rates | Model selector and written-summary switch built (sidebar); the rest Stage 6 |
 | Behind the scenes | Question log | Built locally; hosted log with hosting (9.2) |
 | Behind the scenes | Data download on the host; friendly error and usage-limit messages | With hosting (9.2) |
 
 ### 9.5 Data extracts
 
-Users download data for their own research, asking in plain language or through a builder panel (item 50):
-
-- **One row per school,** or per school and year, with the IPEDS ID and name.
-- **The requested measures,** following the same dictionary rules as answers: right periods, missing values blank, never zero.
-- **School characteristics the user picks** (sector, control, level, state, city, region, Carnegie class, size, system), from the directory for the same year as the data.
-- **A documentation sheet:** each column's definition, period and source table, notes, the group definition used, and the date produced.
-
-The extract uses the same code that builds answers, so an extract and an on-screen answer always agree. To decide when built: the layout for several years, the format (Excel, CSV, or both), and limits for very large requests.
+Moved to Stage 7 (section 10.1) on Nov 25, 2026, to be built after version 2 is published. Version 1's extract builder is not carried over in the meantime.
 
 ### 9.6 Before version 1 is retired
 
@@ -383,7 +377,7 @@ Bring the Access-to-SQLite converter and the cross-year index into version 2, wi
 
 The Render link is switched to version 2 when all of these hold:
 
-1. The version 1 features above are in place.
+1. The version 1 features above are in place, except the extract builder and chart formatting (Stage 7).
 2. The success test from Stage 5 is met in two runs.
 3. Real users' questions are at least 90% right or acceptable in two runs.
 4. Version 2 runs on the host without unresolved errors, tested before the switch.
@@ -392,7 +386,7 @@ The existing Render service is switched to the new repository; it is never delet
 
 ---
 
-## 10. Stage 7: flexibility
+## 10. Stage 7: flexibility, data extracts and chart formatting
 
 - **Groups from a list the user confirms,** which the web search depends on.
 - **The formula field and category sets** (section 7).
@@ -411,6 +405,23 @@ The existing Render service is switched to the new repository; it is never delet
 | Policies and events | Test-optional schools, the Pell expansion, schools that closed this year | Works out what is meant and what IPEDS can show |
 
 When web search explains a topic that `outside_ipeds.csv` does not list, the app says it found no IPEDS variable for it, says what IPEDS does cover, and logs the topic for review. Pointers to other sources found on the web are labelled as unreviewed.
+
+
+### 10.1 Data extracts
+
+Moved from Stage 6 on Nov 25, 2026. Users download data for their own research, asking in plain language or through a builder panel (item 50):
+
+- **One row per school,** or per school and year, with the IPEDS ID and name.
+- **The requested measures,** following the same dictionary rules as answers: right periods, missing values blank, never zero.
+- **School characteristics the user picks** (sector, control, level, state, city, region, Carnegie class, size, system), from the directory for the same year as the data.
+- **A documentation sheet:** each column's definition, period and source table, notes, the group definition used, and the date produced.
+
+The extract uses the same code that builds answers, so an extract and an on-screen answer always agree. To decide when built: the layout for several years, the format (Excel, CSV, or both), and limits for very large requests.
+
+
+### 10.2 Chart formatting
+
+Moved from Stage 6 on Nov 26, 2026: version 1's "Format chart" panel (layout, text, style and axes tabs, presentation preset, undo and reset), chart edits typed in chat sharing settings with the panel (follow-up item 29), and preview and download as PNG or SVG in slide layouts. The automatic chart is already built.
 
 ---
 

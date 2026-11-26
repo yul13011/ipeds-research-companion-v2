@@ -2244,10 +2244,8 @@ class Part6a(unittest.TestCase):
 
     def test_a_trend_with_no_figure_and_nothing_before_asks_which(self):
         state = {}
-        decline = dict(kind="decline", request=req("group", year=dict(rq.no_year(), span="the last N years", last=10)),
-                       edit=None, options=[], chosen=[],
-                       decline=dict(reason="", wanted="", missing="measure", closest="", about=None))
-        page = self.ask("Show a 10-year trend.", decline, state)
+        reply = reply_request(req("group", year=dict(rq.no_year(), span="the last N years", last=10)))
+        page = self.ask("Show a 10-year trend.", reply, state)
         self.assertEqual(page["kind"], "clarify")
         self.assertEqual(page["options"], ["Fall enrollment", "Admission rate", "Graduation rate", "Net price"])
         self.assertNotIn("couldn't find", page["message"])
@@ -2318,6 +2316,79 @@ class Part6a(unittest.TestCase):
         page = self.run_(req("schools", measures=[M("DRVCOST.CINSON")], schools=[S("Harvard", 166027)],
                              readings=[dict(term="cost", reading="Cost profile")]))
         self.assertEqual(len(page["table"]["columns"]), 5)        # the school and the four figures of the profile
+
+
+
+class Part6aDecisions(unittest.TestCase):
+    """Part 6a, the owner's decisions after the first run (2026-11-25): a decline stays a decline; a trend with no
+    years named covers every release that holds the figure; the school being compared stays when the comparison
+    schools are replaced; the group's label shows both counts when the schools compared are in it."""
+    NO_YEARS = dict(rq.no_year(), span="a range of years", start=0, end=0)
+    FIVE = [S("WPI", 168421), S("Case Western", 201645), S("Stevens", 186867), S("Drexel", 212054), S("Northeastern", 167358)]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def run_(self, r):
+        return answer.run_direct(r, {}, self.log, DB, "[t]")
+
+    def test_a_decline_for_a_figure_ipeds_lacks_stays_a_decline(self):
+        """Log 23.1: PhD economics enrollment over five years is declined, not offered four unrelated figures."""
+        decline = dict(kind="decline", request=req("group", year=dict(rq.no_year(), span="the last N years", last=5)),
+                       edit=None, options=[], chosen=[],
+                       decline=dict(reason="", wanted="PhD economics enrollment", missing="measure", closest="", about=None))
+        page = answer.ask("do you know the phd economics enrollment for past 5 years", {}, self.log, DB, call=saved(decline))
+        self.assertEqual(page["kind"], "decline")
+
+    def test_the_instruction_says_how_to_send_a_trend_with_no_figure_or_no_years(self):
+        system = interpret.INSTRUCTIONS
+        self.assertIn("names no figure at all", system)
+        self.assertIn("A trend or change with no years named", system)
+
+    def test_a_trend_with_no_years_covers_every_release_held(self):
+        page = self.run_(req("schools", measures=[M("COST2_NETPRICE.NPGRN2")], schools=[S("Harvard", 166027)], year=self.NO_YEARS))
+        years = [r[0] for r in page["table"]["rows"]]
+        self.assertEqual(len(years), 10)                                     # 2014-15 to 2023-24, each release's own
+        self.assertFalse(any("2012" in y or "2013-14" in y for y in years))  # no years from earlier-year columns
+        self.assertIn("No years were given, so the trend covers every release that holds the figure.", page["interpreted"])
+        asked = self.run_(req("schools", measures=[M("COST2_NETPRICE.NPGRN2")], schools=[S("Harvard", 166027)],
+                              year=dict(rq.no_year(), span="from a year on", start=2012)))
+        self.assertEqual(len(asked["table"]["rows"]), 12)                    # asked for: the earlier years too
+
+    def test_a_trend_with_no_years_starts_at_the_first_release_holding_the_figure(self):
+        """The Pell graduation rate is held from the 2016-17 release on: nine releases, no empty years before."""
+        page = self.run_(req("schools", measures=[M("DRVGR.PGBA6RT")], schools=[S("Yale", 130794)], year=self.NO_YEARS))
+        self.assertEqual(len(page["table"]["rows"]), 9)
+        self.assertTrue(page["table"]["rows"][0][0].startswith("2016-17"))
+
+    def test_replacing_the_comparison_schools_keeps_the_school_being_compared(self):
+        before = req("school_vs_group", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003)], peers_of=195003)
+        edit = dict(changes=[dict(field="schools", action="replace")], values=dict(rq.empty(), schools=self.FIVE))
+        after = rq.apply_edit(before, edit, [before])
+        self.assertEqual([s["id"] for s in after["schools"]], [195003] + [s["id"] for s in self.FIVE])
+        removed = rq.apply_edit(after, dict(changes=[dict(field="schools", action="remove")],
+                                            values=dict(rq.empty(), schools=[S("RIT", 195003)])), [after])
+        self.assertNotIn(195003, [s["id"] for s in removed["schools"]])
+        plain = req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("Yale", 130794)])
+        self.assertEqual([s["id"] for s in rq.apply_edit(plain, edit, [plain])["schools"]], [s["id"] for s in self.FIVE])
+
+    def test_the_group_label_shows_both_counts_when_the_schools_compared_are_in_it(self):
+        r = req("school_vs_group", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003)] + self.FIVE, peers_of=195003)
+        page = self.run_(r)
+        label = page["table"]["rows"][-1][0]
+        self.assertIn("own IPEDS comparison group: 11 schools in the group; 6 reported this figure "
+                      "(the schools compared are not counted in the group figure)", label)
+        alone = self.run_(dict(r, schools=[S("RIT", 195003)]))
+        self.assertEqual(alone["table"]["rows"][-1][0], "Rochester Institute of Technology's own IPEDS comparison group (11 schools)")
+        years = dict(rq.no_year(), span="a range of years", start=2022, end=2024)
+        trend_page = self.run_(dict(r, year=years))
+        self.assertTrue(any("(the schools compared are not counted in the group figure)" in c for c in trend_page["table"]["columns"]))
 
 
 if __name__ == "__main__":
