@@ -246,7 +246,8 @@ def group_members(plan_, db, y):
     for g in t["groups"]:
         mine = members_of(db, g, t["latest"] if t["membership"] == "today" else y)
         out = mine if out is None else out & mine
-    return (out if out is not None else set(plan_["members"] or ())) & present
+    base = (out if out is not None else set(plan_["members"] or ())) & present
+    return base | (set(plan_.get("plus") or ()) & present)   # schools added to the group, each year they report
 
 
 # ---- notes

@@ -194,6 +194,10 @@ def build_index(db):
                                         period=None, set_up=True, many_rows=False, main=f"{rate} {syn or ''}", context="",
                                         text=f"{rate} {syn or ''}")
     terms = {}
+    try:                                        # readings used only when asked (owner decision 2026-11-25)
+        only = {(t, r) for t, r in q("SELECT term, reading FROM dict_terms WHERE only_when_asked = 'yes'")}
+    except sqlite3.OperationalError:            # a dictionary without the column
+        only = set()
     for term, words_, kind, reading, measure, condition, default, default_for, ask, statement in q(
             "SELECT term, words, kind, reading, measure, condition, is_default, default_for, always_ask, statement "
             "FROM dict_terms WHERE status = 'in use' AND (kind <> 'setting' OR words IS NOT NULL) ORDER BY rowid"):
@@ -204,7 +208,8 @@ def build_index(db):
         r = next((r for r in t["readings"] if r["reading"] == reading), None)
         if r is None:
             r = dict(reading=reading, kind=kind, is_default=default, default_for=default_for,
-                     when=ask if ask == "mixed levels" else None, measures=[], condition=condition)
+                     when=ask if ask == "mixed levels" else None, measures=[], condition=condition,
+                     only=(term, reading) in only)
             t["readings"].append(r)
         if measure and measure not in r["measures"]:
             r["measures"].append(measure)
@@ -374,16 +379,22 @@ def shortlist(question, db_path, carried=()):
     for table in {r["table"] for r in found["rows"].values()} | {s["table"] for s in found["sets"].values()}:
         for mid in index["first_version"].get(table, [])[:3]:   # a matched category row or set brings its table's measures
             measures.setdefault(mid, entries[mid])
-    for request in carried:                     # keep what the conversation already uses
+    kept_m, kept_s, kept_g = {}, {}, {}         # what the conversation already uses: first, so the shortlist's
+    for request in reversed(list(carried)):     # limits never drop it (newest request first)
         for mid in [m["id"] for m in request["measures"]] + [c["measure"] for c in request["conditions"]]:
             if mid in entries:
-                measures.setdefault(mid, entries[mid])
-        for s in request["schools"] + ([{"id": request["peers_of"]}] if request["peers_of"] else []):
+                kept_m.setdefault(mid, entries[mid])
+        for s in request["schools"] + [{"id": u} for u in request.get("plus_schools") or []] + \
+                ([{"id": request["peers_of"]}] if request["peers_of"] else []):
             if s.get("id") in index["schools"][1]:
-                found["schools"].setdefault(s["id"], index["schools"][1][s["id"]])
+                kept_s.setdefault(s["id"], index["schools"][1][s["id"]])
         for g in request["groups"]:
             if g in index["groups"][1]:
-                found["groups"].setdefault(g, index["groups"][1][g])
+                kept_g.setdefault(g, index["groups"][1][g])
+    measures = {**kept_m, **{k: v for k, v in measures.items() if k not in kept_m}}
+    found["schools"] = {**kept_s, **{k: v for k, v in found["schools"].items() if k not in kept_s}}
+    found["groups"] = {**kept_g, **{k: v for k, v in found["groups"].items() if k not in kept_g}}
+    for request in carried:
         for m in request["measures"]:
             for pair in m["row"]:
                 key = (m["id"].partition(".")[0], pair["column"].upper(), pair["code"])

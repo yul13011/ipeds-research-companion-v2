@@ -45,8 +45,10 @@ def turn(state):
 
 def finish(out, state, db, log, row):
     """Turn a resolve outcome into what the page shows, update the conversation, and write the logs."""
-    if out["kind"] == "many":
-        pages = [finish(o, state, db, log, dict(row, part=i)) for i, o in enumerate(out["outcomes"])]
+    if out["kind"] == "many":                           # several answers: each part's outcome and request in the log
+        parts = [dict(row, part=i) for i in range(len(out["outcomes"]))]
+        pages = [finish(o, state, db, log, p) for o, p in zip(out["outcomes"], parts)]
+        row.update(outcome="many", parts=[{k: p.get(k) for k in ("part", "outcome", "request", "rows")} for p in parts])
         return dict(kind="many", pages=pages)
     row["outcome"] = out["kind"]
     if out.get("log"):                                  # the model's own explanation: log only, never shown
@@ -111,7 +113,7 @@ def ask(question, state, log, db_path=None, call=None, model=None, progress=None
     progress("finding")                                                    # a character cleanup, not a wording rule
     history = state.get("history") or []
     pending = state.get("pending") or []
-    carried = history[-1:] + [o["request"] for o in pending]
+    carried = history[-5:] + [o["request"] for o in pending]   # the last five requests (owner decision 2026-11-25)
     short = shortlist.shortlist(question, db_path, carried)
     declined = (state.get("last_decline") or {}).get("missing")
     short_now = {"short": short}
@@ -122,7 +124,8 @@ def ask(question, state, log, db_path=None, call=None, model=None, progress=None
         return short_now["short"], added
     progress("reading")
     reply, meta = interpret.interpret(question, short, history[-1] if history else None, pending, call=call, model=model,
-                                      declined=declined, search=searched if config.AI_SEARCH else None)
+                                      declined=declined, search=searched if config.AI_SEARCH else None,
+                                      earlier=history[-5:])
     short = meta.get("short") or short
     progress("getting")
     db = connect(db_path)

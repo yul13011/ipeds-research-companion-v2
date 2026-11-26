@@ -541,3 +541,15 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **"Cost of attendance" (and "cost", "COA")** defaults to the published total price for full-time, first-time undergraduates, which all ten releases hold: the total price for in-state students living on campus (DRVCOST.CINSON; for private schools the in-state and out-of-state prices are the same). terms.csv term `cost`: a new default reading "Published total price (on campus, in-state)", with a statement saying so; the cost profile stays as a reading, no longer the default; "COA" added to the words.
 - **The cost of attendance in the net price table** (COAISGS2 for public schools, COAGS2 for private, students awarded grant or scholarship aid) is a reading of its own, never the default, used only when the question asks for it specifically ("the cost used to calculate net price").
 - **Then:** run the question set once (IPEDS_STAGE=6.0) and report the MIT question and any other cost question that changes; if nothing else changes, push Part 6.0 after the history check, and write Part 6a's proposal, with item 31.
+
+## 2026-11-25: cost corrections; Part 6a proposal approved
+
+- **The cost term is split.** "cost" keeps the cost profile (total price, tuition, net price) as its default, as before. "cost of attendance" and "COA" are their own term, defaulting to the published total price (DRVCOST.CINSON, in-state, on campus), with the two net-price-table readings used only when asked.
+- **The shortlist marks a reading used only when asked** ("used only when the question asks for it specifically"), so the model sees the convention.
+- **Whenever the app asks which reading of a term is meant, the term's default is always one of the options.**
+- **Part 6a, approved:**
+  1. A group plus named schools: a new request field, `plus_schools`; the added schools join the list even if they are outside the group or the national universe, and "Interpreted as" names them.
+  2. A trend that names no measure: the previous request's measure, schools and group; with no previous measure, the app asks which figure, offering four (terms.csv `figures to offer`, approved as drafted): fall enrollment, admission rate, the bachelor's six-year graduation rate and net price.
+  3. Schools named several turns earlier: the shortlist carries the last five requests, with what they carry placed first so the shortlist's limits never drop it; the prompt lists the schools named earlier; an ID kept from an earlier request by an edit is not rejected.
+  4. Two requests in one message, answered together: a new reply kind, `several`.
+  5. The app never says "choose an option" when no options are pending: a reply that only makes sense as an answer to options ("both", "the second") gets a short question asking what the user means (log 24.3, and the College Scorecard failure).

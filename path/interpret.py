@@ -33,6 +33,8 @@ Rules:
         means the schools in the PREVIOUS REQUEST: keep them; never pick new schools for it.
   options: the question has two or three reasonable readings. Give each as a complete request with a short label.
   choose: the user is answering the PENDING OPTIONS ("the first one", "B", "both"). Give their 0-based numbers.
+        If no PENDING OPTIONS are open, a reply like that still is kind choose, with chosen empty: the app asks what
+        the user means.
         If PENDING OPTIONS are open and the user changes something without choosing ("show 2023-24"), return an
         edit with that change; the app applies it to every option and asks again.
   decline: the question cannot be run as asked. Put in `requests` the one request you would have made, as far as
@@ -71,6 +73,12 @@ Rules:
   "BU" or "U of M") or a name no listed school has (such as "RTI"), give "", never another school's tag; the app
   then offers the nearest names. This holds in a decline too.
 - groups: G tags. A school must be in every group named.
+- plus_schools: schools added to a group's list ("the Ivies plus MIT and Stanford"): the group in groups, the added
+  schools' S tags in plus_schools.
+- Schools named in an earlier turn ("the same institutions", "the example set") are listed under SCHOOLS NAMED
+  EARLIER; use their tags.
+- several: when one message asks two things ("which years do you have... and compare the latest year"), give kind
+  several with one complete request for each, in order.
 - "its peers" or "peer institutions": set peers_of to the school's S tag.
 - conditions: comparison is one of {comparisons}; value is a number or a category code, written as text.
 - year: copy the year as the user stated it, or leave it empty. Set kind only if the user said (fall, fiscal year, ...).
@@ -101,7 +109,7 @@ Rules:
 """
 
 
-def render(short, previous, pending, question, declined=None, searches=None, searches_left=0):
+def render(short, previous, pending, question, declined=None, searches=None, searches_left=0, earlier=()):
     """The shortlist and conversation as plain text for the model, in tags. Returns (text, words per part)."""
     parts = {}
     def section(name, lines):
@@ -126,7 +134,8 @@ def render(short, previous, pending, question, declined=None, searches=None, sea
             extra = " | default" + (f" for {r['default_for']}" if r["default_for"] else "") if r["is_default"] == "yes" else ""
             when = " | offered when a group mixes levels" if r["when"] else ""
             uses = f" | {', '.join(r['measure_tags'])}" if r["measure_tags"] else ""
-            rows.append(f"    {r['tag']} | {r['reading']}{uses}{extra}{when}")
+            only = " | used only when the question asks for it specifically" if r.get("only") else ""
+            rows.append(f"    {r['tag']} | {r['reading']}{uses}{extra}{when}{only}")
     section("terms", ["Terms (tag | reading):"] + rows)
     section("schools", ["Schools (tag | name | city, state | also called):"] +
             [f"  {s['tag']} | {s['name']} | {s['city']}, {s['state']} | {s['alias'] or ''}" for s in short["schools"]])
@@ -144,6 +153,12 @@ def render(short, previous, pending, question, declined=None, searches=None, sea
             [f"  {g['tag']} | {g['term']} | {g['definition'][:100]}" for g in short.get("glossary", [])])
     convo = ["PREVIOUS REQUEST" + (f" (the app declined it: {declined})" if declined else "") + ": " +
              (json.dumps(to_wire(previous, short["tags"])) if previous else "none")]
+    back = {key: t for t, (kind, key) in short["tags"].items() if kind == "schools"}
+    named = list(dict.fromkeys(s["id"] for r in reversed(list(earlier)) for s in r["schools"] + [
+        dict(id=u) for u in r.get("plus_schools") or []] if s.get("id") in back))      # newest first
+    if named:
+        names = {s["id"]: s["name"] for s in short["schools"]}
+        convo.append("SCHOOLS NAMED EARLIER: " + "; ".join(f"{back[u]} {names.get(u, u)}" for u in named))
     for s in searches or []:
         convo.append(f"YOUR SEARCH: {s['words']!r} found " + (", ".join(f"{len(v)} {k}" for k, v in s["added"].items())
                                                                   or "nothing new") + " (listed first above)")
@@ -166,8 +181,8 @@ def check(reply):
         return f"a reply of kind {reply['kind']} came without its {needs[reply['kind']]}"
     if reply["kind"] == "options" and len(reply.get("options") or []) < 2:
         return "a reply of kind options came with fewer than two options"
-    if reply["kind"] == "choose" and not reply.get("chosen"):
-        return "a reply of kind choose named no option"
+    if reply["kind"] == "several" and len(reply.get("several") or []) < 2:
+        return "a reply of kind several came with fewer than two requests"
     return None
 
 
@@ -213,7 +228,8 @@ def call_api(system, user, model, schema):
                   "cache_write_tokens": u.cache_creation_input_tokens or 0, "cache_read_tokens": u.cache_read_input_tokens or 0}
 
 
-def interpret(question, short, previous=None, pending=None, call=None, model=None, declined=None, search=None):
+def interpret(question, short, previous=None, pending=None, call=None, model=None, declined=None, search=None,
+              earlier=()):
     """Returns (reply, meta). On two failed attempts the reply is None and meta["error"] says why.
 
     `search` (words -> (shortlist, added)) is the app's own search. When the model replies with kind "search", the
@@ -230,7 +246,7 @@ def interpret(question, short, previous=None, pending=None, call=None, model=Non
     start = time.time()
     while True:
         left = MAX_SEARCHES - len(meta["searches"]) if search else 0
-        user, parts = render(short, previous, pending, question, declined, meta["searches"], left)
+        user, parts = render(short, previous, pending, question, declined, meta["searches"], left, earlier)
         meta.update(prompt_words=len((system + user).split()), system=system, user=user,
                     prompt_parts=dict(instructions=len(system.split()), **parts, schema_characters=len(json.dumps(schema))))
         reply = one_call(system, user, model, schema, short, call, meta)

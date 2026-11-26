@@ -55,11 +55,12 @@ def trend_page(page):
 
 def ids(t):
     ms, ss, gs = set(), set(), set()
-    reqs = t["requests"] or ([t["reply"]["request"]] if t.get("reply") and t["reply"].get("request") else [])
+    reqs = t["requests"] or ([t["reply"]["request"]] if t.get("reply") and t["reply"].get("request") else []) or \
+        list((t.get("reply") or {}).get("several") or [])   # Part 6a: two requests answered together
     reqs += [o for o in (t.get("options") or [])]
     for r in reqs:
         ms |= {m["id"] for m in r.get("measures") or []}
-        ss |= {s["id"] for s in r.get("schools") or [] if s.get("id")}
+        ss |= {s["id"] for s in r.get("schools") or [] if s.get("id")} | set(r.get("plus_schools") or [])
         gs |= set(r.get("groups") or [])
     return ms, ss, gs
 

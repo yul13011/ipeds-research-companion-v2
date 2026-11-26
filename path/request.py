@@ -8,6 +8,7 @@ measure and any group; no part is specific to one kind of question.
                 `row` names a single category row in a multi-row table; unnamed columns take their default
     schools     schools named by the user: {"name": as written, "id": UNITID from the shortlist, or null}
     groups      group names from the shortlist; a school must be in all of them
+    plus_schools  schools added to the group's list ("the Ivies plus MIT and Stanford"), even outside the group
     peers_of    the UNITID whose peers are wanted ("its peers")
     conditions  filters on a measure: {"measure", "comparison", "value"}
     breakdown   a breakdown set from the shortlist, and any fixed value the user changed
@@ -42,7 +43,7 @@ OPERATIONS = {
     "define": "the definition of a measure or term",
     "data_exists": "what data exists on a topic, and for which years",
 }
-LIST_FIELDS = ("measures", "schools", "groups", "conditions", "readings")
+LIST_FIELDS = ("measures", "schools", "groups", "plus_schools", "conditions", "readings")
 SCALAR_FIELDS = ("operation", "peers_of", "breakdown", "split_by", "sort", "year", "topic")
 COMPARISONS = (">", ">=", "<", "<=", "=", "!=")
 YEAR_KINDS = ("fall", "fiscal year", "academic year", "aid year", "entering cohort", "class year", "calendar year", "latest")
@@ -89,6 +90,7 @@ def reply_schema():
         measures={"type": "array", "items": obj(measure=of("measures"), row={"type": "array", "items": of("rows")})},
         schools={"type": "array", "items": obj(name=STRING, school=or_none(of("schools")))},
         groups={"type": "array", "items": of("groups")},
+        plus_schools={"type": "array", "items": of("schools")},   # added to the group's list
         peers_of=or_none(of("schools")),
         conditions={"type": "array", "items": obj(measure=of("measures"), comparison={"type": "string", "enum": list(COMPARISONS)},
                                                   value=STRING)},
@@ -105,7 +107,8 @@ def reply_schema():
         general=STRING,                                          # define, as a last resort: a short explanation
     )
     return obj(
-        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline", "about_decline", "search"]},
+        kind={"type": "string", "enum": ["request", "edit", "options", "choose", "decline", "about_decline", "search",
+                                         "several"]},
         search_words=STRING,                    # kind search: the words to look for (plain text, never nullable)
         requests={"type": "array", "items": request},
         changes={"type": "array", "items": obj(
@@ -146,6 +149,7 @@ def request_from_wire(r, tags, unknown=None):
     return dict(
         operation=r["operation"], measures=measures,
         schools=[dict(name=s["name"], id=look(s.get("school"), "schools")) for s in r.get("schools") or []],
+        plus_schools=[u for u in (look(t, "schools") for t in r.get("plus_schools") or []) if u],
         groups=[g for g in (look(t, "groups") for t in r.get("groups") or []) if g],
         peers_of=look(r.get("peers_of"), "schools") if r.get("peers_of") else None,
         conditions=[dict(measure=look(c["measure"], "measures"), comparison=c["comparison"], value=c["value"])
@@ -175,6 +179,7 @@ def from_wire(reply, tags=None):
                 request=items[0] if kind in ("request", "decline") and items else None,
                 edit=dict(changes=reply["changes"], values=items[0] if items else None) if kind == "edit" else None,
                 options=[dict(label=l, request=r) for l, r in zip(labels, items)] if kind == "options" else [],
+                several=items if kind == "several" else [],     # two or three requests, answered together
                 chosen=reply.get("chosen") or [],
                 decline=({k: (v or None) if k in ("missing", "about") else v for k, v in reply["decline"].items()}
                          if reply.get("decline") else None) if kind in ("decline", "about_decline") else None,
@@ -201,6 +206,7 @@ def to_wire(r, tags):
         measures=[dict(measure=t("measures", m["id"]), row=[t("rows", (table(m["id"]), p["column"], p["code"])) for p in m["row"]])
                   for m in r["measures"]],
         schools=[dict(name=s["name"], school=t("schools", s["id"]) if s["id"] else None) for s in r["schools"]],
+        plus_schools=[t("schools", u) for u in r.get("plus_schools") or []],
         groups=[t("groups", g) for g in r["groups"]],
         peers_of=t("schools", r["peers_of"]) if r["peers_of"] else None,
         conditions=[dict(measure=t("measures", c["measure"]), comparison=c["comparison"], value=c["value"]) for c in r["conditions"]],
@@ -263,7 +269,7 @@ def empty(operation="schools"):
     """A request with every part present and empty."""
     return {"operation": operation, "measures": [], "schools": [], "groups": [], "peers_of": None, "conditions": [],
             "breakdown": None, "split_by": None, "sort": None, "year": no_year(), "topic": None,
-            "readings": [], "explain": [], "general": None}
+            "readings": [], "explain": [], "general": None, "plus_schools": []}
 
 
 def same(a, b):
@@ -310,6 +316,7 @@ def used_ids(request):
     for c in request["conditions"]:
         ids["measure"].add(c["measure"])
     ids["school"] |= {s["id"] for s in request["schools"] if s["id"] is not None}
+    ids["school"] |= set(request.get("plus_schools") or [])
     if request["peers_of"] is not None:
         ids["school"].add(request["peers_of"])
     ids["group"] |= set(request["groups"])

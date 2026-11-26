@@ -2154,14 +2154,16 @@ class ChangeOrder1(unittest.TestCase):
     def test_cost_of_attendance_defaults_to_the_published_total_price(self):
         """Owner decision 2026-11-25: "cost of attendance" is the published total price (held in all ten releases); the
         net-price-table cost is a reading of its own, never the default."""
-        default = self.db.execute("SELECT measure FROM dict_terms WHERE term='cost' AND is_default='yes'").fetchall()
+        default = self.db.execute("SELECT measure FROM dict_terms WHERE term='cost of attendance' AND is_default='yes'").fetchall()
         self.assertEqual(default, [("DRVCOST.CINSON",)])
+        profile = self.db.execute("SELECT reading FROM dict_terms WHERE term='cost' AND is_default='yes'").fetchall()
+        self.assertEqual({r for (r,) in profile}, {"Cost profile"})          # "cost" keeps the profile
         page = self.run_(req("schools", measures=[M("DRVCOST.CINSON")], schools=[S("MIT", 166683)],
-                             readings=[dict(term="cost", reading="Published total price (on campus, in-state)")],
+                             readings=[dict(term="cost of attendance", reading="Published total price (on campus, in-state)")],
                              year=dict(rq.no_year(), span="from a year on", start=2015)))
         self.assertEqual(len(page["table"]["rows"]), 10)
         self.assertNotIn("not collected", [r[2] for r in page["table"]["rows"]])
-        self.assertEqual(self.db.execute("SELECT is_default FROM dict_terms WHERE term='cost' AND measure='COST2_NETPRICE.COAGS2'")
+        self.assertEqual(self.db.execute("SELECT is_default FROM dict_terms WHERE term='cost of attendance' AND measure='COST2_NETPRICE.COAGS2'")
                          .fetchone()[0], "no")
 
     def test_a_cost_used_only_when_asked_gives_the_default_otherwise(self):
@@ -2176,7 +2178,7 @@ class ChangeOrder1(unittest.TestCase):
         page = self.run_(req("schools", measures=[M("COST2_NETPRICE.COAT40"), M("COST2_NETPRICE.COAT42")], schools=mit))
         self.assertTrue(page["interpreted"].startswith("Total price, in-state students living on campus"))   # one measure
         asked = req("schools", measures=[M("COST2_NETPRICE.COAT42")], schools=mit,
-                    readings=[dict(term="cost", reading="Cost of attendance for students awarded Title IV federal aid")])
+                    readings=[dict(term="cost of attendance", reading="Cost of attendance for students awarded Title IV federal aid")])
         page = self.run_(asked)
         self.assertTrue(page["interpreted"].startswith("Total cost of attendance, students awarded Title IV"))
         self.assertIn("calculate net price for students awarded Title IV", page["interpreted"])
@@ -2184,6 +2186,138 @@ class ChangeOrder1(unittest.TestCase):
 
     def test_which_years_reads_as_data_exists(self):
         self.assertIn("which years are held", interpret.INSTRUCTIONS)
+
+
+
+class Part6a(unittest.TestCase):
+    """Stage 6, Part 6a (owner decisions 2026-11-25): a group plus named schools; a trend that names no figure; schools
+    named several turns earlier; two requests answered together; no "choose an option" with nothing pending; and the
+    cost corrections (the term's default always offered; readings used only when asked marked on the shortlist)."""
+    IVY_PLUS = [166683, 243744]                         # MIT and Stanford
+    WORCESTER = ("Worcester Polytechnic Institute, Case Western Reserve University, Stevens Institute of Technology, "
+                 "Drexel University and Northeastern University")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dir = tempfile.TemporaryDirectory()
+        cls.log = Log(cls.dir.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.dir.cleanup()
+
+    def run_(self, r):
+        return answer.run_direct(r, {}, self.log, DB, "[t]")
+
+    def ask(self, q, reply, state):
+        return answer.ask(q, state, self.log, DB, call=saved(reply))
+
+    def test_a_group_plus_named_schools(self):
+        page = self.run_(req("rank", measures=[M("DRVGR.GBA6RTT")], groups=["Ivy League"], plus_schools=self.IVY_PLUS))
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        self.assertIn("The eight Ivy League schools, plus Massachusetts Institute of Technology and Stanford University",
+                      page["interpreted"])
+        years = dict(rq.no_year(), span="a range of years", start=2022, end=2024)
+        trend = self.run_(req("group", measures=[M("DRVEF.ENRTOT")], groups=["Ivy League"], plus_schools=self.IVY_PLUS, year=years))
+        alone = self.run_(req("group", measures=[M("DRVEF.ENRTOT")], groups=["Ivy League"], year=years))
+        num = lambda c: int(str(c).replace(",", ""))
+        for with_, without_ in zip(trend["table"]["rows"], alone["table"]["rows"]):
+            self.assertGreater(num(with_[2]), num(without_[2]))      # MIT and Stanford added in every year
+
+    def test_an_added_school_can_be_edited_and_must_be_on_the_shortlist(self):
+        r = req("rank", measures=[M("DRVGR.GBA6RTT")], groups=["Ivy League"], plus_schools=self.IVY_PLUS)
+        edited = rq.apply_edit(r, dict(changes=[dict(field="plus_schools", action="remove")],
+                                       values=dict(rq.empty(), plus_schools=[243744])), [r])
+        self.assertEqual(edited["plus_schools"], [166683])
+        wire = wire_reply("request", dict(operation="rank", plus_schools=["S9"]))["requests"][0]
+        unknown = []
+        rq.request_from_wire(wire, {}, unknown)
+        self.assertEqual(unknown, ["S9"])
+
+    def test_a_trend_with_no_figure_uses_the_previous_one(self):
+        state = {}
+        self.ask("Yale enrollment", reply_request(req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)])), state)
+        page = self.ask("Show a 10-year trend.",
+                        reply_request(req("schools", year=dict(rq.no_year(), span="the last N years", last=10))), state)
+        self.assertEqual(len(page["table"]["rows"]), 10)
+        self.assertIn("Fall total headcount for Yale University", page["interpreted"])
+
+    def test_a_trend_with_no_figure_and_nothing_before_asks_which(self):
+        state = {}
+        decline = dict(kind="decline", request=req("group", year=dict(rq.no_year(), span="the last N years", last=10)),
+                       edit=None, options=[], chosen=[],
+                       decline=dict(reason="", wanted="", missing="measure", closest="", about=None))
+        page = self.ask("Show a 10-year trend.", decline, state)
+        self.assertEqual(page["kind"], "clarify")
+        self.assertEqual(page["options"], ["Fall enrollment", "Admission rate", "Graduation rate", "Net price"])
+        self.assertNotIn("couldn't find", page["message"])
+        chosen = answer.choose(1, state, self.log)
+        self.assertEqual(len(chosen["table"]["rows"]), 10)        # admission rate, nationally, over ten years
+
+    def test_schools_named_earlier_stay_on_the_shortlist_and_in_the_prompt(self):
+        """Log 58.5: five school names fill the shortlist; the measure kept from the earlier question is still on it."""
+        earlier = req("school_vs_group", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003)], peers_of=195003)
+        short = shortlist.shortlist(self.WORCESTER, DB, [earlier])
+        self.assertIn("DRVGR.GBA6RTT", shortlist.ids(short)["measure"])
+        older = req("schools", measures=[M("DRVEF.ENRTOT")], schools=[S("Yale", 130794)])
+        q = "use the institutions in the example set"
+        short = shortlist.shortlist(q, DB, [older, earlier])
+        user = interpret.render(short, earlier, None, q, earlier=[older, earlier])[0]
+        self.assertRegex(user, r"SCHOOLS NAMED EARLIER: S\d+ Rochester Institute of Technology; S\d+ Yale University")
+
+    def test_an_edit_may_keep_what_an_earlier_request_named(self):
+        from path import resolve
+        earlier = req("schools", measures=[M("DRVGR.GBA6RTT")], schools=[S("RIT", 195003)])
+        short = shortlist.shortlist("Drexel University", DB)
+        edited = dict(earlier, schools=[S("Drexel", 212054)])
+        self.assertIsNotNone(resolve.off_shortlist(edited, short))           # alone, the measure is not on this shortlist
+        self.assertIsNone(resolve.off_shortlist(edited, short, earlier=[earlier]))
+
+    def test_two_requests_in_one_message_are_answered_together(self):
+        q = "Which years are available for Ivy League admission rates? Compare the latest available year."
+        a = req("data_exists", measures=[M("DRVADM.DVADM01")], groups=["Ivy League"])
+        b = req("rank", measures=[M("DRVADM.DVADM01")], groups=["Ivy League"])
+        reply = dict(kind="several", several=[a, b], request=None, edit=None, options=[], chosen=[], decline=None)
+        page = self.ask(q, reply, {})
+        self.assertEqual([p["kind"] for p in page["pages"]], ["answer", "answer"])
+        self.assertIn("10 releases", page["pages"][0]["message"])
+        self.assertEqual(len(page["pages"][1]["table"]["rows"]), 8)
+        row = json.loads((Path(self.dir.name) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        self.assertEqual([p["outcome"] for p in row["parts"]], ["ready", "ready"])
+
+    def test_no_choose_an_option_when_nothing_is_pending(self):
+        for q in ("both", "the second"):
+            page = self.ask(q, dict(kind="choose", request=None, edit=None, options=[], chosen=[], decline=None), {})
+            self.assertEqual(page["kind"], "clarify")
+            self.assertIn("there are no options open", page["message"])
+        self.assertIsNone(interpret.check(dict(kind="choose", chosen=[])))   # no longer a failed reply
+
+    def test_the_terms_default_is_always_among_the_options(self):
+        from path import resolve
+        mit, y = [S("MIT", 166683)], dict(rq.no_year(), span="from a year on", start=2015)
+        readings = (("Title IV", "COST2_NETPRICE.COAT42", "Cost of attendance for students awarded Title IV federal aid"),
+                    ("Net price cost", "COST2_NETPRICE.COAGS2", "Cost of attendance used to calculate net price"))
+        opts = [dict(label=label, request=req("schools", measures=[M(m)], schools=mit, year=y,
+                                              readings=[dict(term="cost of attendance", reading=reading)]))
+                for label, m, reading in readings]
+        d = resolve.Dictionary(sqlite3.connect(f"file:{DB}?mode=ro", uri=True), DB)
+        out = resolve.with_default(opts, d)
+        self.assertEqual(out[0]["label"], "Total price, in-state students living on campus")
+        page = self.run_(out[0]["request"])
+        self.assertEqual(len(page["table"]["rows"]), 10)           # MIT's published total price, ten releases
+        self.assertEqual(len(resolve.with_default(out, d)), 3)    # already there: not added twice
+
+    def test_readings_used_only_when_asked_are_marked_on_the_shortlist(self):
+        q = "What is the total cost of attendance at MIT?"
+        user = interpret.render(shortlist.shortlist(q, DB), None, None, q)[0]
+        self.assertRegex(user, r"Cost of attendance used to calculate net price \| [M\d, ]+ \| used only when the question "
+                               r"asks for it specifically")
+        self.assertRegex(user, r"Published total price \(on campus, in-state\) \| M\d+ \| default\n")
+
+    def test_cost_keeps_the_profile(self):
+        page = self.run_(req("schools", measures=[M("DRVCOST.CINSON")], schools=[S("Harvard", 166027)],
+                             readings=[dict(term="cost", reading="Cost profile")]))
+        self.assertEqual(len(page["table"]["columns"]), 5)        # the school and the four figures of the profile
 
 
 if __name__ == "__main__":

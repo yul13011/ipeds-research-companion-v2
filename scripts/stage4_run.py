@@ -99,7 +99,7 @@ with open(folder / "turns.jsonl", "a", encoding="utf-8") as out:
             first = rows[0] if rows else {}
             rec = dict(source=source, case=case, turn=turn, question=question, repeat=repeat, error=error,
                        seconds=round(time.time() - start, 2), page=summary(page),
-                       reply=first.get("reply"), requests=[r.get("request") for r in rows if r.get("request")],
+                       reply=first.get("reply"), requests=[q for r in rows for q in ([r.get("request")] + [p.get("request") for p in r.get("parts") or []]) if q],
                        options=first.get("options"), missing=first.get("missing"), detail=first.get("detail"),
                        shortlist=first.get("shortlist"), tokens_in=first.get("tokens_in"), tokens_out=first.get("tokens_out"),
                        cache_write=first.get("cache_write"), cache_read=first.get("cache_read"), cost_usd=first.get("cost_usd"),

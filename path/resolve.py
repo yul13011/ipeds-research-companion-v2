@@ -17,7 +17,7 @@ import re
 
 from path import shortlist as sl
 from path import trend
-from path.request import apply_edit, by_year, fill_years, used_ids
+from path.request import apply_edit, by_year, fill_years, is_trend, used_ids
 
 CLOSEST_MATCHES = 3                 # how many of the best shortlisted measures a "not found" answer names
 
@@ -208,25 +208,34 @@ def resolve(reply, short, state, db, db_path):
     if reply.get("unknown_tags"):                       # a tag that was not on this question's shortlist
         return outcome("wrong_reading", message=say(d, "could not read"), detail={"tags not on the shortlist": reply["unknown_tags"]})
     kind = reply["kind"]
+    history = state.get("history") or []
     if kind == "decline":
         bad = off_shortlist(reply["request"], short) if reply.get("request") else None
         if bad:
             return outcome("wrong_reading", message=say(d, "could not read"), detail=bad)
+        if (reply["decline"] or {}).get("missing") == "measure" and reply.get("request") and \
+                not reply["request"]["measures"] and is_trend(reply["request"]["year"]):
+            return no_measure(reply["request"], history, d, short)     # a trend that names no figure
         return model_decline(reply, short, d)
+    if kind == "several":                               # two or three requests in one message, answered together
+        bad = next((b for b in (off_shortlist(r, short) for r in reply["several"]) if b), None)
+        if bad:
+            return outcome("wrong_reading", message=say(d, "could not read"), detail=bad)
+        return outcome("many", outcomes=[resolve_request(r, d, short, new_question=True) for r in reply["several"]])
     if kind == "about_decline":                         # "why not?", "where can I find that?", "what can you show instead?"
         return about_decline(reply, state, d)
     if kind == "choose":
         pending = state.get("pending") or []
         picked = [pending[i]["request"] for i in reply["chosen"] if 0 <= i < len(pending)]
-        if not picked:
-            return outcome("wrong_reading", message=say(d, "which option"), detail="choose")
+        if not picked:                                  # "both", "the second" with no options open: ask what is meant
+            return outcome("clarify", question=say(d, "what do you mean"), options=[])
         results = [resolve_request(r, d, None) for r in picked]       # options were checked when they were shown
         return results[0] if len(results) == 1 else outcome("many", outcomes=results)
     if kind == "options":
         good = [o for o in reply["options"] if not off_shortlist(o["request"], short)]
         if not good:
             return outcome("wrong_reading", message=say(d, "could not read"), detail=off_shortlist(reply["options"][0]["request"], short))
-        return outcome("clarify", question="Which did you mean?", options=good)
+        return outcome("clarify", question="Which did you mean?", options=with_default(good, d))
     request = reply["request"]
     if kind == "edit" and state.get("pending"):        # a change made while options are open applies to every option
         options = []
@@ -240,10 +249,65 @@ def resolve(reply, short, state, db, db_path):
         if not history:
             return outcome("wrong_reading", message=say(d, "nothing to change"), detail="edit")
         request = apply_edit(history[-1], reply["edit"], history)    # the shortlist carries the previous request's items
-    out = resolve_request(request, d, short, new_question=kind == "request")
+    if not request["measures"] and is_trend(request["year"]):
+        return no_measure(request, history, d, short)   # a trend that names no figure
+    out = resolve_request(request, d, short, new_question=kind == "request",
+                          earlier=history[-5:] if kind == "edit" else ())
     if out["kind"] == "clarify" and "request" not in out:
         out["request"] = request                        # kept as the previous request while the question is open
     return out
+
+
+def with_default(options, d):
+    """Owner decision 2026-11-25: when the app asks which reading of a term is meant, the term's default is always one
+    of the options. Options that read one term (by their readings or their measures) without its default get it first."""
+    terms = {}
+    for o in options:
+        r = o["request"]
+        found = {x["term"]: x["reading"] for x in r["readings"]}
+        for m in r["measures"]:
+            for term, reading in d.q("SELECT term, reading FROM dict_terms WHERE UPPER(measure) = UPPER(?) AND kind = 'measure' "
+                                     "AND status = 'in use'", m["id"]):
+                found.setdefault(term, reading)
+        for term, reading in found.items():
+            terms.setdefault(term, set()).add(reading)
+    out = list(options)
+    for term, readings in terms.items():
+        default = d.one("SELECT reading, shown_as FROM dict_terms WHERE term = ? AND kind = 'measure' AND is_default = 'yes' "
+                        "AND status = 'in use' ORDER BY rowid", term)
+        if len(readings) > 1 and default and default[0] not in readings:
+            first = next(o for o in options if term in {x["term"] for x in o["request"]["readings"]} or any(
+                d.one("SELECT 1 FROM dict_terms WHERE term = ? AND UPPER(measure) = UPPER(?)", term, m["id"])
+                for m in o["request"]["measures"]))
+            out.insert(0, dict(label=default[1] or default[0], request=with_reading(without(first["request"], measures=[]),
+                                                                                  d, term, default[0])))
+    return out
+
+
+def no_measure(request, history, d, short):
+    """Owner decision 2026-11-25: a trend that names no figure uses the previous request's figure, schools and group,
+    with the new years; with no previous figure, the app asks which, offering the figures in terms.csv
+    `figures to offer`."""
+    previous = next((r for r in reversed(history) if r["measures"]), None)
+    if previous:
+        r = copy.deepcopy(previous)
+        r["year"] = request["year"]
+        for part in ("schools", "groups", "plus_schools", "peers_of"):
+            if request.get(part):
+                r[part] = copy.deepcopy(request[part])
+        if r["operation"] not in trend.OPERATIONS:
+            r["operation"] = "schools" if r["schools"] and not r["groups"] else "group"
+        return resolve_request(r, d, short, earlier=history[-5:])
+    op = request["operation"] if request["operation"] in trend.OPERATIONS else \
+        ("schools" if request["schools"] and not request["groups"] else "group")
+    options = []
+    for label, measure in d.q("SELECT reading, measure FROM dict_terms WHERE term = 'figures to offer' AND status = 'in use' "
+                              "ORDER BY rowid"):
+        r = without(request, operation=op, measures=[dict(id=measure, row=[])])
+        term = d.one("SELECT term, reading FROM dict_terms WHERE UPPER(measure) = UPPER(?) AND kind = 'measure' "
+                     "AND is_default = 'yes' AND status = 'in use'", measure)
+        options.append(dict(label=label, request=with_reading(r, d, term[0], term[1]) if term else r))
+    return outcome("clarify", question=say(d, "which figure"), options=options, request=request)
 
 
 def about_decline(reply, state, d):
@@ -265,18 +329,22 @@ def about_decline(reply, state, d):
     return outcome("about", message=last["message"])
 
 
-def off_shortlist(request, short):
-    """Whatever the request names that was not on the shortlist shown to the model, or None."""
+def off_shortlist(request, short, earlier=()):
+    """Whatever the request names that was not on the shortlist shown to the model, or None. `earlier`: requests of
+    earlier turns, whose IDs an edit may keep without naming them again (owner decision 2026-11-25)."""
     if short is None:
         return None
     have, used = sl.ids(short), used_ids(request)
+    for r in earlier:
+        for k, v in used_ids(r).items():
+            have.setdefault(k, set()).update(v)
     bad = {k: sorted(map(str, used[k] - have[k])) for k in used if used[k] - have[k]}
     return bad or None
 
 
-def resolve_request(request, d, short, new_question=False):
+def resolve_request(request, d, short, new_question=False, earlier=()):
     """Check one request against the shortlist and the dictionary, and build the plan."""
-    bad = off_shortlist(request, short)
+    bad = off_shortlist(request, short, earlier)
     if bad:
         return outcome("wrong_reading", message=say(d, "could not read"), detail=bad, request=request)
     request = shared_abbreviations(request, d)
@@ -954,6 +1022,12 @@ def scope(request, d, plan):
     elif universe == "all":
         plan["statements"].append(universe_statement)
     plan["scope"] = "; ".join(([plan["scope"]] if plan["scope"] else []) + parts)
+    plus = [u for u in request.get("plus_schools") or [] if d.one("SELECT 1 FROM directory WHERE UNITID = ? AND year = ?",
+                                                                  u, d.year)]
+    if plus:                                            # schools added to the list, even outside the group or the universe
+        plan["plus"] = plus
+        plan["members"] = (plan["members"] or set()) | set(plus)
+        plan["scope"] = say(d, "group plus", group=plan["scope"], schools=" and ".join(d.name(u) for u in plus))
     return None
 
 
