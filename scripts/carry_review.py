@@ -4,7 +4,10 @@
 
 A turn is carried over only when its answer is identical to the reviewed run's: operation, measures, schools,
 groups, years and every figure on the page (owner rule, 2026-11-26). Every other turn that needs a person's
-judgement is printed for review by hand. Expectations changed since the review are checked by hand.
+judgement is printed for review by hand. Each grade stores a fingerprint of the expectation it was judged against
+(`expect_fp`); a grade is carried only while the fingerprint matches. After reviewing a run by hand, stamp it:
+
+    python scripts/carry_review.py --stamp haiku_6b_first
 """
 import csv
 import json
@@ -16,10 +19,18 @@ sys.argv, args = sys.argv[:1], sys.argv[1:]          # the grader reads its own 
 sys.path.insert(0, str(ROOT / "scripts"))
 import stage4_grade as g
 
-reviewed, new_runs = args[0], args[1:]
 FILE = ROOT / "docs" / "stage4" / "review.csv"
 rows = list(csv.DictReader(open(FILE, encoding="utf-8")))
 fields = list(rows[0])
+if args[0] == "--stamp":                                # after reviewing a run by hand: stamp its grades with the
+    for r in rows:                                      # fingerprint of the expectation they were judged against
+        if r["model"] in args[1:] and not r.get("expect_fp"):
+            r["expect_fp"] = g.fingerprint(g.EXP.get((r["source"], r["case"], r["turn"])))
+    w = csv.DictWriter(open(FILE, "w", encoding="utf-8", newline=""), fieldnames=fields)
+    w.writeheader()
+    w.writerows(rows)
+    sys.exit(f"stamped {', '.join(args[1:])}")
+reviewed, new_runs = args[0], args[1:]
 done = {(r["model"], r["source"], r["case"], r["turn"]) for r in rows}
 before = {(t["source"], str(t["case"]), str(t["turn"])): t for t in g.turns(reviewed)}
 review = {(r["source"], r["case"], r["turn"]): r for r in rows if r["model"] == reviewed}
@@ -36,12 +47,13 @@ for run in new_runs:
         shape = lambda turn: [(r.get("operation"), json.dumps(r.get("year"), sort_keys=True)) for r in turn.get("requests") or []]
         page = lambda turn: json.dumps({k: v for k, v in (turn.get("page") or {}).items() if k != "seconds"}, sort_keys=True)
         same = old is not None and g.ids(old) == g.ids(t) and shape(old) == shape(t) and page(old) == page(t)
+        same = same and key in review and review[key].get("expect_fp") == g.fingerprint(e)   # expectation unchanged
         if key in review and same:
             pass
         elif not e["measures"].startswith("*") or not t.get("requests"):
             continue                                # graded automatically
         if key in review and same:
-            added.append(dict(review[key], model=run, why=(review[key]["why"] + " (same reading as " + reviewed + ")").strip()))
+            added.append(dict(review[key], model=run, expect_fp=g.fingerprint(e), why=(review[key]["why"] + " (same reading as " + reviewed + ")").strip()))
         else:
             by_hand.append((run, key, t["question"], sorted(g.ids(t)[0]), sorted(g.ids(t)[1]), sorted(g.ids(t)[2]),
                             (t.get("page") or {}).get("interpreted") or (t.get("page") or {}).get("message")))

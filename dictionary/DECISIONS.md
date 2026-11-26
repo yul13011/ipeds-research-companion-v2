@@ -571,3 +571,10 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **Push Part 6a** after the full rebuild and the history check. No question-set run now; Part 6b's runs check these three changes.
 - **Standing rules for token use** (added to CLAUDE.md): grades carried over only for identical answers; long jobs started, reported, and left until the owner says to continue; full logs to the untracked logs folder; read only the standing rules and the current part; one-line progress messages; each part's report written so a fresh session can start from it, with every decision in DECISIONS.md or the report.
 - **Running questions in parallel:** a proposal only (`docs/reports/STAGE_6_PARALLEL_RUNS_PROPOSAL.md`).
+
+## 2026-11-26: parallel runs; grades tied to their expectation; prompt size in reports
+
+- **Parallel runs, approved:** the question set runs with 4 workers (conversations side by side, turns within a conversation in order, merged into one run). A call the API refuses for rate limits is retried after the wait the API gives, and each wait is recorded with the turn (`rate_waits`). `scripts/stage4_run.py --workers 4` (the default); `--workers 1` asks one question at a time.
+- **At the end of each part, one of the two runs is sequential** (`--workers 1`, for the timing figures) **and the other parallel.** Each report says which run its timings come from.
+- **Carry-over of grades:** each grade in `docs/stage4/review.csv` stores a fingerprint of the expectation it was judged against (`expect_fp`, every column of the expectation row). A grade is carried over only while the fingerprint still matches, as well as the answer being identical. After reviewing a run by hand: `scripts/carry_review.py --stamp <run>`. The two end-of-part runs of Part 6a (`haiku_6a_second`, `haiku_6a_third`) are stamped; expectations have not changed since they were graded.
+- **Every report gives the instruction prompt's word count against the 2,500 limit** (the test `test_prompt_shows_the_shortlist_only`).

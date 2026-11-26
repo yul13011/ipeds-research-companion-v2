@@ -26,6 +26,8 @@ Owner decisions are in `dictionary/DECISIONS.md`.
 4. Read the standing rules and the part about to be worked on, not the whole work order or plan.
 5. Keep progress messages to one line; the report is where details go.
 6. At the end of each part, write the report so a fresh session can start from it with CLAUDE.md and the work order alone. Every decision made during the part must be in `dictionary/DECISIONS.md` or the report.
+7. Every report gives the instruction prompt's word count against the 2,500 limit (`meta["prompt_words"]`, as in `test_prompt_shows_the_shortlist_only`) (owner decision, 2026-11-26).
+8. Question-set runs use 4 workers by default (`scripts/stage4_run.py`); at the end of each part, one of the two runs is sequential (`--workers 1`, for the timing figures) and the other parallel. After reviewing a run by hand, stamp it: `scripts/carry_review.py --stamp <run>` (owner decision, 2026-11-26).
 
 ## One home for conventions
 

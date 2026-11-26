@@ -28,6 +28,13 @@ STAGES = ["4", "5.0", "5b2", "5c", "5d", "5f", "5g", "6.0", "6", "7"]           
 STAGE = os.environ.get("IPEDS_STAGE", "4")              # the stage being measured; earlier-due questions are counted
 EXP = {(r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(ROOT / "docs" / "stage4" / "expectations.csv", encoding="utf-8"))}
 REVIEW_FILE = ROOT / "docs" / "stage4" / "review.csv"
+
+
+def fingerprint(e):
+    """A short fingerprint of a question's expectation (every column), stored with its grade: a grade is carried over
+    only while the fingerprint still matches (owner decision 2026-11-26)."""
+    import hashlib
+    return hashlib.sha1(json.dumps(e, sort_keys=True).encode("utf-8")).hexdigest()[:12] if e else ""
 REVIEW = {(r["model"], r["source"], r["case"], r["turn"]): r for r in csv.DictReader(open(REVIEW_FILE, encoding="utf-8"))} if REVIEW_FILE.exists() else {}
 
 
