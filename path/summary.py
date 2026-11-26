@@ -68,7 +68,7 @@ def sources_of(page):
 def call_api(system, user, model, on_text=None):
     """One plain-text call, streamed when `on_text` is given. Returns (text, usage)."""
     import anthropic
-    client = anthropic.Anthropic()
+    client = anthropic.Anthropic(timeout=config.CALL_SECONDS, max_retries=0)
     kwargs = dict(model=model, max_tokens=400, system=system, messages=[{"role": "user", "content": user}])
     if on_text:
         with client.messages.stream(**kwargs) as stream:

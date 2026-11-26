@@ -49,6 +49,11 @@ def patient(fn, waits):
     return call
 
 
+def norm(question):
+    """For finding a question asked elsewhere in the set: curly quotes and dashes as plain ones, case ignored."""
+    return question.replace("’", "'").replace("–", "-").replace("—", "-").strip().lower()
+
+
 def conversations():
     by = {}
     for r in csv.DictReader(open(ROOT / "docs" / "test_questions.csv", encoding="utf-8")):
@@ -66,6 +71,11 @@ def conversations():
         owner.setdefault(r["case"], []).append((int(r["turn"]), r["question"], False))
     for case, turns in owner.items():
         yield "owner", case, sorted(turns)
+    asked = {norm(q) for c in by.values() for _, q, _ in c} | {norm(t["q"]) for c in cases for t in c["turns"]} |             {norm(q) for c in owner.values() for _, q, _ in c}
+    topics = json.loads((ROOT / "page" / "explore.json").read_text(encoding="utf-8"))["topics"]
+    for e in (e for t in topics for e in t["examples"]):   # Part 6b: the page's example questions not asked elsewhere
+        if norm(e["question"]) not in asked:
+            yield "explore", e["id"], [(1, e["question"], False)]
     bad = {}                                            # Part 5d: the badly written set (docs/stage5d)
     for r in csv.DictReader(open(ROOT / "docs" / "stage5d" / "badly_written.csv", encoding="utf-8")):
         bad.setdefault(r["case"], []).append((int(r["turn"]), r["question"], False))

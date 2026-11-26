@@ -211,13 +211,15 @@ def one_call(system, user, model, schema, short, call, meta):
             return reply
         except Exception as e:                      # any failure is recorded and retried once
             reply, meta["error"] = None, f"{type(e).__name__}: {e}"
+            if type(e).__name__ == "APITimeoutError":   # past the time limit: no second wait
+                break
     return reply
 
 
 def call_api(system, user, model, schema):
     """One call to the Anthropic API with the reply held to this question's shape. Returns (reply text, usage)."""
     import anthropic
-    client = anthropic.Anthropic()                  # reads ANTHROPIC_API_KEY from the environment
+    client = anthropic.Anthropic(timeout=config.CALL_SECONDS, max_retries=0)   # key from ANTHROPIC_API_KEY; the time limit
     response = client.messages.create(              # the instructions and the reply shape are the same for every
         model=model, max_tokens=8000,                   # question, so they are cached; only the shortlist changes
         system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],

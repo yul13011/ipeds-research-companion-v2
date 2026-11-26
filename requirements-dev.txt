@@ -1,0 +1,5 @@
+# Development tools only, never installed on the host (owner decision, 2026-11-26).
+# Playwright takes the Part 6b screenshots. Install: .venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+# then: .venv\Scripts\python.exe -m playwright install chromium
+greenlet==3.5.6
+playwright==1.65.2

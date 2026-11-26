@@ -578,3 +578,15 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **At the end of each part, one of the two runs is sequential** (`--workers 1`, for the timing figures) **and the other parallel.** Each report says which run its timings come from.
 - **Carry-over of grades:** each grade in `docs/stage4/review.csv` stores a fingerprint of the expectation it was judged against (`expect_fp`, every column of the expectation row). A grade is carried over only while the fingerprint still matches, as well as the answer being identical. After reviewing a run by hand: `scripts/carry_review.py --stamp <run>`. The two end-of-part runs of Part 6a (`haiku_6a_second`, `haiku_6a_third`) are stamped; expectations have not changed since they were graded.
 - **Every report gives the instruction prompt's word count against the 2,500 limit** (the test `test_prompt_shows_the_shortlist_only`).
+
+## 2026-11-26: Part 6b review point approved (the page)
+
+- **No sidebar, as in version 1:** the model selector is on the About page and "Clear conversation" sits beside the chat box. In the Part 6b check, "sidebar open and closed" becomes "menu expanded and hidden" and "side panels open and collapsed".
+- **No AI switch** (approved difference from version 1). Version 1's off mode answers with a keyword parser, which version 2 forbids.
+- **The definitions browser is shown to everyone** in the "Analysis tools" panel: no extract card (Stage 7), no "Developer settings" on About. Its checkbox reads "Also search coded categories" (version 2 holds no release documentation).
+- **Example questions** (Explore and "Need ideas?") are sent to the chat as if typed, through the question path. The six not yet in the question set are added. Any that fail are reported; no rules are added for them.
+- **New captions and error messages** are drafted for the owner's approval before they are final.
+- **A 30-second limit on each model call**, with a friendly message when it is passed.
+- **"Display table"** is off by default when a chart is shown and on when there is none. The "Verified summary" popover is left out (approved difference). The topic cards and example questions live in a page content file, not in the dictionary.
+- **The written summary is always on.** The page has no switch; `IPEDS_SUMMARY=0` turns it off for testing only.
+- **Streamlit 1.66.0**, as in version 1, pinned in requirements.txt. **Playwright** is installed in .venv only as a development tool, listed in `requirements-dev.txt` and kept out of the hosting requirements.

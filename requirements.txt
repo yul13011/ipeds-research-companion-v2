@@ -1,4 +1,4 @@
-# Version 2's Python packages, every version pinned exactly (pip freeze of .venv, 2026-11-24).
+# Version 2's Python packages, every version pinned exactly (pip freeze of .venv, 2026-11-24; Streamlit 1.66.0 as in version 1, 2026-11-26).
 # The app uses streamlit, anthropic, altair, pandas, numpy and openpyxl (scripts); the rest are what they need.
 # Set up:  python -m venv .venv  then  .venv\Scripts\python.exe -m pip install -r requirements.txt
 # fastembed is not included (owner decision, 2026-11-24).
@@ -47,7 +47,7 @@ rpds-py==2026.9.1
 smmap==5.0.3
 sniffio==1.3.1
 starlette==1.10.0
-streamlit==1.58.0
+streamlit==1.66.0
 tenacity==9.2.1
 toml==0.10.2
 typing-inspection==0.4.5

@@ -6,6 +6,7 @@
     choose()       an option button: runs that option's request directly, with no model call
     take_offer()   a button offered under an answer ("Today's schools only"): runs its request, with no model call
     pick_school()  the school picker: fills in the school and runs the request, with no model call
+    cancel()       the school picker's Cancel: nothing runs, and the waiting request is dropped
 
 `state` is the conversation, kept by the page: "history" (requests answered, oldest first),
 "pending" (options on screen) and "picker" (a request waiting for a school). Every log line carries the
@@ -78,7 +79,7 @@ def finish(out, state, db, log, row):
     elif out["kind"] == "picker":
         state["picker"] = out
         state.setdefault("history", []).append(out["request"])  # kept, so "show 2023-24" edits it before a school is picked
-        page = dict(kind="picker", message=f'Which school do you mean by "{out["name"]}"?',
+        page = dict(kind="picker", name=out["name"], message=f'Which school do you mean by "{out["name"]}"?',
                     candidates=[(c["id"], f"{c['name']} ({c['city']}, {c['state']})") for c in out["candidates"]])
     else:
         page = dict(kind=out["kind"], message=out["message"])
@@ -93,6 +94,18 @@ def finish(out, state, db, log, row):
                              wanted=out.get("wanted") or out.get("request"),
                              missing=out["missing"], closest=out.get("closest"), message=out["message"]))
     return page
+
+
+def error_kind(error):
+    """Which friendly message a failed model call gets, from the API's own error type (never the user's words):
+    "limit" (the account's usage limit), "access" (the model is not open to this key), "timeout" (past the time limit),
+    "down" (the API or the network failed), or None (the reply could not be read: the usual "could not read")."""
+    name, _, text = (error or "").partition(":")
+    if "usage limit" in text:
+        return "limit"
+    return {"APITimeoutError": "timeout", "AuthenticationError": "access", "PermissionDeniedError": "access",
+            "NotFoundError": "access", "APIConnectionError": "down", "InternalServerError": "down",
+            "OverloadedError": "down", "RateLimitError": "down", "ServiceUnavailableError": "down"}.get(name)
 
 
 def status(step, db_path=None):
@@ -140,6 +153,8 @@ def ask(question, state, log, db_path=None, call=None, model=None, progress=None
         page = finish(out, state, db, log, row)
     finally:
         db.close()
+    if reply is None and error_kind(meta["error"]):   # the page shows a friendly message for this kind
+        page["error"] = row["error_kind"] = error_kind(meta["error"])
     row["seconds"] = round(time.time() - start, 2)
     log.question(row)
     page["seconds"] = row["seconds"]
@@ -193,3 +208,13 @@ def pick_school(unitid, state, log, db_path=None):
     request = waiting["request"]
     request["schools"][waiting["index"]]["id"] = unitid
     return run_direct(request, state, log, db_path, question=f"[picked school] {unitid}")
+
+
+def cancel(state):
+    """The school picker's Cancel (version 1's button): the request waiting for a school is dropped, so the next
+    question starts from the request before it."""
+    if state.get("picker"):
+        history = state.get("history") or []
+        if history and history[-1] is state["picker"]["request"]:
+            history.pop()
+    state["picker"] = None
