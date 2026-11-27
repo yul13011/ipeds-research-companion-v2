@@ -61,7 +61,7 @@ What is carried over (plan section 9.4):
 - Explore IPEDS: the six topic cards with description, scope note and three example questions, and "Ask your own question about…". Every example question must pass in the question set; add them to it.
 - Ask & Analyze: version 1's panels and menu; the "Need ideas?" panel with a topic dropdown and example questions.
 - Results: the "Display table" switch.
-- Tools: the definitions browser. Version 1's extract builder is not carried over (Stage 7); its absence is an approved difference from version 1.
+- Tools: the definitions browser. Version 1's extract builder is not carried over (Stage 7); its absence is an approved difference from version 1. Owner decision, Nov 27, 2026: the whole analysis tools panel, the definitions browser included, is hidden until Stage 7; its absence is an approved difference from version 1.
 - About: privacy note, AI switch, and benchmark match rates taken from the latest benchmark run, not typed in.
 - Friendly error messages for every failure the page can meet (API down, time limit, database missing).
 

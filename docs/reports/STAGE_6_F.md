@@ -54,3 +54,18 @@
 
 - The switch (your Render steps).
 - After it: one full question-set run against the live app; speed, including the first answer after idle; your 10 to 15 question checklist.
+
+## After the owner's changes (2026-11-27)
+
+- **The question log is version 2's own Google Sheet** (`path/log.py`, adapted from version 1's `question_log.py`).
+  - **What it writes:** one row per turn, in the agreed columns. Cost is the reading call; the summary's cost, about 6% more, stays in the disk log.
+  - **When it writes:** only on the host, when both sheet values are set, and only by the app's own log. Tests and question-set runs never write to it.
+  - **A failed write:** the answer still shows, the failure is noted in Render's log, and the disk log keeps the turn.
+  - **Setting names:** version 2 reads `IPEDS_V2_…` names only, so it can't reach version 1's sheet, whose settings stay on the same service.
+  - **First use:** the header row is written on first use, and the app never writes over a sheet whose first row is something else.
+- **Removed:** the owner log download in About. `scripts/hosted_log.py` now reads the sheet's CSV export.
+- **The analysis tools panel is hidden,** the definitions browser included. The code is kept; `config.TOOLS_PANEL = True` turns it back on. Its test still checks the browser with the setting on.
+- **`gspread` 6.2.1** and its nine supporting packages: approved, installed and pinned in `requirements.txt`, which matches `.venv` exactly. None of the pinned versions changed. The sheet uses version 1's service account.
+- **Tests:** 390 (3 new for the sheet; the log-zip test replaced by the sheet-export one). Result: all passing.
+- **Line counts:** the question path 4,110 (+61, the sheet writer in `log.py`); the page and tools 766.
+- **Section 5 of the Part 6f proposal** (the disk log and the owner download) is replaced by the sheet.

@@ -49,8 +49,15 @@ LOG_DIR = Path(os.environ.get("IPEDS_LOG_DIR", ROOT / "logs"))
 DAILY_USD = float(os.environ.get("IPEDS_DAILY_USD", "0"))
 CONVERSATION_QUESTIONS = int(os.environ.get("IPEDS_CONVERSATION_QUESTIONS", "0"))
 DAY_ZONE = "America/New_York"
-# The owner-only log download in About (Part 6f): shown only when this secret is set on the host.
-OWNER_PASSPHRASE = os.environ.get("IPEDS_OWNER_PASSPHRASE", "")
+# The hosted question log in a Google Sheet (owner decision 2026-11-27), version 2's own sheet: written only when both
+# values are set on the host. The names differ from version 1's (IPEDS_QUESTIONS_SHEET, IPEDS_GSHEETS_CREDENTIALS),
+# which stay on the same Render service, so version 2 can never write to version 1's sheet.
+QUESTIONS_SHEET = os.environ.get("IPEDS_V2_QUESTIONS_SHEET", "")           # the sheet's ID or address
+SHEET_CREDENTIALS = os.environ.get("IPEDS_V2_GSHEETS_CREDENTIALS", "")      # the service account's JSON key, one string
+SHEET_TAB = os.environ.get("IPEDS_V2_QUESTIONS_WORKSHEET", "questions")
+
+# The analysis tools panel (the definitions browser) is hidden until Stage 7 (owner decision 2026-11-27); True shows it.
+TOOLS_PANEL = False
 
 # The automatic chart (Part 5c): palette, font and axis colours taken from version 1's chart settings
 # (agent-redesign/prototype/charts.py, read only). No formatting panel in this stage.

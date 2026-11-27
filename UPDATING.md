@@ -165,8 +165,9 @@ python -c "import sqlite3, config; print(*sqlite3.connect(config.LOCAL_DB).execu
 | `IPEDS_DAILY_USD` | `2` |
 | `IPEDS_CONVERSATION_QUESTIONS` | `40` |
 | `ANTHROPIC_API_KEY` | secret (already set for version 1) |
-| `IPEDS_OWNER_PASSPHRASE` | secret, your choice |
+| `IPEDS_V2_QUESTIONS_SHEET` | version 2's question sheet: its address or ID |
+| `IPEDS_V2_GSHEETS_CREDENTIALS` | secret: the service account's JSON key, pasted whole |
 
 **Switching back to version 1:** set the repository, branch, build command and start command back to version 1's (recorded in `docs/reports/STAGE_6_F.md` before the switch), save, and deploy. Version 1's data and variables were never removed.
 
-**The hosted log:** About → Owner → type the passphrase → download the zip. Unzip it, then `.venv\Scripts\python.exe scripts/hosted_log.py <folder>` writes `docs/hosted_questions.csv` (untracked) for choosing new real users' questions.
+**The hosted log:** version 2's Google Sheet, one row per turn (the disk log on the host is the backup). Download it as CSV (File → Download → CSV), then `.venv\Scripts\python.exe scripts/hosted_log.py <file.csv>` writes `docs/hosted_questions.csv` (untracked) for choosing new real users' questions.

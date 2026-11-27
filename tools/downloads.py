@@ -1,10 +1,8 @@
 """Downloads (Part 6c): CSV and Excel with a sources sheet, made from the answer's own page object, so a download
 carries exactly the figures, periods, notes and definitions on screen. Adapted from version 1's exports.py
 (agent-redesign/prototype/exports.py, read only): its formula guard and sheet layout; rewritten for version 2's page.
-Also the owner's log download (Part 6f): the hosted log files as one zip.
 """
 import io
-import zipfile
 
 import pandas as pd
 
@@ -67,11 +65,3 @@ def excel_bytes(part):
                 ws.column_dimensions[col[0].column_letter].width = min(80, max(14, width))
     return out.getvalue()
 
-
-def log_zip(folder):
-    """The log files in `folder` (questions, declines, summaries, the day's spend) as one zip."""
-    out = io.BytesIO()
-    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(folder.glob("*.json*")):
-            z.write(f, f.name)
-    return out.getvalue()

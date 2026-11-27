@@ -632,3 +632,14 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
   - **The log:** downloadable from About by the owner only.
 - **No separate test service.** The live service is switched directly and tested straight after, with one full question-set run against the live app, the speed (including the first answer after idle) and the owner's checklist. It is switched back if needed; version 1's data stays on the disk.
 - **Before the switch:** tests passing, the history check, and the push.
+
+## 2026-11-27: the question log in a Google Sheet; the analysis tools panel hidden
+
+- **The hosted question log is version 2's own Google Sheet**, like version 1's. It replaces the owner-only log download in About, which is removed.
+  - Version 1's sheet is never touched. Version 2 reads its own setting names (`IPEDS_V2_QUESTIONS_SHEET`, `IPEDS_V2_GSHEETS_CREDENTIALS`, optional `IPEDS_V2_QUESTIONS_WORKSHEET`), never version 1's, which stay on the same Render service.
+  - One row per turn: time (Eastern), conversation code, turn number, question, outcome, decline reason, operation, measures, schools or group, model, seconds, cost (the reading call; the written summary's cost, about 6% more, is in the disk log).
+  - Written only when both values are set on the host, and only by the app's own log. Local runs, tests and question-set runs never write to it.
+  - A failed write is noted in the host's log and the answer still shows. The disk log, written first, keeps every turn as the backup.
+  - Version 1's method (`question_log.py`, background thread, quiet failure) is copied and adapted. It needs the `gspread` package: 6.2.1 and its nine supporting packages, approved by the owner on 2026-11-27 and pinned in `requirements.txt`.
+  - The sheet uses version 1's service account (owner decision, 2026-11-27). The new sheet is shared with that account, and the same key goes into version 2's own setting, `IPEDS_V2_GSHEETS_CREDENTIALS`.
+- **The analysis tools panel, the definitions browser included, is hidden until Stage 7.** The code is kept and turned on with `config.TOOLS_PANEL = True`. Its absence is an approved difference from version 1.

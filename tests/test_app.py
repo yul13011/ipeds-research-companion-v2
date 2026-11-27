@@ -115,7 +115,8 @@ class App(unittest.TestCase):
     def test_the_side_panels_and_the_menu(self):
         self.chat()
         self.assertIn("Need ideas?", self.text())
-        self.assertIn("Browse definitions", self.text())
+        self.assertNotIn("Browse definitions", self.text())     # the tools panel is hidden until Stage 7
+        self.assertNotIn("Tools ‹", [b.label for b in self.at.button])
         self.at.button(key="collapse_ideas").click().run()
         self.assertIn("› Ideas", [b.label for b in self.at.button])
         self.button("Hide Menu").click().run()
@@ -199,7 +200,13 @@ class App(unittest.TestCase):
 
     # Tools and About
     def test_the_definitions_browser_finds_a_variable(self):
+        """Hidden until Stage 7 (owner decision 2026-11-27); the code is kept and still works when turned on."""
+        from unittest import mock
+        patch = mock.patch.object(config, "TOOLS_PANEL", True)
+        patch.start()
+        self.addCleanup(patch.stop)
         self.chat()
+        self.assertIn("Browse definitions", self.text())
         self.button("Search definitions →").click().run()
         self.at.text_input[0].set_value("graduate enrollment")
         self.at.button(key=next(b.key for b in self.at.button if b.label == "Search codebooks") or None).click().run()

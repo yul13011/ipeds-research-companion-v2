@@ -5,7 +5,6 @@ Only the data calls are version 2's: path/answer.py for questions and buttons, t
 releases held and the benchmark rates. Left out, as approved: the extract builder (Stage 7), the AI switch, the
 developer settings, and the model-usage panel of the extract builder.
 """
-import hmac
 import json
 import uuid
 from contextlib import contextmanager
@@ -182,7 +181,7 @@ def render_chat():
     with st.container(key='panel_restore_controls'):
         controls_left, controls_right = st.columns(2)
         if not s.ideas_open: controls_left.button('› Ideas', key='show_ideas', on_click=toggle_panel, args=('ideas_open',))
-        if not s.tools_open:
+        if config.TOOLS_PANEL and not s.tools_open:
             with controls_right.container(horizontal=True, horizontal_alignment='right'):
                 st.button('Tools ‹', key='show_tools', on_click=toggle_panel, args=('tools_open',))
     # Keep column identities/positions fixed across reruns.
@@ -191,7 +190,7 @@ def render_chat():
         if not s.ideas_open: hidden.append('[data-testid="stColumn"]:has(.st-key-ideas_panel)')
         if not s.tools_open: hidden.append('[data-testid="stColumn"]:has(.st-key-tools_panel)')
         st.html('<style>' + (','.join(hidden) + '{display:none!important}' if hidden else '') + '</style>')
-    panels = st.columns([1, 4.5, 1], gap='medium')
+    panels = st.columns([1, 4.5, 1] if config.TOOLS_PANEL else [1, 5.5], gap='medium')   # tools hidden until Stage 7
     with panels[0]: render_ideas()
     with panels[1], st.container(key='chat_workspace', height='stretch'):
         if s.get('request_error'): st.error(s.request_error)
@@ -213,11 +212,12 @@ def render_chat():
         if question and question.strip(): s.pending_action = {'type': 'question', 'question': question}; st.rerun()
         if not s.turns:
             st.caption(say('empty_chat_caption', model=MODEL_OPTIONS.get(s.model_choice, s.model_choice)))
-    with panels[-1], st.container(border=True, key='tools_panel'):
-        title, collapse = st.columns([5, 1], vertical_alignment='center')
-        title.subheader('Analysis tools')
-        collapse.button('›', key='collapse_tools', on_click=toggle_panel, args=('tools_open',), help='Collapse analysis tools panel')
-        render_tools()
+    if config.TOOLS_PANEL:
+        with panels[-1], st.container(border=True, key='tools_panel'):
+            title, collapse = st.columns([5, 1], vertical_alignment='center')
+            title.subheader('Analysis tools')
+            collapse.button('›', key='collapse_tools', on_click=toggle_panel, args=('tools_open',), help='Collapse analysis tools panel')
+            render_tools()
     if pending_slot is not None:
         # Redraw the whole workspace before a slow call; the spinner stays in the assistant's bubble.
         with pending_slot.container(), st.chat_message('assistant'):
@@ -280,14 +280,6 @@ def render_about():
             col.metric(f'{label} match rate', f'{round(100 * m / total)}%' if total else '—')
             col.caption(f'{m:,} of {total:,} {desc} matched')
         st.caption(say('benchmark_caption'))
-    if config.OWNER_PASSPHRASE:                         # the owner's log download (Part 6f): only on the host
-        with st.expander('Owner'):
-            typed = st.text_input('Owner passphrase', type='password', key='owner_passphrase')
-            if typed and hmac.compare_digest(typed.encode(), config.OWNER_PASSPHRASE.encode()):
-                from tools import downloads
-                st.download_button('Download the question log (zip)', downloads.log_zip(config.LOG_DIR),
-                                   file_name='ipeds-v2-log.zip', mime='application/zip', key='owner_log', on_click='ignore')
-            elif typed: st.caption('That passphrase is not right.')
 
 
 STYLES = (HERE / "styles.css").read_text(encoding="utf-8")

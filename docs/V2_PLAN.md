@@ -328,7 +328,7 @@ Proposals in `docs/reports/STAGE_6_CHANGE_ORDER_1_PROPOSALS.md`.
 
 - **Hosting.** The existing Render service, switched to the version 2 repository when the switch test is met. The database is published as a separate version 2 dataset on Hugging Face, holding only IPEDS data and the dictionary; version 1's dataset is untouched. Hosting is set up and tested before the switch, so the switch itself is quick and can be reversed.
 - **Spending guard.** A daily limit on questions or API spend, with a friendly usage-limit message.
-- **Question log.** Version 2's own log, separate from version 1's Google Sheet; tests never write to it.
+- **Question log.** Version 2's own Google Sheet, separate from version 1's (which is never touched), one row per turn, written only on the host; the disk log stays as the backup. Tests and question-set runs never write to it (owner decision, Nov 27, 2026).
 - **Secrets.** The API key is a secret in the host's settings, never in the repository.
 - **Labels.** The provisional label on 2024-25 figures (built in 5a; checked again on the host).
 - **Speed.** Measured again on the host.
@@ -359,10 +359,10 @@ Found in Stage 5's real users' questions:
 | Results | Downloads: Excel with sources, CSV | Stage 6 (6c); the technical audit file moves to Stage 7 (owner decision, Nov 26, 2026: launch first) |
 | Charts | Automatic line or bar chart in the owner's palette and fonts | Built (5c): a line over the years for a trend, bars for a one-year comparison, in version 1's palette and font |
 | Charts | "Format chart" panel, chart edits typed in chat, preview and download as PNG or SVG | Left out until Stage 7 (owner decision, Nov 26, 2026) |
-| Tools | Definitions browser | Stage 6 |
+| Tools | Definitions browser | Built in 6b; hidden with the whole analysis tools panel until Stage 7 (owner decision, Nov 27, 2026; an approved difference from version 1) |
 | Tools | Extract builder | Left out until Stage 7, with data extracts (owner decision, Nov 25, 2026) |
 | About | Model selector, AI switch, privacy note, benchmark match rates | Model selector and written-summary switch built (sidebar); the rest Stage 6 |
-| Behind the scenes | Question log | Built locally; hosted log with hosting (9.2) |
+| Behind the scenes | Question log | Disk log; on the host, also version 2's own Google Sheet (9.2) |
 | Behind the scenes | Data download on the host; friendly error and usage-limit messages | With hosting (9.2) |
 
 ### 9.5 Data extracts
@@ -377,7 +377,7 @@ Moved to Stage 7 (section 10.3) on Nov 26, 2026. Until then, version 2 still use
 
 The Render link is switched to version 2 when all of these hold:
 
-1. The version 1 features above are in place, except the extract builder, chart formatting and the technical audit file (Stage 7).
+1. The version 1 features above are in place, except the extract builder, chart formatting, the technical audit file and the analysis tools panel with the definitions browser (Stage 7).
 2. The success test from Stage 5 is met (Part 6b's two runs).
 3. Real users' questions are at least 90% right or acceptable (Part 6b's two runs).
 4. Version 2 runs on the host without unresolved errors. Owner decision, Nov 26, 2026 (launch first): there is no separate test service. The live service is switched and tested straight after, with one full question-set run against the live app, and switched back if needed (version 1's data stays on the disk).
@@ -441,6 +441,7 @@ Owner decision, Nov 26, 2026: version 2 is published as soon as possible; everyt
 - **A review of the instruction prompt** (2,496 words against the 2,500 limit).
 - **Extra question-set runs:** before launch, Part 6b's two runs stand; one full run is made against the live app after the switch.
 - **The technical audit file download** (version 1's third download).
+- **The analysis tools panel and the definitions browser:** hidden (Nov 27, 2026); the code is kept and turned on with `config.TOOLS_PANEL`.
 
 ---
 

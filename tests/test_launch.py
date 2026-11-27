@@ -1,13 +1,13 @@
-"""Part 6c and 6f: downloads that match the screen, the spending guard, the data download at start-up, the owner's log
-zip and the hosted-log script. No test calls the API, uses the network or writes to a shared log."""
+"""Part 6c and 6f: downloads that match the screen, the spending guard, the data download at start-up, the question
+sheet and the hosted-log script. No test calls the API, uses the network or writes to a shared log."""
 import csv
 import hashlib
 import io
 import json
 import sys
 import tempfile
+import time
 import unittest
-import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import config
 import hosted_log
 import serve
-from path import answer, request as rq
+from path import answer, log, request as rq
 from path.log import Log
 from tools import downloads
 
@@ -178,22 +178,63 @@ class Serve(unittest.TestCase):
             self.assertEqual(list((Path(d) / "abc123").iterdir()), [])
 
 
-class HostedLog(unittest.TestCase):
-    def test_log_zip_and_rows(self):
+class Sheet(unittest.TestCase):
+    """The hosted question sheet, with a stand-in worksheet: no network, no Google account."""
+    ROW = dict(conversation="abc", turn=2, question="Ivies plus MIT", outcome="ready", model="claude-haiku-5-5",
+               seconds=4.2, cost_usd=0.0012, request=dict(operation="group", measures=[dict(id="DRVEF.ENRTOT", row=[])],
+               schools=[dict(name="Yale", id=130794)], groups=["Ivy League"], plus_schools=[166683], peers_of=None))
+
+    def test_one_row_per_turn_in_the_agreed_columns(self):
+        row = dict(zip(log.COLUMNS, log.sheet_row(self.ROW)))
+        self.assertEqual((row["conversation"], row["turn"], row["outcome"], row["operation"], row["measures"]),
+                         ("abc", 2, "ready", "group", "DRVEF.ENRTOT"))
+        self.assertEqual(row["schools_or_group"], "Ivy League; Yale; +166683")
+        self.assertEqual((row["model"], row["seconds"], row["cost_usd"], row["decline_reason"]), ("claude-haiku-5-5", 4.2, 0.0012, ""))
+        declined = dict(zip(log.COLUMNS, log.sheet_row(dict(outcome="decline", missing="not collected", question="x"))))
+        self.assertEqual((declined["decline_reason"], declined["operation"]), ("not collected", ""))
+
+    def test_only_the_apps_own_log_with_both_values_writes(self):
         with tempfile.TemporaryDirectory() as d:
-            lines = [dict(conversation="aaa", question="Yale admission rate", outcome="ready"),
-                     dict(conversation="aaa", question="[option] Total", outcome="ready"),
-                     dict(conversation="bbb", question="hi", outcome="limit_daily"),
-                     dict(conversation="ccc", question="Harvard", outcome="decline"),
-                     dict(conversation="aaa", question="yale admission rate", outcome="ready")]
-            (Path(d) / "questions.jsonl").write_text("\n".join(json.dumps(x) for x in lines), encoding="utf-8")
-            (Path(d) / "spend.json").write_text("{}", encoding="utf-8")
-            rows = hosted_log.rows(d)
+            with mock.patch.object(config, "QUESTIONS_SHEET", "sheet-id"), mock.patch.object(config, "SHEET_CREDENTIALS", "{}"):
+                self.assertFalse(Log(d).to_sheet)               # tests and question-set runs pass their own folder
+                with mock.patch.object(config, "LOG_DIR", Path(d)):
+                    self.assertTrue(Log().to_sheet)
+            with mock.patch.object(config, "LOG_DIR", Path(d)):
+                self.assertFalse(Log().to_sheet)                # no sheet values: the local default
+
+    def test_a_failed_write_keeps_the_disk_log(self):
+        class Broken:
+            def append_row(self, *a, **k):
+                raise ConnectionError("offline")
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(config, "LOG_DIR", Path(d)),                 mock.patch.object(config, "QUESTIONS_SHEET", "sheet-id"), mock.patch.object(config, "SHEET_CREDENTIALS", "{}"),                 mock.patch.object(log, "open_sheet", lambda: Broken()), self.assertLogs("question_sheet", "ERROR"):
+            Log().question(dict(self.ROW))
+            time.sleep(0.5)                                     # the write runs on its own thread
+            self.assertEqual(json.loads((Path(d) / "questions.jsonl").read_text(encoding="utf-8"))["question"], "Ivies plus MIT")
+        written = []
+
+        class Good:
+            def append_row(self, values, **k):
+                written.append(values)
+        with mock.patch.object(log, "open_sheet", lambda: Good()):
+            log.to_sheet(log.sheet_row(self.ROW)).join(5)
+        self.assertEqual(written[0][3], "Ivies plus MIT")
+
+
+class HostedLog(unittest.TestCase):
+    def test_rows_from_the_sheet_export(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "sheet.csv"
+            with open(path, "w", newline="", encoding="utf-8") as f:
+                w = csv.writer(f)
+                w.writerow(log.COLUMNS)
+                for conv, q, outcome in [("aaa", "Yale admission rate", "ready"), ("aaa", "[option] Total", "ready"),
+                                         ("bbb", "hi", "limit_daily"), ("ccc", "Harvard", "decline"),
+                                         ("aaa", "yale admission rate", "ready")]:
+                    w.writerow(["2026-11-27 10:00:00", conv, 1, q, outcome, "", "", "", "", "", 1.0, 0.001])
+            rows = hosted_log.rows(path)
             self.assertEqual([(r["conversation"], r["turn"], r["repeat"]) for r in rows],
                              [("h1", 1, "no"), ("h2", 1, "no"), ("h1", 2, "yes")])
             self.assertNotIn("aaa", json.dumps(rows))
-            names = zipfile.ZipFile(io.BytesIO(downloads.log_zip(Path(d)))).namelist()
-            self.assertEqual(sorted(names), ["questions.jsonl", "spend.json"])
 
 
 if __name__ == "__main__":
