@@ -44,6 +44,14 @@ PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)} 
 # Local logs. Tests pass their own folder, so they never write here.
 LOG_DIR = Path(os.environ.get("IPEDS_LOG_DIR", ROOT / "logs"))
 
+# The spending guard (Part 6f, owner decision 2026-11-26: $2 a day, 40 questions per conversation on the host).
+# 0 means no limit, the local default; the host sets both. The day runs midnight to midnight, Eastern time.
+DAILY_USD = float(os.environ.get("IPEDS_DAILY_USD", "0"))
+CONVERSATION_QUESTIONS = int(os.environ.get("IPEDS_CONVERSATION_QUESTIONS", "0"))
+DAY_ZONE = "America/New_York"
+# The owner-only log download in About (Part 6f): shown only when this secret is set on the host.
+OWNER_PASSPHRASE = os.environ.get("IPEDS_OWNER_PASSPHRASE", "")
+
 # The automatic chart (Part 5c): palette, font and axis colours taken from version 1's chart settings
 # (agent-redesign/prototype/charts.py, read only). No formatting panel in this stage.
 CHART = dict(palette=["#24658A", "#C47A28", "#78649B", "#398278", "#A24B4B", "#5E8C3A", "#C96E9C", "#4E9DB5", "#9C7A3C", "#6B6FA8"],

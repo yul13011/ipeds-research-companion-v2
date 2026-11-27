@@ -9,6 +9,7 @@ import json
 import math
 import re
 import sqlite3
+import threading
 from collections import Counter
 
 from path.request import TAG_RANGES, fill_years
@@ -26,6 +27,7 @@ CUTOFF = 0.25                       # keep entries scoring at least this share o
 SWAP_ONLY_UP_TO, ONE_OFF_UP_TO = 4, 7   # misspellings: words of up to 4 letters may only swap two neighbouring letters;
                                         # up to 7 letters, one letter off; longer words, two letters off
 _INDEX = {}
+_BUILDING = threading.Lock()         # the start-up warm-up and a first question never build two copies
 
 
 def words(text):
@@ -300,14 +302,19 @@ def get_index(db_path):
     fingerprint of the dictionary files, and a different fingerprint means a new index."""
     db = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     try:
-        try:
-            stamp = tuple(db.execute("SELECT item, fingerprint FROM _dictionary_state ORDER BY item"))
-        except sqlite3.OperationalError:                # a database built before the fingerprints were kept
-            stamp = ()
-        if _INDEX.get(db_path, (None,))[0] != stamp:
-            _INDEX[db_path] = (stamp, build_index(db))
+        with _BUILDING:
+            return _get_index(db, db_path)
     finally:
         db.close()
+
+
+def _get_index(db, db_path):
+    try:
+        stamp = tuple(db.execute("SELECT item, fingerprint FROM _dictionary_state ORDER BY item"))
+    except sqlite3.OperationalError:                    # a database built before the fingerprints were kept
+        stamp = ()
+    if _INDEX.get(db_path, (None,))[0] != stamp:
+        _INDEX[db_path] = (stamp, build_index(db))
     return _INDEX[db_path][1]
 
 

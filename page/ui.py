@@ -5,6 +5,7 @@ Only the data calls are version 2's: path/answer.py for questions and buttons, t
 releases held and the benchmark rates. Left out, as approved: the extract builder (Stage 7), the AI switch, the
 developer settings, and the model-usage panel of the extract builder.
 """
+import hmac
 import json
 import uuid
 from contextlib import contextmanager
@@ -279,6 +280,14 @@ def render_about():
             col.metric(f'{label} match rate', f'{round(100 * m / total)}%' if total else '—')
             col.caption(f'{m:,} of {total:,} {desc} matched')
         st.caption(say('benchmark_caption'))
+    if config.OWNER_PASSPHRASE:                         # the owner's log download (Part 6f): only on the host
+        with st.expander('Owner'):
+            typed = st.text_input('Owner passphrase', type='password', key='owner_passphrase')
+            if typed and hmac.compare_digest(typed.encode(), config.OWNER_PASSPHRASE.encode()):
+                from tools import downloads
+                st.download_button('Download the question log (zip)', downloads.log_zip(config.LOG_DIR),
+                                   file_name='ipeds-v2-log.zip', mime='application/zip', key='owner_log', on_click='ignore')
+            elif typed: st.caption('That passphrase is not right.')
 
 
 STYLES = (HERE / "styles.css").read_text(encoding="utf-8")

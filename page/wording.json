@@ -14,6 +14,8 @@
  "error_access": "The selected model isn't available right now. Choose the other model under About this prototype, or try again later.",
  "error_timeout": "Reading this question took longer than {seconds} seconds, so it was stopped. No partial result was published. Please try again, or ask it in a shorter way.",
  "error_down": "The AI service couldn't be reached. No partial result was published. Please try again in a minute.",
+ "error_daily": "The app has answered as many questions as it can today. Please come back tomorrow. Explore IPEDS and the definitions browser still work.",
+ "error_conversation": "This conversation has reached its limit of 40 questions. Click \"Clear conversation\" to start a new one.",
  "error_app": "The request could not finish. No partial result was published. Please try again, or ask it another way.",
  "error_database": "The IPEDS database isn't available, so the app can't answer questions. If you run the app yourself, build the database first: python build/build_data.py"
 }

@@ -4,7 +4,7 @@ Paste everything below the line into Claude Code, opened in the `ipeds-research-
 
 ---
 
-This is the work order for Stage 6 of version 2. Its goal is in section 9 of the plan: version 2 replaces version 1 at the existing link, https://ipeds-research-companion.onrender.com/, once it does everything version 1 does and passes the switch test. Work through it one part at a time. The order is 6.0, 6a, 6b, then the Part 6f proposal, then Part 6c while I do the account steps for 6f, then the rest of 6f, then 6g (owner decision, Nov 26, 2026: publish as soon as possible, so hosting starts early). Stop after each part, write a report, and wait for my go before starting the next. Parts that say "propose first" stop twice: once with the proposal, once with the build.
+This is the work order for Stage 6 of version 2. Its goal is in section 9 of the plan: version 2 replaces version 1 at the existing link, https://ipeds-research-companion.onrender.com/, once it does everything version 1 does and passes the switch test. Work through it one part at a time. The order is 6.0, 6a, 6b, then the Part 6f proposal, then Part 6c while I do the account steps for 6f, then the rest of 6f, then 6g (owner decision, Nov 26, 2026: publish as soon as possible, so hosting starts early). Owner decision, Nov 26, 2026 (launch first): everything not needed for launch moves to Stage 7 (plan section 10.4): the faculty fix, the log 4.6 fix, the 73 expectations, the instruction review, extra test runs and the technical audit file. Part 6f and Part 6c are built together; the live service is switched directly, with no separate test service. Stop after each part, write a report, and wait for my go before starting the next. Parts that say "propose first" stop twice: once with the proposal, once with the build.
 
 READ FIRST
 - `CLAUDE.md`: the working rules. They all still apply.
@@ -80,7 +80,7 @@ Done when: the only differences left are the version 2 elements I've approved, a
 
 PART 6c. TABLE DOWNLOADS
 
-- Downloads: Excel with a sources sheet, CSV, and the technical audit file, as in version 1. Every download carries the same figures, periods, notes and definitions as the answer on screen, from the same result object.
+- Downloads: Excel with a sources sheet, and CSV, as in version 1. The technical audit file moves to Stage 7 (owner decision, Nov 26, 2026: launch first). Every download carries the same figures, periods, notes and definitions as the answer on screen, from the same result object.
 - Chart formatting (the "Format chart" panel, chart edits typed in chat, PNG and SVG downloads) has moved to Stage 7 (owner decision, Nov 26, 2026). The automatic chart already built stays. Until Stage 7, "make it a bar chart" keeps its current decline, and the missing panel is an approved difference from version 1 in the Part 6b check.
 
 Tests: a download for a trend, a group figure and a breakdown matches the on-screen table cell for cell.
@@ -104,10 +104,13 @@ Plan section 9.2. Propose first, then wait. The proposal covers:
 6. The secrets: which values are secrets and where each is set.
 7. The switch and how to reverse it, as numbered steps I can follow in the Render dashboard.
 
-After my go, build what is needed, publish the dataset (ask me before creating it), and run the hosting test. Report: start-up time, the median turn time on the host against local, and the provisional label and every warning checked on the host.
+Approved Nov 26, 2026, with these choices: dataset `yul13011/ipeds-v2-data`, uploaded with `huggingface_hub` installed in `.venv` only (the owner signs in); Starter instance; the disk grown to 10 GB; $2 a day and 40 questions per conversation, with the two proposed messages; the owner-only log download in About. No separate test service: the live service is switched directly and tested straight after, and switched back if needed (version 1's data stays on the disk). Before the switch: tests passing, the history check, and the push. Account steps are given to the owner as numbered instructions when needed.
+
+After my go, build what is needed and publish the dataset. Report: start-up time, the median turn time on the host against local, and the provisional label and every warning checked on the host.
 
 PART 6g. MEASURE IT AND THE SWITCH TEST
 
+- Owner decision, Nov 26, 2026 (launch first): after the switch, one full question-set run against the live app, the speed (including the first answer after idle), and the owner's 10-15 question checklist. Part 6b's two runs stand for the scorecard; the benchmarks and other runs below wait unless something changes.
 - The question set (IPEDS_STAGE=6, with the four-row scorecard, the Explore and "Need ideas?" examples, and the owner questions due by Stage 6). Don't rerun it twice by default. If the question path (shortlist, interpret, request, resolve, fetch, trend, summary, dictionary) hasn't changed since the last two-run scorecard, reuse it and say which runs. If it has changed, run twice and say what changed. In either case, run the full set once on the host, to check that hosting changes no answer and to measure speed there.
 - The benchmarks across ten years, reusing earlier results where nothing they depend on has changed, and saying which.
 - Time and cost per question, locally and on the host.

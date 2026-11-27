@@ -356,7 +356,7 @@ Found in Stage 5's real users' questions:
 | Answers | Written summary | Built (5e) |
 | Results | Table, single-number tile, underlying counts and data status, warnings, definitions and sources | Built |
 | Results | "Display table" switch | Stage 6 |
-| Results | Downloads: Excel with sources, CSV, technical audit file | Stage 6 |
+| Results | Downloads: Excel with sources, CSV | Stage 6 (6c); the technical audit file moves to Stage 7 (owner decision, Nov 26, 2026: launch first) |
 | Charts | Automatic line or bar chart in the owner's palette and fonts | Built (5c): a line over the years for a trend, bars for a one-year comparison, in version 1's palette and font |
 | Charts | "Format chart" panel, chart edits typed in chat, preview and download as PNG or SVG | Left out until Stage 7 (owner decision, Nov 26, 2026) |
 | Tools | Definitions browser | Stage 6 |
@@ -377,10 +377,10 @@ Moved to Stage 7 (section 10.3) on Nov 26, 2026. Until then, version 2 still use
 
 The Render link is switched to version 2 when all of these hold:
 
-1. The version 1 features above are in place, except the extract builder and chart formatting (Stage 7).
-2. The success test from Stage 5 is met in two runs.
-3. Real users' questions are at least 90% right or acceptable in two runs.
-4. Version 2 runs on the host without unresolved errors, tested before the switch.
+1. The version 1 features above are in place, except the extract builder, chart formatting and the technical audit file (Stage 7).
+2. The success test from Stage 5 is met (Part 6b's two runs).
+3. Real users' questions are at least 90% right or acceptable (Part 6b's two runs).
+4. Version 2 runs on the host without unresolved errors. Owner decision, Nov 26, 2026 (launch first): there is no separate test service. The live service is switched and tested straight after, with one full question-set run against the live app, and switched back if needed (version 1's data stays on the disk).
 5. The speed limits are met on the host: 10 seconds a turn, 20 with a search, including the first answer after the app has been idle.
 6. The owner has tested the hosted app with 10 to 15 questions of her choosing.
 
@@ -431,6 +431,16 @@ Moved from Stage 6 on Nov 26, 2026: version 1's "Format chart" panel (layout, te
 ### 10.3 A self-contained data pipeline
 
 Moved from Stage 6 on Nov 26, 2026. Bring the Access-to-SQLite converter and the cross-year index into version 2, with a tested way to add a new release to the index, so version 2 no longer depends on version 1's data folder. **Deadline:** before the next IPEDS release is added (section 11) and before version 1's folder is removed.
+
+### 10.4 Moved from Stage 6 to publish sooner
+
+Owner decision, Nov 26, 2026: version 2 is published as soon as possible; everything not needed for launch waits for Stage 7.
+- **The faculty question:** a question naming "instructional staff" still asks which reading is meant. Proposed fix in the resolve step (`docs/reports/STAGE_6_B_DECISIONS.md`, item 1).
+- **Log 4.6:** a trend with no figure keeps the previous request's school and operation (`resolve.no_measure`). Proposed fix in the same report, item 2, with removal of Part 6a's instruction line.
+- **The 73 expectations that name no schools or no measure,** and the grader's `operation` column and `none` marker (same report, item 3; `docs/reports/STAGE_6_EXPECTATION_GAPS.csv`).
+- **A review of the instruction prompt** (2,496 words against the 2,500 limit).
+- **Extra question-set runs:** before launch, Part 6b's two runs stand; one full run is made against the live app after the switch.
+- **The technical audit file download** (version 1's third download).
 
 ---
 

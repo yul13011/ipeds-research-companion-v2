@@ -84,6 +84,20 @@ class App(unittest.TestCase):
         self.assertIn("What was Yale’s admission rate in fall 2024?", self.text())
         self.assertEqual(self.at.dataframe[0].value.iloc[0, 0], "Yale University")
 
+    # Part 6c and 6f
+    def test_downloads_and_the_daily_limit(self):
+        from unittest import mock
+        from path.log import Log
+        self.chat()
+        self.ask("a_yale_admission")
+        self.assertIn("Download Data", " ".join(str(p.proto) for p in self.at.get("popover")))
+        Log(config.LOG_DIR).add_spend(5.0)
+        with mock.patch.object(config, "DAILY_USD", 2.0):
+            self.at.chat_input[0].set_value("And Harvard?").run()
+        self.assertFalse(self.at.exception)
+        self.assertIn("come back tomorrow", " ".join(e.value for e in self.at.error))
+        self.assertEqual(self.replies, [])                 # no model call was waiting to be used
+
     # Ask & Analyze
     def test_answer_shows_interpreted_as_table_and_sources(self):
         self.chat()

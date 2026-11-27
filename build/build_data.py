@@ -335,7 +335,7 @@ def add_release(out, release, filename=None, source_data=None, catalog=None):
     families = families_from_catalog(catalog or config.CATALOG, release)
     report = load_release(out, path, release, year, families)
     out.execute("INSERT OR REPLACE INTO _releases VALUES (?,?,?,?,datetime('now'),?)",
-                (year, release, status, str(path), round(time.time() - start, 1)))
+                (year, release, status, f"annual/{release}/{filename}", round(time.time() - start, 1)))   # relative: no local path in the published data
     out.commit()
     return report, removed
 

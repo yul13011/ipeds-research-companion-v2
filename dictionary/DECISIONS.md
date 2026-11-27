@@ -609,3 +609,26 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **New order for Stage 6, to publish sooner:** after Part 6b, the Part 6f proposal; then Part 6c, built while the owner does the account steps for 6f; then the rest of 6f; then 6g.
 - **The switch test also requires:** the speed limits met on the host, including the first answer after the app has been idle; the owner's own test of the hosted app, with a checklist from Claude; and a review of the hosted question log a few days after the switch.
 - **Before the Part 6b push (owner's checks, 2026-11-26):** the carry-over script sends a turn whose earlier hand grade overrode the automatic grade back to a person when its answer changes (`scripts/carry_review.py`). The instructional-staff Explore example names the staff it asks for ("full-time and part-time instructional staff counts"); page wording only.
+
+## 2026-11-26: owner's decisions on the end of Part 6b (proposals in `docs/reports/STAGE_6_B_DECISIONS.md`)
+
+- **The faculty term's `always_ask` set to `no`: decided by the owner, not applied.** The build refuses a term that neither asks nor has a default, and no code asks for such a term. So a bare "faculty" would no longer ask. `terms.csv` is unchanged (`always_ask = yes`). The live call showed the real cause: the model picked the instructional-staff row but named no reading. A fix in the resolve step is proposed instead, awaiting the owner.
+- **Log 4.6: no more instruction lines.** The model's reply was right. The code's trend-with-no-figure step (`no_measure`) kept the previous request's school and operation. A fix in that step is proposed; no change to the request's shape.
+- **Expectations that name no schools or no measure:** listed with proposed values for the owner's review (`docs/reports/STAGE_6_EXPECTATION_GAPS.csv`), alongside Part 6c.
+
+## 2026-11-26: launch first; Part 6f approved
+
+- **Publish version 2 as soon as possible.** Everything not needed for launch moves to Stage 7 (plan section 10.4):
+  - the faculty fix;
+  - the log 4.6 fix;
+  - the 73 expectations that name no schools or no measure;
+  - the instruction review;
+  - extra question-set runs;
+  - the technical audit file (Part 6c builds the CSV and Excel downloads only).
+- **Part 6f, approved:**
+  - **Dataset:** `yul13011/ipeds-v2-data`, uploaded with `huggingface_hub` installed in `.venv` only, not in `requirements.txt`. The owner signs in.
+  - **Render:** Starter instance; the disk grown to 10 GB.
+  - **Spending guard:** $2 of API spend a day and 40 questions per conversation, with the two proposed messages.
+  - **The log:** downloadable from About by the owner only.
+- **No separate test service.** The live service is switched directly and tested straight after, with one full question-set run against the live app, the speed (including the first answer after idle) and the owner's checklist. It is switched back if needed; version 1's data stays on the disk.
+- **Before the switch:** tests passing, the history check, and the push.

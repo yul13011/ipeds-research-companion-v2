@@ -108,6 +108,16 @@ def error_kind(error):
             "OverloadedError": "down", "RateLimitError": "down", "ServiceUnavailableError": "down"}.get(name)
 
 
+def over_limit(state, log):
+    """The spending guard (owner decision 2026-11-26): "daily" when today's API spend has reached config.DAILY_USD,
+    "conversation" when this conversation has asked config.CONVERSATION_QUESTIONS typed questions; 0 turns a limit off."""
+    if config.DAILY_USD and log.spent_today() >= config.DAILY_USD:
+        return "daily"
+    if config.CONVERSATION_QUESTIONS and state.get("questions", 0) >= config.CONVERSATION_QUESTIONS:
+        return "conversation"
+    return None
+
+
 def status(step, db_path=None):
     """The status line's words for a step: finding, reading, searching, getting, writing."""
     db = connect(db_path or config.LOCAL_DB.as_posix())
@@ -122,6 +132,12 @@ def ask(question, state, log, db_path=None, call=None, model=None, progress=None
     db_path = db_path or config.LOCAL_DB.as_posix()
     progress = progress or (lambda step: None)
     start = time.time()
+    limit = over_limit(state, log)
+    if limit:                                           # the spending guard: no model call, logged, a friendly message
+        log.question(dict(conversation=state.setdefault("conversation_id", uuid.uuid4().hex[:12]), turn=state.get("turns", 0),
+                          question=question, outcome="limit_" + limit))
+        return dict(kind="decline", message="", error=limit)
+    state["questions"] = state.get("questions", 0) + 1
     question = question.replace("–", "-").replace("—", "-")   # en and em dashes as hyphens ("2014-15"):
     progress("finding")                                                    # a character cleanup, not a wording rule
     history = state.get("history") or []
@@ -140,6 +156,7 @@ def ask(question, state, log, db_path=None, call=None, model=None, progress=None
                                       declined=declined, search=searched if config.AI_SEARCH else None,
                                       earlier=history[-5:])
     short = meta.get("short") or short
+    log.add_spend(meta["cost_usd"])
     progress("getting")
     db = connect(db_path)
     try:
@@ -165,6 +182,7 @@ def summarize(page, state, log, call=None, model=None, on_text=None):
     """The written summary of an answer, or None (no table, the call failed, or a number was not in the table: then
     it is dropped and logged). Every call is logged with its time and cost."""
     text, meta = summary.summarize(page, call=call, model=model, on_text=on_text)
+    log.add_spend(meta.get("cost_usd"))
     if meta.get("text") is not None or meta.get("error"):
         log.summary(dict(conversation=state.get("conversation_id"), turn=state.get("turns"), kept=meta["kept"],
                          text=meta.get("text"), missing=meta["missing"], error=meta["error"], model=meta["model"],

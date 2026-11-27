@@ -143,3 +143,30 @@ Later stage: publish the new database to Render and switch the app over.
 ```bash
 python -c "import sqlite3, config; print(*sqlite3.connect(config.LOCAL_DB).execute('SELECT year, release, status FROM _releases ORDER BY year'), sep='\n')"
 ```
+
+## The hosted app (Render), from Part 6f
+
+**The data on the host.** The database is the public Hugging Face dataset `yul13011/ipeds-v2-data`. The host downloads one fixed version of it (`IPEDS_V2_DATASET_REVISION`) once, onto the persistent disk, and checks its SHA-256. After a yearly update:
+1. Upload the new `data/ipeds_v2.sqlite` and its `.sha256` file to the dataset. Run `.venv\Scripts\python.exe scripts/publish_dataset.py`; it needs `huggingface_hub` in `.venv` and your Hugging Face login.
+2. Copy the new commit id from the dataset's history.
+3. In Render, set `IPEDS_V2_DATASET_REVISION` to it and redeploy. The new version downloads into its own folder; the old folder can be deleted from the disk afterwards.
+
+**Version 2's settings on the Render service** (version 1's own variables stay, so switching back needs no edits):
+
+| Setting | Value |
+| --- | --- |
+| Build command | `pip install -r requirements.txt` |
+| Start command | `python serve.py` |
+| `PYTHON_VERSION` | `3.12.10` |
+| `IPEDS_V2_DATASET_REPO` | `yul13011/ipeds-v2-data` |
+| `IPEDS_V2_DATASET_REVISION` | the dataset commit id |
+| `IPEDS_V2_DATA_DIR` | `/var/data/v2` |
+| `IPEDS_LOG_DIR` | `/var/data/v2/logs` |
+| `IPEDS_DAILY_USD` | `2` |
+| `IPEDS_CONVERSATION_QUESTIONS` | `40` |
+| `ANTHROPIC_API_KEY` | secret (already set for version 1) |
+| `IPEDS_OWNER_PASSPHRASE` | secret, your choice |
+
+**Switching back to version 1:** set the repository, branch, build command and start command back to version 1's (recorded in `docs/reports/STAGE_6_F.md` before the switch), save, and deploy. Version 1's data and variables were never removed.
+
+**The hosted log:** About → Owner → type the passphrase → download the zip. Unzip it, then `.venv\Scripts\python.exe scripts/hosted_log.py <folder>` writes `docs/hosted_questions.csv` (untracked) for choosing new real users' questions.

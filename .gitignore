@@ -27,3 +27,4 @@ venv/
 
 # Raw question log: holds session IDs and timestamps. The cleaned copy is docs/test_questions.csv.
 docs/question_log.csv
+docs/hosted_questions.csv

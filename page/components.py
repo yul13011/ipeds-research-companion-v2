@@ -159,9 +159,22 @@ def render_result(page, key, latest, on_button):
     if latest:
         for i, label in enumerate(page.get('offers') or []):
             st.button(label, key=key + f'_offer_{i}', on_click=on_button, args=('offer', i, label))
-    if page['definitions']:
+    if page['definitions'] or page['table']['rows']:
         with st.container(horizontal=True):
-            definitions_popover(page)
+            if page['definitions']: definitions_popover(page)
+            if page['table']['rows']: download_popover(page, key)
+
+
+def download_popover(page, key):
+    """Version 1's "Download Data" (Part 6c): Excel with sources, and CSV, from this answer's own page object. Made
+    when clicked, so the summary written under the table is included."""
+    from functools import partial
+    from tools import downloads
+    with st.popover('Download Data'):
+        st.download_button('Excel + sources', partial(downloads.excel_bytes, page), file_name=f'ipeds-{key}.xlsx',
+                           mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', key=key + '_xlsx', on_click='ignore')
+        st.download_button('CSV', partial(downloads.csv_bytes, page), file_name=f'ipeds-{key}.csv', mime='text/csv',
+                           key=key + '_csv', on_click='ignore')
 
 
 def render_answer(page, key, latest=False, on_button=None, model=None, number=None):
