@@ -2009,3 +2009,9 @@ haiku_6b_first,bad,bw23,1,yes,yes,correct answer,,,"on-campus food and housing, 
 haiku_6b_second,bad,bw04,1,yes,yes,correct answer,,,"12-month headcount for 'how many kids go to umich': an enrollment figure, stated (graded by hand, as in 6a)",40ed91b1dc26
 haiku_6b_second,bad,bw10,1,yes,yes,correct answer,,,"the CUNY system as a group: fall enrollment (graded by hand, as in 6a)",1b7407b4275f
 haiku_6b_second,bad,bw23,1,yes,yes,correct answer,,,"on-campus food and housing, $14,124 (the expectation names last year's column, chg5ay2; this is the 2024-25 column)",ec808123acfd
+haiku_6b_first,log,4,6,yes,no,wrong reading,model,,Yale's graduation rate trend only: the model kept Yale (operation schools) beside the Ivy League plus MIT and Stanford; 'Interpreted as' says Yale only (as in 6a),94a6407072a8
+haiku_6b_first,log,60,5,no,yes,wrong reading,model,,"general IPEDS glossary entries (Use the Data, IPEDS), not where income data comes from (net price by family income for aided students)",2c56378a6cab
+haiku_6b_first,bad,bw40,1,yes,yes,clarifying question,,,asks which reading of 'salary of profs',7d85af378067
+haiku_6b_second,log,4,6,yes,no,wrong reading,model,,Yale's graduation rate trend only: the model kept Yale (operation schools) beside the Ivy League plus MIT and Stanford; 'Interpreted as' says Yale only (as in 6a),94a6407072a8
+haiku_6b_second,log,60,5,no,yes,wrong reading,model,,declined as not a data question,2c56378a6cab
+haiku_6b_second,bad,bw40,1,yes,yes,clarifying question,,,asks which school 'wayne st' is,7d85af378067

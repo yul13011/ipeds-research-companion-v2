@@ -221,9 +221,9 @@ Run 1 is sequential (`--workers 1`, the timing figures); run 2 parallel (4 worke
 
 | Row | Run 1 (`haiku_6b_first`) | Run 2 (`haiku_6b_second`) | Part 6a end-of-part runs (IPEDS_STAGE=6.0) |
 | --- | --- | --- | --- |
-| Full set, scored and trend | 158 of 159 (99.4%) | 154 of 159 (96.9%) | 95.5% and 94.2% (of 155) |
-| Real users' questions | 65 of 66 (98.5%) | 61 of 66 (92.4%) | 89.4% and 90.9% |
-| The same as Part 5e (119) | 118 of 119 (99.2%) | 114 of 119 (95.8%) | 95.8% and 94.1% |
+| Full set, scored and trend | 156 of 159 (98.1%) | 153 of 159 (96.2%) | 95.5% and 94.2% (of 155) |
+| Real users' questions | 63 of 66 (95.5%) | 60 of 66 (90.9%) | 89.4% and 90.9% |
+| The same as Part 5e (119) | 117 of 119 (98.3%) | 114 of 119 (95.8%) | 95.8% and 94.1% |
 | Badly written set | 54 of 56 (96.4%) | 55 of 56 (98.2%) | 98.2% and 96.4% |
 | Median turn | 5.8 s | 5.9 s | 6.3 s and 6.5 s |
 | Turns over the limit (whole turn, with the summary) | 8 of 246 | 16 of 246 | 9 and 11 |
@@ -250,16 +250,18 @@ Run 1 is sequential (`--workers 1`, the timing figures); run 2 parallel (4 worke
 - **The Big Ten plus Notre Dame** answers with 19 schools in both runs.
 - **The Yale master's question** shows master's degrees only.
 - **bw23 "uw madison room and board"** gives on-campus food and housing, $14,124.
-- **Log 4.6** ("a trend for Ivies plus MIT and Stanford") is right in both runs: the instruction line from Part 6a's approval held.
+
+**Log 4.6** ("a trend for Ivies plus MIT and Stanford") is still wrong in both runs: Yale's trend only, as in Part 6a. An earlier draft of this report said it was right. The automatic grade passed it, because its expectation names no schools; the fixed carry-over script found it (see "Checks before the push").
 
 **Wrong readings:**
 
 | Turn | Run 1 | Run 2 | Cause |
 | --- | --- | --- | --- |
+| log 4.6 "a trend for Ivies plus MIT and Stanford" | wrong | wrong | model: kept Yale from earlier turns; as in Part 6a |
 | log 24.6 "list them in rank order from largest to smallest" | wrong | wrong | model: listed alphabetically; wrong in earlier parts too |
 | log 14.3 (rank by three measures, one outside IPEDS) | right | wrong | model; varies, as before |
 | log 60.4 "the universe with the lowest net cost" | right | wrong | model: declined; varies, as before |
-| log 60.5 "Where does income data come from in ipeds" | right | wrong | model: declined as not a data question; the same as in Part 6a's run 2 |
+| log 60.5 "Where does income data come from in ipeds" | wrong | wrong | model. Run 1 gave general IPEDS glossary entries, not the income source; run 2 declined it as not a data question, as in Part 6a's run 2 |
 | log 62.1 "hawaii" | right | wrong | model: declined; varies, as before |
 | bw30 "is miami dade the biggest community college" | wrong | right | model; varies, as before |
 | bw41 "hi can u tell me abt stanford" | wrong | wrong | model: declined; expected a question back |
@@ -278,12 +280,37 @@ None of these comes from the code changed in this part.
   - This matters for the new switch-test item, "the first answer after the app has been idle". The Part 6f proposal will cover loading the index when the app starts, before the first question.
 - **Log 58.7** (expenses per FTE for six schools over ten years) took 17 s and 27 s, against 6 to 7 s of model time. The rest is working out the rate from the counts for each school and year.
 
-### Something found in the tools
+### Checks before the push (owner's three questions, 2026-11-26)
 
-**The carry-over script has a gap.** When the automatic grade says "wrong" and the reviewed run's hand grade overrode it, the turn is neither carried over nor listed for review.
-- **Example:** bw04's 12-month headcount for "how many kids go to umich", which you accepted in earlier parts.
-- **This time:** I found the 3 such turns per run by a separate check and graded them by hand: bw04, bw10 and bw23.
-- **The fix** (about 5 lines in `scripts/carry_review.py`) is not built: list these turns too. Your go?
+**1. Every turn graded differently between run 1 and run 2: 18 turns, all model variation.**
+- **Nothing from the runner:**
+  - No turn in either run had a model error or waited for a rate limit, and none came near the 30-second limit (slowest of the 19: 18.3 s).
+  - The parallel run has the same 246 turns as the sequential one, in the same order, with every conversation's turns kept together and in order.
+  - So no worker or merge problem was found, and nothing needed fixing in the parallel runner.
+- **Right in one run, wrong in the other (4 turns):**
+  - Wrong in run 2 only: logs 14.3, 60.4 and 62.1. Each is a different reading of the same request.
+  - bw30: wrong in run 1 only (run 1's request left out Miami Dade).
+  - Log 60.5 is wrong in both runs, in different ways; bw41 is wrong in both.
+- **Right or acceptable in both, but graded differently** (an answer in one run and a clarifying question or decline in the other; 13 turns): logs 4.7, 7.1, 8.2, 33.1, 36.4, 48.1, 50.1; probe_sal_cmp and probe_cat_housing_smith; bw06, bw24, bw38, bw48 and bw54.
+- **Why real users' questions differ (95.5% against 90.9%):** run 2 lost 14.3, 60.4 and 62.1 to model variation, the kind seen in every part.
+
+**2. The carry-over.**
+- **All 69 carried grades were checked again independently** (33 in run 1, 36 in run 2). Each carried turn's page is identical, figure for figure, to the reviewed run's, and its expectation is unchanged. All 69 are "correct answer". None was carried wrongly.
+- **The gap is fixed** (`scripts/carry_review.py`, 5 lines). A turn whose earlier hand grade overrode the automatic grade now goes back to a person when its answer changes, not to the grader.
+- **What the fix caught:** run on run 1, it listed 5 more turns.
+  - bw04 and bw10 were graded already.
+  - **log 4.6 was wrong in both runs, and log 60.5 was wrong in run 1.** The automatic grade had passed both, because their expectations name no measure or no schools.
+  - Both are now graded by hand, which lowers run 1 from 99.4% to 98.1% and run 2 from 96.9% to 96.2%.
+- **bw23's expectation** named last year's column (`chg5ay2`); it now also accepts this year's (`chg5ay3`).
+- **A limit that remains:** an expectation with no schools or no measure still lets the grader pass a wrong answer whenever no earlier hand grade exists. Log 4.6 is that case.
+
+**3. The instructional-staff example now reads:** "Show Yale's full-time and part-time instructional staff counts from Fall 2015 through Fall 2024."
+- **One live call:** it still asks "faculty can mean different things".
+- **The cause is the dictionary, not the wording.** The faculty term's two readings are "Instructional staff" and "All staff with faculty status", and the term has `always_ask = yes`. So the app asks whenever the model picks either reading, even when the question names it.
+- **The fix (a convention change; your decision):** set the faculty term's `always_ask` to `no`.
+  - A bare "faculty" still gets the question, because the term has no default.
+  - A question that names "instructional staff" gets the answer.
+  - Not built.
 
 ### Line counts
 
@@ -294,8 +321,7 @@ None of these comes from the code changed in this part.
 
 ### Open questions
 
-1. **The carry-over script's gap:** go on the fix above?
-2. **The instructional-staff Explore example** asks which kind of staff instead of answering. Leave it, or look at why the faculty term is offered for "instructional staff"?
+1. **The faculty term's `always_ask`:** set it to `no`, so that a question naming "instructional staff" is answered? This affects the instructional-staff Explore example and log 7.1.
 
 ### Next
 

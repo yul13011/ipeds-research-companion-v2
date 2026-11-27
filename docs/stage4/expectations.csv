@@ -196,7 +196,7 @@ bad,bw19,1,badly written,answer,*SAT scores,199120,,5d,SAT 25th/50th/75th percen
 bad,bw20,1,badly written,answer|clarify,F_F1A.F1H02,159391,,5d,"LSU is an IPEDS alias of six schools: the main campus, or the picker"
 bad,bw21,1,badly written,answer|clarify,DRVEF.ENRTOT,228723,,5d,IPEDS alias of College Station
 bad,bw22,1,badly written,answer|clarify,DRVEF.ENRTOT,104151,,5d,"Arizona State, Appalachian State, Alabama State, Angelo State...: the picker, or Arizona State with ""Interpreted as"" naming it"
-bad,bw23,1,badly written,answer,COST1.chg5ay2,240444,,5d,nickname table; room and board is on-campus food and housing
+bad,bw23,1,badly written,answer,COST1.chg5ay3|COST1.chg5ay2,240444,,5d,nickname table; room and board is on-campus food and housing
 bad,bw24,1,badly written,answer,COST1.chg3ay3,243780,,5d,no hyphens
 bad,bw25,1,badly written,clarify,DRVGR.GBA6RTT,,,5d,"Boston, Binghamton and Baylor are all called BU: the picker only (owner, 2026-11-24)"
 bad,bw26,1,badly written,answer,DRVEF.ENRTOT,134130;134097,,5d,word order

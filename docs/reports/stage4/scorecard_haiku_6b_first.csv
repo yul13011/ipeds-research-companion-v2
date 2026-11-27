@@ -8,7 +8,7 @@ haiku_6b_first,log,4,2,scored,Compare Ivy League six-year bachelor graduation ra
 haiku_6b_first,log,4,3,trend,Show Yale’s six-year bachelor graduation rate for entering cohorts 2009 through 2018.,trend,answer,True,True,correct answer,,5.71,0.000952,13698,690,,,no
 haiku_6b_first,log,4,4,trend,How does this trend compare to a the average among Phd-enrolling universities nationally?,trend,clarify,True,True,clarifying question,,6.14,0.001439,15258,1351,,,no
 haiku_6b_first,log,4,5,trend,can you create a trend line for Yale's peers?,trend,clarify,True,True,clarifying question,,6.99,0.001306,13873,1362,,,
-haiku_6b_first,log,4,6,trend,Please create a trend for Ivies plus MIT and Stanford,trend,answer,True,True,correct answer,,8.05,0.00138,16264,1033,,,
+haiku_6b_first,log,4,6,trend,Please create a trend for Ivies plus MIT and Stanford,trend,answer,True,False,wrong reading,Yale's graduation rate trend only: the model kept Yale (operation schools) beside the Ivy League plus MIT and Stanford; 'Interpreted as' says Yale only (as in 6a),8.05,0.00138,16264,1033,,model,
 haiku_6b_first,log,4,7,trend,MIT is massachusetts institute of technology,answer|clarify|decline,decline,True,False,correct decline,,2.56,0.000857,14475,344,not a data question,,
 haiku_6b_first,log,6,1,trend,"Show Yale, Harvard, and Princeton admission rates from 2015 through 2024.",trend,answer,True,True,correct answer,,3.35,0.000838,14469,308,,,no
 haiku_6b_first,log,7,1,scored,How many full-time and part-time instructional staff did Yale have in Fall 2024?,answer|clarify,clarify,,True,clarifying question,,5.57,0.001073,13414,988,,,
@@ -72,7 +72,7 @@ haiku_6b_first,log,60,1,scored,Any variable that shows economic Mobility,decline
 haiku_6b_first,log,60,2,scored,Do you have something like income after graduation,decline,decline,True,True,correct decline,,3.72,0.000674,10571,759,not collected,,
 haiku_6b_first,log,60,3,scored,What is college scorecard,answer|decline,answer,True,True,correct answer,,2.82,0.000546,10525,513,,,
 haiku_6b_first,log,60,4,scored,What is the universe with the lowest net cost?,answer|clarify,clarify,,True,clarifying question,,8.37,0.001428,13035,1775,,,
-haiku_6b_first,log,60,5,scored,Where does income data come from in ipeds,answer,answer,True,True,correct answer,,4.71,0.000875,12001,876,,,
+haiku_6b_first,log,60,5,scored,Where does income data come from in ipeds,answer,answer,False,True,wrong reading,"general IPEDS glossary entries (Use the Data, IPEDS), not where income data comes from (net price by family income for aided students)",4.71,0.000875,12001,876,,model,
 haiku_6b_first,log,62,1,scored,hawaii,clarify,clarify,True,True,clarifying question,,6.26,0.001073,12043,1262,,,
 haiku_6b_first,log,62,2,scored,i'd like a profile of students entering and graduating out of UH campuses,answer|clarify,clarify,,True,clarifying question,,7.77,0.001755,16160,1804,,,
 haiku_6b_first,log,62,3,scored,"connect enrollment and graduation in STEM or med-related majors, by demographics (eg. ethnicity, HS of graduation, SAT)",answer|clarify,clarify,,True,clarifying question,,13.37,0.003059,33615,2445,,,
@@ -222,7 +222,7 @@ haiku_6b_first,bad,bw36,1,badly written,how many collages in vermont,answer,answ
 haiku_6b_first,bad,bw37,1,badly written,rpi vs rit cost,answer|clarify,clarify,,True,clarifying question,,9.27,0.001283,10066,2078,,,
 haiku_6b_first,bad,bw38,1,badly written,uiuc intl students,answer,clarify,,True,clarifying question,,8.22,0.00232,30966,1498,,,
 haiku_6b_first,bad,bw39,1,badly written,what % of osu students are women,clarify,clarify,,True,clarifying question,,5.11,0.001245,15145,987,,,
-haiku_6b_first,bad,bw40,1,badly written,salary of profs at wayne st,answer,clarify,True,True,clarifying question,,6.57,0.001471,15195,1428,,,
+haiku_6b_first,bad,bw40,1,badly written,salary of profs at wayne st,answer,clarify,True,True,clarifying question,asks which reading of 'salary of profs',6.57,0.001471,15195,1428,,,
 haiku_6b_first,bad,bw41,1,badly written,hi can u tell me abt stanford,clarify,decline,True,True,wrong reading,,4.7,0.000864,11922,869,not found,,
 haiku_6b_first,bad,bw42,1,badly written,student loan default rate at usc,decline,decline,True,True,correct decline,,5.38,0.001315,15332,1090,not collected,,
 haiku_6b_first,bad,bw43,1,badly written,mizou vs umich vs uconn grad rates,answer,answer,True,True,correct answer,,9.83,0.00212,29090,1473,,,

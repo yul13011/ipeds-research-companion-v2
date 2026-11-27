@@ -48,9 +48,13 @@ for run in new_runs:
         page = lambda turn: json.dumps({k: v for k, v in (turn.get("page") or {}).items() if k != "seconds"}, sort_keys=True)
         same = old is not None and g.ids(old) == g.ids(t) and shape(old) == shape(t) and page(old) == page(t)
         same = same and key in review and review[key].get("expect_fp") == g.fingerprint(e)   # expectation unchanged
+        # A hand grade that overrode the automatic one (Part 6b): a changed answer goes back to a person, not the grader
+        old_auto = g.auto_reading(old, e) if old else (None, None)
+        overrode = key in review and any(a is not None and {"yes": True, "no": False}.get(review[key][f]) not in (None, a)
+                                         for a, f in zip(old_auto, ("measure_right", "schools_right")))
         if key in review and same:
             pass
-        elif not e["measures"].startswith("*") or not t.get("requests"):
+        elif not overrode and (not e["measures"].startswith("*") or not t.get("requests")):
             continue                                # graded automatically
         if key in review and same:
             added.append(dict(review[key], model=run, expect_fp=g.fingerprint(e), why=(review[key]["why"] + " (same reading as " + reviewed + ")").strip()))

@@ -127,7 +127,7 @@
     {
      "id": "faculty-changes",
      "purpose": "Explore a trend",
-     "question": "Show Yale’s instructional staff count from Fall 2015 through Fall 2024, split by full-time and part-time."
+     "question": "Show Yale’s full-time and part-time instructional staff counts from Fall 2015 through Fall 2024."
     }
    ]
   },
