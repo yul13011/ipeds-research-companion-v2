@@ -170,7 +170,7 @@ Measures with no row have no earlier years. The years each measure has values ar
 Years in which IPEDS changed a definition, or that need a note in a trend. Shown when a trend's period crosses `first_release` (or falls within `first_release` to `last_release`). The data is never hidden.
 
 - `kind`: `definition change` or `context` (a note where no definition changed).
-- `tables`: the tables the row applies to. Blank means every table (used with a period).
+- `tables`: the tables the row applies to, or single measures written `TABLE.COLUMN` when only some of a table's measures are affected (the gender row names the men's and women's measures, so a total is not marked). Blank means every table (used with a period).
 - `applies_to`: what the note is about, in plain words.
 - `first_release`, `last_release`: the release years, such as `2020-21`. `last_release` is blank for a lasting change.
 - `period_from`, `period_to`: instead of releases, the months a figure's period must overlap for the note to show (`2020-03` to `2022-06` for the pandemic note). A row needs releases or a period.

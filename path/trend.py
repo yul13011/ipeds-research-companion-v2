@@ -294,7 +294,7 @@ def break_notes(db, years, tables, periods):
     for ts, first, last, start, end, note in db.execute(
             "SELECT tables, first_release, last_release, period_from, period_to, note_shown FROM "
             "dict_comparability_breaks WHERE status = 'approved' ORDER BY rowid").fetchall():
-        mine = {t.strip().upper() for t in (ts or "").split(",") if t.strip()}
+        mine = {t.strip().upper() for t in (ts or "").split(",") if t.strip()}   # tables, or single measures (TABLE.COLUMN)
         if mine and not mine & {t.upper() for t in tables}:
             continue
         if start:                                       # by the period each figure covers
@@ -358,6 +358,8 @@ def run(plan_, db, result, fetch):
             else:
                 tables.update(({mm["table"]} | {p["table"] for p in mm.get("parts") or []} |   # (a rate from counts has no table)
                                {r[k].partition(".")[0] for r in mm["rates"] for k in ("numerator", "denominator")}) - {None})
+                tables.update(({mm["id"]} | {p["id"] for p in mm.get("parts") or []} |          # and each measure, for a break
+                               {r[k] for r in mm["rates"] for k in ("numerator", "denominator")}) - {None})  # that names measures
             if m.get("period_pattern") and y not in periods:
                 periods[y] = period_months(fill_years(m["period_pattern"], y))
             suffix, unit = (f": {m.get('shown_as') or m['name']}" if several else ""), fetch.unit_of(m)
@@ -547,7 +549,7 @@ def by_change(plan_, db, result, fetch):
         va, vb = values[(m["id"], a)].get(u), values[(m["id"], b)].get(u)
         return None if va is None or vb is None else (va, vb, vb - va)
 
-    tables = {mm["table"] for mm in at.values()} - {None}
+    tables = ({mm["table"] for mm in at.values()} | {mm["id"] for mm in at.values()}) - {None}
     marks = {}
     for i, (note, marked) in enumerate(break_notes(db, [a, b], tables, {}), 1):
         for y in marked:

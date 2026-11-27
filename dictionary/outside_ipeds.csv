@@ -1,5 +1,5 @@
 topic,example_wording,in_ipeds,what_to_say,pointer,instead,checked_by_code
-Earnings after graduation; return on investment; economic mobility,"""best return on investment""; ""income after graduation""; ""ROI""",No,"IPEDS does not collect earnings. Cost, net price and graduation rates are in IPEDS and can be shown.",College Scorecard (U.S. Department of Education),,
+Earnings after graduation; return on investment; economic mobility,"""best return on investment""; ""income after graduation""; ""ROI""; ""starting salary of graduates""; ""average salary of graduates""; ""salary after graduation""; ""graduates' salaries""; ""alumni earnings""",No,"IPEDS does not collect earnings. Cost, net price and graduation rates are in IPEDS and can be shown.",College Scorecard (U.S. Department of Education),,
 Student loan debt at graduation; loan repayment,"""average student loan debt of Yale graduates""",No,"IPEDS has loan amounts awarded in a year, not debt at graduation or repayment.",College Scorecard,,
 Loan default rates,"""default rate""",No,Not collected in IPEDS.,Federal Student Aid cohort default rates,,
 Institutional AI policies,"""variables on institutions' AI policies""",No,IPEDS has no data on AI policies.,,,

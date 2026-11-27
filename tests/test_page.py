@@ -94,6 +94,11 @@ class Picker(unittest.TestCase):
 
 
 class Content(unittest.TestCase):
+    def test_the_admissions_scope_note_is_exact_about_test_scores(self):
+        topics = json.loads((ROOT / "page" / "explore.json").read_text(encoding="utf-8"))["topics"]
+        self.assertIn("25th and 75th percentile scores are available for Fall 2015–2024, and the medians (50th percentile) "
+                      "from Fall 2022", topics[0]["scope"])
+
     def test_six_topics_with_three_examples_and_unique_ids(self):
         topics = json.loads((ROOT / "page" / "explore.json").read_text(encoding="utf-8"))["topics"]
         self.assertEqual(len(topics), 6)
@@ -120,6 +125,78 @@ class Content(unittest.TestCase):
     def test_hosting_requirements_leave_out_playwright(self):
         self.assertNotIn("playwright", (ROOT / "requirements.txt").read_text().lower())
         self.assertIn("streamlit==1.66.0", (ROOT / "requirements.txt").read_text())
+
+
+class Chart(unittest.TestCase):
+    """Version 1's default chart style (owner decision, 2026-11-26)."""
+    def test_bars_start_at_zero_and_a_trend_is_focused(self):
+        from page.components import domain
+        self.assertEqual(domain([3.9, 4.6, 5.7], "percent", temporal=False), [0, 100])
+        self.assertEqual(domain([1000, 5000], "count", temporal=False)[0], 0)
+        low, high = domain([3.9, 4.6, 7.1], "percent", temporal=True)
+        self.assertTrue(0 < low < 3.9 and 7.1 < high < 100)
+
+    def test_bar_names_are_wrapped_not_cut(self):
+        import streamlit as st
+        from unittest import mock
+        from page import components
+        spec = dict(kind="bar", x="School", series=["Rate"], unit="percent",
+                    points=[("University of Pennsylvania", "Rate", 5.0), ("Cornell University", "Rate", 8.0)])
+        with mock.patch.object(st, "vega_lite_chart") as drawn, mock.patch.object(st, "caption"):
+            components.chart(spec)
+        text = json.dumps(drawn.call_args[0][0])
+        self.assertIn('"labelLimit": 0', text)
+        self.assertIn(r"University of\nPennsylvania", text)       # wrapped onto two lines (JSON escapes the line break)
+
+    def test_a_trend_has_axis_titles_and_a_dash_per_series(self):
+        import streamlit as st
+        from unittest import mock
+        from page import components
+        spec = dict(kind="line", x="Year", series=["Yale", "Harvard"], unit="percent",
+                    points=[("2015-16", "Yale", 6.3), ("2015-16", "Harvard", 5.3), ("2016-17", "Yale", 6.9), ("2016-17", "Harvard", 5.2)])
+        with mock.patch.object(st, "vega_lite_chart") as drawn, mock.patch.object(st, "caption") as caption:
+            components.chart(spec)
+        text = json.dumps(drawn.call_args[0][0])
+        for part in ('"Percent (%)"', '"Reporting period"', '"strokeDash"'):
+            self.assertIn(part, text)
+        self.assertIn("Gaps indicate unavailable observations.", caption.call_args[0][0])
+
+
+class Retry(unittest.TestCase):
+    def test_a_busy_api_is_retried_once_after_a_short_wait(self):
+        from unittest import mock
+        class OverloadedError(Exception):
+            pass
+        def busy(*a):
+            raise OverloadedError("busy")
+        meta = dict(calls=0, attempts=0, input_tokens=0, output_tokens=0, cache_write_tokens=0, cache_read_tokens=0)
+        with mock.patch.object(interpret.time, "sleep") as slept:
+            interpret.one_call("s", "u", "m", {}, {"tags": {}}, busy, meta)
+        self.assertEqual(meta["attempts"], 2)
+        slept.assert_called_once_with(2.0)
+
+
+@unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
+class Breaks(unittest.TestCase):
+    def test_the_gender_note_marks_mens_and_womens_figures_only(self):
+        import sqlite3
+        from path import trend
+        db = sqlite3.connect(f"file:{config.LOCAL_DB.as_posix()}?mode=ro", uri=True)
+        try:
+            gender = lambda tables: [n for n, _ in trend.break_notes(db, [2020, 2024], tables, {}) if "men and women" in n]
+            self.assertEqual(gender({"ADM", "ADM.ADMSSN", "ADM.APPLCN"}), [])          # a total admission rate
+            self.assertEqual(len(gender({"ADM", "ADM.APPLCNW"})), 1)                     # women applicants
+            self.assertEqual(len(gender({"EFA", "EFA.EFTOTLM"})), 1)
+            self.assertEqual(len(gender({"DRVADM", "DRVADM.DVADM03"})), 1)               # derived: percent admitted, women
+            self.assertEqual(gender({"DRVADM", "DRVADM.DVADM01"}), [])                   # derived: percent admitted, total
+        finally:
+            db.close()
+
+
+    def test_graduates_starting_salary_finds_the_earnings_row(self):
+        from path import shortlist
+        short = shortlist.shortlist("What is the average starting salary of Yale graduates?", config.LOCAL_DB.as_posix())
+        self.assertTrue(any(t["topic"].startswith("Earnings after graduation") for t in short["outside"]))
 
 
 if __name__ == "__main__":

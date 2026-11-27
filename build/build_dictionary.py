@@ -297,8 +297,11 @@ def check(db, wording_only=False):
             problems.append(f"comparability_breaks.csv: kind must be one of {BREAK_KINDS} and status one of {BREAK_STATUS}")
         if not first and not start:
             problems.append("comparability_breaks.csv: a row needs a first release or a period it covers")
-        for t in split(tables):
-            if t not in data:
+        for t in split(tables):                         # a table, or one measure written TABLE.COLUMN
+            if "." in t:
+                if t.upper() not in measures:
+                    problems.append(f"comparability_breaks.csv: {t} is not in measures.csv")
+            elif t not in data:
                 problems.append(f"comparability_breaks.csv: {t} is not a data table")
     sets = {(t, s) for t, s in db.execute('SELECT "table", breakdown_set FROM dict_category_codes WHERE breakdown_set IS '
                                           'NOT NULL UNION SELECT "table", breakdown_set FROM dict_measures WHERE '

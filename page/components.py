@@ -40,26 +40,73 @@ def has_chart(spec):
     return bool(spec) and any(v is not None for _, _, v in spec['points'])
 
 
+# Version 1's default chart style (agent-redesign/prototype/charts.py, panels() and domain(), 2026-11-26; owner
+# decision 2026-11-26). Its formatting panel is not carried over (Stage 7).
+UNIT_TITLES = {'percent': 'Percent (%)', 'dollars': 'US dollars (USD)', 'average': 'US dollars (USD)'}
+
+
+def domain(values, unit, temporal):
+    """Version 1's axis range: a focused scale for a trend; bars always from zero (owner decision, 2026-11-26)."""
+    valid = [v for v in values if v is not None]
+    if not valid: return [0, 100] if unit == 'percent' else [0, 1]
+    low, high = float(min(valid)), float(max(valid))
+    if unit == 'percent' and not temporal: return [0, 100]
+    if temporal:
+        pad = max((high - low) * .12, 1 if unit == 'percent' else abs(high) * .03 or 1)
+        return [max(0, low - pad) if low >= 0 else low - pad, min(100, high + pad) if unit == 'percent' else high + pad]
+    return [min(0, low) * 1.15, max(0, high) * 1.15 or 1]
+
+
 def chart(spec):
-    """The automatic chart: a line over the years for a trend, bars for a comparison in one year (Part 5c)."""
+    """The automatic chart: a line over the years for a trend, bars for a comparison in one year. Returns its note."""
+    import textwrap
+    from path.show import fmt as figure
     c = config.CHART
-    data = pd.DataFrame(spec['points'], columns=[spec['x'], 'Series', 'Value'])
-    fmt = '.1f' if spec.get('unit') == 'percent' else '$,.0f' if spec.get('unit') in ('dollars', 'average') else ',.0f'
-    color = alt.Color('Series:N', scale=alt.Scale(range=c['palette']), legend=alt.Legend(title=None, orient='bottom'))
-    order = list(dict.fromkeys(data[spec['x']]))
-    if spec['kind'] == 'line':                          # a gap stays a gap: missing years break the line
-        graph = alt.Chart(data).mark_line(point=alt.OverlayMarkDef(size=c['point_size']), strokeWidth=c['line_width'],
-                                          invalid='break-paths-show-domains').encode(
-            x=alt.X(f"{spec['x']}:O", sort=order, title=None), y=alt.Y('Value:Q', title=None, axis=alt.Axis(format=fmt)),
-            color=color, tooltip=[spec['x'], 'Series', alt.Tooltip('Value:Q', format=fmt)])
-    else:
-        graph = alt.Chart(data.dropna()).mark_bar(color=c['palette'][0]).encode(
-            y=alt.Y(f"{spec['x']}:N", sort=order, title=None), x=alt.X('Value:Q', title=None, axis=alt.Axis(format=fmt)),
-            tooltip=[spec['x'], alt.Tooltip('Value:Q', format=fmt)])
-    graph = graph.properties(width='container').configure(font=c['font']).configure_axis(
+    unit = spec.get('unit') or 'count'
+    data = pd.DataFrame(spec['points'], columns=['category', 'series', 'value'])
+    data['display_value'] = [figure((v, unit)) if v is not None else 'no value' for v in data['value']]
+    temporal = spec['kind'] == 'line'
+    limits = domain(list(data['value']), unit, temporal)
+    scale = alt.Scale(domain=limits, zero=not temporal, nice=False)
+    number = alt.Axis(format='.1f' if unit in ('percent', 'ratio') else ',.0f')
+    y_title = UNIT_TITLES.get(unit, unit.capitalize())
+    tooltip = [alt.Tooltip('category:N', title=spec['x']), alt.Tooltip('series:N', title='Series'), alt.Tooltip('display_value:N', title='Value')]
+    names = list(dict.fromkeys(data['series']))
+    if temporal:
+        order = list(dict.fromkeys(data['category']))
+        legend = alt.Legend(orient='top', title=None, labelLimit=220, columns=1, direction='vertical') if len(names) > 1 else None
+        color = alt.Color('series:N', scale=alt.Scale(domain=names, range=c['palette'][:len(names)] or c['palette']), legend=legend)
+        graph = alt.Chart(data).encode(tooltip=tooltip).mark_line(point=alt.OverlayMarkDef(size=c['point_size']), strokeWidth=c['line_width'],
+                                                                  invalid='break-paths-show-domains').encode(
+            x=alt.X('category:O', sort=order, title='Reporting period', axis=alt.Axis(labelAngle=-45 if len(order) > 6 else 0, values=order, labelOverlap=False)),
+            y=alt.Y('value:Q', title=y_title, scale=scale, axis=number),
+            color=color, strokeDash=alt.StrokeDash('series:N', legend=None), detail='series:N').properties(height=320)
+        note = 'Gaps indicate unavailable observations.'
+        if unit == 'percent' and limits != [0, 100]: note += ' Percentage trend uses a focused, labeled scale.'
+    else:                                               # names wrapped, never cut off (owner decision, 2026-11-26)
+        data = data.dropna(subset=['value'])
+        data['wrapped'] = data['category'].map(lambda t: '\n'.join(textwrap.wrap(str(t), 22, break_long_words=False)))
+        order = list(data['wrapped'])
+        line_height = c['font_size'] + 5
+        if unit == 'percent':                           # version 1's percent bars: 0, 25, 50, 75, 100
+            number = alt.Axis(format='.0f', values=[v for v in (0, 25, 50, 75, 100) if limits[0] <= v <= limits[1]], labelOverlap=False)
+        encoding = dict(x=alt.X('value:Q', title=y_title, scale=scale, axis=number),
+                        y=alt.Y('wrapped:N', sort=order, title=None, axis=alt.Axis(labelAngle=0, labelLimit=0, labelLineHeight=line_height,
+                                                                                    labelExpr="split(datum.label, '\\n')")))
+        base = alt.Chart(data).encode(tooltip=tooltip)
+        bars = base.mark_bar(size=18, color=c['palette'][0]).encode(**encoding)
+        labels = base.mark_text(align='left', dx=6, fontSize=12, color=c['text']).encode(**encoding, text='display_value:N')
+        zero = alt.Chart(pd.DataFrame({'baseline': [0]})).mark_rule(color='#8D989E', strokeWidth=1).encode(x=alt.datum(0))
+        tallest = max((w.count('\n') + 1) * line_height + 14 for w in order)
+        graph = (bars + labels + zero).properties(height=max(180, 72 + len(order) * max(40, tallest)))
+        note = 'Values are labeled; missing observations are not zero.'
+    graph = graph.properties(width='container', padding={'left': 8, 'right': 64, 'top': 12, 'bottom': 8}).configure(font=c['font']).configure_axis(
         labelFontSize=c['font_size'], titleFontSize=c['font_size'], labelColor=c['text'], titleColor=c['text'],
-        gridColor=c['grid'], domainColor=c['domain']).configure_legend(labelFontSize=c['font_size']).configure_view(stroke=None)
-    st.altair_chart(graph, width='stretch')
+        gridColor=c['grid'], domainColor=c['domain']).configure_legend(labelFontSize=12).configure_view(stroke=None)
+    spec_out = graph.to_dict()
+    spec_out['background'] = '#ffffff'                  # version 1's chart background
+    st.vega_lite_chart(spec_out, width='stretch', theme=None)
+    st.caption(note)
 
 
 def written_summary(page, model):

@@ -172,3 +172,131 @@ These are in `page/wording.json`. Every other label is version 1's own.
 - the two end-of-part question-set runs (one sequential, one parallel) with the four-row scorecard and the four new examples;
 - the full rebuild;
 - the report's end-of-part sections.
+
+## After your decisions: end of Part 6b (2026-11-26)
+
+Your decisions are in DECISIONS.md under "2026-11-26: Part 6b decisions after the screenshot comparison" and "end of Part 6b". Checkpoint commit `eb99e14` was made before them. Then the full rebuild (passed its checks) and the two end-of-part runs. Committed locally with your updated work order and plan; not pushed.
+
+### What changed
+
+1. **The chart takes version 1's default style** (`page/components.py`, copied from version 1's `charts.py`; the formatting panel stays in Stage 7):
+   - **Trends:** a scale focused on the data, axis titles ("Percent (%)", "Reporting period"), a dash pattern per school, year labels slanted when there are more than six, and version 1's caption: "Gaps indicate unavailable observations. Percentage trend uses a focused, labeled scale."
+   - **Bars:** they start at zero; version 1's do too (percent bars run 0 to 100), so there is no exception to report. Ticks at 0, 25, 50, 75 and 100 for percents, with each value labelled at the end of its bar, a zero line, and the caption "Values are labeled; missing observations are not zero."
+   - **School names in bar charts** wrap onto as many lines as they need and are never cut off (for example, "Columbia University in / the City of New York").
+   - White chart background, as in version 1.
+   - **Checked against version 1:** the line chart of the three schools' admission rates now differs by 3.1% of pixels, and only in the data and the year labels:
+     - version 2 shows each year's published whole-number rate and labels years "2015-16";
+     - version 1 worked out rates with decimals from the counts and labelled years "2015".
+   - Screenshots: `docs/reports/stage6b/07_answer_with_chart_v1.png`, `07_answer_with_chart_v2.png`, `v2_bar_chart.png`.
+2. **The wording is approved and in place**, with your three edits to W3, W4 and W5 (`page/wording.json`).
+3. **"Average starting salary of Yale graduates"** now gets: "IPEDS does not collect earnings… You may find this in College Scorecard (U.S. Department of Education)."
+   - **The fix:** five phrasings added to the earnings row's wording in `outside_ipeds.csv`, such as "starting salary of graduates" and "salary after graduation". No new rule.
+4. **The note about counting men and women.**
+   - **Where it came from:** the gender row of `comparability_breaks.csv`, which matched whole tables (EF, EFA, ADM). Admission rates in some years are worked out from the admissions counts (ADM.ADMSSN over ADM.APPLCN), so every admission-rate trend carried the note, though a total is not affected.
+   - **The fix:** a row's `tables` can now name single measures as `TABLE.COLUMN`. The gender row lists the men's and women's measures only: 37 in EF, EFA and ADM, plus, at your decision, the 11 derived ones in DRVADM and DRVEF.
+   - Three general lines in `path/trend.py`, one build check in `build/build_dictionary.py`, and the README updated.
+   - **Checked live:** the admission-rate trend no longer shows the note; a women's figure does.
+5. **The scope notes.**
+   - **Graduation rates:** true as written. The 2015–2024 releases cover entering cohorts 2009–2018 (the dictionary's "fall -6").
+   - **Test scores:** the 25th and 75th percentiles are held for every release from fall 2015, for SAT and ACT alike; the medians only from fall 2022.
+     - The card's sentence was true but incomplete, and my last message was wrong to say only the 25th was held before 2022.
+     - The card now reads: "SAT and ACT 25th and 75th percentile scores are available for Fall 2015–2024, and the medians (50th percentile) from Fall 2022, where institutions report them."
+6. **Retries:** after a busy or failed API call, the single retry now waits 2 seconds. A timed-out call is still not retried. This adds 4 lines to `path/interpret.py`.
+7. **One fix to the question set:** I wrote the expectation for the enrollment-trend example with ";" between its two measures; the grader reads "|". The app's answer was right in both runs. Corrected, and regraded.
+
+### Tests
+
+- **375, all passing** (7 new since the checkpoint):
+  - the chart: bars from zero, a focused trend, names wrapped, axis titles and dashes;
+  - the retry waiting 2 seconds;
+  - the gender note on a women's figure (also a derived one), not on a total;
+  - the salary question finding the earnings row;
+  - the exact test-score wording.
+- **Instruction prompt: 2,496 words** against the 2,500 limit (unchanged in this part).
+- **Trial call:** accepted.
+
+### The scorecard (two runs, IPEDS_STAGE=6)
+
+Run 1 is sequential (`--workers 1`, the timing figures); run 2 parallel (4 workers).
+
+| Row | Run 1 (`haiku_6b_first`) | Run 2 (`haiku_6b_second`) | Part 6a end-of-part runs (IPEDS_STAGE=6.0) |
+| --- | --- | --- | --- |
+| Full set, scored and trend | 158 of 159 (99.4%) | 154 of 159 (96.9%) | 95.5% and 94.2% (of 155) |
+| Real users' questions | 65 of 66 (98.5%) | 61 of 66 (92.4%) | 89.4% and 90.9% |
+| The same as Part 5e (119) | 118 of 119 (99.2%) | 114 of 119 (95.8%) | 95.8% and 94.1% |
+| Badly written set | 54 of 56 (96.4%) | 55 of 56 (98.2%) | 98.2% and 96.4% |
+| Median turn | 5.8 s | 5.9 s | 6.3 s and 6.5 s |
+| Turns over the limit (whole turn, with the summary) | 8 of 246 | 16 of 246 | 9 and 11 |
+| Over the limit without the summary | 3 | 10 | 3 and 6 |
+| Cost | $0.28 | $0.27 | $0.27 |
+| Shortlist misses | 0 of 27 | 0 of 27 | 0 of 25 |
+
+**The full set is now 159:** the four Explore examples added to the set. IPEDS_STAGE=6 counts the questions due by Stage 6; Part 6a's runs used 6.0.
+
+**The four Explore examples:**
+- **Right in both runs:** Ivy League undergraduate enrollment; Yale's undergraduate and graduate enrollment trend; the three-rank faculty salaries (shown with the other ranks, medical school excluded, stated).
+- **"Show Yale's instructional staff count from Fall 2015 through Fall 2024, split by full-time and part-time"** asked "Which did you mean?" (instructional staff or all staff with faculty status) in both runs.
+  - That counts as right or acceptable, but an example on the page that answers with a question is weak.
+  - Its wording says "instructional staff", yet the shortlist offers the faculty term's two readings. Something to look at; nothing changed.
+
+**Manual review.**
+- **Run 1:** 43 turns read by hand, 33 carried over from Part 6a's last run.
+- **Run 2:** 41 turns read by hand, 36 carried over from run 1.
+- **Plus 3 turns in each run** the carry-over script missed (below), and the four stage 7 owner questions, graded for the record.
+
+**Better than Part 6a:**
+- **log 8.2** ("how many degrees… last ten years") counts all degrees, not only bachelor's.
+- **"Just Yale and Harvard"** keeps the two schools.
+- **The Big Ten plus Notre Dame** answers with 19 schools in both runs.
+- **The Yale master's question** shows master's degrees only.
+- **bw23 "uw madison room and board"** gives on-campus food and housing, $14,124.
+- **Log 4.6** ("a trend for Ivies plus MIT and Stanford") is right in both runs: the instruction line from Part 6a's approval held.
+
+**Wrong readings:**
+
+| Turn | Run 1 | Run 2 | Cause |
+| --- | --- | --- | --- |
+| log 24.6 "list them in rank order from largest to smallest" | wrong | wrong | model: listed alphabetically; wrong in earlier parts too |
+| log 14.3 (rank by three measures, one outside IPEDS) | right | wrong | model; varies, as before |
+| log 60.4 "the universe with the lowest net cost" | right | wrong | model: declined; varies, as before |
+| log 60.5 "Where does income data come from in ipeds" | right | wrong | model: declined as not a data question; the same as in Part 6a's run 2 |
+| log 62.1 "hawaii" | right | wrong | model: declined; varies, as before |
+| bw30 "is miami dade the biggest community college" | wrong | right | model; varies, as before |
+| bw41 "hi can u tell me abt stanford" | wrong | wrong | model: declined; expected a question back |
+
+None of these comes from the code changed in this part.
+
+**Two readings changed without being wrong.**
+- **Log 58.5 and 58.6:** run 1 showed RIT and the five schools beside the national figure, not RIT's comparison group. The six schools are right.
+- **Log 3.2 in run 2:** Yale's undergraduates by race came from the 12-month headcount, not fall enrollment.
+
+### Speed
+
+- **The median turn is faster than Part 6a's:** 5.8 s, against 6.3 s.
+- **The slowest turns are each worker's first question.** In run 1, log 1.1 took 50.8 s against 8.5 s of model time. In run 2, the first conversation of each of the four workers took 15 to 21 s (logs 1.1 to 4.1).
+  - The time goes to loading the search index on a process's first question, made slower by the rebuild just before.
+  - This matters for the new switch-test item, "the first answer after the app has been idle". The Part 6f proposal will cover loading the index when the app starts, before the first question.
+- **Log 58.7** (expenses per FTE for six schools over ten years) took 17 s and 27 s, against 6 to 7 s of model time. The rest is working out the rate from the counts for each school and year.
+
+### Something found in the tools
+
+**The carry-over script has a gap.** When the automatic grade says "wrong" and the reviewed run's hand grade overrode it, the turn is neither carried over nor listed for review.
+- **Example:** bw04's 12-month headcount for "how many kids go to umich", which you accepted in earlier parts.
+- **This time:** I found the 3 such turns per run by a separate check and graded them by hand: bw04, bw10 and bw23.
+- **The fix** (about 5 lines in `scripts/carry_review.py`) is not built: list these turns too. Your go?
+
+### Line counts
+
+| | At the checkpoint | Now |
+| --- | --- | --- |
+| The question path | 3,992 | 4,001 (+9: trend +4 for breaks that name measures, interpret +5 for the retry wait) |
+| The page and the tools behind it | 792 | 834 (components +50 for the chart) |
+
+### Open questions
+
+1. **The carry-over script's gap:** go on the fix above?
+2. **The instructional-staff Explore example** asks which kind of staff instead of answering. Leave it, or look at why the faculty term is offered for "instructional staff"?
+
+### Next
+
+As the new order says: the Part 6f proposal (hosting), then Part 6c while you do the account steps.

@@ -8,7 +8,7 @@ Written by `scripts/database_inventory.py` after each full rebuild. Do not edit 
 | --- | ---: |
 | Tables | 106 |
 | Rows | 40,380,316 |
-| File size | 3.27 GB (3,268,239,360 bytes) |
+| File size | 3.27 GB (3,268,243,456 bytes) |
 | Releases | 10 (2015-16 to 2024-25) |
 
 Tables and rows by layer:
@@ -174,4 +174,4 @@ The layers:
 | `_tables` | Every table loaded from each release: source name, kind, rows read and loaded | local_table, year | 10 | 554 |
 | `sqlite_stat1` | SQLite's own statistics for its query planner | tbl, idx | 3 | 70 |
 
-Counted in 37 seconds.
+Counted in 25 seconds.

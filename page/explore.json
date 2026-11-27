@@ -8,7 +8,7 @@
    "icon": "🎓",
    "summary": "Applicants, offers, first-year enrollment, and test scores.",
    "description": "Explore how many students apply, receive admission offers, and enroll. Compare admission and yield rates, and discover available SAT and ACT score statistics.",
-   "scope": "The loaded admissions data cover first-time, degree/certificate-seeking undergraduates at institutions without open admission, for Fall 2015–2024. Graduate admissions are not included in these tables. Reported SAT section medians are available from Fall 2022 where institutions report them.",
+   "scope": "The loaded admissions data cover first-time, degree/certificate-seeking undergraduates at institutions without open admission, for Fall 2015–2024. Graduate admissions are not included in these tables. SAT and ACT 25th and 75th percentile scores are available for Fall 2015–2024, and the medians (50th percentile) from Fall 2022, where institutions report them.",
    "examples": [
     {
      "id": "admissions-point",

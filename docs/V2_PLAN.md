@@ -31,7 +31,7 @@ This is the plan for version 2. It says what version 2 is, how it works, what it
 | 1–4 | The first slice: the question path on the 2024-25 release, the dictionary, tests and benchmarks | Done Nov 21, 2026 |
 | 5 | All ten years and trends; understanding badly written questions; written summary; explaining terms and concepts | Done Nov 25, 2026 |
 | 6 | Fixes found in Stage 5; follow-ups real users need; version 1 features (without the extract builder and chart formatting); hosting; then publishing version 2 at the existing Render link | Next |
-| 7 | Flexibility: groups from confirmed lists, the formula field and category sets, comparing and suggesting measures, web search; data extracts; chart formatting | After the switch |
+| 7 | Flexibility: groups from confirmed lists, the formula field and category sets, comparing and suggesting measures, web search; data extracts; chart formatting; a self-contained data pipeline | After the switch |
 | Version 3 | A conversational research companion built on version 2 | After version 2 |
 
 The order of stages 6 and 7 was swapped on Nov 24, 2026: users get version 2, with version 1's features, before the flexibility work, which is not needed to start using it.
@@ -371,7 +371,7 @@ Moved to Stage 7 (section 10.1) on Nov 25, 2026, to be built after version 2 is 
 
 ### 9.6 Before version 1 is retired
 
-Bring the Access-to-SQLite converter and the cross-year index into version 2, with a way to add a new release to the index, so version 2 no longer depends on version 1's data folder.
+Moved to Stage 7 (section 10.3) on Nov 26, 2026. Until then, version 2 still uses version 1's converter and cross-year index to add a release, so version 1's data folder must be kept.
 
 ### 9.7 The switch test
 
@@ -381,12 +381,16 @@ The Render link is switched to version 2 when all of these hold:
 2. The success test from Stage 5 is met in two runs.
 3. Real users' questions are at least 90% right or acceptable in two runs.
 4. Version 2 runs on the host without unresolved errors, tested before the switch.
+5. The speed limits are met on the host: 10 seconds a turn, 20 with a search, including the first answer after the app has been idle.
+6. The owner has tested the hosted app with 10 to 15 questions of her choosing.
+
+A few days after the switch, version 2's hosted log is reviewed for errors, slow turns and wrong readings, and any fixes go into one change order.
 
 The existing Render service is switched to the new repository; it is never deleted. Version 1's repository and data stay as they are, so the switch can be reversed.
 
 ---
 
-## 10. Stage 7: flexibility, data extracts and chart formatting
+## 10. Stage 7: flexibility, data extracts, chart formatting and the data pipeline
 
 - **Groups from a list the user confirms,** which the web search depends on.
 - **The formula field and category sets** (section 7).
@@ -422,6 +426,11 @@ The extract uses the same code that builds answers, so an extract and an on-scre
 ### 10.2 Chart formatting
 
 Moved from Stage 6 on Nov 26, 2026: version 1's "Format chart" panel (layout, text, style and axes tabs, presentation preset, undo and reset), chart edits typed in chat sharing settings with the panel (follow-up item 29), and preview and download as PNG or SVG in slide layouts. The automatic chart is already built.
+
+
+### 10.3 A self-contained data pipeline
+
+Moved from Stage 6 on Nov 26, 2026. Bring the Access-to-SQLite converter and the cross-year index into version 2, with a tested way to add a new release to the index, so version 2 no longer depends on version 1's data folder. **Deadline:** before the next IPEDS release is added (section 11) and before version 1's folder is removed.
 
 ---
 

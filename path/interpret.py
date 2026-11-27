@@ -192,6 +192,11 @@ def check(reply):
 MAX_SEARCHES = 2                    # the model's own searches per question (owner decision, 2026-11-24)
 
 
+RETRY_WAIT = 2.0                                    # seconds before the one retry after an API failure
+RETRY_AFTER_WAIT = ("APIConnectionError", "InternalServerError", "OverloadedError", "RateLimitError",
+                    "ServiceUnavailableError", "APIStatusError")
+
+
 def one_call(system, user, model, schema, short, call, meta):
     """One model call with one retry. Returns the reply in code form, or None (meta["error"] says why)."""
     meta["calls"] += 1
@@ -213,6 +218,8 @@ def one_call(system, user, model, schema, short, call, meta):
             reply, meta["error"] = None, f"{type(e).__name__}: {e}"
             if type(e).__name__ == "APITimeoutError":   # past the time limit: no second wait
                 break
+            if meta["attempts"] == 1 and type(e).__name__ in RETRY_AFTER_WAIT:
+                time.sleep(RETRY_WAIT)                  # a busy or failed API: one retry, about 2 s later (owner, 2026-11-26)
     return reply
 
 

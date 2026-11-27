@@ -4,7 +4,7 @@ Paste everything below the line into Claude Code, opened in the `ipeds-research-
 
 ---
 
-This is the work order for Stage 6 of version 2. Its goal is in section 9 of the plan: version 2 replaces version 1 at the existing link, https://ipeds-research-companion.onrender.com/, once it does everything version 1 does and passes the switch test. Work through it one part at a time, in order. Stop after each part, write a report, and wait for my go before starting the next. Parts that say "propose first" stop twice: once with the proposal, once with the build.
+This is the work order for Stage 6 of version 2. Its goal is in section 9 of the plan: version 2 replaces version 1 at the existing link, https://ipeds-research-companion.onrender.com/, once it does everything version 1 does and passes the switch test. Work through it one part at a time. The order is 6.0, 6a, 6b, then the Part 6f proposal, then Part 6c while I do the account steps for 6f, then the rest of 6f, then 6g (owner decision, Nov 26, 2026: publish as soon as possible, so hosting starts early). Stop after each part, write a report, and wait for my go before starting the next. Parts that say "propose first" stop twice: once with the proposal, once with the build.
 
 READ FIRST
 - `CLAUDE.md`: the working rules. They all still apply.
@@ -87,11 +87,11 @@ Tests: a download for a trend, a group figure and a breakdown matches the on-scr
 
 PART 6d. DATA EXTRACTS: MOVED TO STAGE 7
 
-Owner decision, Nov 25, 2026: data extracts are built after version 2 is published, in Stage 7 (plan section 10.1). Version 1's extract builder is not carried over. Go from Part 6c to Part 6e.
+Owner decision, Nov 25, 2026: data extracts are built after version 2 is published, in Stage 7 (plan section 10.1). Version 1's extract builder is not carried over. Go from Part 6c to Part 6f.
 
-PART 6e. A SELF-CONTAINED DATA PIPELINE
+PART 6e. A SELF-CONTAINED DATA PIPELINE: MOVED TO STAGE 7
 
-Plan section 9.6. Bring the Access-to-SQLite converter and the cross-year index into version 2, with a tested way to add a new release to the index, so version 2 no longer depends on version 1's data folder. Update `UPDATING.md`. Test by rebuilding one release from its Access file and checking it matches the current database exactly.
+Owner decision, Nov 26, 2026: bringing the converter and the cross-year index into version 2 moves to Stage 7 (plan section 10.3). It must be done before the next IPEDS release is added and before version 1's folder is removed. Go from Part 6c to Part 6f.
 
 PART 6f. HOSTING (propose first)
 
@@ -112,8 +112,11 @@ PART 6g. MEASURE IT AND THE SWITCH TEST
 - The benchmarks across ten years, reusing earlier results where nothing they depend on has changed, and saying which.
 - Time and cost per question, locally and on the host.
 - Line counts: which modules grew most during Stage 6.
-- A scorecard against the switch test in plan section 9.7: the version 1 features in place, except the extract builder and chart formatting; the success test met in two runs; real users' questions at least 90% right or acceptable in two runs; version 2 running on the host without unresolved errors.
+- A scorecard against the switch test in plan section 9.7: the version 1 features in place, except the extract builder and chart formatting; the success test met in two runs; real users' questions at least 90% right or acceptable in two runs; version 2 running on the host without unresolved errors; the speed limits met on the host (10 seconds a turn, 20 with a search, the median reported, and the first answer after the app has been idle measured separately).
 
-If any part of the switch test is not met, say what is missing and stop. If all of it is met, stop and wait: I switch the Render link myself, following the steps from Part 6f.
+If any part of the switch test is not met, say what is missing and stop. If all of it is met, stop and wait. Then:
+1. I test the hosted app myself with 10 to 15 questions of my choosing. Give me a short checklist of what to try (a lookup, a trend, a group, a follow-up, a definition, a decline, a download).
+2. I switch the Render link myself, following the steps from Part 6f.
+3. A few days after the switch: read version 2's hosted log, list errors, slow turns and wrong readings among real users' questions, and propose any fixes as one change order. Remind me of the steps to switch back if anything serious appears.
 
 START by reading the documents above and telling me in a few sentences how you understand Stage 6 and Part 6.0, with anything unclear. Then wait for my go.

@@ -590,3 +590,21 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
 - **"Display table"** is off by default when a chart is shown and on when there is none. The "Verified summary" popover is left out (approved difference). The topic cards and example questions live in a page content file, not in the dictionary.
 - **The written summary is always on.** The page has no switch; `IPEDS_SUMMARY=0` turns it off for testing only.
 - **Streamlit 1.66.0**, as in version 1, pinned in requirements.txt. **Playwright** is installed in .venv only as a development tool, listed in `requirements-dev.txt` and kept out of the hosting requirements.
+
+## 2026-11-26: Part 6b decisions after the screenshot comparison
+
+- **The chart takes version 1's default style** (not its formatting panel, Stage 7): a scale focused on the data, axis titles, a dash pattern per series, slanted year labels, and version 1's caption under the chart. **Bars always start at zero.** Long school names in bar charts are shown in full, not cut off.
+- **Wording drafts W1 to W9 and E1 to E6 approved**, with three edits: W3 "Sonnet is slower and costs more."; W4 says questions are logged to improve the app (Part 6f makes this true on the host) and "Queries and calculations are run by the app, not by the AI"; W5 drops "not arbitrary errors".
+- **Version 2's own elements approved:** the provisional warning, the data-release line, years held, statements.
+- **"Average starting salary of graduates"** points to the College Scorecard through synonyms on the earnings row of `outside_ipeds.csv`. No new rule.
+- **The note about counting men and women** is shown only on measures it applies to (the row that produces it, fixed in the dictionary).
+- **Retries:** after a busy or failed API call, the single retry waits about 2 seconds, within the 30-second limit.
+- **Checkpoint commit** before these changes.
+
+## 2026-11-26: end of Part 6b; Stage 6 order and switch test changed
+
+- **The gender row in comparability_breaks.csv also names the derived men's and women's measures** (DRVADM percent admitted and yield by men and women; DRVEF percent of enrollment that are women, undergraduate and graduate). A row's `tables` may name single measures (`TABLE.COLUMN`), so a total is never marked.
+- **The admissions card's scope note states the test scores exactly:** SAT and ACT 25th and 75th percentile scores are held for fall 2015 to 2024, and the medians (50th percentile) from fall 2022 (checked against the ADM table in every release).
+- **Part 6e (the self-contained data pipeline) moves to Stage 7.** It must be done before the next IPEDS release is added and before version 1's folder is removed. (Work order and plan updated by the owner.)
+- **New order for Stage 6, to publish sooner:** after Part 6b, the Part 6f proposal; then Part 6c, built while the owner does the account steps for 6f; then the rest of 6f; then 6g.
+- **The switch test also requires:** the speed limits met on the host, including the first answer after the app has been idle; the owner's own test of the hosted app, with a checklist from Claude; and a review of the hosted question log a few days after the switch.
