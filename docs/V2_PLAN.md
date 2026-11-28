@@ -380,7 +380,7 @@ The Render link is switched to version 2 when all of these hold:
 1. The version 1 features above are in place, except the extract builder, chart formatting, the technical audit file and the analysis tools panel with the definitions browser (Stage 7).
 2. The success test from Stage 5 is met (Part 6b's two runs).
 3. Real users' questions are at least 90% right or acceptable (Part 6b's two runs).
-4. Version 2 runs on the host without unresolved errors. Owner decision, Nov 26, 2026 (launch first): there is no separate test service. The live service is switched and tested straight after, with one full question-set run against the live app, and switched back if needed (version 1's data stays on the disk).
+4. Version 2 runs on the host without unresolved errors. Owner decision, Nov 26, 2026 (launch first): there is no separate test service. The live service is switched and tested straight after, with one full question-set run against the live app, and switched back if needed. The 4 GB disk holds one version's data at a time, so after a switch back version 1 downloads its data again on its first page view (Nov 27, 2026).
 5. The speed limits are met on the host: 10 seconds a turn, 20 with a search, including the first answer after the app has been idle.
 6. The owner has tested the hosted app with 10 to 15 questions of her choosing.
 

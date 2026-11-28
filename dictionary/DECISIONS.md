@@ -643,3 +643,25 @@ One dated line per decision, with its reason. Newest at the bottom. A change to 
   - Version 1's method (`question_log.py`, background thread, quiet failure) is copied and adapted. It needs the `gspread` package: 6.2.1 and its nine supporting packages, approved by the owner on 2026-11-27 and pinned in `requirements.txt`.
   - The sheet uses version 1's service account (owner decision, 2026-11-27). The new sheet is shared with that account, and the same key goes into version 2's own setting, `IPEDS_V2_GSHEETS_CREDENTIALS`.
 - **The analysis tools panel, the definitions browser included, is hidden until Stage 7.** The code is kept and turned on with `config.TOOLS_PANEL = True`. Its absence is an approved difference from version 1.
+
+## 2026-11-27: the Render disk stays at 4 GB
+
+- **The disk is not grown to 10 GB** (replaces that part of the 2026-11-26 Part 6f approval). The 4 GB disk holds one version's data at a time:
+  - version 2: 3.27 GB;
+  - version 1: 3.13 GB in 70 files.
+- **At the switch,** version 1's data folder is removed through Render's Shell, after the settings are changed and before the deploy. The app is down for a few minutes until version 2 has downloaded its data (about 1 minute) and started.
+- **Switching back** removes version 2's data folder (its logs are kept) and redeploys version 1.
+  - Version 1 downloads its data again by itself on its first page view (`prototype/data_bootstrap.py`, from `yul13011/ipeds-data`), about 5 to 10 minutes in all.
+- **`serve.py` needs no room for a second copy:** it writes the download to a `.part` file and renames it.
+- **The one shared variable is `PYTHON_VERSION`:** version 2 sets 3.12.10, and switching back restores version 1's value.
+- **Each later data update** (a new year, or the 2024-25 final release) removes the old copy first, with an outage of a few minutes. Steps are in `UPDATING.md`.
+
+## 2026-11-27: four more columns in version 2's question sheet
+
+- **Added after the first twelve, whose names and order are unchanged:**
+  - `interpreted_as`: the "Interpreted as" text shown; several answers are joined with " | ";
+  - `n_rows`: the rows in the answer's table;
+  - `had_value`: TRUE when the table holds at least one figure, not only labels or blanks;
+  - `app_version`: the deployed commit, from Render's `RENDER_GIT_COMMIT`, or `IPEDS_APP_VERSION` if set.
+- **When the answer isn't a table** (a clarifying question, a decline), the three answer columns are blank.
+- **A sheet whose header is the earlier twelve columns** is extended in place on first use. Its rows are kept, and a sheet with any other first row is never written over.

@@ -220,6 +220,56 @@ class Sheet(unittest.TestCase):
         self.assertEqual(written[0][3], "Ivies plus MIT")
 
 
+class SheetColumns(unittest.TestCase):
+    """The four columns added on 2026-11-27, after the first twelve."""
+    def test_the_added_columns_follow_the_first_twelve(self):
+        self.assertEqual(log.COLUMNS[:12], ("time", "conversation", "turn", "question", "outcome", "decline_reason",
+                                            "operation", "measures", "schools_or_group", "model", "seconds", "cost_usd"))
+        self.assertEqual(log.COLUMNS[12:], ("interpreted_as", "n_rows", "had_value", "app_version"))
+
+    @unittest.skipUnless(config.LOCAL_DB.exists(), "local database not built")
+    def test_an_answer_fills_them_from_what_was_shown(self):
+        case = json.loads((REPLIES / "a_yale_admission.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as d:
+            page = answer.ask(case["question"], {}, Log(d), call=saved(case["reply"]))
+            line = json.loads((Path(d) / "questions.jsonl").read_text(encoding="utf-8").splitlines()[-1])
+        with mock.patch.object(config, "APP_VERSION", "737dafd"):
+            row = dict(zip(log.COLUMNS, log.sheet_row(line)))
+        self.assertEqual(row["interpreted_as"], page["interpreted"])
+        self.assertEqual((row["n_rows"], row["had_value"], row["app_version"]), (len(page["table"]["rows"]), True, "737dafd"))
+
+    def test_several_answers_and_a_decline(self):
+        many = dict(outcome="many", parts=[dict(request=dict(operation="schools"), rows=2, interpreted="A", had_value=False),
+                                           dict(request=dict(operation="rank"), rows=3, interpreted="B", had_value=True)])
+        row = dict(zip(log.COLUMNS, log.sheet_row(many)))
+        self.assertEqual((row["interpreted_as"], row["n_rows"], row["had_value"]), ("A | B", 5, True))
+        row = dict(zip(log.COLUMNS, log.sheet_row(dict(outcome="decline", missing="not collected"))))
+        self.assertEqual((row["interpreted_as"], row["n_rows"], row["had_value"]), ("", "", ""))
+
+    def test_an_existing_twelve_column_header_is_extended_in_place(self):
+        class Sheet:
+            col_count = 12
+            def __init__(self, first): self.first, self.updated, self.added = first, None, 0
+            def row_values(self, n): return list(self.first)
+            def add_cols(self, n): self.added += n
+            def update(self, range_name, values): self.updated = values[0]
+        class Book:
+            def __init__(self, ws): self.ws = ws
+            def worksheet(self, name): return self.ws
+        for first, ok in [(log.COLUMNS[:12], True), ((), True), (("something", "else"), False)]:
+            ws = Sheet(first)
+            client = mock.Mock(open_by_key=lambda ref: Book(ws))
+            gspread = mock.Mock(service_account_from_dict=lambda creds: client, WorksheetNotFound=KeyError)
+            with mock.patch.dict(sys.modules, gspread=gspread), mock.patch.dict(log._SHEET, worksheet=None),                     mock.patch.object(config, "SHEET_CREDENTIALS", "{}"), mock.patch.object(config, "QUESTIONS_SHEET", "id"):
+                if ok:
+                    log.open_sheet()
+                    self.assertEqual((ws.updated, ws.added), (list(log.COLUMNS), 4))
+                else:
+                    with self.assertRaises(RuntimeError):
+                        log.open_sheet()
+                    self.assertIsNone(ws.updated)
+
+
 class HostedLog(unittest.TestCase):
     def test_rows_from_the_sheet_export(self):
         with tempfile.TemporaryDirectory() as d:
@@ -230,7 +280,7 @@ class HostedLog(unittest.TestCase):
                 for conv, q, outcome in [("aaa", "Yale admission rate", "ready"), ("aaa", "[option] Total", "ready"),
                                          ("bbb", "hi", "limit_daily"), ("ccc", "Harvard", "decline"),
                                          ("aaa", "yale admission rate", "ready")]:
-                    w.writerow(["2026-11-27 10:00:00", conv, 1, q, outcome, "", "", "", "", "", 1.0, 0.001])
+                    w.writerow(["2026-11-27 10:00:00", conv, 1, q, outcome, "", "", "", "", "", 1.0, 0.001, "", "", "", ""])
             rows = hosted_log.rows(path)
             self.assertEqual([(r["conversation"], r["turn"], r["repeat"]) for r in rows],
                              [("h1", 1, "no"), ("h2", 1, "no"), ("h1", 2, "yes")])

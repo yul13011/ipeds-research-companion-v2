@@ -22,7 +22,8 @@ import config
 
 _SPEND = threading.Lock()                               # several visitors share one process
 COLUMNS = ("time", "conversation", "turn", "question", "outcome", "decline_reason", "operation", "measures",
-           "schools_or_group", "model", "seconds", "cost_usd")
+           "schools_or_group", "model", "seconds", "cost_usd",
+           "interpreted_as", "n_rows", "had_value", "app_version")   # added 2026-11-27, after the first twelve
 _SHEET = dict(lock=threading.Lock(), worksheet=None)
 _note = logging.getLogger("question_sheet")
 
@@ -71,6 +72,8 @@ def sheet_row(row):
     """One turn's log line as the sheet's columns. The request's parts come from the resolved request (or each part's,
     when several were answered together)."""
     requests = [row["request"]] if row.get("request") else [p["request"] for p in row.get("parts") or [] if p.get("request")]
+    answers = [row] if row.get("request") else [p for p in row.get("parts") or [] if p.get("request")]
+    counted = [a["rows"] for a in answers if a.get("rows") is not None]
     def each(get):
         return "; ".join(dict.fromkeys(x for r in requests for x in get(r)))
     scope = lambda r: list(r.get("groups") or []) + [s.get("name") or str(s.get("id")) for s in r.get("schools") or []] +         [f"+{u}" for u in r.get("plus_schools") or []] + ([f"peers of {r['peers_of']}"] if r.get("peers_of") else [])
@@ -78,7 +81,11 @@ def sheet_row(row):
                   conversation=row.get("conversation"), turn=row.get("turn"), question=row.get("question"),
                   outcome=row.get("outcome"), decline_reason=row.get("missing") or row.get("detail") or row.get("error_kind"),
                   operation=each(lambda r: [r.get("operation") or ""]), measures=each(lambda r: [m["id"] for m in r.get("measures") or []]),
-                  schools_or_group=each(scope), model=row.get("model"), seconds=row.get("seconds"), cost_usd=row.get("cost_usd"))
+                  schools_or_group=each(scope), model=row.get("model"), seconds=row.get("seconds"), cost_usd=row.get("cost_usd"),
+                  interpreted_as=" | ".join(a["interpreted"] for a in answers if a.get("interpreted")),
+                  n_rows=sum(counted) if counted else None,
+                  had_value=any(bool(a.get("had_value")) for a in answers) if counted else None,
+                  app_version=config.APP_VERSION)
     return ["" if values[c] is None else values[c] for c in COLUMNS]
 
 
@@ -93,9 +100,12 @@ def open_sheet():
             ws = book.worksheet(config.SHEET_TAB)
         except gspread.WorksheetNotFound:
             ws = book.add_worksheet(title=config.SHEET_TAB, rows=1000, cols=len(COLUMNS))
-        if ws.row_values(1) != list(COLUMNS):
-            if ws.row_values(1):
+        first = ws.row_values(1)
+        if first != list(COLUMNS):
+            if first != list(COLUMNS[:len(first)]):         # empty, or an earlier header that these columns extend
                 raise RuntimeError("the sheet's first row is not version 2's header; nothing is written over it")
+            if ws.col_count < len(COLUMNS):
+                ws.add_cols(len(COLUMNS) - ws.col_count)
             ws.update(range_name="A1", values=[list(COLUMNS)])
         _SHEET["worksheet"] = ws
     return _SHEET["worksheet"]

@@ -146,12 +146,25 @@ python -c "import sqlite3, config; print(*sqlite3.connect(config.LOCAL_DB).execu
 
 ## The hosted app (Render), from Part 6f
 
-**The data on the host.** The database is the public Hugging Face dataset `yul13011/ipeds-v2-data`. The host downloads one fixed version of it (`IPEDS_V2_DATASET_REVISION`) once, onto the persistent disk, and checks its SHA-256. After a yearly update:
-1. Upload the new `data/ipeds_v2.sqlite` and its `.sha256` file to the dataset. Run `.venv\Scripts\python.exe scripts/publish_dataset.py`; it needs `huggingface_hub` in `.venv` and your Hugging Face login.
-2. Copy the new commit id from the dataset's history.
-3. In Render, set `IPEDS_V2_DATASET_REVISION` to it and redeploy. The new version downloads into its own folder; the old folder can be deleted from the disk afterwards.
+The Render service `IPEDS-research_companion` (Oregon, 0.5 CPU, 512 MB) has a **4 GB persistent disk** at `/var/data`. It holds one copy of one version's data at a time (owner decision, 2026-11-27):
+- version 2's database is 3.27 GB (3.04 GiB);
+- version 1's 70 files are 3.13 GB (2.92 GiB);
+- both together don't fit.
+So switching either way removes the other version's data first. The app returning to the disk downloads its own data again from Hugging Face.
 
-**Version 2's settings on the Render service** (version 1's own variables stay, so switching back needs no edits):
+### Version 1's settings (the way back; read from the dashboard, 2026-11-27)
+
+| Setting | Version 1 |
+| --- | --- |
+| Repository, branch | `yul13011/IPEDS-research_companion`, `main` (live commit `43b994d`) |
+| Build command | `pip install -r prototype/requirements.txt` |
+| Start command | `streamlit run prototype/app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true --browser.gatherUsageStats false` (the dashboard shows only the start; copy the full text before the switch) |
+| Its environment | `ANTHROPIC_API_KEY`, `IPEDS_DATA_DIR` (its data folder, `/var/data/ipeds` in its runbook), `IPEDS_DATASET_REPO` (`yul13011/ipeds-data`), `IPEDS_GSHEETS_CREDENTIALS`, `IPEDS_QUESTIONS_SHEET`, `PYTHON_VERSION` (`3.11.9` in its runbook; write down the real value before the switch) |
+| Auto-Deploy | On Commit |
+
+Version 1's variables stay in place while version 2 runs; version 2 never reads them. **The one shared name is `PYTHON_VERSION`:** version 2 sets it to `3.12.10`, and switching back sets it back.
+
+### Version 2's settings
 
 | Setting | Value |
 | --- | --- |
@@ -164,10 +177,67 @@ python -c "import sqlite3, config; print(*sqlite3.connect(config.LOCAL_DB).execu
 | `IPEDS_LOG_DIR` | `/var/data/v2/logs` |
 | `IPEDS_DAILY_USD` | `2` |
 | `IPEDS_CONVERSATION_QUESTIONS` | `40` |
-| `ANTHROPIC_API_KEY` | secret (already set for version 1) |
-| `IPEDS_V2_QUESTIONS_SHEET` | version 2's question sheet: its address or ID |
-| `IPEDS_V2_GSHEETS_CREDENTIALS` | secret: the service account's JSON key, pasted whole |
+| `IPEDS_V2_QUESTIONS_SHEET` | version 2's question sheet: its address (not version 1's) |
+| `IPEDS_V2_GSHEETS_CREDENTIALS` | secret: the service account's JSON key (version 1's account, the same key as `IPEDS_GSHEETS_CREDENTIALS`) |
 
-**Switching back to version 1:** set the repository, branch, build command and start command back to version 1's (recorded in `docs/reports/STAGE_6_F.md` before the switch), save, and deploy. Version 1's data and variables were never removed.
+### Switching to version 2
 
-**The hosted log:** version 2's Google Sheet, one row per turn (the disk log on the host is the backup). Download it as CSV (File → Download → CSV), then `.venv\Scripts\python.exe scripts/hosted_log.py <file.csv>` writes `docs/hosted_questions.csv` (untracked) for choosing new real users' questions.
+The app is unavailable for a few minutes: from removing version 1's data (step 5) until version 2 is live (step 7), about 3 to 6 minutes (download about 1 minute, plus the build).
+
+1. **Environment → Edit:** add version 2's values above, except `PYTHON_VERSION`. Save with **"Save only"**, not a deploy option.
+2. **Settings → Build & Deploy:**
+   - Source: Edit → `yul13011/ipeds-research-companion-v2`, branch `main`.
+   - Build command: `pip install -r requirements.txt`.
+   - Start command: `python serve.py`.
+   - If a deploy starts by itself, open **Events** and cancel it before going on.
+3. **Environment:** change `PYTHON_VERSION` to `3.12.10`, again with **Save only**.
+4. **Shell tab** (still version 1's running instance, with the disk attached). Check what's there:
+
+        echo $IPEDS_DATA_DIR
+        du -sh /var/data/*
+        df -h /var/data
+
+   The first line should print version 1's folder (expected `/var/data/ipeds`), and `du` should show it at about 2.9G.
+5. **Still in the Shell:** remove that folder, using the path the first line printed. The app stops answering from here until step 7.
+
+        rm -rf /var/data/ipeds
+        df -h /var/data
+
+   `df` should now show at least 3.4G available. If it doesn't, stop and tell Claude before deploying.
+6. **Manual Deploy → Deploy latest commit.**
+7. **Logs:** `[serve] downloading yul13011/ipeds-v2-data …`, then `downloaded 3.04 GB in … s`, then `index ready`, then the Streamlit lines and Live.
+8. Open https://ipeds-research-companion.onrender.com, ask one question, and check that a row appears in version 2's sheet.
+
+### Switching back to version 1
+
+The app is unavailable from step 3 until version 1's data has downloaded, which happens on the **first page view** after the deploy: about 5 to 10 minutes in all. That first visit waits for the 2.92 GiB download, so open it yourself.
+
+1. **Settings → Build & Deploy:** Source back to `yul13011/IPEDS-research_companion`, branch `main`; build and start commands back to version 1's (table above). Cancel any deploy that starts by itself.
+2. **Environment:** `PYTHON_VERSION` back to version 1's value, with **Save only**. Version 2's variables can stay.
+3. **Shell** (version 2's instance): check, then remove version 2's data, keeping its logs:
+
+        du -sh /var/data/v2/*
+        rm -rf /var/data/v2/b97be26c66f5940ec881155ef5dc2667b2737f4d
+        df -h /var/data
+
+   Use the folder named after the version in `IPEDS_V2_DATASET_REVISION`. Don't remove `/var/data/v2/logs`.
+4. **Manual Deploy → Deploy latest commit.**
+5. Open the link yourself and wait while version 1 downloads its data. The page shows a loading state, and the Logs tab shows the download. Then ask a test question.
+
+If version 2's instance won't start (so there's no Shell), deploy version 1 anyway (steps 1, 2, 4). Then open version 1's Shell and remove the v2 folder before opening the page. Version 1's download only starts on the first page view, so there's time to do this.
+
+### Next year's data update (a short outage)
+
+The disk can't hold two versions of version 2's data, and `serve.py` keeps each version in its own folder. So the old copy must be removed before the new one downloads. The app is unavailable for about 3 to 6 minutes.
+1. Publish the new database: `.venv\Scripts\python.exe scripts/publish_dataset.py` (needs `huggingface_hub` in `.venv` and your Hugging Face login). It prints the new commit id.
+2. **Environment:** set `IPEDS_V2_DATASET_REVISION` to the new id, with **Save only**.
+3. **Shell:** `rm -rf /var/data/v2/<old commit id>`, then `df -h /var/data` (at least 3.4G available). Keep `/var/data/v2/logs`.
+4. **Manual Deploy.** The new version downloads (about 1 minute) and the app comes back.
+
+The same applies when the 2024-25 provisional release is replaced by its final version.
+
+### The hosted log
+
+Version 2's Google Sheet, one row per turn; the disk log at `/var/data/v2/logs` on the host is the backup.
+- Download the sheet as CSV (File → Download → CSV).
+- Then `.venv\Scripts\python.exe scripts/hosted_log.py <file.csv>` writes `docs/hosted_questions.csv` (untracked) for choosing new real users' questions.

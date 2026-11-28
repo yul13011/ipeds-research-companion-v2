@@ -17,7 +17,7 @@
       "runtimeArgs": [
         "-NoProfile",
         "-Command",
-        "$env:PORT='8518'; & '.venv\\Scripts\\python.exe' serve.py"
+        "$env:ANTHROPIC_API_KEY = [Environment]::GetEnvironmentVariable('ANTHROPIC_API_KEY','User'); $env:PORT='8518'; $env:IPEDS_DAILY_USD='2'; $env:IPEDS_CONVERSATION_QUESTIONS='40'; & '.venv\\Scripts\\python.exe' serve.py"
       ],
       "port": 8518
     }

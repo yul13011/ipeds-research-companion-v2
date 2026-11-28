@@ -55,7 +55,7 @@ Proposal only. Nothing has been built, created or changed outside this computer.
 | Start command | `python serve.py` (it runs Streamlit on `$PORT`, address `0.0.0.0`, headless, no usage statistics) |
 | Python | `PYTHON_VERSION = 3.12.10` (as locally) |
 | Instance | **Starter** (512 MB, $7 a month, always on), as version 1 now; Standard (2 GB, $25) only if the hosting test shows memory above about 400 MB |
-| Persistent disk | Grow the existing disk from 4 GB to **10 GB**, mounted at `/var/data`, so version 1's data (3.1 GB) and version 2's (3.27 GB) both fit, with room for one data update. Keeping version 1's data is what makes switching back quick. About $2.50 a month (Render disks are about $0.25 per GB a month); a disk can be grown, not shrunk. |
+| Persistent disk | Superseded 2026-11-27: the disk stays at 4 GB, one version's data at a time (see `UPDATING.md`). Originally: grow the existing disk from 4 GB to **10 GB**, mounted at `/var/data`, so version 1's data (3.1 GB) and version 2's (3.27 GB) both fit, with room for one data update. Keeping version 1's data is what makes switching back quick. About $2.50 a month (Render disks are about $0.25 per GB a month); a disk can be grown, not shrunk. |
 | `IPEDS_LOCAL_DB` | `/var/data/v2/<dataset version>/ipeds_v2.sqlite` (set by `serve.py` from the two values below; shown for reference) |
 | `IPEDS_DATASET_REPO` | `yul13011/ipeds-v2-data` |
 | `IPEDS_DATASET_REVISION` | the dataset version to use |

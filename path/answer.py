@@ -49,7 +49,8 @@ def finish(out, state, db, log, row):
     if out["kind"] == "many":                           # several answers: each part's outcome and request in the log
         parts = [dict(row, part=i) for i in range(len(out["outcomes"]))]
         pages = [finish(o, state, db, log, p) for o, p in zip(out["outcomes"], parts)]
-        row.update(outcome="many", parts=[{k: p.get(k) for k in ("part", "outcome", "request", "rows")} for p in parts])
+        row.update(outcome="many", parts=[{k: p.get(k) for k in ("part", "outcome", "request", "rows", "interpreted", "had_value")}
+                                         for p in parts])
         return dict(kind="many", pages=pages)
     row["outcome"] = out["kind"]
     if out.get("log"):                                  # the model's own explanation: log only, never shown
@@ -69,7 +70,8 @@ def finish(out, state, db, log, row):
         state["offers"] = plan.get("offers") or None    # a button under the answer, such as "Today's schools only"
         if out.get("instead"):
             page["message"] = out["instead"]
-        row.update(request=out["request"], rows=len(result["rows"]))
+        row.update(request=out["request"], rows=len(result["rows"]), interpreted=page.get("interpreted"),
+                   had_value=any(isinstance(c, tuple) for r in result["rows"] for c in r))   # a figure, not only labels
     elif out["kind"] == "clarify":
         state["pending"] = out["options"]
         if out.get("request"):                          # kept as the previous request while the question is open

@@ -55,6 +55,8 @@ DAY_ZONE = "America/New_York"
 QUESTIONS_SHEET = os.environ.get("IPEDS_V2_QUESTIONS_SHEET", "")           # the sheet's ID or address
 SHEET_CREDENTIALS = os.environ.get("IPEDS_V2_GSHEETS_CREDENTIALS", "")      # the service account's JSON key, one string
 SHEET_TAB = os.environ.get("IPEDS_V2_QUESTIONS_WORKSHEET", "questions")
+# The running build, for the sheet's app_version column: Render sets RENDER_GIT_COMMIT on each deploy.
+APP_VERSION = (os.environ.get("IPEDS_APP_VERSION") or os.environ.get("RENDER_GIT_COMMIT") or "")[:12]
 
 # The analysis tools panel (the definitions browser) is hidden until Stage 7 (owner decision 2026-11-27); True shows it.
 TOOLS_PANEL = False

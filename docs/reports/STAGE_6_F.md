@@ -63,6 +63,7 @@
   - **A failed write:** the answer still shows, the failure is noted in Render's log, and the disk log keeps the turn.
   - **Setting names:** version 2 reads `IPEDS_V2_…` names only, so it can't reach version 1's sheet, whose settings stay on the same service.
   - **First use:** the header row is written on first use, and the app never writes over a sheet whose first row is something else.
+- **Sheet columns (2026-11-27):** four more after the first twelve: interpreted_as, n_rows, had_value, app_version. An existing twelve-column header is extended in place.
 - **Removed:** the owner log download in About. `scripts/hosted_log.py` now reads the sheet's CSV export.
 - **The analysis tools panel is hidden,** the definitions browser included. The code is kept; `config.TOOLS_PANEL = True` turns it back on. Its test still checks the browser with the setting on.
 - **`gspread` 6.2.1** and its nine supporting packages: approved, installed and pinned in `requirements.txt`, which matches `.venv` exactly. None of the pinned versions changed. The sheet uses version 1's service account.
